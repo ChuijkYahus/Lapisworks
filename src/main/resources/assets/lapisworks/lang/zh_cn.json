@@ -137,6 +137,9 @@
     "mishaps.lapisworks.bad_item.mainhand.writeable": "一个可写的iota存储物品（如核心）",
     "mishaps.lapisworks.bad_item.mainhand.noniotaholder": ".（不是iota存储物品）",
     "mishaps.lapisworks.bad_item.mainhand.readonly": ".（一个只读iota存储物品）",
+    "mishaps.lapisworks.bad_item.offhand.scrolls": "a scroll",
+    "mishaps.lapisworks.bad_item.offhand.scroll_with_pattern": "a scroll with a pattern iota",
+    "mishaps.lapisworks.bad_item.offhand.scroll_with_great_spell": "a scroll with a pattern on it that resembles a Great Spell but does not necessarily have the correct stroke order",
 
 
     "notif.lapisworks.wizard_diaries.all_gotten": "我应当已经找到了所有遗存至今的古代宝典。",
