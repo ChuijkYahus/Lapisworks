@@ -30,15 +30,15 @@
             "op_id": "lapisworks:spherical_dstl",
             "anchor": "lapisworks:spherical_dstl",
             "input": "[pattern], vec, num",
-            "output": "",
+            "output": "[any]",
             "text": "pages.lapisworks.lapisworks_misc.spherical_dstl.summary"
         },
         {
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:cubic_exalt",
             "anchor": "lapisworks:cubic_exalt",
-            "input": "[pattern], vec, num, bool",
-            "output": "",
+            "input": "[pattern], vec, vec, bool",
+            "output": "[any]",
             "text": "pages.lapisworks.lapisworks_misc.cubic_exalt.summary"
         },
         {

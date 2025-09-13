@@ -14,7 +14,6 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.luxof.lapisworks.MishapThrowerJava;
-import com.luxof.lapisworks.init.ModItems;
 import com.luxof.lapisworks.items.shit.FullyAmelInterface;
 import com.luxof.lapisworks.items.shit.PartiallyAmelInterface;
 import com.luxof.lapisworks.mishaps.MishapBadMainhandItem;
@@ -23,6 +22,7 @@ import com.luxof.lapisworks.mishaps.MishapNotEnoughOffhandItems;
 import static com.luxof.lapisworks.Lapisworks.getFullAmelFromNorm;
 import static com.luxof.lapisworks.Lapisworks.getPartAmelFromNorm;
 import static com.luxof.lapisworks.Lapisworks.getRequiredAmelToComplete;
+import static com.luxof.lapisworks.Lapisworks.isAmel;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +62,7 @@ public class ImbueAmel implements SpellAction {
 
         if (offHandItems.isEmpty()) {
             MishapThrowerJava.throwMishap(needAmel);
-        } else if (ModItems.AMEL_MODELS.indexOf(offHandItems.getItem()) == -1) {
+        } else if (!isAmel(offHandItems)) {
             MishapThrowerJava.throwMishap(needAmel);
         } else if (mainHandItems.isEmpty()) {
             MishapThrowerJava.throwMishap(needImbueable);

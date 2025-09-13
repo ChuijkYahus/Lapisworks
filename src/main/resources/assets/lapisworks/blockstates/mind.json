@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "filled=0": { "model": "lapisworks:block/mind/mind" },
+        "filled=1": { "model": "lapisworks:block/mind/mindthird" },
+        "filled=2": { "model": "lapisworks:block/mind/mindtwothirds" },
+        "filled=3": { "model": "lapisworks:block/mind/mindfull" }
+    }
+}

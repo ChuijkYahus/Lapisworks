@@ -1,5 +1,7 @@
 package com.luxof.lapisworks.actions;
 
+import static com.luxof.lapisworks.Lapisworks.isAmel;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -24,13 +26,11 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
 
 import com.luxof.lapisworks.MishapThrowerJava;
-import com.luxof.lapisworks.init.ModItems;
 import com.luxof.lapisworks.mishaps.MishapNotEnoughOffhandItems;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 
 public class MoarAttr implements SpellAction {
-    // i always keep my shit public in case someone
-    // needs to do something cursed
+    // i always keep my shit public in case someone needs to do something cursed
     public EntityAttribute modifyAttribute;
     public double limitModifier;
     public double limitOffset; // "only give mobs +60 +2xbase hp at max!"
@@ -68,7 +68,7 @@ public class MoarAttr implements SpellAction {
         ItemStack offHandItems = caster.getOffHandStack();
         if (offHandItems.isEmpty()) {
             MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(offHandItems, "amel"));
-        } else if (ModItems.AMEL_MODELS.indexOf(offHandItems.getItem()) == -1) {
+        } else if (!isAmel(offHandItems)) {
             MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(offHandItems, "amel"));
         }
 

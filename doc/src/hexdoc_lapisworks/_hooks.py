@@ -13,6 +13,7 @@ import hexdoc_lapisworks
 
 from .__gradle_version__ import FULL_VERSION, GRADLE_VERSION
 from .__version__ import PY_VERSION
+from .book.pages import pages
 
 
 class LapisworksPlugin(ModPluginImpl):
@@ -27,6 +28,11 @@ class LapisworksModPlugin(ModPluginWithBook):
     @override
     def modid(self) -> str:
         return "lapisworks"
+
+    @staticmethod
+    @hookimpl
+    def hexdoc_load_tagged_unions() -> HookReturn[Package]:
+        return [pages]
 
     @property
     @override

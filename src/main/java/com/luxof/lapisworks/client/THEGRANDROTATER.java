@@ -117,7 +117,7 @@ public class THEGRANDROTATER {
     );
     public static Vector3f projectTo4D(Vector4f v) {
         // 4 - v.w. Why?
-        // projection. v.w is also never above 1, so we need something above that.
+        // projection. v.w is also never above 1, so i need something above that.
         return new Vector3f(v.x, v.y, v.z).div(4 - v.w);
     }
     public static void renderEnchantedSentinel(

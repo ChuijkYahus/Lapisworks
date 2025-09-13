@@ -10,58 +10,20 @@
             "text": "pages.lapisworks.great.enchsent_lore"
         },
         {
-            "type": "hexcasting:pattern",
-            "flag": "lapisworks:enchsent1",
-            "op_id": "lapisworks:create_enchsent1",
-            "anchor": "lapisworks:create_enchsent1",
+            "type": "hexcasting:lapisworks/pwshape",
+            "op_id": "lapisworks:create_enchsent",
+            "anchor": "lapisworks:create_enchsent",
             "input": "vec, num",
             "output": "",
-            "text": "pages.lapisworks.great.create_enchsent.summary"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "flag": "lapisworks:enchsent2",
-            "op_id": "lapisworks:create_enchsent2",
-            "anchor": "lapisworks:create_enchsent2",
-            "input": "vec, num",
-            "output": "",
-            "text": "pages.lapisworks.great.create_enchsent.summary"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "flag": "lapisworks:enchsent3",
-            "op_id": "lapisworks:create_enchsent3",
-            "anchor": "lapisworks:create_enchsent3",
-            "input": "vec, num",
-            "output": "",
-            "text": "pages.lapisworks.great.create_enchsent.summary"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "flag": "lapisworks:enchsent4",
-            "op_id": "lapisworks:create_enchsent4",
-            "anchor": "lapisworks:create_enchsent4",
-            "input": "vec, num",
-            "output": "",
-            "text": "pages.lapisworks.great.create_enchsent.summary"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "flag": "lapisworks:enchsent5",
-            "op_id": "lapisworks:create_enchsent5",
-            "anchor": "lapisworks:create_enchsent5",
-            "input": "vec, num",
-            "output": "",
-            "text": "pages.lapisworks.great.create_enchsent.summary"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "flag": "lapisworks:enchsent6",
-            "op_id": "lapisworks:create_enchsent6",
-            "anchor": "lapisworks:create_enchsent6",
-            "input": "vec, num",
-            "output": "",
-            "text": "pages.lapisworks.great.create_enchsent.summary"
+            "text": "pages.lapisworks.great.create_enchsent.summary",
+            "origins": [
+                {"q": 0, "r": 0},
+                {"q": 0, "r": 0},
+                {"q": 1, "r": 0},
+                {"q": 0, "r": 0},
+                {"q": 1, "r": 0},
+                {"q": 1, "r": 0}
+            ]
         },
         {
             "type": "patchouli:text",

@@ -11,7 +11,8 @@
 		"GuiSpellcastingMixin",
 		"PlayerEntityMixin",
 		"ServerPlayerEntityMixin",
-		"PatternRegistryManifestMixin"
+		"PatternRegistryManifestMixin",
+		"VillagerEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

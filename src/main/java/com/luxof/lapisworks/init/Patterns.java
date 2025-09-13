@@ -8,10 +8,14 @@ import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.common.lib.hex.HexActions;
 
 import static at.petrak.hexcasting.api.misc.MediaConstants.CRYSTAL_UNIT;
+import static com.luxof.lapisworks.init.ThemConfigFlags.registerPWShapePattern;
+
+import java.util.List;
 
 import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.actions.CheckAttr;
 import com.luxof.lapisworks.actions.ImbueLap;
+import com.luxof.lapisworks.actions.MindLiquefaction;
 import com.luxof.lapisworks.actions.SwapAmel;
 import com.luxof.lapisworks.actions.MoarAttr;
 import com.luxof.lapisworks.actions.great.BanishMySent;
@@ -28,6 +32,8 @@ import com.luxof.lapisworks.actions.misc.VisibleDstl;
 import com.luxof.lapisworks.actions.misc.WritableMainHand;
 import com.luxof.lapisworks.actions.misc.WriteMainHand;
 import com.luxof.lapisworks.actions.CheckEnchant;
+import com.luxof.lapisworks.actions.CognitionPrfn;
+import com.luxof.lapisworks.actions.HexResearchYoink;
 import com.luxof.lapisworks.actions.ImbueAmel;
 
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -101,17 +107,32 @@ public class Patterns {
         register("write_mainhand", "deeeed", HexDir.EAST, new WriteMainHand());
         register("writable_mainhand", "eeeedaww", HexDir.SOUTH_WEST, new WritableMainHand());
 
+        register("thought_sieve", "qadaadadqaqdadqaq", HexDir.WEST, new HexResearchYoink());
+        register("absorb_mind", "aawqqwqqqaede", HexDir.WEST, new MindLiquefaction());
+        register("check_mind", "aawqqwqqq", HexDir.WEST, new CognitionPrfn());
+
         // hol up, let him cook
         // i said LET HIM COOK
         // LET. HIM. COOK :fire:
         SpellAction createEnchSent = new CreateEnchSent();
         // hell naw i will not learn to speak regex
-        register("create_enchsent1", "aqaeawdwwwdwqwdwwwdweqqaqwedeewqded", HexDir.NORTH_WEST, createEnchSent);
-        register("create_enchsent2", "aqaeawdwwwdwqwdwwwdwewweaqa", HexDir.NORTH_WEST, createEnchSent);
-        register("create_enchsent3", "wdwewdwwwdwwwdwqwdwwwdw", HexDir.NORTH_EAST, createEnchSent);
-        register("create_enchsent4", "aqaeawdwwwdwqwdwwwdweqaawddeweaqa", HexDir.NORTH_WEST, createEnchSent);
-        register("create_enchsent5", "wdwwwdwqwdwwwdweqaawdde", HexDir.NORTH_WEST, createEnchSent);
-        register("create_enchsent6", "wdwwwdwqwdwwwdwweeeee", HexDir.NORTH_WEST, createEnchSent);
+        register("create_enchsent0", "aqaeawdwwwdwqwdwwwdweqqaqwedeewqded", HexDir.NORTH_WEST, createEnchSent);
+        register("create_enchsent1", "aqaeawdwwwdwqwdwwwdwewweaqa", HexDir.NORTH_WEST, createEnchSent);
+        register("create_enchsent2", "wdwewdwwwdwwwdwqwdwwwdw", HexDir.NORTH_EAST, createEnchSent);
+        register("create_enchsent3", "aqaeawdwwwdwqwdwwwdweqaawddeweaqa", HexDir.NORTH_WEST, createEnchSent);
+        register("create_enchsent4", "wdwwwdwqwdwwwdweqaawdde", HexDir.NORTH_WEST, createEnchSent);
+        register("create_enchsent5", "wdwwwdwqwdwwwdwweeeee", HexDir.NORTH_WEST, createEnchSent);
+        registerPWShapePattern(
+            "lapisworks:create_enchsent",
+            List.of(
+                "aqaeawdwwwdwqwdwwwdweqqaqwedeewqded",
+                "aqaeawdwwwdwqwdwwwdwewweaqa",
+                "wdwewdwwwdwwwdwqwdwwwdw",
+                "aqaeawdwwwdwqwdwwwdweqaawddeweaqa",
+                "wdwwwdwqwdwwwdweqaawdde",
+                "wdwwwdwqwdwwwdwweeeee"
+            )
+        );
         
         register("banish_my_enchsent", "wdwewdwdwqwawwwawewawwwaw", HexDir.NORTH_EAST, new BanishMySent());
         register("banish_other_enchsent", "eeeeedwqwawwwawewawwwaw", HexDir.NORTH_EAST, new BanishOtherSent());

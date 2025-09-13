@@ -11,8 +11,9 @@ import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 import static com.luxof.lapisworks.Lapisworks.pickUsingSeed;
 import static com.luxof.lapisworks.Lapisworks.pickConfigFlags;
 import static com.luxof.lapisworks.Lapisworks.nullConfigFlags;
-import static com.luxof.lapisworks.LapisworksNetworking.SEND_RNG_SEED;
+import static com.luxof.lapisworks.LapisworksNetworking.SEND_PWSHAPE_PATS;
 import static com.luxof.lapisworks.LapisworksNetworking.SEND_SENT;
+import static com.luxof.lapisworks.init.ThemConfigFlags.turnChosenIntoNbt;
 
 import java.util.List;
 
@@ -92,11 +93,10 @@ public class LapisworksServer {
             buf.writeDouble(sentAmbit);
             ServerPlayNetworking.send(player, SEND_SENT, buf);
 
-            // it can't be THAT expensive to recompute this every time a player joins
-            long seed = (long)pickUsingSeed(server.getOverworld().getSeed());
-            PacketByteBuf seedBuf = PacketByteBufs.create();
-            seedBuf.writeLong(seed);
-            ServerPlayNetworking.send(player, SEND_RNG_SEED, seedBuf);
+            PacketByteBuf patsBuf = PacketByteBufs.create();
+            // hell naw i'm not dealing with the two extra args to writeMap()
+            patsBuf.writeNbt(turnChosenIntoNbt());
+            ServerPlayNetworking.send(player, SEND_PWSHAPE_PATS, patsBuf);
         });
         ServerLifecycleEvents.SERVER_STARTED.register((server) -> {
             pickConfigFlags(new Random(pickUsingSeed(server.getOverworld().getSeed())));

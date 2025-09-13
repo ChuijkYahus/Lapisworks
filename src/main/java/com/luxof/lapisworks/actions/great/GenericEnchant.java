@@ -15,10 +15,11 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapUnenlightened;
 
 import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.init.EnchantCountKeeper;
-import com.luxof.lapisworks.init.ModItems;
 import com.luxof.lapisworks.mishaps.MishapAlreadyHasEnchantment;
 import com.luxof.lapisworks.mishaps.MishapNotEnoughOffhandItems;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
+
+import static com.luxof.lapisworks.Lapisworks.isAmel;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +30,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 
-/** responsibility of mixin to make enchantment do something falls on the user of this. */
+/** responsibility of mixin to make enchantment do something falls on the user of this.
+ * Also take this' enchantmentIdx if you want the index you need to give to LapisworksInterface's stuff. */
 public class GenericEnchant implements SpellAction {
     public final int enchantmentIdx;
     public final int maxLevel;
@@ -93,7 +95,7 @@ public class GenericEnchant implements SpellAction {
         ItemStack offHandItems = caster.getOffHandStack();
         if (offHandItems.isEmpty()) {
             MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(offHandItems, "amel"));
-        } else if (ModItems.AMEL_MODELS.indexOf(offHandItems.getItem()) == -1) {
+        } else if (!isAmel(offHandItems)) {
             MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(offHandItems, "amel"));
         } else if (offHandItems.getCount() < 10) {
             MishapThrowerJava.throwMishap(new MishapNotEnoughOffhandItems(offHandItems, this.requiredAmel));

@@ -1,8 +1,9 @@
 package com.luxof.lapisworks.init;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import net.minecraft.nbt.NbtCompound;
 import vazkii.patchouli.api.PatchouliAPI;
 
 // really evil fucking dark magic bullshit to circumvent some stuff that was there for a reason
@@ -12,37 +13,29 @@ import vazkii.patchouli.api.PatchouliAPI;
 // i guess you could also make the excuse for originality too, afaik no one has done
 // per-world patterns that change shape
 public class ThemConfigFlags {
-    // i dunno what happens if i Identifier.toString();
-    public static List<String> allEnchSentFlags = List.of(
-        "lapisworks:enchsent1", "lapisworks:enchsent2", "lapisworks:enchsent3",
-        "lapisworks:enchsent4", "lapisworks:enchsent5", "lapisworks:enchsent6"
-    );
+    public static HashMap<String, Integer> chosenFlags = new HashMap<String, Integer>();
+    public static HashMap<String, List<String>> allPerWorldShapePatterns = new HashMap<String, List<String>>();
 
-    // feel free to fuck with this stuff
-    // NOTE: TO REMOVE COMPILER WARNINGS, THIS ISN'T FILLED UNTIL declareEm() IS CALLED!
-    public static List<Integer> chosenFlags = new ArrayList<Integer>(List.of());
-    public static List<List<String>> allConfigFlags = new ArrayList<List<String>>(List.of(
-        allEnchSentFlags
-    ));
-    // this makes sense as well as Patterns.java, but I'd rather people not have 5000 editor tabs open
-    public static List<List<String>> allPerWorldShapePatterns = new ArrayList<List<String>>(List.of(
-        List.of(
-            // if you really want to add to this, just make your own shapes and append to this big list
-            "aqaeawdwwwdwqwdwwwdweqqaqwedeewqded",
-            "aqaeawdwwwdwqwdwwwdwewweaqa",
-            "wdwewdwwwdwwwdwqwdwwwdw",
-            "aqaeawdwwwdwqwdwwwdweqaawddeweaqa",
-            "wdwwwdwqwdwwwdweqaawdde",
-            "wdwwwdwqwdwwwdwweeeee"
-        )
-    ));
+    public static NbtCompound turnChosenIntoNbt() {
+        NbtCompound nbt = new NbtCompound();
+        chosenFlags.forEach((key, val) -> { nbt.putInt(key, val); });
+        return nbt;
+    }
+
+    /** make sure you call this before you call declareEm() */
+    public static void registerPWShapePattern(String genericId, List<String> sigs) {
+        chosenFlags.put(genericId, null);
+        allPerWorldShapePatterns.put(genericId, sigs);
+    }
 
     public static void declareEm() {
-        allConfigFlags.forEach((List<String> list) -> {
-            list.forEach((String flag) -> {
-                PatchouliAPI.get().setConfigFlag(flag, false);
-            });
-            chosenFlags.add(null);
-        });
+        allPerWorldShapePatterns.keySet().forEach(
+            (String id) -> {
+                List<String> sigs = allPerWorldShapePatterns.get(id);
+                for (int i = 0; i < sigs.size(); i++) {
+                    PatchouliAPI.get().setConfigFlag(id + String.valueOf(i), false);
+                }
+            }
+        );
     }
 }

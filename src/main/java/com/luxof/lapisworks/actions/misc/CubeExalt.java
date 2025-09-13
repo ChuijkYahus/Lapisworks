@@ -49,6 +49,11 @@ public class CubeExalt implements Action {
             generatePointsInFilledCube(pointA, pointB);
         FrameForEach frame = new FrameForEach(datum, intrs, null, new ArrayList<Iota>());
 
+        stack.remove(lastIdx);
+        stack.remove(lastIdx - 1);
+        stack.remove(lastIdx - 2);
+        stack.remove(lastIdx - 3);
+
         return new OperationResult(img2, List.of(), cont.pushFrame(frame), HexEvalSounds.THOTH);
     }
     
