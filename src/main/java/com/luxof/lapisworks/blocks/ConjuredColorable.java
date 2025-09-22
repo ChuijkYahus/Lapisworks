@@ -1,9 +1,9 @@
 package com.luxof.lapisworks.blocks;
 
+import at.petrak.hexcasting.api.casting.ParticleSpray;
 
 import static com.luxof.lapisworks.Lapisworks.getPigmentFromDye;
 
-import at.petrak.hexcasting.api.casting.ParticleSpray;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

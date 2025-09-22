@@ -7,17 +7,17 @@ import at.petrak.hexcasting.common.msgs.MsgOpenSpellGuiS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
+import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 
 import static com.luxof.lapisworks.Lapisworks.pickUsingSeed;
 import static com.luxof.lapisworks.Lapisworks.pickConfigFlags;
+import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.nullConfigFlags;
-import static com.luxof.lapisworks.LapisworksNetworking.SEND_PWSHAPE_PATS;
-import static com.luxof.lapisworks.LapisworksNetworking.SEND_SENT;
+import static com.luxof.lapisworks.LapisworksIDs.SEND_PWSHAPE_PATS;
+import static com.luxof.lapisworks.LapisworksIDs.SEND_SENT;
 import static com.luxof.lapisworks.init.ThemConfigFlags.turnChosenIntoNbt;
 
 import java.util.List;
-
-import org.joml.Random;
 
 import kotlin.Pair;
 
@@ -27,6 +27,8 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
@@ -35,7 +37,56 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 
+import org.joml.Random;
+
 public class LapisworksServer {
+    public static void onJoinPWShapeStuff(
+        ServerPlayNetworkHandler handler,
+        PacketSender sender,
+        MinecraftServer server
+    ) {
+        ServerPlayerEntity player = handler.getPlayer();
+        Vec3d sentPos = ((EnchSentInterface)player).getEnchantedSentinel();
+        Double sentAmbit = ((EnchSentInterface)player).getEnchantedSentinelAmbit();
+        if (sentPos == null) { return; }
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeBoolean(false);
+        buf.writeVector3f(sentPos.toVector3f());
+        buf.writeDouble(sentAmbit);
+        ServerPlayNetworking.send(player, SEND_SENT, buf);
+
+        PacketByteBuf patsBuf = PacketByteBufs.create();
+        // hell naw i'm not dealing with the two extra args to writeMap()
+        patsBuf.writeNbt(turnChosenIntoNbt());
+        ServerPlayNetworking.send(player, SEND_PWSHAPE_PATS, patsBuf);
+    }
+
+    public static void juiceUpAttr(ServerPlayerEntity plr, EntityAttribute attr) {
+        try {
+            plr.getAttributes().getCustomInstance(attr).setBaseValue(
+                plr.getAttributeBaseValue(attr) + ((LapisworksInterface)plr).getAmountOfAttrJuicedUpByAmel(attr)
+            );
+        } catch (Exception e) {
+            LOGGER.error("We had an error in the juiceUpAttr part of the code. USUALLY this shouldn't happen, but it probably isn't a problem if it does.");
+            e.printStackTrace();
+        }
+    }
+
+    public static void onJoinLoadJuicedAttrs(
+        ServerPlayNetworkHandler handler,
+        PacketSender sender,
+        MinecraftServer server
+    ) {
+        // somehow this works to fix the bug.
+        // i'm guessing somewhere between PlayerEntity#readNbt() and the player loading into the world,
+        // PlayerEntity.attributes is reset to the defaults (but then why doesn't health reset to default??)
+        ServerPlayerEntity player = handler.getPlayer();
+        juiceUpAttr(player, EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        juiceUpAttr(player, EntityAttributes.GENERIC_ATTACK_SPEED);
+        //juiceUpAttr(player, EntityAttributes.GENERIC_MAX_HEALTH);
+        juiceUpAttr(player, EntityAttributes.GENERIC_MOVEMENT_SPEED);
+    }
+
     public static void handleCastingGridPacket(
         MinecraftServer server,
         ServerPlayerEntity player,
@@ -70,7 +121,7 @@ public class LapisworksServer {
 
     public static void lockIn() {
         ServerPlayNetworking.registerGlobalReceiver(
-            LapisworksNetworking.OPEN_CASTING_GRID,
+            LapisworksIDs.OPEN_CASTING_GRID,
             (
                 MinecraftServer server,
                 ServerPlayerEntity player,
@@ -83,20 +134,9 @@ public class LapisworksServer {
         );
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            ServerPlayerEntity player = handler.getPlayer();
-            Vec3d sentPos = ((EnchSentInterface)player).getEnchantedSentinel();
-            Double sentAmbit = ((EnchSentInterface)player).getEnchantedSentinelAmbit();
-            if (sentPos == null) { return; }
-            PacketByteBuf buf = PacketByteBufs.create();
-            buf.writeBoolean(false);
-            buf.writeVector3f(sentPos.toVector3f());
-            buf.writeDouble(sentAmbit);
-            ServerPlayNetworking.send(player, SEND_SENT, buf);
+            onJoinPWShapeStuff(handler, sender, server);
+            onJoinLoadJuicedAttrs(handler, sender, server);
 
-            PacketByteBuf patsBuf = PacketByteBufs.create();
-            // hell naw i'm not dealing with the two extra args to writeMap()
-            patsBuf.writeNbt(turnChosenIntoNbt());
-            ServerPlayNetworking.send(player, SEND_PWSHAPE_PATS, patsBuf);
         });
         ServerLifecycleEvents.SERVER_STARTED.register((server) -> {
             pickConfigFlags(new Random(pickUsingSeed(server.getOverworld().getSeed())));

@@ -17,12 +17,12 @@ import com.luxof.lapisworks.blocks.entities.MindEntity;
 import com.luxof.lapisworks.init.ModBlocks;
 
 import static com.luxof.lapisworks.Lapisworks.prettifyDouble;
+import static com.luxof.lapisworks.LapisworksIDs.MIND_BLOCK;
 
 import java.util.List;
 import java.util.Optional;
 
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
 public class CognitionPrfn implements ConstMediaAction {
@@ -31,7 +31,7 @@ public class CognitionPrfn implements ConstMediaAction {
         BlockPos mindPos = OperatorUtils.getBlockPos(args, 0, getArgc());
         try { ctx.assertPosInRange(mindPos); }
         catch (Mishap mishap) { MishapThrowerJava.throwMishap(mishap); }
-        MishapBadBlock needMind = new MishapBadBlock(mindPos, Text.translatable("block.lapisworks.mind"));
+        MishapBadBlock needMind = new MishapBadBlock(mindPos, MIND_BLOCK);
         if (!(ctx.getWorld().getBlockState(mindPos).getBlock() instanceof Mind)) {
             MishapThrowerJava.throwMishap(needMind);
         }

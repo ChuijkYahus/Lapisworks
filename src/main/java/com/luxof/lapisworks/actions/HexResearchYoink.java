@@ -30,6 +30,11 @@ import com.luxof.lapisworks.init.ModBlocks;
 
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.matchShape;
+import static com.luxof.lapisworks.LapisworksIDs.FULL_SIMPLE_MIND;
+import static com.luxof.lapisworks.LapisworksIDs.GREAT_SCROLL;
+import static com.luxof.lapisworks.LapisworksIDs.MIND_BLOCK;
+import static com.luxof.lapisworks.LapisworksIDs.PAT_SCROLL;
+import static com.luxof.lapisworks.LapisworksIDs.SCROLL;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +47,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
 /** my excuses:
@@ -86,7 +90,7 @@ public class HexResearchYoink implements SpellAction {
         BlockPos mindPos = OperatorUtils.getBlockPos(args, 0, getArgc());
         try { ctx.assertPosInRange(mindPos); }
         catch (Mishap mishap) { MishapThrowerJava.throwMishap(mishap); }
-        MishapBadBlock needMind = new MishapBadBlock(mindPos, Text.translatable("block.lapisworks.mind"));
+        MishapBadBlock needMind = new MishapBadBlock(mindPos, MIND_BLOCK);
         if (!(ctx.getWorld().getBlockState(mindPos).getBlock() instanceof Mind)) {
             MishapThrowerJava.throwMishap(needMind);
         }
@@ -98,9 +102,7 @@ public class HexResearchYoink implements SpellAction {
         if (blockEntityOpt.isEmpty()) { MishapThrowerJava.throwMishap(needMind); }
         MindEntity blockEntity = (MindEntity)blockEntityOpt.get();
         if (blockEntity.mindCompletion < 100f) {
-            MishapThrowerJava.throwMishap(
-                new MishapBadBlock(mindPos, Text.translatable("mishaps.lapisworks.bad_block.full_mind"))
-            );
+            MishapThrowerJava.throwMishap(new MishapBadBlock(mindPos, FULL_SIMPLE_MIND));
         }
 
 
@@ -108,7 +110,7 @@ public class HexResearchYoink implements SpellAction {
         if (!(offHandItems.getItem() instanceof ItemScroll)) {
             MishapThrowerJava.throwMishap(new MishapBadOffhandItem(
                 offHandItems,
-                Text.translatable("mishaps.lapisworks.bad_item.offhand.scrolls")
+                SCROLL
             ));
         }
         ItemScroll scroll = (ItemScroll)offHandItems.getItem();
@@ -119,7 +121,7 @@ public class HexResearchYoink implements SpellAction {
         if (!(iota instanceof PatternIota)) {
             MishapThrowerJava.throwMishap(new MishapBadOffhandItem(
                 offHandItems,
-                Text.translatable("mishaps.lapisworks.bad_item.offhand.scroll_with_pattern")
+                PAT_SCROLL
             ));
         }
 
@@ -129,7 +131,7 @@ public class HexResearchYoink implements SpellAction {
         if (realPattern == null) {
             MishapThrowerJava.throwMishap(new MishapBadOffhandItem(
                 offHandItems,
-                Text.translatable("mishaps.lapisworks.bad_item.offhand.scroll_with_great_spell")
+                GREAT_SCROLL
             ));
         }
 
@@ -156,7 +158,7 @@ public class HexResearchYoink implements SpellAction {
 
 		@Override
 		public void cast(CastingEnvironment ctx) {
-            this.blockEntity.mindCompletion -= 25.0f;
+            this.blockEntity.mindCompletion -= 50.0f;
             this.blockEntity.markDirty();
             if (ctx.getWorld().random.nextInt(4) > 2) { return; } // 3/5 chance (number is 0-4 inclusive)
             this.scroll.writeDatum(caster.getOffHandStack(), new PatternIota(this.pattern));

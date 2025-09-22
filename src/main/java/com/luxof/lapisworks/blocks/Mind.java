@@ -23,7 +23,8 @@ public class Mind extends BlockWithEntity {
         super(AbstractBlock.Settings.create().sounds(BlockSoundGroup.DEEPSLATE_TILES).breakInstantly());
     }
 
-    public static final IntProperty FILLED = IntProperty.of("filled", 0, 3);
+    // i REFUSE to use BERs (scawy)
+    public static final IntProperty FILLED = IntProperty.of("filled", 0, 14);
 
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {

@@ -36,8 +36,8 @@ public class EntityMixin {
 
     @Inject(at = @At("HEAD"), method = "readNbt")
 	public void readNbt(NbtCompound nbt, CallbackInfo ci) {
+        // oh yeah, it's backwards compat time
         if ((Object)this instanceof LivingEntity) {
-            // oh yeah, it's backwards compat time
             try {
                 ((LapisworksInterface)this).setLapisworksAttributes(new AttributeContainer(
                     DefaultAttributeContainer.builder()

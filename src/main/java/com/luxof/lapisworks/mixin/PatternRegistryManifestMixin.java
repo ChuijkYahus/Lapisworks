@@ -7,10 +7,9 @@ import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
+import static com.luxof.lapisworks.init.ThemConfigFlags.allPerWorldShapePatterns;
 
 import java.util.List;
-
-import static com.luxof.lapisworks.init.ThemConfigFlags.allPerWorldShapePatterns;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,7 +34,7 @@ public abstract class PatternRegistryManifestMixin {
                 List<String> pats = allPerWorldShapePatterns.get(patId);
                 int idx = pats.indexOf(sig);
                 if (idx == -1) { continue; }
-                else if (idx != chosenFlags.get(patId) - 1) {
+                if (idx != chosenFlags.get(patId)) {
                     cir.setReturnValue(new PatternShapeMatch.Nothing());
                 } else {
                     break; // approved!

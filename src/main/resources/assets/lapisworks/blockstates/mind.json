@@ -1,8 +1,19 @@
 {
     "variants": {
-        "filled=0": { "model": "lapisworks:block/mind/mind" },
-        "filled=1": { "model": "lapisworks:block/mind/mindthird" },
-        "filled=2": { "model": "lapisworks:block/mind/mindtwothirds" },
-        "filled=3": { "model": "lapisworks:block/mind/mindfull" }
+        "filled=0": { "model": "lapisworks:block/mind/mindempty" },
+        "filled=1": { "model": "lapisworks:block/mind/minda" },
+        "filled=2": { "model": "lapisworks:block/mind/mindb" },
+        "filled=3": { "model": "lapisworks:block/mind/mindc" },
+        "filled=4": { "model": "lapisworks:block/mind/mindd" },
+        "filled=5": { "model": "lapisworks:block/mind/minde" },
+        "filled=6": { "model": "lapisworks:block/mind/mindf" },
+        "filled=7": { "model": "lapisworks:block/mind/mindg" },
+        "filled=8": { "model": "lapisworks:block/mind/mindh" },
+        "filled=9": { "model": "lapisworks:block/mind/mindi" },
+        "filled=10": { "model": "lapisworks:block/mind/mindj" },
+        "filled=11": { "model": "lapisworks:block/mind/mindk" },
+        "filled=12": { "model": "lapisworks:block/mind/mindl" },
+        "filled=13": { "model": "lapisworks:block/mind/mindm" },
+        "filled=14": { "model": "lapisworks:block/mind/mindn" }
     }
 }

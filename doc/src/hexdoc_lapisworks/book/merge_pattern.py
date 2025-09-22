@@ -1,5 +1,12 @@
-# creds: Object-object for basically this entire thing
-# https://gist.github.com/object-Object/8fd4e05c5a63f60d4a31e5f301af5abc
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "hexdoc-hexcasting",
+#     "networkx",
+#     "scipy",
+# ]
+# ///
+
 # pyright: reportUnknownArgumentType=information
 # pyright: reportUnknownMemberType=information
 # pyright: reportUnknownVariableType=information
@@ -74,13 +81,13 @@ def overlay_patterns(
     for pattern, origin in patterns:
         cursor = origin
         compass = pattern.startdir
+        G.add_edge(cursor, cursor + compass)
 
         for angle in pattern.signature:
-            next_cursor = cursor + compass
-            G.add_edge(cursor, next_cursor)
-            cursor = next_cursor
+            cursor += compass
             compass = Direction((compass.value + ANGLES.find(angle)) % len(Direction))
-    
+            G.add_edge(cursor, cursor + compass)
+
     # find a path that visits each edge at least once
     # https://en.wikipedia.org/wiki/Chinese_postman_problem#Undirected_solution_and_T-joins
 
@@ -137,3 +144,61 @@ def overlay_patterns(
         is_per_world=True,
         id=op_id,
     )
+
+
+if __name__ == "__main__":
+    # note: you'd generate the inputs for this instead of hardcoding it
+    overlay = overlay_patterns(
+        op_id=ResourceLocation("lapisworks", "create_enchsent"),
+        patterns=[
+            (
+                PatternInfo(
+                    startdir=Direction.NORTH_WEST,
+                    signature="aqaeawdwwwdwqwdwwwdweqqaqwedeewqded",
+                    id=ResourceLocation("lapisworks", "create_enchsent1"),
+                ),
+                HexCoord(q=0, r=0),
+            ),
+            (
+                PatternInfo(
+                    startdir=Direction.NORTH_WEST,
+                    signature="aqaeawdwwwdwqwdwwwdwewweaqa",
+                    id=ResourceLocation("lapisworks", "create_enchsent2"),
+                ),
+                HexCoord(q=0, r=0),
+            ),
+            (
+                PatternInfo(
+                    startdir=Direction.NORTH_EAST,
+                    signature="wdwewdwwwdwwwdwqwdwwwdw",
+                    id=ResourceLocation("lapisworks", "create_enchsent3"),
+                ),
+                HexCoord(q=1, r=0),
+            ),
+            (
+                PatternInfo(
+                    startdir=Direction.NORTH_WEST,
+                    signature="aqaeawdwwwdwqwdwwwdweqaawddeweaqa",
+                    id=ResourceLocation("lapisworks", "create_enchsent4"),
+                ),
+                HexCoord(q=0, r=0),
+            ),
+            (
+                PatternInfo(
+                    startdir=Direction.NORTH_WEST,
+                    signature="wdwwwdwqwdwwwdweqaawdde",
+                    id=ResourceLocation("lapisworks", "create_enchsent5"),
+                ),
+                HexCoord(q=1, r=0),
+            ),
+            (
+                PatternInfo(
+                    startdir=Direction.NORTH_WEST,
+                    signature="wdwwwdwqwdwwwdwweeeee",
+                    id=ResourceLocation("lapisworks", "create_enchsent6"),
+                ),
+                HexCoord(q=1, r=0),
+            ),
+        ],
+    )
+    print(overlay)

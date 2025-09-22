@@ -13,7 +13,7 @@ import at.petrak.hexcasting.api.misc.MediaConstants;
 import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 
-import static com.luxof.lapisworks.LapisworksNetworking.SEND_SENT;
+import static com.luxof.lapisworks.LapisworksIDs.SEND_SENT;
 
 import java.util.List;
 

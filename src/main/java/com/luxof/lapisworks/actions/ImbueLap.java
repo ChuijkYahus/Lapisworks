@@ -1,21 +1,19 @@
 package com.luxof.lapisworks.actions;
 
 import java.util.List;
-import java.util.Optional;
 
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.RenderedSpell;
 import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.OperationResult;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -29,44 +27,37 @@ public class ImbueLap implements SpellAction {
         return 0;
     }
 
+    private static boolean isLapis(ItemStack stack) {
+        return !stack.isEmpty() && stack.getItem() == Items.LAPIS_LAZULI;
+    }
+
     @Override
     public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
-        // FUCKING GOD I LOVE RUST!!!!
-        // EVERY TIME I SEE OPTION ENUM A WHITE TEAR FLOWS DOWN MY LEG
-        // I FEEL ALL FUZZY AND WARM INSIDE
-        Optional<LivingEntity> casterOption = Optional.of(ctx.getCastingEntity());
-        if (casterOption.isEmpty()) {
-            MishapThrowerJava.throwMishap(new MishapBadCaster());
-        }
-        LivingEntity caster = casterOption.get();
-        ItemStack offHandItems = caster.getOffHandStack();
-        if (offHandItems.isEmpty()) {
+        HeldItemInfo heldStackInfo = ctx.getHeldItemToOperateOn(ImbueLap::isLapis);
+        if (heldStackInfo == null) {
             //                              *shrug* i don't know why it's different either.
-            MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(offHandItems, "lapis_lazuli"));
-        } else if (offHandItems.getItem() != Items.LAPIS_LAZULI) {
-            MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(offHandItems, "lapis_lazuli"));
+            // i now know: i was stupid
+            MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "lapis_lazuli"));
         }
+        int count = heldStackInfo.stack().getCount();
 
         return new SpellAction.Result(
-            new Spell(caster, offHandItems.getCount()),
-            MediaConstants.SHARD_UNIT * 2 * offHandItems.getCount(),
-            List.of(ParticleSpray.burst(caster.getPos(), 1, 10 + offHandItems.getCount())),
+            new Spell(count, heldStackInfo.hand()),
+            MediaConstants.SHARD_UNIT * 2 * count,
+            List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 1, 10 + count)),
             1 // I REALLY don't know what to make this but I think it's for stuff like Hermes' Gambit
         );
     }
 
     public class Spell implements RenderedSpell {
         public final int count;
-        public final LivingEntity caster;
+        public final Hand hand;
 
-        public Spell(LivingEntity caster, int count) {
-            this.caster = caster;
-            this.count = count;
-        }
+        public Spell(int count, Hand hand) { this.count = count; this.hand = hand; }
 
 		@Override
 		public void cast(CastingEnvironment ctx) {
-            this.caster.setStackInHand(Hand.OFF_HAND, new ItemStack(ModItems.AMEL_ITEM, this.count));
+            ctx.replaceItem(ImbueLap::isLapis, new ItemStack(ModItems.AMEL_ITEM, this.count), hand);
 		}
 
         @Override

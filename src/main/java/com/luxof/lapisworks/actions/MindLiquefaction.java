@@ -13,7 +13,6 @@ import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
-import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
@@ -22,19 +21,24 @@ import com.luxof.lapisworks.blocks.Mind;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
 import com.luxof.lapisworks.init.ModBlocks;
 
+import static com.luxof.lapisworks.LapisworksIDs.MIND_BLOCK;
+
 import java.util.List;
 import java.util.Optional;
 
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
 /** you could make like 10 / (6.666.. * 60) = 0.025 dust per second per mind from this
  * so hexal wisp eating isn't overran */
 public class MindLiquefaction implements SpellAction {
+    private static boolean isMediaHolder(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) { return false; }
+        ADMediaHolder mediaHolder = IXplatAbstractions.INSTANCE.findMediaHolder(stack);
+        return mediaHolder == null || !mediaHolder.canRecharge();
+    }
 
     public int getArgc() {
         return 1;
@@ -42,15 +46,10 @@ public class MindLiquefaction implements SpellAction {
 
     @Override
     public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
-        Optional<LivingEntity> casterOp = Optional.of(ctx.getCastingEntity());
-        if (casterOp.isEmpty()) { MishapThrowerJava.throwMishap(new MishapBadCaster()); }
-        LivingEntity caster = casterOp.get();
-
-
         BlockPos mindPos = OperatorUtils.getBlockPos(args, 0, getArgc());
         try { ctx.assertPosInRange(mindPos); }
         catch (Mishap mishap) { MishapThrowerJava.throwMishap(mishap); }
-        MishapBadBlock needMind = new MishapBadBlock(mindPos, Text.translatable("block.lapisworks.mind"));
+        MishapBadBlock needMind = new MishapBadBlock(mindPos, MIND_BLOCK);
         if (!(ctx.getWorld().getBlockState(mindPos).getBlock() instanceof Mind)) {
             MishapThrowerJava.throwMishap(needMind);
         }
@@ -64,20 +63,16 @@ public class MindLiquefaction implements SpellAction {
 
 
         Mishap needRechargeable = MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "rechargeable");
-        HeldItemInfo heldStackInfo = ctx.getHeldItemToOperateOn((stack) -> { return true; });
+        HeldItemInfo heldStackInfo = ctx.getHeldItemToOperateOn(MindLiquefaction::isMediaHolder);
         if (heldStackInfo == null) {
             MishapThrowerJava.throwMishap(needRechargeable);
         }
-        ADMediaHolder mediaHolder = IXplatAbstractions.INSTANCE.findMediaHolder(heldStackInfo.component1());
-        if (mediaHolder == null || !mediaHolder.canRecharge()) {
-            MishapThrowerJava.throwMishap(needRechargeable);
-        }
-        
+
 
         return new SpellAction.Result(
             new Spell(blockEntity, heldStackInfo.component1()),
             0L,
-            List.of(ParticleSpray.burst(caster.getPos(), 2, 15)),
+            List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 2, 15)),
             1
         );
     }

@@ -4,14 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.nbt.NbtCompound;
+
 import vazkii.patchouli.api.PatchouliAPI;
 
-// really evil fucking dark magic bullshit to circumvent some stuff that was there for a reason
+// really evil fucking dark magic bullshit to circumvent some stuff that was probably there for a reason
 // (still probably better then Hexical's panic())
 // why?
 // i like pretty shit
 // i guess you could also make the excuse for originality too, afaik no one has done
-// per-world patterns that change shape
+// per-world shape patterns
 public class ThemConfigFlags {
     public static HashMap<String, Integer> chosenFlags = new HashMap<String, Integer>();
     public static HashMap<String, List<String>> allPerWorldShapePatterns = new HashMap<String, List<String>>();

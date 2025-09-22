@@ -6,8 +6,6 @@ import com.luxof.lapisworks.blocks.Mind;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.mixinsupport.ArtMindInterface;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +48,9 @@ public class MindEntity extends BlockEntity {
     }
 
     public static int computeFilledState(float filledPercent) {
-        return (int)Math.max(Math.min(Math.floor((double)filledPercent / 33.33), 3.0), 0.0);
+        // 7.14 is 100 / 14
+        // i need to do X/(100/14) to get nums from 0-14
+        return (int)Math.max(Math.min(Math.floor((double)filledPercent / 7.14), 14.0), 0.0);
     }
 
     public static void consumeVillagerMinds(World world, BlockPos pos, MindEntity blockEntity) {
@@ -70,6 +70,7 @@ public class MindEntity extends BlockEntity {
             VillagerEntity villager = villagersNear.get(idx);
             if (villager.isSleeping() && usedVillagersCount == 0) {
                 blockEntity.mindCompletion += 15.0f;
+                blockEntity.mindCompletion = Math.min(100.0f, blockEntity.mindCompletion);
                 ((ArtMindInterface)villager).setDontUseAgainTicks(sleepingVillagerUseAgainCD);
                 break;
             }
@@ -80,6 +81,7 @@ public class MindEntity extends BlockEntity {
             ((ArtMindInterface)villager).incUsedMindPercentage(villagerExhaustionRate);
             ((ArtMindInterface)villager).setMindBeingUsedTicks(villagerExhaustRegenCD);
             blockEntity.mindCompletion += mindCompleteRatePerVillager;
+            blockEntity.mindCompletion = Math.min(100.0f, blockEntity.mindCompletion);
         }
     }
 

@@ -21,8 +21,8 @@
         },
         {
             "type": "patchouli:text",
-            "title": "pages.lapisworks.lapisworks_mishaps.badmainhand.title",
-            "text": "pages.lapisworks.lapisworks_mishaps.badmainhand.summary"
+            "title": "pages.lapisworks.lapisworks_mishaps.badspechand.title",
+            "text": "pages.lapisworks.lapisworks_mishaps.badspechand.summary"
         }
     ]
 }

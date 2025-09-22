@@ -1,11 +1,14 @@
 package com.luxof.lapisworks.mishaps;
 
-import java.util.List;
-
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+
+import static com.luxof.lapisworks.LapisworksIDs.ALREADY_ENCHANTED;
+
+import java.util.List;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
@@ -41,7 +44,7 @@ public class MishapAlreadyHasEnchantment extends Mishap {
     @Override
     public Text errorMessage(CastingEnvironment ctx, Context errorCtx) {
         return Text.translatable(
-            "mishaps.lapisworks.already_enchanted",
+            ALREADY_ENCHANTED,
             this.whatEntity.getName(),
             this.enchantmentName,
             this.enchantmentName,

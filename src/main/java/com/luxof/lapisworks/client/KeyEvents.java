@@ -7,7 +7,7 @@ import org.lwjgl.glfw.GLFW;
 import com.luxof.lapisworks.init.ModItems;
 
 import static com.luxof.lapisworks.Lapisworks.trinketEquipped;
-import static com.luxof.lapisworks.LapisworksNetworking.OPEN_CASTING_GRID;
+import static com.luxof.lapisworks.LapisworksIDs.OPEN_CASTING_GRID;
 
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

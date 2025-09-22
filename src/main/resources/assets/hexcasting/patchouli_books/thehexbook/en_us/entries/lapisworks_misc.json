@@ -50,40 +50,56 @@
             "text": "pages.lapisworks.lapisworks_misc.visible_dstl.summary"
         },
         {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:equiv_block",
+            "anchor": "lapisworks:equiv_block",
+            "input": "vec, vec",
+            "output": "bool",
+            "text": "pages.lapisworks.lapisworks_misc.equiv_block.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:equal_block",
+            "anchor": "lapisworks:equal_block",
+            "input": "vec, vec",
+            "output": "bool",
+            "text": "pages.lapisworks.lapisworks_misc.equal_block.summary"
+        },
+        {
             "type": "patchouli:text",
             "text": "pages.lapisworks.lapisworks_misc.rwpatternsheadsup"
         },
         {
             "type": "hexcasting:pattern",
-            "op_id": "lapisworks:read_mainhand",
-            "anchor": "lapisworks:read_mainhand",
-            "input": "",
+            "op_id": "lapisworks:read_spechand",
+            "anchor": "lapisworks:read_spechand",
+            "input": "int",
             "output": "any",
-            "text": "pages.lapisworks.lapisworks_misc.read_mainhand.summary"
+            "text": "pages.lapisworks.lapisworks_misc.read_spechand.summary"
         },
         {
             "type": "hexcasting:pattern",
-            "op_id": "lapisworks:readable_mainhand",
-            "anchor": "lapisworks:readable_mainhand",
-            "input": "",
+            "op_id": "lapisworks:readable_spechand",
+            "anchor": "lapisworks:readable_spechand",
+            "input": "int",
             "output": "bool",
-            "text": "pages.lapisworks.lapisworks_misc.readable_mainhand.summary"
+            "text": "pages.lapisworks.lapisworks_misc.readable_spechand.summary"
         },
         {
             "type": "hexcasting:pattern",
-            "op_id": "lapisworks:write_mainhand",
-            "anchor": "lapisworks:write_mainhand",
-            "input": "any",
+            "op_id": "lapisworks:write_spechand",
+            "anchor": "lapisworks:write_spechand",
+            "input": "any, int",
             "output": "",
-            "text": "pages.lapisworks.lapisworks_misc.write_mainhand.summary"
+            "text": "pages.lapisworks.lapisworks_misc.write_spechand.summary"
         },
         {
             "type": "hexcasting:pattern",
-            "op_id": "lapisworks:writable_mainhand",
-            "anchor": "lapisworks:writable_mainhand",
-            "input": "",
+            "op_id": "lapisworks:writable_spechand",
+            "anchor": "lapisworks:writable_spechand",
+            "input": "int",
             "output": "bool",
-            "text": "pages.lapisworks.lapisworks_misc.writable_mainhand.summary"
+            "text": "pages.lapisworks.lapisworks_misc.writable_spechand.summary"
         }
     ]
 }

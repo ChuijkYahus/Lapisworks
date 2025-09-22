@@ -1,6 +1,6 @@
 package com.luxof.lapisworks.items.shit;
 
-import static com.luxof.lapisworks.Lapisworks.isAmel;
+import static com.luxof.lapisworks.init.Mutables.isAmel;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -47,5 +47,4 @@ public class AmelSword extends SwordItem implements FullyAmelInterface {
     // also postHit and getAttributeModifiers ig
 
     @Override public int getRequiredAmelToMakeFromBase() { return 32; }
-    @Override public boolean noPartAmelPhase() { return true; }
 }

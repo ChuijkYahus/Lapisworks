@@ -6,23 +6,21 @@ import at.petrak.hexcasting.api.casting.RenderedSpell;
 import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.OperationResult;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
 import at.petrak.hexcasting.api.casting.mishaps.MishapUnenlightened;
 
 import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.init.EnchantCountKeeper;
+import com.luxof.lapisworks.init.Mutables;
 import com.luxof.lapisworks.mishaps.MishapAlreadyHasEnchantment;
-import com.luxof.lapisworks.mishaps.MishapNotEnoughOffhandItems;
+import com.luxof.lapisworks.mishaps.MishapNotEnoughItems;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 
-import static com.luxof.lapisworks.Lapisworks.isAmel;
-
 import java.util.List;
-import java.util.Optional;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -86,23 +84,15 @@ public class GenericEnchant implements SpellAction {
             );
         }
 
-        Optional<LivingEntity> casterOption = Optional.of(ctx.getCastingEntity());
-        if (casterOption.isEmpty()) {
-            MishapThrowerJava.throwMishap(new MishapBadCaster());
-        }
-        LivingEntity caster = casterOption.get();
-
-        ItemStack offHandItems = caster.getOffHandStack();
-        if (offHandItems.isEmpty()) {
-            MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(offHandItems, "amel"));
-        } else if (!isAmel(offHandItems)) {
-            MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(offHandItems, "amel"));
-        } else if (offHandItems.getCount() < 10) {
-            MishapThrowerJava.throwMishap(new MishapNotEnoughOffhandItems(offHandItems, this.requiredAmel));
+        HeldItemInfo amelInfo = ctx.getHeldItemToOperateOn(Mutables::isAmel);
+        if (amelInfo == null) {
+            MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "amel"));
+        } else if (amelInfo.stack().getCount() < this.requiredAmel) {
+            MishapThrowerJava.throwMishap(new MishapNotEnoughItems(amelInfo.stack(), this.requiredAmel));
         }
 
         return new SpellAction.Result(
-            new Spell(entity, caster),
+            new Spell(entity, amelInfo.stack(), amelInfo.hand()),
             this.requiredMedia,
             List.of(ParticleSpray.burst(entity.getPos(), 3, 25)),
             1
@@ -111,23 +101,24 @@ public class GenericEnchant implements SpellAction {
 
     public class Spell implements RenderedSpell {
         public final LivingEntity entity;
-        public final LivingEntity caster;
+        public final ItemStack stack;
+        public final Hand hand;
 
-        public Spell(LivingEntity entity, LivingEntity caster) {
-            this.entity = entity;
-            this.caster = caster;
+        public Spell(LivingEntity entity, ItemStack stack, Hand hand) {
+            this.entity = entity; this.stack = stack; this.hand = hand;
         }
 
 		@Override
 		public void cast(CastingEnvironment ctx) {
-            this.caster.setStackInHand(
-                Hand.OFF_HAND,
-                caster.getOffHandStack().getCount() == requiredAmel ?
+            ctx.replaceItem(
+                Mutables::isAmel,
+                this.stack.getCount() == requiredAmel ?
                     ItemStack.EMPTY :
                     new ItemStack(
-                        caster.getOffHandStack().getItem(),
-                        caster.getOffHandStack().getCount() - requiredAmel
-                    )
+                        this.stack.getItem(),
+                        this.stack.getCount() - requiredAmel
+                    ),
+                 this.hand
             );
             ((LapisworksInterface)this.entity).incrementEnchant(enchantmentIdx);
 		}

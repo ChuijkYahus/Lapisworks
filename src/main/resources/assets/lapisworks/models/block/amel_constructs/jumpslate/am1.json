@@ -1,0 +1,7 @@
+{
+    "parent": "hexcasting:block/slate",
+    "textures": {
+        "0": "lapisworks:block/amel_constructs/jumpslate/am1",
+        "particle": "lapisworks:block/amel_constructs/jumpslate/am1"
+    }
+}

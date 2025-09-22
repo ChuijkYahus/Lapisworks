@@ -10,11 +10,13 @@ import com.mojang.datafixers.util.Pair;
 
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.clamp;
-import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.Lapisworks.nullConfigFlags;
 import static com.luxof.lapisworks.Lapisworks.prettifyFloat;
-import static com.luxof.lapisworks.LapisworksNetworking.SEND_PWSHAPE_PATS;
-import static com.luxof.lapisworks.LapisworksNetworking.SEND_SENT;
+import static com.luxof.lapisworks.LapisworksIDs.BLOCKING_MPP;
+import static com.luxof.lapisworks.LapisworksIDs.SCRYING_MIND_END;
+import static com.luxof.lapisworks.LapisworksIDs.SCRYING_MIND_START;
+import static com.luxof.lapisworks.LapisworksIDs.SEND_PWSHAPE_PATS;
+import static com.luxof.lapisworks.LapisworksIDs.SEND_SENT;
 import static com.luxof.lapisworks.init.ModItems.IRON_SWORD;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 
@@ -50,7 +52,7 @@ public class LapisworksClient implements ClientModInitializer {
     public static void registerMPPs() {
         ModelPredicateProviderRegistry.register(
             IRON_SWORD,
-            id("blocking"), // first person doesn't work but WHATEVER
+            BLOCKING_MPP, // first person doesn't work but WHATEVER
             (stack, world, entity, seed) -> {
                 return entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F;
             }    
@@ -70,7 +72,7 @@ public class LapisworksClient implements ClientModInitializer {
         // the eternal fucking grammar battle with this simple Markiplier ass log will drive me insane
         // thankful i won't have to edit this file anymore
         // ^^^^ what was that, chief?
-        LOGGER.info("Hello everybody my name is LapisworksClient and today what I am going to do is: keybinds, networking, Model Predicate Providers, spin 4D hypercubes for the FUNNY, and client-side rendering!");
+        LOGGER.info("Hello everybody my name is LapisworksClient and today what we are going to do is: keybinds, networking, Model Predicate Providers, spin 4D hypercubes for the FUNNY, and client-side rendering!");
         LOGGER.info("Does NONE of that sound fun? Well, that's because it isn't. So let's get started, shall we?");
 
         // we all thank hexxy for adding simple addDisplayer() instead of requiring mixin in unison
@@ -83,12 +85,12 @@ public class LapisworksClient implements ClientModInitializer {
                 lines.add(
                     new Pair<ItemStack, Text>(
                         new ItemStack(ModItems.MIND),
-                        Text.translatable("render.lapisworks.scryinglens.mind.start").append(
+                        SCRYING_MIND_START.copy().append(
                             Text.literal(
                                 prettifyFloat(clamp(blockEntity.mindCompletion, 0f, 100f))
                             )
                         ).append(
-                            Text.translatable("render.lapisworks.scryinglens.mind.end")
+                            SCRYING_MIND_END
                         ).formatted(
                             Formatting.LIGHT_PURPLE
                         )
