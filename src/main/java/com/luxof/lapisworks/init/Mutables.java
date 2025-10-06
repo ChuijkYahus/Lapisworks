@@ -1,11 +1,17 @@
 package com.luxof.lapisworks.init;
 
+import at.petrak.hexcasting.api.casting.OperatorUtils;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
+import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.api.misc.TriPredicate;
+import at.petrak.hexcasting.common.items.ItemStaff;
 import at.petrak.hexcasting.common.lib.HexItems;
 
 import com.luxof.lapisworks.MishapThrowerJava;
+import com.luxof.lapisworks.TriConsumer;
+import com.luxof.lapisworks.interop.hextended.LapixtendedInterface;
 import com.luxof.lapisworks.items.shit.FullyAmelInterface;
 import com.luxof.lapisworks.items.shit.PartiallyAmelInterface;
 import com.luxof.lapisworks.mishaps.MishapBadHandItem;
@@ -45,22 +51,20 @@ import static com.luxof.lapisworks.LapisworksIDs.ENHANCE_ENCHANTED_BOOK;
 import static com.luxof.lapisworks.LapisworksIDs.FLAY_ARTMIND_ADVANCEMENT;
 import static com.luxof.lapisworks.LapisworksIDs.HASTENATURE_ADVANCEMENT;
 import static com.luxof.lapisworks.LapisworksIDs.JUKEBOX_INTO_LIVE_JUKEBOX;
+import static com.luxof.lapisworks.LapisworksIDs.MAKE_GENERIC_PARTAMEL;
 import static com.luxof.lapisworks.LapisworksIDs.SIMPLE_MIND_INTO_AMETHYST;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.apache.logging.log4j.util.TriConsumer;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.data.client.BlockStateVariantMap.TriFunction;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.Item;
@@ -86,9 +90,9 @@ public class Mutables {
     private static List<FullyAmelInterface> TO_FULLAMEL = new ArrayList<>();
     private static Map<Item, Item> moldAmelRecipes = new HashMap<>();
     // like what the fuck are these types below me scoob
-    private static Map<Identifier, BiPredicate<HeldItemInfo, CastingEnvironment>> imbueAmelBeegRecipeFilters = new HashMap<>();
-    private static Map<Identifier, BiFunction<HeldItemInfo, CastingEnvironment, Long>> imbueAmelBeegRecipeMediaCosts = new HashMap<>();
-    private static Map<Identifier, BiConsumer<HeldItemInfo, CastingEnvironment>> imbueAmelBeegRecipeDoers = new HashMap<>();
+    private static Map<Identifier, TriPredicate<HeldItemInfo, CastingEnvironment, List<? extends Iota>>> imbueAmelBeegRecipeFilters = new HashMap<>();
+    private static Map<Identifier, TriFunction<HeldItemInfo, CastingEnvironment, List<? extends Iota>, Long>> imbueAmelBeegRecipeMediaCosts = new HashMap<>();
+    private static Map<Identifier, TriConsumer<HeldItemInfo, CastingEnvironment, List<? extends Iota>>> imbueAmelBeegRecipeDoers = new HashMap<>();
     private static Map<Identifier, BiPredicate<BlockPos, World>> imbueMindRecipeFilters = new HashMap<>();
     private static Map<Identifier, TriConsumer<BlockPos, World, ServerPlayerEntity>> imbueMindRecipeDoers = new HashMap<>();
 
@@ -98,7 +102,10 @@ public class Mutables {
 
 
     public static void registerInfusionRecipe(@NotNull Item normal, PartiallyAmelInterface partInfusion, FullyAmelInterface fullInfusion) { FROM_ITEMS.add(normal); TO_PARTAMEL.add(partInfusion); TO_FULLAMEL.add(fullInfusion); }
-    public static boolean infusionRecipeExistsFor(@NotNull Item normal) { return FROM_ITEMS.contains(normal) || TO_PARTAMEL.contains((PartiallyAmelInterface)normal); }
+    public static boolean infusionRecipeExistsFor(@NotNull Item normal) {
+        if (normal instanceof PartiallyAmelInterface) { return TO_PARTAMEL.contains((PartiallyAmelInterface)normal); }
+        else { return FROM_ITEMS.contains(normal); }
+    }
     /** Returns a partAmel even if normal is a partAmel or a fullAmel. */
     @Nullable public static PartiallyAmelInterface getPartAmelProduct(Item normal) {
         if (normal instanceof PartiallyAmelInterface) { return (PartiallyAmelInterface)normal; }
@@ -136,32 +143,33 @@ public class Mutables {
 
 
     
-    /** <p>i didn't use ItemStack because it'll require another argument to have the Hand.<br>
-     * HeldItemInfo.hand can be null.</p>
-     * <p>all doers should probably assume the environment they're being used in is the server.</p>
-     * <p>beegInfusion recipes are NOT prioritized over normal recipes in case there's overlap, but you
-     * should probably not have the overlap in the first place. Also please don't have overlap in beegInfusion
-     * recipe inputs, Imbue Amel will only take the first one that pops up in case it's intentional
-     * on your part for whatever cursed ass reason.</p>
-     * Also YES, deadass you can throw mishaps in the filter and probably also mediaCostDecider, but i'd
-     * recommend you don't unless you have good mishaps to throw (like not enough amel). */
+    /** <p>i didn't use <code>ItemStack</code> because it'll require another argument to have the Hand.<br>
+     * <code>HeldItemInfo.hand</code> can be null.</p>
+     * <p>all <code>doer</code>s should (and native ones do) probably assume the environment they're being used in is the server.</p>
+     * <p><code>beegInfusion</code> recipes are NOT prioritized over normal recipes in case there's overlap, but you
+     * should probably not have the overlap in the first place unless it's for making a generic like the
+     * generic partially amel staff and it's extended ver. Also please don't have overlap between
+     * <code>beegInfusion</code> recipes in their inputs. If you do, <code>Imbue Amel</code> will only take the first one
+     * that pops up in case it's intentional on your part for whatever cursed ass reason.</p>
+     * Also YES, deadass you can throw mishaps in <code>filter</code> and probably also <code>mediaCostDecider</code>, but i'd
+     * recommend you don't unless you have CONFIRMED and are ABSOLUTELY CERTAIN it's your recipe (like not enough amel). */
     public static void registerBeegInfusionRecipe(
-        @NotNull BiPredicate<HeldItemInfo, CastingEnvironment> filter,
+        @NotNull TriPredicate<HeldItemInfo, CastingEnvironment, List<? extends Iota>> filter,
         @NotNull Identifier id,
-        @NotNull BiFunction<HeldItemInfo, CastingEnvironment, Long> mediaCostDecider,
-        @NotNull BiConsumer<HeldItemInfo, CastingEnvironment> doer
+        @NotNull TriFunction<HeldItemInfo, CastingEnvironment, List<? extends Iota>, Long> mediaCostDecider,
+        @NotNull TriConsumer<HeldItemInfo, CastingEnvironment, List<? extends Iota>> doer
     ) {
         imbueAmelBeegRecipeFilters.put(id, filter);
         imbueAmelBeegRecipeMediaCosts.put(id, mediaCostDecider);
         imbueAmelBeegRecipeDoers.put(id, doer);
     }
-    public static BiPredicate<HeldItemInfo, CastingEnvironment> getBeegInfusionRecipeFilter(Identifier id) { return imbueAmelBeegRecipeFilters.get(id); }
-    public static BiFunction<HeldItemInfo, CastingEnvironment, Long> getBeegInfusionRecipeMediaCostDecider(Identifier id) { return imbueAmelBeegRecipeMediaCosts.get(id); }
-    public static BiConsumer<HeldItemInfo, CastingEnvironment> getBeegInfusionRecipeDoer(Identifier id) { return imbueAmelBeegRecipeDoers.get(id); }
-    public static List<Identifier> testBeegInfusionFilters(HeldItemInfo itemInfo, CastingEnvironment entity) {
+    public static TriPredicate<HeldItemInfo, CastingEnvironment, List<? extends Iota>> getBeegInfusionRecipeFilter(Identifier id) { return imbueAmelBeegRecipeFilters.get(id); }
+    public static TriFunction<HeldItemInfo, CastingEnvironment, List<? extends Iota>, Long> getBeegInfusionRecipeMediaCostDecider(Identifier id) { return imbueAmelBeegRecipeMediaCosts.get(id); }
+    public static TriConsumer<HeldItemInfo, CastingEnvironment, List<? extends Iota>> getBeegInfusionRecipeDoer(Identifier id) { return imbueAmelBeegRecipeDoers.get(id); }
+    public static List<Identifier> testBeegInfusionFilters(HeldItemInfo itemInfo, CastingEnvironment entity, List<? extends Iota> stack) {
         List<Identifier> ret = new ArrayList<>();
         for (Identifier id : imbueAmelBeegRecipeFilters.keySet()) {
-            if (imbueAmelBeegRecipeFilters.get(id).test(itemInfo, entity)) { ret.add(id); }
+            if (imbueAmelBeegRecipeFilters.get(id).test(itemInfo, entity, stack)) { ret.add(id); }
         }
         return ret;
     }
@@ -214,6 +222,21 @@ public class Mutables {
 
 
 
+    /** a list because if it's a composed Runnable (like how Consumer does it) it fucking explodes */
+    private static List<Runnable> registerAtServerStart = new ArrayList<>();
+    /** Schedules a Runnable to be ran at server start.
+     * <p>TEMPORARY and SPECIFICALLY for registering interop recipes until i implement recipes
+     * <p>checks are on you */
+    public static void scheduleRegisterAtServerStart(Runnable runnable) {
+        registerAtServerStart.add(runnable);
+    }
+    /** Shouldn't be called by you. */
+    public static void runScheduledRegisterEvents() {
+        for (Runnable registerEvent : registerAtServerStart) {
+            registerEvent.run();
+        }
+    }
+
     public static void innitBruv() {
         // i wonder if i could move this and make it be almost completely data-driven?
         wizardDiariesGainableAdvancements.add(ENCHSENT_ADVANCEMENT);
@@ -263,7 +286,7 @@ public class Mutables {
 
         // deaduzz.
         registerBeegInfusionRecipe(
-            (heldInfo, ctx) -> {
+            (heldInfo, ctx, stack) -> {
                 ItemStack amel = getStackFromHand(ctx, 1);
                 if (heldInfo.stack().getItem() != Items.ENCHANTED_BOOK) { return false; }
                 else if (heldInfo.hand() != Hand.MAIN_HAND) { return false; }
@@ -285,8 +308,8 @@ public class Mutables {
                 return true;
             },
             ENHANCE_ENCHANTED_BOOK,
-            (heldInfo, ctx) -> { return MediaConstants.CRYSTAL_UNIT * 5; },
-            (heldInfo, ctx) -> {
+            (heldInfo, ctx, stack) -> MediaConstants.CRYSTAL_UNIT * 5,
+            (heldInfo, ctx, hexStack) -> {
                 ItemStack amel = getStackFromHand(ctx, 1);
                 int requiredAmel = 20 * EnchantmentHelper.get(heldInfo.stack()).values().iterator().next();
                 ctx.replaceItem(
@@ -305,6 +328,72 @@ public class Mutables {
                     stack -> true,
                     heldInfo.stack(), 
                     heldInfo.hand()
+                );
+            }
+        );
+        registerBeegInfusionRecipe(
+            (held, ctx, stack) -> {
+                Item item = held.stack().getItem();
+                return held.hand() == Hand.MAIN_HAND &&
+                       item instanceof ItemStaff &&
+                       !(item instanceof FullyAmelInterface);
+            },
+
+            MAKE_GENERIC_PARTAMEL,
+
+            (heldInfo, ctx, hexStack) -> {
+                ItemStack mainHand = heldInfo.stack();
+                int requiredAmelForFullInfusion = mainHand.getItem() instanceof PartiallyAmelInterface ?
+                    // amel needed to make full amel = damage suffered (or healing needed) / 1 amel's worth for healing
+                    (int)Math.ceil((double)mainHand.getDamage() / (double)((PartiallyAmelInterface)mainHand.getItem()).getAmelWorthInDurability()) :
+                    // or just the amount it takes
+                    ((FullyAmelInterface)LapixtendedInterface.getAppropriateFullAmel(mainHand.getItem())).getRequiredAmelToMakeFromBase();
+                int amelCost = Math.min(requiredAmelForFullInfusion, OperatorUtils.getPositiveInt(hexStack, 0, hexStack.size()));
+                if (getStackFromHand(ctx, 1).getCount() < amelCost) { MishapThrowerJava.throwMishap(new MishapNotEnoughItems(getStackFromHand(ctx, 1), amelCost)); }
+                return MediaConstants.SHARD_UNIT * 2 * amelCost;
+            },
+
+            (heldInfo, ctx, hexStack) -> {
+                ItemStack offHand = getStackFromHand(ctx, 1);
+                ItemStack mainHand = heldInfo.stack();
+                Item mainItem = mainHand.getItem();
+
+                int requiredAmelForFullInfusion = mainItem instanceof PartiallyAmelInterface ?
+                    // amel needed to make full amel = damage suffered (or healing needed) / 1 amel's worth for healing
+                    (int)Math.ceil((double)mainHand.getDamage() / (double)((PartiallyAmelInterface)mainItem).getAmelWorthInDurability()) :
+                    // or just the amount it takes
+                    ((FullyAmelInterface)LapixtendedInterface.getAppropriateFullAmel(mainHand.getItem())).getRequiredAmelToMakeFromBase();
+                int amelCost = Math.min(requiredAmelForFullInfusion, OperatorUtils.getPositiveInt(hexStack, 0, hexStack.size()));
+
+                // get the extended vers if they're there
+                PartiallyAmelInterface appropriatePartAmel = LapixtendedInterface.getAppropriatePartAmelGeneric(mainItem);
+                Item appropriateFullAmel = LapixtendedInterface.getAppropriateFullAmel(mainItem);
+                ItemStack setStack;
+                if (amelCost == requiredAmelForFullInfusion) { setStack = new ItemStack(appropriateFullAmel); }
+                if (!(mainItem instanceof PartiallyAmelInterface)) {
+                    setStack = new ItemStack((Item)appropriatePartAmel);
+                    setStack.setDamage(
+                        setStack.getMaxDamage() - amelCost * appropriatePartAmel.getAmelWorthInDurability()
+                    );
+                } else {
+                    setStack = mainHand.copy();
+                    setStack.setDamage(
+                        mainHand.getDamage() - amelCost * appropriatePartAmel.getAmelWorthInDurability()
+                    );
+                }
+
+                ctx.replaceItem(
+                    stack -> isAmel(stack),
+                    offHand.getCount() == amelCost ? ItemStack.EMPTY.copy() : new ItemStack(
+                        offHand.getItem(),
+                        offHand.getCount() - amelCost
+                    ),
+                    Hand.OFF_HAND
+                );
+                ctx.replaceItem(
+                    stack -> stack.getItem() instanceof ItemStaff, 
+                    setStack,
+                    Hand.MAIN_HAND
                 );
             }
         );

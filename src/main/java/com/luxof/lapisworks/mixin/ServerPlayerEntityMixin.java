@@ -3,16 +3,21 @@ package com.luxof.lapisworks.mixin;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
+import com.luxof.lapisworks.interop.hextended.items.AmelOrb;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
 
+import java.util.List;
+
 import com.mojang.authlib.GameProfile;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -61,8 +66,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
     public Vec3d spawnAt = ((EnchSentInterface)this).getEnchantedSentinel();
     public ParticleSpray particles = null;
-    // i like early returns
-    public void tickHelper() {
+    public void spawnEnchSentParticles() {
         Vec3d sentinelPosition = ((EnchSentInterface)this).getEnchantedSentinel();
         if ((spawnAt == null && sentinelPosition != null) || spawnAt != sentinelPosition) {
             spawnAt = sentinelPosition;
@@ -75,9 +79,23 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
             IXplatAbstractions.INSTANCE.getPigment((PlayerEntity)(Object)this)
         );
     }
+    public void spawnOrbParticles() {
+        List<Hand> hands = List.of(Hand.MAIN_HAND, Hand.OFF_HAND);
+        for (Hand hand : hands) {
+            ItemStack stack = this.getStackInHand(hand);
+            if (!(stack.getItem() instanceof AmelOrb orb)) continue;
+            Vec3d placeInAmbit = orb.getPlaceInAmbit(stack);
+            ParticleSpray particles = ParticleSpray.burst(placeInAmbit, 3, 2);
+            particles.sprayParticles(
+                (ServerWorld)this.getWorld(),
+                IXplatAbstractions.INSTANCE.getPigment((PlayerEntity)(Object)this)
+            );
+        }
+    }
 
     @Inject(at = @At("HEAD"), method = "tick")
     public void tick(CallbackInfo ci) {
-        tickHelper();
+        this.spawnEnchSentParticles();
+        this.spawnOrbParticles();
     }
 }

@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import com.luxof.lapisworks.blocks.ConjuredColorable;
 import com.luxof.lapisworks.blocks.JumpSlate;
 import com.luxof.lapisworks.blocks.Mind;
+import com.luxof.lapisworks.blocks.ReboundSlate;
 import com.luxof.lapisworks.blocks.LiveJukebox;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
 import com.luxof.lapisworks.blocks.entities.LiveJukeboxEntity;
@@ -26,6 +27,8 @@ public class ModBlocks {
     public static JumpSlate JUMP_SLATE_AM2 = new JumpSlate();
     public static JumpSlate JUMP_SLATE_AMETH = new JumpSlate();
     public static JumpSlate JUMP_SLATE_LAPIS = new JumpSlate();
+    public static ReboundSlate REBOUND_SLATE_1 = new ReboundSlate();
+    public static ReboundSlate REBOUND_SLATE_2 = new ReboundSlate();
     // FUCK BlockEntityType.Builder.create bro that shit didn't take ANYTHING i gave it
     public static BlockEntityType<BlockEntity> MIND_ENTITY_TYPE = new BlockEntityType<BlockEntity>(
         MindEntity::new,
@@ -46,6 +49,8 @@ public class ModBlocks {
         pickACropTop("amel_constructs/jumpslate/am2", JUMP_SLATE_AM2);
         pickACropTop("amel_constructs/jumpslate/ameth", JUMP_SLATE_AMETH);
         pickACropTop("amel_constructs/jumpslate/lapis", JUMP_SLATE_LAPIS);
+        pickACropTop("amel_constructs/jumpslate/rebound_1", REBOUND_SLATE_1);
+        pickACropTop("amel_constructs/jumpslate/rebound_2", REBOUND_SLATE_2);
         dontForgetStockings("mind_entity_type", MIND_ENTITY_TYPE);
         dontForgetStockings("live_jukebox_entity_type", LIVE_JUKEBOX_ENTITY_TYPE);
     }

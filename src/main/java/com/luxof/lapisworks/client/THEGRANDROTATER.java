@@ -115,7 +115,7 @@ public class THEGRANDROTATER {
             13,15,
             14,15
     );
-    public static Vector3f projectTo4D(Vector4f v) {
+    public static Vector3f projectTo3D(Vector4f v) {
         // 4 - v.w. Why?
         // projection. v.w is also never above 1, so i need something above that.
         return new Vector3f(v.x, v.y, v.z).div(4 - v.w);
@@ -155,7 +155,7 @@ public class THEGRANDROTATER {
         buffer.begin(DrawMode.LINES, VertexFormats.LINES);
 
         drawOrder.forEach((Integer idx) -> {
-            Vector3f v = projectTo4D(new Vector4f(vertices.get(idx)).mul(rotationMatrix));
+            Vector3f v = projectTo3D(new Vector4f(vertices.get(idx)).mul(rotationMatrix));
             // vvvvvvvvvvvv makes almost every line have "good" normals so MC makes them be big
             Vector3f n = new Vector3f(v).cross(new Vector3f(0f, 0f, 1f)).normalize();
             buffer

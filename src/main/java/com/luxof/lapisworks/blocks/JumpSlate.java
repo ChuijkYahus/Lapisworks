@@ -156,7 +156,7 @@ public class JumpSlate extends BlockCircleComponent implements Waterloggable {
 
         List<Pair<BlockPos, Direction>> exitDirs = List.of(
             // get opp if strength < 0, 'cause then it should reverse direction
-            this.exitPositionFromDirection(pos, enterDir, reverseDirIfNeeded(enterDir, stren), Math.abs(stren))
+            this.exitPositionFromDirection(pos, enterDir, reverseDirIfNeeded(enterDir, stren), stren)
         );
 
         return new ControlFlow.Continue(imgNow, exitDirs);

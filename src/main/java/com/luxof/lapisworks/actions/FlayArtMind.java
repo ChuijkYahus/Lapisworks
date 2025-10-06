@@ -14,6 +14,7 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.luxof.lapisworks.MishapThrowerJava;
+import com.luxof.lapisworks.TriConsumer;
 import com.luxof.lapisworks.blocks.Mind;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
 import com.luxof.lapisworks.init.Mutables;
@@ -25,8 +26,6 @@ import static com.luxof.lapisworks.LapisworksIDs.MIND_BLOCK;
 
 import java.util.List;
 import java.util.Map;
-
-import org.apache.logging.log4j.util.TriConsumer;
 
 import org.jetbrains.annotations.Nullable;
 

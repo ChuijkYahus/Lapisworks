@@ -16,6 +16,7 @@ import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.LapisworksIDs.LAPISMAGICSHITGROUPTEXT;
 import static com.luxof.lapisworks.LapisworksIDs.LAPIS_MAGIC_SHIT_GROUP;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -28,29 +29,28 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 
 public class ModItems {
-    public static FabricItemSettings fullStack = new FabricItemSettings().maxCount(64);
-    public static FabricItemSettings unstackable = new FabricItemSettings().maxCount(1);
-    public static FabricItemSettings partamel = new FabricItemSettings().maxCount(1).maxDamage(100);
+    private static FabricItemSettings fullStack = new FabricItemSettings().maxCount(64);
+    private static FabricItemSettings unstackable = new FabricItemSettings().maxCount(1);
     
     public static final Item AMEL_ITEM = new Item(fullStack);
     public static final Item AMEL2_ITEM = new Item(fullStack);
     public static final Item AMEL3_ITEM = new Item(fullStack);
     public static final Item AMEL4_ITEM = new Item(fullStack);
     public static final FullyAmelInterface AMEL_STAFF = new AmelStaff(unstackable);
-    public static final PartiallyAmelStaff PARTAMEL_STAFF = new PartiallyAmelStaff(partamel);
-    public static final PartiallyAmelStaff PARTAMEL_ACACIA_STAFF = new PartiallyAmelStaff(partamel);
-    public static final PartiallyAmelStaff PARTAMEL_BAMBOO_STAFF = new PartiallyAmelStaff(partamel);
-    public static final PartiallyAmelStaff PARTAMEL_BIRCH_STAFF = new PartiallyAmelStaff(partamel);
-    public static final PartiallyAmelStaff PARTAMEL_CHERRY_STAFF = new PartiallyAmelStaff(partamel);
-    public static final PartiallyAmelStaff PARTAMEL_CRIMSON_STAFF = new PartiallyAmelStaff(partamel);
-    public static final PartiallyAmelStaff PARTAMEL_DARK_OAK_STAFF = new PartiallyAmelStaff(partamel);
-    public static final PartiallyAmelStaff PARTAMEL_EDIFIED_STAFF = new PartiallyAmelStaff(partamel);
-    public static final PartiallyAmelStaff PARTAMEL_JUNGLE_STAFF = new PartiallyAmelStaff(partamel);
-    public static final PartiallyAmelStaff PARTAMEL_MANGROVE_STAFF = new PartiallyAmelStaff(partamel);
-    public static final PartiallyAmelStaff PARTAMEL_MINDSPLICE_STAFF = new PartiallyAmelStaff(partamel);
-    public static final PartiallyAmelStaff PARTAMEL_OAK_STAFF = new PartiallyAmelStaff(partamel);
-    public static final PartiallyAmelStaff PARTAMEL_SPRUCE_STAFF = new PartiallyAmelStaff(partamel);
-    public static final PartiallyAmelStaff PARTAMEL_WARPED_STAFF = new PartiallyAmelStaff(partamel);
+    public static final PartiallyAmelStaff PARTAMEL_STAFF = new PartiallyAmelStaff();
+    public static final PartiallyAmelStaff PARTAMEL_ACACIA_STAFF = new PartiallyAmelStaff();
+    public static final PartiallyAmelStaff PARTAMEL_BAMBOO_STAFF = new PartiallyAmelStaff();
+    public static final PartiallyAmelStaff PARTAMEL_BIRCH_STAFF = new PartiallyAmelStaff();
+    public static final PartiallyAmelStaff PARTAMEL_CHERRY_STAFF = new PartiallyAmelStaff();
+    public static final PartiallyAmelStaff PARTAMEL_CRIMSON_STAFF = new PartiallyAmelStaff();
+    public static final PartiallyAmelStaff PARTAMEL_DARK_OAK_STAFF = new PartiallyAmelStaff();
+    public static final PartiallyAmelStaff PARTAMEL_EDIFIED_STAFF = new PartiallyAmelStaff();
+    public static final PartiallyAmelStaff PARTAMEL_JUNGLE_STAFF = new PartiallyAmelStaff();
+    public static final PartiallyAmelStaff PARTAMEL_MANGROVE_STAFF = new PartiallyAmelStaff();
+    public static final PartiallyAmelStaff PARTAMEL_MINDSPLICE_STAFF = new PartiallyAmelStaff();
+    public static final PartiallyAmelStaff PARTAMEL_OAK_STAFF = new PartiallyAmelStaff();
+    public static final PartiallyAmelStaff PARTAMEL_SPRUCE_STAFF = new PartiallyAmelStaff();
+    public static final PartiallyAmelStaff PARTAMEL_WARPED_STAFF = new PartiallyAmelStaff();
     public static final FullyAmelInterface AMEL_RING = new AmelRing(unstackable);
     public static final FullyAmelInterface AMEL_RING2 = new AmelRing(unstackable);
     public static final CastingRing CASTING_RING = new CastingRing(unstackable);
@@ -64,8 +64,10 @@ public class ModItems {
     public static final Item JUMP_SLATE_AM2 = new JumpSlateItem(ModBlocks.JUMP_SLATE_AM2, fullStack);
     public static final Item JUMP_SLATE_AMETH = new JumpSlateItem(ModBlocks.JUMP_SLATE_AMETH, fullStack);
     public static final Item JUMP_SLATE_LAPIS = new JumpSlateItem(ModBlocks.JUMP_SLATE_LAPIS, fullStack);
+    public static final Item REBOUND_SLATE_1 = new JumpSlateItem(ModBlocks.REBOUND_SLATE_1, fullStack);
+    public static final Item REBOUND_SLATE_2 = new JumpSlateItem(ModBlocks.REBOUND_SLATE_2, fullStack);
 
-    private static final List<String> itemNames = List.of(
+    private static List<String> itemNames = new ArrayList<>(List.of(
         "amel",
         "amel2",
         "amel3",
@@ -97,9 +99,11 @@ public class ModItems {
         "amel_constructs/jumpslate/am1",
         "amel_constructs/jumpslate/am2",
         "amel_constructs/jumpslate/ameth",
-        "amel_constructs/jumpslate/lapis"
-    );
-    private static final List<Item> items = List.of(
+        "amel_constructs/jumpslate/lapis",
+        "amel_constructs/jumpslate/rebound_1",
+        "amel_constructs/jumpslate/rebound_2"
+    ));
+    private static List<Item> items = new ArrayList<>(List.of(
         AMEL_ITEM,
         AMEL2_ITEM,
         AMEL3_ITEM,
@@ -131,22 +135,25 @@ public class ModItems {
         JUMP_SLATE_AM1,
         JUMP_SLATE_AM2,
         JUMP_SLATE_AMETH,
-        JUMP_SLATE_LAPIS
-    );
+        JUMP_SLATE_LAPIS,
+        REBOUND_SLATE_1,
+        REBOUND_SLATE_2
+    ));
 
-    public static final ItemGroup LapisMagicShitGroup = FabricItemGroup.builder()
-        .icon(() -> new ItemStack(AMEL_ITEM))
-        .displayName(LAPISMAGICSHITGROUPTEXT)
-        .entries((context, entries) -> {
-            items.forEach(
-                (Item item) -> {
-                    entries.add(item);
-                }
-            );
-        })
-        .build();
+    public static ItemGroup LapisMagicShitGroup;
 
     public static void init_shit() {
+        LapisMagicShitGroup = FabricItemGroup.builder()
+            .icon(() -> new ItemStack(AMEL_ITEM))
+            .displayName(LAPISMAGICSHITGROUPTEXT)
+            .entries((context, entries) -> {
+                items.forEach(
+                    (Item item) -> {
+                        entries.add(item);
+                    }
+                );
+            })
+        .build();
         Registry.register(
             Registries.ITEM_GROUP,
             LAPIS_MAGIC_SHIT_GROUP,
@@ -157,7 +164,13 @@ public class ModItems {
         }
     }
 
-    public static void register(String name, Item item) {
+    private static void register(String name, Item item) {
         Registry.register(Registries.ITEM, id(name), item);
+    }
+
+    public static <T extends Item> T registerItem(String name, T item) {
+        itemNames.add(name);
+        items.add(item);
+        return item;
     }
 }

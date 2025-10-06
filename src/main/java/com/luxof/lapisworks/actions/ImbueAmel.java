@@ -13,6 +13,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.luxof.lapisworks.MishapThrowerJava;
+import com.luxof.lapisworks.TriConsumer;
 import com.luxof.lapisworks.items.shit.FullyAmelInterface;
 import com.luxof.lapisworks.items.shit.PartiallyAmelInterface;
 import com.luxof.lapisworks.mishaps.MishapBadHandItem;
@@ -31,7 +32,6 @@ import static com.luxof.lapisworks.init.Mutables.isAmel;
 import static com.luxof.lapisworks.init.Mutables.testBeegInfusionFilters;
 
 import java.util.List;
-import java.util.function.BiConsumer;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -86,18 +86,21 @@ public class ImbueAmel implements SpellAction {
             // if the filter vv throws? throws out of here and gets caught by Hex Casting
             List<Identifier> beegInfusionRecipes = testBeegInfusionFilters(
                 new HeldItemInfo(mainHandItems, Hand.MAIN_HAND),
-                ctx
+                ctx,
+                args
             );
             if (!beegInfusionRecipes.isEmpty()) {
                 HeldItemInfo heldInfo = new HeldItemInfo(mainHandItems, Hand.MAIN_HAND);
                 return new SpellAction.Result(
                     new BeegInfusion(
                         heldInfo,
-                        getBeegInfusionRecipeDoer(beegInfusionRecipes.get(0))
+                        getBeegInfusionRecipeDoer(beegInfusionRecipes.get(0)),
+                        args
                     ),
                     getBeegInfusionRecipeMediaCostDecider(beegInfusionRecipes.get(0)).apply(
                         heldInfo,
-                        ctx
+                        ctx,
+                        args
                     ),
                     List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 1, 10)),
                     1
@@ -128,13 +131,11 @@ public class ImbueAmel implements SpellAction {
         else if (!(mainHandItem instanceof PartiallyAmelInterface)) {
             changeToItemStack = new ItemStack((Item)partAmel);
             changeToItemStack.setDamage(
-                mainHandItems.getMaxDamage() - infuseAmount * partAmel.getAmelWorthInDurability()
+                changeToItemStack.getMaxDamage() - infuseAmount * partAmel.getAmelWorthInDurability()
             );
         } else {
             changeToItemStack = mainHandItems.copy();
-            changeToItemStack.setDamage(
-                mainHandItems.getDamage() - infuseAmount * partAmel.getAmelWorthInDurability()
-            );
+            changeToItemStack.setDamage(mainHandItems.getDamage() - infuseAmount * partAmel.getAmelWorthInDurability());
         }
 
         return new SpellAction.Result(
@@ -173,19 +174,22 @@ public class ImbueAmel implements SpellAction {
     /** should really just call it a sophisticated infusion */
     public class BeegInfusion implements RenderedSpell {
         public final HeldItemInfo heldInfo;
-        public final BiConsumer<HeldItemInfo, CastingEnvironment> doer;
+        public final TriConsumer<HeldItemInfo, CastingEnvironment, List<? extends Iota>> doer;
+        public final List<? extends Iota> stack;
 
         public BeegInfusion(
             HeldItemInfo heldInfo,
-            BiConsumer<HeldItemInfo, CastingEnvironment> doer
+            TriConsumer<HeldItemInfo, CastingEnvironment, List<? extends Iota>> doer,
+            List<? extends Iota> stack
         ) {
             this.heldInfo = heldInfo;
             this.doer = doer;
+            this.stack = stack;
         }
 
         @Override
         public void cast(CastingEnvironment ctx) {
-            doer.accept(heldInfo, ctx);
+            doer.accept(heldInfo, ctx, stack);
         }
 
         @Override

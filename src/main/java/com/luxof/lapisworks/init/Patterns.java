@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.common.lib.hex.HexActions;
 
 import static at.petrak.hexcasting.api.misc.MediaConstants.CRYSTAL_UNIT;
+
 import static com.luxof.lapisworks.init.ThemConfigFlags.registerPWShapePattern;
 
 import java.util.List;
@@ -110,7 +111,7 @@ public class Patterns {
         register("spherical_dstl", "wqwqwqwqwqwaeaqaaeaqaa", HexDir.NORTH_WEST, new SphereDst());
         register("cubic_exalt", "wqwawqwqqwqwq", HexDir.NORTH_WEST, new CubeExalt());
         register("visible_dstl", "edeewadwewdwe", HexDir.SOUTH_EAST, new VisibleDstl());
-        register("empty_prfn", "qqqqqwa", HexDir.NORTH_EAST, new EmptyPrfn());
+        register("empty_prfn", "qqqqqaw", HexDir.NORTH_WEST, new EmptyPrfn());
         register("read_spechand", "aqqqqa", HexDir.EAST, new ReadFromHand());
         register("readable_spechand", "qqqqadww", HexDir.NORTH_WEST, new ReadableInHand());
         register("write_spechand", "deeeed", HexDir.EAST, new WriteToHand());
@@ -174,12 +175,12 @@ public class Patterns {
         registerPWShapePattern(
             "lapisworks:hastenature",
             List.of(
-                "wawawwwdwdw",
-                "eawawwwdwdwwaqqqq",
-                "qaaqawawweddedwdw",
-                "qwawawwwdwdeeeweeweqeweewe",
-                "wqwawqwqawwwdwdwwwa",
-                "qaaqawawweddedwdw"
+                "awawwwdwdww",
+                "qwdedwqqwdedweawawwwdwdww",
+                "wawqwaweawawwwdwdww",
+                "awwdedwwawwdedweawawwwdwdww",
+                "aaqawawweddedwdww",
+                "aeaeaeaeaeadawawwwdwdww"
             )
         );
     }

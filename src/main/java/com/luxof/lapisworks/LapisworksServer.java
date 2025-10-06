@@ -6,6 +6,7 @@ import at.petrak.hexcasting.common.msgs.MsgClearSpiralPatternsS2C;
 import at.petrak.hexcasting.common.msgs.MsgOpenSpellGuiS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
+import com.luxof.lapisworks.init.Mutables;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 
@@ -40,7 +41,7 @@ import net.minecraft.util.math.Vec3d;
 import org.joml.Random;
 
 public class LapisworksServer {
-    public static void onJoinPWShapeStuff(
+    public static void onJoinEnchSentStuff(
         ServerPlayNetworkHandler handler,
         PacketSender sender,
         MinecraftServer server
@@ -54,9 +55,16 @@ public class LapisworksServer {
         buf.writeVector3f(sentPos.toVector3f());
         buf.writeDouble(sentAmbit);
         ServerPlayNetworking.send(player, SEND_SENT, buf);
+    }
 
+    public static void onJoinPWShapeStuff(
+        ServerPlayNetworkHandler handler,
+        PacketSender sender,
+        MinecraftServer server
+    ) {
+        ServerPlayerEntity player = handler.getPlayer();
         PacketByteBuf patsBuf = PacketByteBufs.create();
-        // hell naw i'm not dealing with the two extra args to writeMap()
+        // hell naw i'm not dealing with the two extra args to writeMap() (i dunno wtf those are)
         patsBuf.writeNbt(turnChosenIntoNbt());
         ServerPlayNetworking.send(player, SEND_PWSHAPE_PATS, patsBuf);
     }
@@ -134,12 +142,13 @@ public class LapisworksServer {
         );
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            onJoinEnchSentStuff(handler, sender, server);
             onJoinPWShapeStuff(handler, sender, server);
             onJoinLoadJuicedAttrs(handler, sender, server);
-
         });
         ServerLifecycleEvents.SERVER_STARTED.register((server) -> {
             pickConfigFlags(new Random(pickUsingSeed(server.getOverworld().getSeed())));
+            Mutables.runScheduledRegisterEvents(); // why not by you? because it was meant to be ran HERE.
         });
         ServerLifecycleEvents.SERVER_STOPPING.register((server) -> { nullConfigFlags(); });
     }

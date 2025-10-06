@@ -29,7 +29,7 @@ public class CastingRing extends ItemStaff implements HexBaubleItem {
         // thus i can flip the sign to achieve the opposite effect.
         // or at least, should be able to.
         -0.10,
-        EntityAttributeModifier.Operation.MULTIPLY_TOTAL
+        EntityAttributeModifier.Operation.MULTIPLY_BASE
     );
 
     public CastingRing(FabricItemSettings props) { super(props); }

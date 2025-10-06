@@ -45,9 +45,17 @@
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:visible_dstl",
             "anchor": "lapisworks:visible_dstl",
-            "input": "vec, num",
+            "input": "vec, vec",
             "output": "bool",
             "text": "pages.lapisworks.lapisworks_misc.visible_dstl.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:empty_prfn",
+            "anchor": "lapisworks:empty_prfn",
+            "input": "vec",
+            "output": "bool",
+            "text": "pages.lapisworks.lapisworks_misc.empty_prfn.summary"
         },
         {
             "type": "hexcasting:pattern",

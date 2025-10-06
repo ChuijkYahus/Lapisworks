@@ -62,25 +62,41 @@ Whoopsies
 - Fixed Jump Slate stuff appearing before enlightenment
   made it appear after enlightenment and got_lapis in a scuffed ahh way that is hopefully never seen
 1.5.5
-- "It is told theywere" kys :broken_heart: (fixed that in the book)
+- Fixed up the ingame book a little (stopped implying GSent was visible, etc.)
+  Also fixed the bug where it wouldn't load on multiplayer!
+- Gave the Warped Infused Staff an actual translation key (bruh how did i forger that)
+- Fixed possible bug with Hastenature (wtf)
+- Fixed bug with PWShape interop for Patchouli
+- Fixed bug where Jump Slate would always jump forwards no matter what
 - Gave the web book a custom icon
 - Gave Jump Slate a friend: Rebound Slate
-- Hextended Gear's staves have Partially Amel-infused variations of them
-  holy FUCK
-  do you KNOW WHAT THAT MEANS?
-  that means 31 NEW FUCKING STAVES
-  31
-  - EXTENDED WOOD STAVES
-  - MOSSY STAVES
-  - PRISMARINE STAVES
-  - OBSIDIAN STAVES
-  - PURPUR STAVES
-  - EXTENDED FANCIFUL STAVES
+- Hextended Gear's staves have Partially Amel-infused variations of them now
+  my hands bleed
+  31 staves
+  - extended wood staves
+  - mossy staves
+  - prismarine staves
+  - obsidian staves
+  - purpur staves
+  - extended fanciful staves
+- fully amel wands have 28% hex grid boost
+- partially amel wands have 40% hex grid boost
+- Buffed partially amel staves' durability from 100 to 200
+- Debuffed fully amel staves' hex grid boost from 25% to 20%
+- Debuffed partially amel staves' hex grid boost from 33% to 30%
+- Amel staff and incomplete amel staves are now held like the vanilla hexcasting staves
+- Changed every hex grid space modifying item to multiply by base, not by total.
 - Also added the block counterpart to the Drawing Orb, the Amel-tuned Drawing Orb
-1.5.6
+
+**NOTE FOR MIGRATORS:**
+per-world shape patterns have once again changed, this will be the last time. i think.
+1.5.5.5:
+- Fixed staffcasting not working if you don't have hextended (WTF????)
+- Also fixed some staves not opening their spellcasting gui
+1.1.7: "haha i added some funny swords"
+1.5.6:
 - Added Enchanted Slipways as interop with Hexal
   They produce twice as many wisps per second but they can't be turned into portals with Oneironaut
-- Added Complex Mind Containers
-- Added Complex Mind -> Budding Psuedoamethyst as interop with Oneironaut
+- Added the Specific Pedestal as interop with Hexical
 1.6.0
 You can have four arms now (procrastination slain)

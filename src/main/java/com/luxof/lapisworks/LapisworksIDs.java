@@ -23,6 +23,8 @@ public class LapisworksIDs {
     public static final Identifier ENHANCE_ENCHANTED_BOOK = id("enhance_enchanted_book");
     public static final Identifier ENLIGHTENED = new Identifier("hexcasting", "enlightenment");
     public static final Identifier GOT_LAPIS = id("got_lapis");
+    public static final Identifier MAKE_GENERIC_PARTAMEL = id("make_generic_partamel");
+    public static final Identifier AMEL_ORB_IS_FILLED = id("amel_orb_is_filled");
 
     public static final Text IMBUEABLE = t("mishaps.lapisworks.descs.imbueable");
     public static final Text READABLE = t("mishaps.lapisworks.descs.readable");
@@ -57,4 +59,7 @@ public class LapisworksIDs {
     public static final String ALREADY_ENCHANTED = "mishaps.lapisworks.already_enchanted";
     public static final String SPECHAND_NOITEM = "mishaps.lapisworks.some_hand.no_item";
     public static final String SPECHAND_BADITEM = "mishaps.lapisworks.some_hand.no_item";
+
+    // lapixtended
+    public static final Identifier MAKE_PARTAMEL_WAND = id("make_partamel_wand");
 }

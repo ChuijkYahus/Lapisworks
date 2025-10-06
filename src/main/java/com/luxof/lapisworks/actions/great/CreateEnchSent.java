@@ -50,7 +50,7 @@ public class CreateEnchSent implements SpellAction {
         PlayerEntity caster = (PlayerEntity)casterOp.get();
 
         Vec3d pos = OperatorUtils.getVec3(args, 0, getArgc());
-        if (caster.getPos().squaredDistanceTo(pos) > 32.0) {
+        if (caster.getPos().distanceTo(pos) > 32.0) {
             // you will NOT fuck with this to do better sent walk!
             MishapThrowerJava.throwMishap(new MishapBadLocation(pos, "too_far"));
         }
