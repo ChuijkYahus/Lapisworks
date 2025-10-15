@@ -2,12 +2,9 @@ package com.luxof.lapisworks.interop.hextended.items;
 
 import at.petrak.hexcasting.api.utils.NBTHelper;
 
-import com.luxof.lapisworks.init.Mutables;
-import com.luxof.lapisworks.items.shit.FullyAmelInterface;
-
+import static com.luxof.lapisworks.Lapisworks.getAllHands;
 import static com.luxof.lapisworks.Lapisworks.prettifyVec3d;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.item.TooltipContext;
@@ -23,7 +20,9 @@ import net.minecraft.world.World;
 
 import org.jetbrains.annotations.Nullable;
 
-public class AmelOrb extends Item implements FullyAmelInterface {
+import com.luxof.lapisworks.init.Mutables.Mutables;
+
+public class AmelOrb extends Item {
     private static final Settings defaultSettings = new Item.Settings().maxCount(1);
     public AmelOrb() { super(defaultSettings); }
     public AmelOrb(Settings settings) {super(settings); }
@@ -35,7 +34,7 @@ public class AmelOrb extends Item implements FullyAmelInterface {
     public double ambitRadius = 3.0;
     
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        List<Hand> hands = new ArrayList<>(List.of(Hand.MAIN_HAND, Hand.OFF_HAND));
+        List<Hand> hands = getAllHands();
         hands.remove(hand);
         ItemStack stack = user.getStackInHand(hand);
         ItemStack amelStack = null;
@@ -96,6 +95,4 @@ public class AmelOrb extends Item implements FullyAmelInterface {
             )
         );
     }
-    @Override
-    public int getRequiredAmelToMakeFromBase() { return 10; }
 }

@@ -1,5 +1,6 @@
 package com.luxof.lapisworks.init;
 
+import com.luxof.lapisworks.items.AmelJar;
 import com.luxof.lapisworks.items.AmelRing;
 import com.luxof.lapisworks.items.AmelStaff;
 import com.luxof.lapisworks.items.CastingRing;
@@ -10,7 +11,6 @@ import com.luxof.lapisworks.items.JumpSlateItem;
 import com.luxof.lapisworks.items.PartiallyAmelStaff;
 import com.luxof.lapisworks.items.WizardDiaries;
 import com.luxof.lapisworks.items.shit.AmelSword;
-import com.luxof.lapisworks.items.shit.FullyAmelInterface;
 
 import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.LapisworksIDs.LAPISMAGICSHITGROUPTEXT;
@@ -36,7 +36,7 @@ public class ModItems {
     public static final Item AMEL2_ITEM = new Item(fullStack);
     public static final Item AMEL3_ITEM = new Item(fullStack);
     public static final Item AMEL4_ITEM = new Item(fullStack);
-    public static final FullyAmelInterface AMEL_STAFF = new AmelStaff(unstackable);
+    public static final Item AMEL_STAFF = new AmelStaff(unstackable);
     public static final PartiallyAmelStaff PARTAMEL_STAFF = new PartiallyAmelStaff();
     public static final PartiallyAmelStaff PARTAMEL_ACACIA_STAFF = new PartiallyAmelStaff();
     public static final PartiallyAmelStaff PARTAMEL_BAMBOO_STAFF = new PartiallyAmelStaff();
@@ -51,8 +51,8 @@ public class ModItems {
     public static final PartiallyAmelStaff PARTAMEL_OAK_STAFF = new PartiallyAmelStaff();
     public static final PartiallyAmelStaff PARTAMEL_SPRUCE_STAFF = new PartiallyAmelStaff();
     public static final PartiallyAmelStaff PARTAMEL_WARPED_STAFF = new PartiallyAmelStaff();
-    public static final FullyAmelInterface AMEL_RING = new AmelRing(unstackable);
-    public static final FullyAmelInterface AMEL_RING2 = new AmelRing(unstackable);
+    public static final Item AMEL_RING = new AmelRing(unstackable);
+    public static final Item AMEL_RING2 = new AmelRing(unstackable);
     public static final CastingRing CASTING_RING = new CastingRing(unstackable);
     public static final AmelSword DIAMOND_SWORD = new DiamondSword();
     public static final AmelSword IRON_SWORD = new IronSword();
@@ -66,6 +66,8 @@ public class ModItems {
     public static final Item JUMP_SLATE_LAPIS = new JumpSlateItem(ModBlocks.JUMP_SLATE_LAPIS, fullStack);
     public static final Item REBOUND_SLATE_1 = new JumpSlateItem(ModBlocks.REBOUND_SLATE_1, fullStack);
     public static final Item REBOUND_SLATE_2 = new JumpSlateItem(ModBlocks.REBOUND_SLATE_2, fullStack);
+    public static final Item AMEL_JAR = new AmelJar(unstackable, 256, false);
+    public static final Item ENERGY_CONTAINER = new AmelJar(unstackable, 1024, true);
 
     private static List<String> itemNames = new ArrayList<>(List.of(
         "amel",
@@ -101,14 +103,16 @@ public class ModItems {
         "amel_constructs/jumpslate/ameth",
         "amel_constructs/jumpslate/lapis",
         "amel_constructs/jumpslate/rebound_1",
-        "amel_constructs/jumpslate/rebound_2"
+        "amel_constructs/jumpslate/rebound_2",
+        "amel_jar",
+        "energy_container"
     ));
     private static List<Item> items = new ArrayList<>(List.of(
         AMEL_ITEM,
         AMEL2_ITEM,
         AMEL3_ITEM,
         AMEL4_ITEM,
-        (Item)AMEL_STAFF,
+        AMEL_STAFF,
         PARTAMEL_STAFF,
         PARTAMEL_ACACIA_STAFF,
         PARTAMEL_BAMBOO_STAFF,
@@ -123,8 +127,8 @@ public class ModItems {
         PARTAMEL_OAK_STAFF,
         PARTAMEL_SPRUCE_STAFF,
         PARTAMEL_WARPED_STAFF,
-        (Item)AMEL_RING,
-        (Item)AMEL_RING2,
+        AMEL_RING,
+        AMEL_RING2,
         CASTING_RING,
         DIAMOND_SWORD,
         IRON_SWORD,
@@ -137,7 +141,9 @@ public class ModItems {
         JUMP_SLATE_AMETH,
         JUMP_SLATE_LAPIS,
         REBOUND_SLATE_1,
-        REBOUND_SLATE_2
+        REBOUND_SLATE_2,
+        AMEL_JAR,
+        ENERGY_CONTAINER
     ));
 
     public static ItemGroup LapisMagicShitGroup;

@@ -1,25 +1,14 @@
 package com.luxof.lapisworks.interop.hextended;
 
-import abilliontrillionstars.hextended.LanisHextendedStaves;
-
-import com.luxof.lapisworks.init.Mutables;
 import com.luxof.lapisworks.interop.hextended.items.AmelOrb;
 import com.luxof.lapisworks.interop.hextended.items.AmelWand;
 import com.luxof.lapisworks.interop.hextended.items.PartAmelWand;
-import com.luxof.lapisworks.items.shit.FullyAmelInterface;
-import com.luxof.lapisworks.items.shit.PartiallyAmelInterface;
 import com.luxof.lapisworks.items.PartiallyAmelStaff;
 
 import static com.luxof.lapisworks.init.ModItems.registerItem;
-
-import com.mojang.datafixers.util.Pair;
-
-import java.util.Map;
-
-import static java.util.Map.entry;
+import static com.luxof.lapisworks.init.Mutables.Mutables.registerBaseCostFor;
 
 import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
 
 /* Lapixtended? Lapistended? Hextended Lapis?
  * maybe Lapix/Lapistended for Hextended Gear stuff added by Lapisworks
@@ -43,6 +32,8 @@ public class Lapixtended {
     public static final Item PARTAMEL_MOSS_WAND = registerItem("staves/incomplete/moss_wand", new PartAmelWand());
     public static final Item PARTAMEL_FLOWERED_MOSS = registerItem("staves/incomplete/flowered_moss", new PartiallyAmelStaff());
     public static final Item PARTAMEL_FLOWERED_MOSS_WAND = registerItem("staves/incomplete/flowered_moss_wand", new PartAmelWand());
+    public static final Item PARTAMEL_OBSIDIAN = registerItem("staves/incomplete/obsidian", new PartiallyAmelStaff());
+    public static final Item PARTAMEL_OBSIDIAN_WAND = registerItem("staves/incomplete/obsidian_wand", new PartAmelWand());
     public static final Item PARTAMEL_PRISMARINE = registerItem("staves/incomplete/prismarine", new PartiallyAmelStaff());
     public static final Item PARTAMEL_PRISMARINE_WAND = registerItem("staves/incomplete/prismarine_wand", new PartAmelWand());
     public static final Item PARTAMEL_DARK_PRISMARINE = registerItem("staves/incomplete/dark_prismarine", new PartiallyAmelStaff());
@@ -52,56 +43,9 @@ public class Lapixtended {
     public static final Item PARTAMEL_WAND = registerItem("staves/incomplete/generic_wand", new PartAmelWand());
     public static final Item AMEL_WAND = registerItem("staves/amel_wand", new AmelWand());
     public static final Item AMEL_ORB = registerItem("amel_constructs/amel_orb", new AmelOrb());
-    private static boolean recipesInitialized = false;
 
     public static void initHextendedInterop() {
-        Mutables.scheduleRegisterAtServerStart(() -> {
-            if (recipesInitialized) return;
-            // a saying i know goes:
-            // "the law's hands are long."
-            recipesInitialized = true;
-            Map<String, Item> STAFF_TO_PARTAMEL = Map.ofEntries(
-                // source for ids: hextended
-                entry("long/acacia", PARTAMEL_ACACIA_WAND),
-                entry("long/bamboo", PARTAMEL_BAMBOO_WAND),
-                entry("long/birch", PARTAMEL_BIRCH_WAND),
-                entry("long/cherry", PARTAMEL_CHERRY_WAND),
-                entry("long/crimson", PARTAMEL_CRIMSON_WAND),
-                entry("long/dark_oak", PARTAMEL_DARK_OAK_WAND),
-                entry("long/edified", PARTAMEL_EDIFIED_WAND),
-                entry("long/jungle", PARTAMEL_JUNGLE_WAND),
-                entry("long/mangrove", PARTAMEL_MANGROVE_WAND),
-                entry("long/mindsplice", PARTAMEL_MINDSPLICE_WAND),
-                entry("long/oak", PARTAMEL_OAK_WAND),
-                entry("long/spruce", PARTAMEL_SPRUCE_WAND),
-                entry("moss", PARTAMEL_MOSS),
-                entry("long/moss", PARTAMEL_MOSS_WAND),
-                entry("flowered_moss", PARTAMEL_FLOWERED_MOSS),
-                entry("long/flowered_moss", PARTAMEL_FLOWERED_MOSS_WAND),
-                entry("prismarine", PARTAMEL_PRISMARINE),
-                entry("long/prismarine", PARTAMEL_PRISMARINE_WAND),
-                entry("dark_prismarine", PARTAMEL_DARK_PRISMARINE),
-                entry("long/dark_prismarine", PARTAMEL_DARK_PRISMARINE_WAND),
-                entry("purpur", PARTAMEL_PURPUR),
-                entry("long/purpur", PARTAMEL_PURPUR_WAND)
-            );
-            Map<String, Pair<Item, Item>> IMBUEMENT_RECIPES = Map.ofEntries(
-                entry("staff/drawing_orb", new Pair<>(null, AMEL_ORB))
-            );
-            for (String id : STAFF_TO_PARTAMEL.keySet()) {
-                Mutables.registerInfusionRecipe(
-                    Registries.ITEM.get(LanisHextendedStaves.id("staff/" + id)),
-                    (PartiallyAmelInterface)STAFF_TO_PARTAMEL.get(id),
-                    (FullyAmelInterface)AMEL_WAND
-                );
-            }
-            for (String id : IMBUEMENT_RECIPES.keySet()) {
-                Mutables.registerInfusionRecipe(
-                    Registries.ITEM.get(LanisHextendedStaves.id(id)),
-                    (PartiallyAmelInterface)IMBUEMENT_RECIPES.get(id).getFirst(),
-                    (FullyAmelInterface)IMBUEMENT_RECIPES.get(id).getSecond()
-                );
-            }
-        });
+        registerBaseCostFor(AMEL_WAND, 20);
+        registerBaseCostFor(AMEL_ORB, 10);
     }
 }

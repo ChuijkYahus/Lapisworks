@@ -26,6 +26,10 @@
             "allowed": [1, 3, 4]
         },
         {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.great.flay_artmind.ethics_forewarning"
+        },
+        {
             "type": "patchouli:spotlight",
             "item": "minecraft:budding_amethyst",
             "text": "pages.lapisworks.great.flay_artmind.budding_amethyst"

@@ -15,6 +15,10 @@
         },
         {
             "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement_spell.howitcostsamel"
+        },
+        {
+            "type": "patchouli:text",
             "text": "pages.lapisworks.imbuement_spell.specialhandlers"
         }
     ]

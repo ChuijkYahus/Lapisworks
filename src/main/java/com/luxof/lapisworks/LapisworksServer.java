@@ -6,7 +6,6 @@ import at.petrak.hexcasting.common.msgs.MsgClearSpiralPatternsS2C;
 import at.petrak.hexcasting.common.msgs.MsgOpenSpellGuiS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
-import com.luxof.lapisworks.init.Mutables;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 
@@ -37,8 +36,6 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
-
-import org.joml.Random;
 
 public class LapisworksServer {
     public static void onJoinEnchSentStuff(
@@ -147,8 +144,7 @@ public class LapisworksServer {
             onJoinLoadJuicedAttrs(handler, sender, server);
         });
         ServerLifecycleEvents.SERVER_STARTED.register((server) -> {
-            pickConfigFlags(new Random(pickUsingSeed(server.getOverworld().getSeed())));
-            Mutables.runScheduledRegisterEvents(); // why not by you? because it was meant to be ran HERE.
+            pickConfigFlags(pickUsingSeed(server.getOverworld().getSeed()));
         });
         ServerLifecycleEvents.SERVER_STOPPING.register((server) -> { nullConfigFlags(); });
     }

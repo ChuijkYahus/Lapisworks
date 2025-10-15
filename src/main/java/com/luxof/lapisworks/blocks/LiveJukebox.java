@@ -33,7 +33,6 @@ public class LiveJukebox extends BlockWithEntity {
         );
     }
 
-    @SuppressWarnings("deprecation") // fuck off
     @Override
     public ActionResult onUse(
         BlockState state,

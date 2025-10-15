@@ -20,7 +20,7 @@ import static com.luxof.lapisworks.Lapisworks.intToHand;
 import static com.luxof.lapisworks.LapisworksIDs.NON_IOTAHOLDER;
 import static com.luxof.lapisworks.LapisworksIDs.READONLY_HOLDER;
 import static com.luxof.lapisworks.LapisworksIDs.WRITEABLE;
-import static com.luxof.lapisworks.init.Mutables.maxHands;
+import static com.luxof.lapisworks.init.Mutables.Mutables.maxHands;
 
 import java.util.List;
 

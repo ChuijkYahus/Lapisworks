@@ -1,0 +1,9 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "normal": {
+        "item": "hexcasting:staff/birch"
+    },
+    "partamel": "lapisworks:staves/incomplete/birch",
+    "fullamel": "lapisworks:staves/amel_staff",
+    "cost": 10
+}

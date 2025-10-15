@@ -20,6 +20,7 @@ import com.luxof.lapisworks.actions.MindLiquefaction;
 import com.luxof.lapisworks.actions.SwapAmel;
 import com.luxof.lapisworks.actions.TeachSong;
 import com.luxof.lapisworks.actions.MoarAttr;
+import com.luxof.lapisworks.actions.ReclaimAmeth;
 import com.luxof.lapisworks.actions.great.BanishMySent;
 import com.luxof.lapisworks.actions.great.BanishOtherSent;
 import com.luxof.lapisworks.actions.great.CreateEnchSent;
@@ -86,6 +87,7 @@ public class Patterns {
             true
         );
         register("imbue_lap", "qadwawdaqqeae", HexDir.NORTH_EAST, new ImbueLap());
+        register("reclaim_ameth", "awwqqqwwa", HexDir.SOUTH_EAST, new ReclaimAmeth());
         register("swap_amel", "wqwawwqwaqeq", HexDir.EAST, new SwapAmel());
         
         register("moar_health", "wqadaqwwawwwqwwawdwawwqwwwwa", HexDir.NORTH_EAST, MoarHealthAction);
@@ -111,12 +113,11 @@ public class Patterns {
         register("spherical_dstl", "wqwqwqwqwqwaeaqaaeaqaa", HexDir.NORTH_WEST, new SphereDst());
         register("cubic_exalt", "wqwawqwqqwqwq", HexDir.NORTH_WEST, new CubeExalt());
         register("visible_dstl", "edeewadwewdwe", HexDir.SOUTH_EAST, new VisibleDstl());
-        register("empty_prfn", "qqqqqaw", HexDir.NORTH_WEST, new EmptyPrfn());
+        register("empty_prfn", "qwawqwaqwweqqqq", HexDir.NORTH_WEST, new EmptyPrfn());
         register("read_spechand", "aqqqqa", HexDir.EAST, new ReadFromHand());
         register("readable_spechand", "qqqqadww", HexDir.NORTH_WEST, new ReadableInHand());
         register("write_spechand", "deeeed", HexDir.EAST, new WriteToHand());
         register("writable_spechand", "eeeedaww", HexDir.SOUTH_WEST, new WritableInHand());
-        register("writable_offhand", "eeedqww", HexDir.SOUTH_WEST, new WritableInHand());
         register("equiv_block", "qqqqqeqeeeee", HexDir.NORTH_WEST, new EquivBlock());
         register("equal_block", "qwawqwadadwewdwe", HexDir.NORTH_WEST, new EqualBlock());
 

@@ -15,7 +15,7 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapUnenlightened;
 
 import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.init.EnchantCountKeeper;
-import com.luxof.lapisworks.init.Mutables;
+import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.mishaps.MishapAlreadyHasEnchantment;
 import com.luxof.lapisworks.mishaps.MishapNotEnoughItems;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;

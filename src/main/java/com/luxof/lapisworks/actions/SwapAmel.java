@@ -12,13 +12,16 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
 
 import com.luxof.lapisworks.MishapThrowerJava;
-import com.luxof.lapisworks.init.Mutables;
+import com.luxof.lapisworks.mixinsupport.GetStacks;
+import com.luxof.lapisworks.recipes.HandsInv;
+import com.luxof.lapisworks.recipes.MoldRec;
 
 import java.util.List;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 
 public class SwapAmel implements SpellAction {
@@ -28,15 +31,21 @@ public class SwapAmel implements SpellAction {
 
     @Override
     public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
-        HeldItemInfo amelInfo = ctx.getHeldItemToOperateOn(Mutables::itemHasMoldAmelProduct);
-        if (amelInfo == null) {
-            MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "amel"));
-        }
-        ItemStack amelStack = amelInfo.stack();
-        Hand hand = amelInfo.hand();
-
-        Item swapWith = Mutables.getMoldAmelProduct(amelStack.getItem());
-        int count = amelStack.getCount();
+        MoldRec recipe = ctx.getWorld().getRecipeManager().getFirstMatch(
+            MoldRec.Type.INSTANCE,
+            new HandsInv(((GetStacks)ctx).getHeldItemStacks()),
+            ctx.getWorld()
+        ).orElseGet(() -> {
+            MishapThrowerJava.throwMishap(new MishapBadOffhandItem(
+                ItemStack.EMPTY.copy(),
+                Text.translatable("mishaps.lapisworks.descs.moldable")
+            ));
+            return null;
+        });
+        Item swapWith = recipe.getOutput();
+        HeldItemInfo inputItems = ctx.getHeldItemToOperateOn(stack -> recipe.getInput().test(stack));
+        int count = inputItems.stack().getCount();
+        Hand hand = inputItems.hand();
 
         return new SpellAction.Result(
             new Spell(swapWith, count, hand),
@@ -60,7 +69,7 @@ public class SwapAmel implements SpellAction {
 		@Override
 		public void cast(CastingEnvironment ctx) {
             ctx.replaceItem(
-                Mutables::itemHasMoldAmelProduct,
+                stack -> true,
                 new ItemStack(this.item, this.count),
                 this.hand
             );

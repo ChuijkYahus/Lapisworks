@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "lapisworks:amel_constructs/live_jukebox"
+    "lapisworks:amel_constructs/live_jukebox",
+    { "id": "lapisworks:amel_constructs/holder", "required": false },
+    { "id": "lapisworks:cradle", "required": false },
+    { "id": "lapisworks:rod", "required": false }
   ]
 }

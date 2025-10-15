@@ -1,0 +1,7 @@
+{
+    "type": "lapisworks:mold_amel",
+    "input": {
+        "item": "lapisworks:amel"
+    },
+    "output": "lapisworks:amel2"
+}

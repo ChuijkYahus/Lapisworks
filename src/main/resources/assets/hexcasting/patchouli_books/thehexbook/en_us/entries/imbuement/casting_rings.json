@@ -16,7 +16,7 @@
         {
             "type": "patchouli:crafting",
             "title": "pages.lapisworks.imbuement_rings.recipe_title",
-            "recipe": "lapisworks:ring"
+            "recipe": "lapisworks:base/ring"
         },
         {
             "type": "patchouli:spotlight",

@@ -1,6 +1,7 @@
 package com.luxof.lapisworks.client;
 
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
+import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 
 import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
@@ -85,6 +86,8 @@ public class LapisworksClient implements ClientModInitializer {
         // ^^^^ what was that, chief?
         LOGGER.info("Hello everybody my name is LapisworksClient and today what we are going to do is: scrying lens tooltips, make blocks transparent, keybinds, networking, Model Predicate Providers, spin 4D hypercubes for the FUNNY, and client-side rendering!");
         LOGGER.info("Does NONE of that sound fun? Well, that's because it isn't. So let's get started, shall we?");
+
+        TrinketRendererRegistry.registerRenderer(ModItems.AMEL_JAR, new JarTrinketRenderer());
 
         // we all thank hexxy for adding simple addDisplayer() instead of requiring mixin in unison
         ScryingLensOverlayRegistry.addDisplayer(

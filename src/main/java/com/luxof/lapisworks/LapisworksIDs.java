@@ -25,6 +25,12 @@ public class LapisworksIDs {
     public static final Identifier GOT_LAPIS = id("got_lapis");
     public static final Identifier MAKE_GENERIC_PARTAMEL = id("make_generic_partamel");
     public static final Identifier AMEL_ORB_IS_FILLED = id("amel_orb_is_filled");
+    public static final Identifier IMBUEMENT_RECIPE_ID = id("amel_imbuement");
+    public static final Identifier MOLD_AMEL_RECIPE_ID = id("mold_amel");
+    public static final Identifier MODS_AT_VER = id("mods_loaded_at_min_version");
+
+    public static final Identifier PLAYER_VAULT = id("player_vault");
+    public static final Identifier CASTENV_VAULT = id("castenv_vault");
 
     public static final Text IMBUEABLE = t("mishaps.lapisworks.descs.imbueable");
     public static final Text READABLE = t("mishaps.lapisworks.descs.readable");
@@ -62,4 +68,8 @@ public class LapisworksIDs {
 
     // lapixtended
     public static final Identifier MAKE_PARTAMEL_WAND = id("make_partamel_wand");
+    // lexical
+    public static final String RH_HOLDER = id("righthanded_holder").toString();
+    public static final String HEXICAL_IMPETUS_HAND = "impetus_hand";
+    public static final String IS_IN_CRADLE = "lapisworks:is_in_cradle";
 }

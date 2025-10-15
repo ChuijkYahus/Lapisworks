@@ -195,7 +195,7 @@ public class JumpSlate extends BlockCircleComponent implements Waterloggable {
     }*/
     @Override
     public Direction normalDir(BlockPos pos, BlockState bs, World world, int recursionLeft) {
-        // why does the switch expression work when i'm not the one writing it :sob:
+        // why does the new kind of switch expression work when i'm not the one writing it :sob:
         return switch (bs.get(ATTACH_FACE)) {
             case FLOOR -> Direction.UP;
             case CEILING -> Direction.DOWN;

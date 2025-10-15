@@ -1,0 +1,9 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "normal": {
+        "item": "hexcasting:staff/acacia"
+    },
+    "partamel": "lapisworks:staves/incomplete/acacia",
+    "fullamel": "lapisworks:staves/amel_staff",
+    "cost": 10
+}

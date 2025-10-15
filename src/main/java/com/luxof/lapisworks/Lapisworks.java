@@ -9,12 +9,13 @@ import at.petrak.hexcasting.common.lib.HexItems;
 
 import com.luxof.lapisworks.init.ModItems;
 import com.luxof.lapisworks.init.ModPOIs;
+import com.luxof.lapisworks.init.ModRecipes;
 import com.luxof.lapisworks.init.Patterns;
 import com.luxof.lapisworks.init.LapisworksLoot;
 import com.luxof.lapisworks.init.ModBlocks;
+import com.luxof.lapisworks.init.ModEntities;
 import com.luxof.lapisworks.init.ThemConfigFlags;
-import com.luxof.lapisworks.init.Mutables;
-import com.luxof.lapisworks.items.shit.FullyAmelInterface;
+import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.mixinsupport.GetStacks;
 
 import static com.luxof.lapisworks.LapisworksIDs.MAINHAND;
@@ -28,17 +29,15 @@ import dev.emi.trinkets.api.TrinketsApi;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
-
+import net.fabricmc.loader.api.Version;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
@@ -57,12 +56,6 @@ import vazkii.patchouli.api.PatchouliAPI;
 
 // why is this project actually big?
 public class Lapisworks implements ModInitializer {
-	public static Map<Item, FullyAmelInterface> swordToAmelMap = Map.of(
-		Items.DIAMOND_SWORD, (FullyAmelInterface)ModItems.DIAMOND_SWORD,
-		Items.IRON_SWORD, (FullyAmelInterface)ModItems.IRON_SWORD,
-		Items.GOLDEN_SWORD, (FullyAmelInterface)ModItems.GOLD_SWORD
-	);
-
 	private static FrozenPigment BLACK_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.BLACK)), Util.NIL_UUID);
 	private static FrozenPigment BROWN_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.BROWN)), Util.NIL_UUID);
 	private static FrozenPigment BLUE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.BLUE)), Util.NIL_UUID);
@@ -84,17 +77,40 @@ public class Lapisworks implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	public static boolean HEXTENDED_INTEROP = false;
+	public static boolean HEXICAL_INTEROP = false;
+
+	public static boolean isModLoaded(String modid) { return FabricLoader.getInstance().isModLoaded(modid); }
+	/** assumes the mod is actually loaded and that <code>targetVersion</code> doesn't cause an error.
+	 * Kurwa eksploduje if wrong? Nah, just gives <code>null</code>.
+	 * If true? returns <code>current version - target version</code> */
+	@Nullable
+	public static Integer verDifference(String modid, String targetVersion) {
+		try {
+			Version currentVer = FabricLoader.getInstance().getModContainer(modid).get()
+				.getMetadata().getVersion();
+			Version targetVer = Version.parse(targetVersion);
+			return currentVer.compareTo(targetVer);
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
 	@Override
 	public void onInitialize() {
 		boolean anyInterop = false;
-        if (FabricLoader.getInstance().isModLoaded("hextended")) {
+        if (isModLoaded("hextended")) {
 			HEXTENDED_INTEROP = true;
 			anyInterop = true;
             com.luxof.lapisworks.interop.hextended.Lapixtended.initHextendedInterop();
         }
+		if (isModLoaded("hexical")) {
+			HEXICAL_INTEROP = true;
+			anyInterop = true;
+			com.luxof.lapisworks.interop.hexical.Lapixical.initHexicalInterop();
+		}
 
 		ThemConfigFlags.declareEm();
+		ModEntities.questionWhyIMustDoThis();
 		Patterns.init();
 		ModItems.init_shit();
 		LapisworksServer.lockIn();
@@ -102,6 +118,7 @@ public class Lapisworks implements ModInitializer {
 		LapisworksLoot.gibLootexclamationmark();
 		Mutables.innitBruv();
 		ModPOIs.crawlOutOfHell();
+		ModRecipes.apologizeForWarcrimes();
 
         LOGGER.info("Luxof's pet Lapisworks is getting a bit hyperactive.");
 		LOGGER.info("\"Lapisworks! Lapis Lapis!\"");
@@ -116,6 +133,8 @@ public class Lapisworks implements ModInitializer {
 			//)
 			LOGGER.info("You have an addon that has interop with Lapisworks loaded?! Oh NOO, it's overstimulated, it's gonna throw up a bunch of content! Look what you've done!");
 		} else LOGGER.info("Feed it redstone.");
+
+		;
 	}
 
 	public static Identifier id(String string) {
@@ -182,16 +201,21 @@ public class Lapisworks implements ModInitializer {
 		// (should probably homebrew my own atp)
 		Random rng = new Random(seed);
 		int sendThisSeed = 0;
-		for (int i = -1; i < seed % 13; i++) { // so they can't easily predict world seed
-			sendThisSeed = rng.nextInt(32767); // wonder if i should use newSeed() instead
+		for (int i = -1; i < seed % 13; i++) { // so no one can predict the world seed off this
+			sendThisSeed = rng.nextInt(32767);
 		}
 		return sendThisSeed;
 	}
 
-	/** Computes the config flags and selects them for you. ASSUMES THIS IS A FRESHLY-MADE RNG!! */
-	public static void pickConfigFlags(Random rng) {
+	/** Computes the config flags and selects them for you. */
+	public static void pickConfigFlags(int seed) {
 		for (String patId : allPerWorldShapePatterns.keySet()) {
-			int chosen = rng.nextInt(32767) % allPerWorldShapePatterns.get(patId).size();
+			int amountOfPatterns = allPerWorldShapePatterns.get(patId).size();
+			// same seed used per pattern
+			Random rng = new Random(
+				new Random(seed % amountOfPatterns).nextInt(32767)
+			);
+			int chosen = rng.nextInt(32767) % amountOfPatterns;
 			PatchouliAPI.get().setConfigFlag(
 				patId + String.valueOf(chosen),
 				true
@@ -214,7 +238,7 @@ public class Lapisworks implements ModInitializer {
 		}
 	}
 
-	/** truncates to first two digits after the dot. */
+	/** truncates to first two digits after the dot. I use this for Simple Mind Containers' scryglass info. */
 	public static String prettifyFloat(float value) {
 		// val % 0.01 flickers sometimes
 		return String.valueOf(Math.floor((double)value * 100.0) / 100.0);
@@ -279,7 +303,7 @@ public class Lapisworks implements ModInitializer {
 		return Math.abs(b - a) < epsilon;
 	}
 
-    /** returns null if hand isn't MAIN_HAND or OFF_HAND (i'll add more eventually..!!) */
+    /** returns null if hand isn't MAIN_HAND or OFF_HAND or inaccessible (i'll add more eventually..!!) */
     @Nullable
     public static ItemStack getStackFromHand(CastingEnvironment ctx, int hand) {
         List<HeldItemInfo> stacks = ((GetStacks)ctx).getHeldStacks();
@@ -300,10 +324,16 @@ public class Lapisworks implements ModInitializer {
 		}
 	}
 
-	/** Returns stuff like "43rd" (A LITERAL, NOT TRANSLATEABLE!!!) if it doesn't know wtf that Hand is */
+	/** Returns stuff like Text.translateable("hands.lapisworks.43") (43rd hand)
+	 * if it doesn't know wtf that Hand is */
 	public static Text handToString(Hand hand) {
 		if (hand == Hand.MAIN_HAND) { return MAINHAND; }
 		else if (hand == Hand.OFF_HAND) { return OFFHAND; }
 		return Text.translatable("hands.lapisworks." + hand.ordinal());
+	}
+
+	/** Will update when the third and fourth hands expansion comes out fr */
+	public static List<Hand> getAllHands() {
+		return new ArrayList<>(List.of(Hand.MAIN_HAND, Hand.OFF_HAND));
 	}
 }

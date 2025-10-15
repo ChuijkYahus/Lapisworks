@@ -14,7 +14,8 @@
 		"PatternRegistryManifestMixin",
 		"VillagerEntityMixin",
 		"CastingEnvironmentMixin",
-		"CircleExecutionStateMixin"
+		"CircleExecutionStateMixin",
+		"ItemRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

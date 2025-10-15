@@ -1,0 +1,14 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "requiredmod": [
+        {
+            "id": "hextended"
+        }
+    ],
+    "normal": {
+        "item": "hextended:staff/flowered_moss"
+    },
+    "partamel": "lapisworks:staves/incomplete/flowered_moss",
+    "fullamel": "lapisworks:staves/amel_staff",
+    "cost": 10
+}

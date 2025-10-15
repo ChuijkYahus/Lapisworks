@@ -10,7 +10,7 @@ import net.minecraft.item.Item;
 
 import org.jetbrains.annotations.Nullable;
 
-/** Not a literal <code>interface</code>, but an interface to do stuff that'd be added to by Lapixtended interop. */
+/** Not a literal <code>interface</code>, but an interface to do stuff that'd be added to by Lapixtended. */
 public class LapixtendedInterface {
     /** Returns <code>PARTAMEL_STAFF</code> if <code>fromitem</code> is an <code>ItemStaff</code>, otherwise <code>PARTAMEL_WAND</code> if it's an <code>ItemExtendedStaff</code>.
      * <p>returns <code>null</code> if it's neither.
@@ -33,6 +33,6 @@ public class LapixtendedInterface {
                 return com.luxof.lapisworks.interop.hextended.Lapixtended.AMEL_WAND;
             }
         }
-        return ofItem instanceof ItemStaff ? (Item)ModItems.AMEL_STAFF : null;
+        return ofItem instanceof ItemStaff ? ModItems.AMEL_STAFF : null;
     }
 }

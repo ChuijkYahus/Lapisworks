@@ -1,0 +1,9 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "normal": {
+        "item": "hexcasting:staff/jungle"
+    },
+    "partamel": "lapisworks:staves/incomplete/jungle",
+    "fullamel": "lapisworks:staves/amel_staff",
+    "cost": 10
+}

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.luxof.lapisworks.init.Mutables;
+import com.luxof.lapisworks.init.Mutables.Mutables;
 
 import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.criterion.Criteria;

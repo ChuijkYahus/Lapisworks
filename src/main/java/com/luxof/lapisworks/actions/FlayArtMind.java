@@ -17,7 +17,7 @@ import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.TriConsumer;
 import com.luxof.lapisworks.blocks.Mind;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
-import com.luxof.lapisworks.init.Mutables;
+import com.luxof.lapisworks.init.Mutables.Mutables;
 
 import static com.luxof.lapisworks.Lapisworks.toList;
 import static com.luxof.lapisworks.LapisworksIDs.FULL_SIMPLE_MIND;

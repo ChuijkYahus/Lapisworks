@@ -90,13 +90,85 @@ Whoopsies
 
 **NOTE FOR MIGRATORS:**
 per-world shape patterns have once again changed, this will be the last time. i think.
-1.5.5.5:
+1.5.5.5
 - Fixed staffcasting not working if you don't have hextended (WTF????)
 - Also fixed some staves not opening their spellcasting gui
 1.1.7: "haha i added some funny swords"
-1.5.6:
-- Added Enchanted Slipways as interop with Hexal
-  They produce twice as many wisps per second but they can't be turned into portals with Oneironaut
-- Added the Specific Pedestal as interop with Hexical
+1.5.6's honest reaction to that information:
+- Imbue Amel now costs 2xAmel *in dust*, not *in shards*
+- Many patterns that previously took Amel are more convenient now.
+- Simple Mind Containers now look good in the offhand too
+- Refactored, like, another 40% of the codebase
+- Fixed up the book a little
+- Fixed a few errors in the book
+- Fixed Amel Swords not working for a bit
+- Fixed Amel Wand being able to be made with 10 Amel for a bit and shit like that (wtf?)
+- Fixed Enchant Skin
+- Fixed Imbue Amel and mishap bugs
+- Fixed Lapisworks crashing with hexxy4's Hex Casting build
+- Fixed Mold Amel saying it needs Amel and not a moldable substance when it doesn't find a moldable substance
+- Fixed partamel variants of the Obsidian wand/staff not existing
+- Fixed the Incomplete Staff of Amethyst Lazuli never being able to graduate to a complete staff
+- Lapisworks can be datapacked for shit now (will add a wiki for how right after this update)
+- Added Reclaim Amethyst
+- Added the Amel Jar to store 4 stacks of Amel
+  - It also renders on you when you equip it in the belt slot
+  - Works from your hotbar too
+- Added the Enchantment Energy Container to store 16 stacks of Amel
+  - Can't be equipped but works from your hotbar like the Amel Jar
+- Added interop with Hexical
+  - Added the Copper Rod
+  - Added the Amel-Copper Item Cradle
+  - Added the Handed Prison for v2.0.0
+
+**NOTE FOR MIGRATORS:**
+Super sorry, but this is the LAST!! time per-world shape patterns change!
+1.5.6.5
+- Fixed the Copper Rod and Amel-Copper Item Cradle and the Handed Prison not dropping their items
+- Fixed those items also not being mineable
+1.5.6.6
+- Fixed up the book a little (online and patchouli)
+- Fixed Dark Primarine Staves having no Amel Imbuement recipe
+- Fixed crash lmao
+1.5.7
+- Amel Imbuement is datapack-friendlier now
+- You can datapack Simple Mind Infusion recipes now
+- Added interop with Hexal
+  - Simple Minds, when imbued into the air, produce wandering wisps like the ones from a slipway,
+    but these ones last MUCH longer and thus collect MUCH more eatable media
+  - Enchanted Slipways
+    Simple Mind Infusion recipe (that costs Amel as well)
+    They produce twice as many wandering wisps per second but they can't be turned into portals with Oneironaut
+1.5.8
+- Hierophantics interop
+  - Max experience fishermen villagers can be flayed into you
+    costs 64 amel and 10 charged amethyst
+    they only have the on_my_reference_found trigger, triggers when your reference is found in a stack of an
+    offender within "range"
+      starts with a "guess" vector pointing from you to the enemy
+    has a "vigilance" attribute which can range from 0-3
+      0: no notification
+      1: chat notification
+      2: chat + audio notification
+      3: chat + on-screen + audio notification
+    they also have a "range" attribute (0-256)
+      the higher, the more inaccurate the guess (err_margin=range/4)
+      e.g. range=64 means guess can be 16 blocks from the offender
+      or range=256 means guess can be 64 blocks from the offender
+      however, if the offender is in your ambit the guess is always precise
+  - Less than max experience fishermen can also be flayed into you
+    costs 48 amel and 10 charged amethyst
+    they are almost equivalent to the other mind
+    err=range/8 by default, err=range/32 when offender is within ambit
+    range is only 0-96
+    starts casting with an entity reference to the offender on the stack
+    has a 1 in err chance of not detecting the offender
+- EMI interop
+  - You can now see Imbue Amel, Mold Amel and Simple Mind Infusion recipes in EMI
+  - You can also see BeegInfusion recipes in EMI
 1.6.0
 You can have four arms now (procrastination slain)
+- Your third and fourth arms can auto-cast 20x a second
+  Both must be devoted to auto-cast, but one can hold something (e.g. Focus, Amel-tuned Orb, etc.)
+- Your third and fourth arms can hold items
+- You may swap arms 1-2 with 3-4, or use them with mouse3-4 (yes middle click and mouse4, rebindable)

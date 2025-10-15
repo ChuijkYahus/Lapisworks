@@ -1,0 +1,14 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "requiredmod": [
+        {
+            "id": "hextended"
+        }
+    ],
+    "normal": {
+        "item": "hextended:staff/purpur"
+    },
+    "partamel": "lapisworks:staves/incomplete/purpur",
+    "fullamel": "lapisworks:staves/amel_staff",
+    "cost": 10
+}

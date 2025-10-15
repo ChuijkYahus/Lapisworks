@@ -1,0 +1,15 @@
+{
+	"required": false,
+	"package": "com.luxof.lapisworks.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+		"CircleCastEnvMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"plugin": "com.luxof.lapisworks.mixin.FullLapixicalMixinConfigPlugin",
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

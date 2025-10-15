@@ -16,7 +16,7 @@ import com.luxof.lapisworks.mishaps.MishapBadHandItem;
 import static com.luxof.lapisworks.Lapisworks.getStackFromHand;
 import static com.luxof.lapisworks.Lapisworks.intToHand;
 import static com.luxof.lapisworks.LapisworksIDs.READABLE;
-import static com.luxof.lapisworks.init.Mutables.maxHands;
+import static com.luxof.lapisworks.init.Mutables.Mutables.maxHands;
 
 import java.util.List;
 

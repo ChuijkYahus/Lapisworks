@@ -1,0 +1,14 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "requiredmod": [
+        {
+            "id": "hexical",
+            "min": "2.0.0"
+        }
+    ],
+    "normal": {
+        "item": "hexical:pedestal"
+    },
+    "fullamel": "lapisworks:amel_constructs/holder",
+    "cost": 15
+}

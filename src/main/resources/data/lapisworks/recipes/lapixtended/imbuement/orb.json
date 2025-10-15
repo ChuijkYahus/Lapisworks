@@ -1,0 +1,13 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "requiredmod": [
+        {
+            "id": "hextended"
+        }
+    ],
+    "normal": {
+        "item": "hextended:staff/drawing_orb"
+    },
+    "fullamel": "lapisworks:amel_constructs/amel_orb",
+    "cost": 10
+}

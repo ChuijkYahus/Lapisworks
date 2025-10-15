@@ -46,7 +46,7 @@
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:banish_other_enchsent",
             "anchor": "lapisworks:banish_other_enchsent",
-            "input": "",
+            "input": "vec",
             "output": "",
             "text": "pages.lapisworks.great.banish_other_enchsent.summary"
         }

@@ -3,10 +3,13 @@ package com.luxof.lapisworks.mixin;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
+import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.interop.hextended.items.AmelOrb;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
+import com.luxof.lapisworks.mixinsupport.GetVAULT;
 
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.getAllHands;
 
 import java.util.List;
 
@@ -28,10 +31,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerEntity.class)
-public abstract class ServerPlayerEntityMixin extends PlayerEntity {
+public abstract class ServerPlayerEntityMixin extends PlayerEntity implements GetVAULT {
     public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
         super(world, pos, yaw, gameProfile);
     }
+
+    private final VAULT vault = VAULT.of((ServerPlayerEntity)(Object)this);
+    // yall ever think of a word so long it starts lookin wrong despite being correctly spelled n shit?
+    // this phenomena is called "semantic satiation" iirc
+    @Override public VAULT grabVAULT() { return this.vault; }
 
     @Inject(at = @At("HEAD"), method = "readCustomDataFromNbt")
     public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
@@ -56,12 +64,11 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         Vec3d sentPos = ((EnchSentInterface)this).getEnchantedSentinel();
         Double ambit = ((EnchSentInterface)this).getEnchantedSentinelAmbit();
         nbt.putBoolean("LAPISWORKS_EnchSent_exists", sentPos != null);
-        Vec3d usePos = sentPos != null ? sentPos : new Vec3d(0.0, 0.0, 0.0);
-        double useAmbit = ambit != null ? ambit : 0.0;
-        nbt.putDouble("LAPISWORKS_EnchSent_posX", usePos.x);
-        nbt.putDouble("LAPISWORKS_EnchSent_posY", usePos.y);
-        nbt.putDouble("LAPISWORKS_EnchSent_posZ", usePos.z);
-        nbt.putDouble("LAPISWORKS_EnchSent_Ambit", useAmbit);
+        if (sentPos == null) return;
+        nbt.putDouble("LAPISWORKS_EnchSent_posX", sentPos.x);
+        nbt.putDouble("LAPISWORKS_EnchSent_posY", sentPos.y);
+        nbt.putDouble("LAPISWORKS_EnchSent_posZ", sentPos.z);
+        nbt.putDouble("LAPISWORKS_EnchSent_Ambit", ambit);
     }
 
     public Vec3d spawnAt = ((EnchSentInterface)this).getEnchantedSentinel();
@@ -80,7 +87,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         );
     }
     public void spawnOrbParticles() {
-        List<Hand> hands = List.of(Hand.MAIN_HAND, Hand.OFF_HAND);
+        List<Hand> hands = getAllHands();
         for (Hand hand : hands) {
             ItemStack stack = this.getStackInHand(hand);
             if (!(stack.getItem() instanceof AmelOrb orb)) continue;

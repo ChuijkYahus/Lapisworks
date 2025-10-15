@@ -12,6 +12,8 @@ import static com.luxof.lapisworks.LapisworksIDs.SPECHAND_NOITEM;
 
 import java.util.List;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -25,24 +27,24 @@ public class MishapBadHandItem extends Mishap {
     public final Hand hand;
     public Text gotItemDesc;
     
-    private ItemStack nullIfEmpty(ItemStack stack) {
-        if (stack == null) { return stack; }
-        return stack.isEmpty() ? null : stack;
+    private ItemStack emptyIfNull(ItemStack stack) {
+        if (stack == null) { return ItemStack.EMPTY.copy(); }
+        return stack;
     }
 
-    public MishapBadHandItem(ItemStack item, Text wanted, Hand hand) {
-        this.item = nullIfEmpty(item);
+    public MishapBadHandItem(@Nullable ItemStack item, Text wanted, Hand hand) {
+        this.item = emptyIfNull(item);
         this.wanted = wanted;
         this.hand = hand;
     }
-    public MishapBadHandItem(ItemStack item, Item wanted, Hand hand) {
-        this.item = nullIfEmpty(item);
+    public MishapBadHandItem(@Nullable ItemStack item, Item wanted, Hand hand) {
+        this.item = emptyIfNull(item);
         this.wanted = wanted.getName();
         this.hand = hand;
     }
     /** Replaces the period usually at the end of bad_item (not no_item) with gotItemDesc. */
-    public MishapBadHandItem(ItemStack item, Text wanted, Text gotItemDesc, Hand hand) {
-        this.item = nullIfEmpty(item);
+    public MishapBadHandItem(@Nullable ItemStack item, Text wanted, Text gotItemDesc, Hand hand) {
+        this.item = emptyIfNull(item);
         this.wanted = wanted;
         this.hand = hand;
         this.gotItemDesc = gotItemDesc;

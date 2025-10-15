@@ -1,7 +1,7 @@
 {
     "name": "pages.lapisworks.imbuement.jumpslate.title",
     "icon": "lapisworks:amel_constructs/jumpslate/am1",
-    "flag": "hexcasting:enlightenment",
+    "advancement": "hexcasting:enlightenment",
     "category": "hexcasting:lapisworks/imbuement",
     "sortnum": 6,
     "pages": [

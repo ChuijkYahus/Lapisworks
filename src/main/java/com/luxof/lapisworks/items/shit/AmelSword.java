@@ -1,6 +1,6 @@
 package com.luxof.lapisworks.items.shit;
 
-import static com.luxof.lapisworks.init.Mutables.isAmel;
+import static com.luxof.lapisworks.init.Mutables.Mutables.isAmel;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,7 +13,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
-public class AmelSword extends SwordItem implements FullyAmelInterface {
+public class AmelSword extends SwordItem {
     public Item material;
 
     public AmelSword(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, Item material) {
@@ -45,6 +45,4 @@ public class AmelSword extends SwordItem implements FullyAmelInterface {
       return UseAction.BLOCK;
     }
     // also postHit and getAttributeModifiers ig
-
-    @Override public int getRequiredAmelToMakeFromBase() { return 32; }
 }

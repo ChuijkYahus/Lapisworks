@@ -12,7 +12,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
 import static com.luxof.lapisworks.Lapisworks.getStackFromHand;
-import static com.luxof.lapisworks.init.Mutables.maxHands;
+import static com.luxof.lapisworks.init.Mutables.Mutables.maxHands;
 
 import java.util.List;
 

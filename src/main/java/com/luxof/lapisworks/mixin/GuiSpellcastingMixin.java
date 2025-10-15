@@ -11,7 +11,6 @@ import com.luxof.lapisworks.init.ModItems;
 import at.petrak.hexcasting.client.gui.GuiSpellcasting;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 
 @Mixin(GuiSpellcasting.class)
 public class GuiSpellcastingMixin {
@@ -23,8 +22,8 @@ public class GuiSpellcastingMixin {
         }
         if (
             Lapisworks.trinketEquipped(player, ModItems.CASTING_RING) ||
-            Lapisworks.trinketEquipped(player, (Item)ModItems.AMEL_RING) ||
-            Lapisworks.trinketEquipped(player, (Item)ModItems.AMEL_RING2)
+            Lapisworks.trinketEquipped(player, ModItems.AMEL_RING) ||
+            Lapisworks.trinketEquipped(player, ModItems.AMEL_RING2)
         ) {
             // PROBABLY should add check for if player opened casting menu
             // but i'll let that be until it bites me in the ass

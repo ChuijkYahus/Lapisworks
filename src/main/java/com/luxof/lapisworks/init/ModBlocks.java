@@ -18,7 +18,6 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 
-// i ran out of new names
 public class ModBlocks {
     public static ConjuredColorable CONJURED_COLORABLE = new ConjuredColorable();
     public static Mind MIND_BLOCK = new Mind();
@@ -29,7 +28,6 @@ public class ModBlocks {
     public static JumpSlate JUMP_SLATE_LAPIS = new JumpSlate();
     public static ReboundSlate REBOUND_SLATE_1 = new ReboundSlate();
     public static ReboundSlate REBOUND_SLATE_2 = new ReboundSlate();
-    // FUCK BlockEntityType.Builder.create bro that shit didn't take ANYTHING i gave it
     public static BlockEntityType<BlockEntity> MIND_ENTITY_TYPE = new BlockEntityType<BlockEntity>(
         MindEntity::new,
         ImmutableSet.of(MIND_BLOCK),

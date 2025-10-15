@@ -1,0 +1,7 @@
+{
+    "type": "lapisworks:mold_amel",
+    "input": {
+        "item": "lapisworks:amel_constructs/jumpslate/am1"
+    },
+    "output": "lapisworks:amel_constructs/jumpslate/am2"
+}

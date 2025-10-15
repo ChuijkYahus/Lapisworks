@@ -30,6 +30,10 @@ show_landing_text = false
 "lapisworks:amel_constructs/diamond_sword" = { texture = "lapisworks:textures/item/amel_dsword_noanim.png" }
 "lapisworks:amel_constructs/iron_sword" = { texture = "lapisworks:textures/item/amel_isword_noanim.png" }
 "lapisworks:amel_constructs/gold_sword" = { texture = "lapisworks:textures/item/amel_gsword_noanim.png" }
+"lapisworks:energy_container" = { texture = "lapisworks:textures/item/energy_container.png" }
+
+[flags]
+"lapisworks:no_fulllapixical" = false
 
 [extra.hexcasting]
 # thank you hierophantics lmao
