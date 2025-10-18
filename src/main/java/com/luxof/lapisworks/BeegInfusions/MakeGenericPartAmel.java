@@ -10,13 +10,11 @@ import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.init.Mutables.BeegInfusion;
 import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.interop.hextended.LapixtendedInterface;
-import com.luxof.lapisworks.items.shit.PartiallyAmelInterface;
+import com.luxof.lapisworks.items.shit.DurabilityPartAmel;
 import com.luxof.lapisworks.mishaps.MishapNotEnoughItems;
-import com.luxof.lapisworks.mixinsupport.GetStacks;
-import com.luxof.lapisworks.recipes.HandsInv;
-import com.luxof.lapisworks.recipes.ImbuementRec;
 
 import static com.luxof.lapisworks.LapisworksIDs.AMEL;
+import static com.luxof.lapisworks.Lapisworks.LOGGER;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -30,35 +28,28 @@ public class MakeGenericPartAmel extends BeegInfusion {
     private int infusing = 0;
 
     @Override
-    protected void postSetUp() {
-        try {
-            fullInfusionCost = item instanceof PartiallyAmelInterface ?
-                (int)Math.ceil(
-                    stack.getDamage() /
-                    (double)((PartiallyAmelInterface)item).getAmelWorthInDurability()
-                ) : Mutables.getBaseCostForInfusionOf(LapixtendedInterface.getAppropriateFullAmel(item));
-        } catch (NullPointerException e) {}
+    public boolean test() {
+        boolean ret = false;
+        for (HeldItemInfo heldInfo : this.heldInfos) {
+            stack = heldInfo.stack();
+            item = stack.getItem();
+            hand = heldInfo.hand();
+            LOGGER.info("Hand: " + hand.toString());
+            if (item instanceof ItemStaff) {
+                ret = true;
+                break;
+            }
+        }
+        fullInfusionCost = item instanceof DurabilityPartAmel durab ?
+            stack.getMaxDamage() / durab.getAmelWorthInDurability()
+            : Mutables.getBaseCostForInfusionOf(
+                LapixtendedInterface.getAppropriateFullAmel(item)
+            );
         infusing = Math.min(
             OperatorUtils.getPositiveInt(hexStack, 0, hexStack.size()),
             fullInfusionCost
         );
-    }
-
-    @Override
-    public boolean test() {
-        boolean ret = false;
-        for (HeldItemInfo heldInfo : this.heldInfos) {
-            ret = true;
-            stack = heldInfo.stack();
-            item = stack.getItem();
-            hand = heldInfo.hand();
-            if (!(item instanceof ItemStaff)) ret = false;
-            else if (ctx.getWorld().getRecipeManager().getFirstMatch(
-                    ImbuementRec.Type.INSTANCE,
-                    new HandsInv(((GetStacks)ctx).getHeldItemStacks()),
-                    ctx.getWorld()
-                ).isPresent()) ret = false;
-        }
+        LOGGER.info("full vs infusing: " + fullInfusionCost + " " + infusing);
         return ret;
     }
 
@@ -81,15 +72,15 @@ public class MakeGenericPartAmel extends BeegInfusion {
     public void accept() {
         vault.drain(Mutables::isAmel, infusing, Flags.PRESET_Stacks_InvItem_UpToHotbar);
 
-        PartiallyAmelInterface partAmel = LapixtendedInterface.getAppropriatePartAmelGeneric(item);
+        DurabilityPartAmel partAmel = (DurabilityPartAmel)LapixtendedInterface.getAppropriatePartAmelGeneric(item);
         Item fullAmel = LapixtendedInterface.getAppropriateFullAmel(item);
         ItemStack newStaff;
         if (infusing == fullInfusionCost) { newStaff = new ItemStack(fullAmel); }
-        else if (!(item instanceof PartiallyAmelInterface)) {
+        else if (!(item instanceof DurabilityPartAmel)) {
             newStaff = new ItemStack((Item)partAmel);
             newStaff.setDamage(
-            newStaff.getMaxDamage() - infusing * partAmel.getAmelWorthInDurability()
-        );
+                newStaff.getMaxDamage() - infusing * partAmel.getAmelWorthInDurability()
+            );
         } else {
             newStaff = stack.copy();
             newStaff.setDamage(

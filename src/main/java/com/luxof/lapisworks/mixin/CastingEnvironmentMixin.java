@@ -2,7 +2,6 @@ package com.luxof.lapisworks.mixin;
 
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
-import net.minecraft.item.ItemStack;
 
 import com.luxof.lapisworks.VAULT.CastEnvVAULT;
 import com.luxof.lapisworks.VAULT.VAULT;
@@ -12,9 +11,12 @@ import com.luxof.lapisworks.mixinsupport.GetVAULT;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
+// who up mixing they ins rn
 @Mixin(value = CastingEnvironment.class, remap = false)
 public abstract class CastingEnvironmentMixin implements GetStacks, GetVAULT {
     private final VAULT vault = VAULT.of((CastingEnvironment)(Object)this);

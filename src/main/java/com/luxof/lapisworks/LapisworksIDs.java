@@ -65,6 +65,7 @@ public class LapisworksIDs {
     public static final String ALREADY_ENCHANTED = "mishaps.lapisworks.already_enchanted";
     public static final String SPECHAND_NOITEM = "mishaps.lapisworks.some_hand.no_item";
     public static final String SPECHAND_BADITEM = "mishaps.lapisworks.some_hand.no_item";
+    public static final String INFUSED_AMEL = "lapisworks:infused_amel";
 
     // lapixtended
     public static final Identifier MAKE_PARTAMEL_WAND = id("make_partamel_wand");

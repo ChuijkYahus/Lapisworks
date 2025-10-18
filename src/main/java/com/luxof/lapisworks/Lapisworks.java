@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexItems;
 
 import com.luxof.lapisworks.init.ModItems;
@@ -18,6 +19,7 @@ import com.luxof.lapisworks.init.ThemConfigFlags;
 import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.mixinsupport.GetStacks;
 
+import static com.luxof.lapisworks.LapisworksIDs.INFUSED_AMEL;
 import static com.luxof.lapisworks.LapisworksIDs.MAINHAND;
 import static com.luxof.lapisworks.LapisworksIDs.OFFHAND;
 import static com.luxof.lapisworks.init.ThemConfigFlags.allPerWorldShapePatterns;
@@ -335,5 +337,17 @@ public class Lapisworks implements ModInitializer {
 	/** Will update when the third and fourth hands expansion comes out fr */
 	public static List<Hand> getAllHands() {
 		return new ArrayList<>(List.of(Hand.MAIN_HAND, Hand.OFF_HAND));
+	}
+
+	public static boolean hasInfusedAmel(ItemStack stack) {
+		return NBTHelper.contains(stack, INFUSED_AMEL);
+	}
+
+	public static int getInfusedAmel(ItemStack stack) {
+		return NBTHelper.getInt(stack, INFUSED_AMEL, 0);
+	}
+	
+	public static void setInfusedAmel(ItemStack stack, int count) {
+		NBTHelper.putInt(stack, INFUSED_AMEL, count);
 	}
 }

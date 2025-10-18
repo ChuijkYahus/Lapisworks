@@ -6,8 +6,6 @@
 		"LivingEntityMixin",
 		"PlayerBasedCastEnvMixin",
 		"EntityMixin",
-		"ItemMixin",
-		"ItemStaffMixin",
 		"GuiSpellcastingMixin",
 		"PlayerEntityMixin",
 		"ServerPlayerEntityMixin",

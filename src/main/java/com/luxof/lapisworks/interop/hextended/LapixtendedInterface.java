@@ -4,7 +4,7 @@ import at.petrak.hexcasting.common.items.ItemStaff;
 
 import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.init.ModItems;
-import com.luxof.lapisworks.items.shit.PartiallyAmelInterface;
+import com.luxof.lapisworks.items.shit.DurabilityPartAmel;
 
 import net.minecraft.item.Item;
 
@@ -16,10 +16,10 @@ public class LapixtendedInterface {
      * <p>returns <code>null</code> if it's neither.
     */
     @Nullable
-    public static PartiallyAmelInterface getAppropriatePartAmelGeneric(Item forItem) {
+    public static DurabilityPartAmel getAppropriatePartAmelGeneric(Item forItem) {
         if (Lapisworks.HEXTENDED_INTEROP) {
             if (forItem instanceof abilliontrillionstars.hextended.items.ItemExtendedStaff) {
-                return (PartiallyAmelInterface)com.luxof.lapisworks.interop.hextended.Lapixtended.PARTAMEL_WAND;
+                return (DurabilityPartAmel)(com.luxof.lapisworks.interop.hextended.Lapixtended.PARTAMEL_WAND);
             }
         }
         return forItem instanceof ItemStaff ? ModItems.PARTAMEL_STAFF : null;

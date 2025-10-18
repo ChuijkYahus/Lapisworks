@@ -130,6 +130,13 @@ Super sorry, but this is the LAST!! time per-world shape patterns change!
 - Fixed up the book a little (online and patchouli)
 - Fixed Dark Primarine Staves having no Amel Imbuement recipe
 - Fixed crash lmao
+1.5.6.7
+- Technically Amel Imbuement is datapack-friendlier now but untrusted (unfinished i think)
+- Fixed BeegInfusions not fucking working a lot of the time
+- Fixed no Amel Imbuement recipe for Casting Rings
+1.5.6.8
+- Read 1.5.6.7's changelog. Yeah.
+- Fixed partially amel stuff's durability not changing.
 1.5.7
 - Amel Imbuement is datapack-friendlier now
 - You can datapack Simple Mind Infusion recipes now
@@ -139,6 +146,18 @@ Super sorry, but this is the LAST!! time per-world shape patterns change!
   - Enchanted Slipways
     Simple Mind Infusion recipe (that costs Amel as well)
     They produce twice as many wandering wisps per second but they can't be turned into portals with Oneironaut
+- Added the Geode Dowser
+  - Consumes 1 amethyst dust per use
+- Added the Enchanted Brewing Stand
+  - Costs 10 Amel to make
+  - 2x blaze usage for 2x speed
+  - Takes 1 amethyst dust per brewing session
+- Added the Thinking Brewing Stand
+  - Can remember up to 5 potion recipes
+  - Each write is permanent, stops brewing anything but remembered potions when at the limit
+  - Makes the selected potions automatically and always takes 2 brewing sessions worth of time
+    time is constant, so even if there's like 5 steps it takes the time of 2 steps
+- Added the Enchanted Scroll
 1.5.8
 - Hierophantics interop
   - Max experience fishermen villagers can be flayed into you

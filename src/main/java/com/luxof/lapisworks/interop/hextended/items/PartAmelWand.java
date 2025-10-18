@@ -20,5 +20,4 @@ public class PartAmelWand extends PartiallyAmelStaff {
         EntityAttributeModifier.Operation.MULTIPLY_BASE
     );
     @Override public EntityAttributeModifier _getGridZoom() { return this.GRID_ZOOM; }
-    @Override public int getMaxDurability() { return 400; }
 }

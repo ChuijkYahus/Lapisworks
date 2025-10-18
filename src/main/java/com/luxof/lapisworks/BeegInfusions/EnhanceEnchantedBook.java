@@ -17,7 +17,6 @@ import static com.luxof.lapisworks.LapisworksIDs.ENCHBOOK_WITH_NOTONE_ENCH;
 import static com.luxof.lapisworks.LapisworksIDs.ENCHBOOK_WITH_ONE_ENCH;
 
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -33,27 +32,24 @@ public class EnhanceEnchantedBook extends BeegInfusion {
     private int infusing = 0;
 
     @Override
-    protected void postSetUp() {
-        try { requiredAmel = 20 * EnchantmentHelper.get(stack).values().iterator().next(); }
-        catch (NoSuchElementException e) {}
-        infusing = Math.min(
-            OperatorUtils.getPositiveInt(this.hexStack, 0, this.hexStack.size()),
-            requiredAmel
-        );
-    }
-
-    @Override
     public boolean test() {
         boolean ret = false;
         for (HeldItemInfo heldInfo : this.heldInfos) {
-            ret = true;
             stack = heldInfo.stack();
             hand = heldInfo.hand();
-            if (!stack.isOf(Items.ENCHANTED_BOOK)) ret = false;
+            if (stack.isOf(Items.ENCHANTED_BOOK)) {
+                ret = true;
+                break;
+            }
         }
         if (!ret) return false;
         // ^^vv don't wanna uselessly go through a lot of items just to return false
         availableAmel = vault.fetch(Mutables::isAmel, Flags.PRESET_Stacks_InvItem_UpToHotbar);
+        requiredAmel = 20 * EnchantmentHelper.get(stack).values().iterator().next();
+        infusing = Math.min(
+            OperatorUtils.getPositiveInt(this.hexStack, 0, this.hexStack.size()),
+            requiredAmel
+        );
         return ret;
     }
 
