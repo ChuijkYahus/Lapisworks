@@ -43,7 +43,7 @@ public class Lapixical {
             // the only version after hexical 1.5.0 is 2.0.0
             FullLapixical.initHexical200Interop();
         } else {
-            PatchouliAPI.get().setConfigFlag("lapisworks:no_fulllapixical", true);
+            PatchouliAPI.get().setConfigFlag("lapisworks:fulllapixical", false);
         }
         ModBlocks.pickACropTop("rod", ROD);
         ModBlocks.pickACropTop("cradle", CRADLE);

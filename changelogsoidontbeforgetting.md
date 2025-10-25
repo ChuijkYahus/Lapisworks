@@ -137,27 +137,31 @@ Super sorry, but this is the LAST!! time per-world shape patterns change!
 1.5.6.8
 - Read 1.5.6.7's changelog. Yeah.
 - Fixed partially amel stuff's durability not changing.
+1.5.6.9
+- Fixed requiring Hexical or it'll break the book :sob:
 1.5.7
 - Amel Imbuement is datapack-friendlier now
 - You can datapack Simple Mind Infusion recipes now
+- Fixed up the book a lil
 - Added interop with Hexal
-  - Simple Minds, when imbued into the air, produce wandering wisps like the ones from a slipway,
-    but these ones last MUCH longer and thus collect MUCH more eatable media
   - Enchanted Slipways
     Simple Mind Infusion recipe (that costs Amel as well)
     They produce twice as many wandering wisps per second but they can't be turned into portals with Oneironaut
 - Added the Geode Dowser
+  - Imbue 5 Amel into a compass
   - Consumes 1 amethyst dust per use
 - Added the Enchanted Brewing Stand
-  - Costs 10 Amel to make
+  - Imbue 10 Amel into a Brewing Stand
   - 2x blaze usage for 2x speed
-  - Takes 1 amethyst dust per brewing session
+  - Takes 2 amethyst dust per brewing session/step in brewing process
 - Added the Thinking Brewing Stand
+  - Infuse a Simple Mind into a Brewing Stand
   - Can remember up to 5 potion recipes
   - Each write is permanent, stops brewing anything but remembered potions when at the limit
-  - Makes the selected potions automatically and always takes 2 brewing sessions worth of time
-    time is constant, so even if there's like 5 steps it takes the time of 2 steps
+  - When a potion from memory is selected, takes items automatically and always takes 2 brewing
+    sessions worth of time (so if there's 7 in-between potions it only takes 2 steps worth of time)
 - Added the Enchanted Scroll
+  - It's literally a Hex Casting IDE, I don't know what more to tell you
 1.5.8
 - Hierophantics interop
   - Max experience fishermen villagers can be flayed into you

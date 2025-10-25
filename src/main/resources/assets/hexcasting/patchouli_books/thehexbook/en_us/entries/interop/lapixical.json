@@ -25,13 +25,13 @@
         },
         {
             "type": "patchouli:text",
-            "flag": "&lapisworks:no_fulllapixical,mod:hexical",
+            "flag": "&mod:hexical,!lapisworks:fulllapixical",
             "advancement": "hexcasting:enlightenment",
             "text": "pages.lapisworks.interop.lapixical.get200bruh"
         },
         {
             "type": "patchouli:spotlight",
-            "flag": "!lapisworks:no_fulllapixical",
+            "flag": "&mod:hexical,lapisworks:fulllapixical",
             "advancement": "hexcasting:enlightenment",
             "item": "lapisworks:amel_constructs/holder",
             "text": "pages.lapisworks.interop.lapixical.holder"

@@ -26,10 +26,8 @@ public class BeegInfusion {
         this.ctx = ctx;
         this.hexStack = hexStack;
         this.vault = vault;
-        this.postSetUp();
         return this;
     }
-    protected void postSetUp() {}
 
     public boolean test() { return false; }
     public void mishapIfNeeded() {}

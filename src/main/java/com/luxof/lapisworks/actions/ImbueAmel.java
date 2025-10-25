@@ -42,8 +42,10 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 
-// someone one called this code "unreadable"
-// i agree 75%
+/** Object-object's honest reaction to seeing this:
+ * "this code makes no sense"
+ * "..and the code is incomprehensible anyway.."
+ * I don't know if I should wear that like a badge of honour or what */
 public class ImbueAmel implements SpellAction {
     public int getArgc() {
         return 1;

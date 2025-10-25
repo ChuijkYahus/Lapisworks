@@ -1,6 +1,5 @@
 package com.luxof.lapisworks.items.shit;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.getInfusedAmel;
 import static com.luxof.lapisworks.Lapisworks.setInfusedAmel;
 

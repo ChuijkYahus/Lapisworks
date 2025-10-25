@@ -23,7 +23,7 @@ repositories {
 	maven { url "https://maven.blamejared.com" }
 	maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/releases/" }
-	maven { url = "https://maven.kosmx.dev/" }
+	maven { url "https://maven.kosmx.dev/" }
 	exclusiveContent {
         forRepository {
             maven {
@@ -44,6 +44,7 @@ repositories {
         }
         filter { 
             includeGroup('software.bernie.geckolib')
+			includeGroup('com.eliotlash.mclib') // fucking mclib
         }
     }
 	maven {
@@ -112,16 +113,23 @@ dependencies {
 	// Lexical
 	// test 2.0.0
 	modCompileOnly files("${rootProject.rootDir}\\libs\\hexical-2.0.0-e0d7ef9.jar")
-	modLocalRuntime files("${rootProject.rootDir}\\libs\\hexical-2.0.0-e0d7ef9.jar")
+	//modLocalRuntime files("${rootProject.rootDir}\\libs\\hexical-2.0.0-e0d7ef9.jar")
 	modCompileOnly files("${rootProject.rootDir}\\libs\\hexpose-1.0.0.jar")
-	modLocalRuntime files("${rootProject.rootDir}\\libs\\hexpose-1.0.0.jar")
+	//modLocalRuntime files("${rootProject.rootDir}\\libs\\hexpose-1.0.0.jar")
 	modCompileOnly "dev.kosmx.player-anim:player-animation-lib-fabric:${player_animator_version}"
 	modLocalRuntime "dev.kosmx.player-anim:player-animation-lib-fabric:${player_animator_version}"
 	// test 1.5.0
 	//modLocalRuntime "maven.modrinth:hexical:1.5.0-fabric,1.20.1"
 	// Lapisal
-	/*modCompileOnly("ram.talia.hexal:hexal-fabric-1.20.1:0.3.0") exclude module: 'serialization-hooks'
-	modLocalRuntime("ram.talia.hexal:hexal-fabric-1.20.1:0.3.0") exclude module: 'serialization-hooks'*/
+	modLocalRuntime("com.eliotlash.mclib:mclib:20")
+	modCompileOnly("ram.talia.hexal:hexal-fabric-1.20.1:0.3.0") {
+		exclude module: 'serialization-hooks'
+		exclude module: "mclib"
+	}
+	modLocalRuntime("ram.talia.hexal:hexal-fabric-1.20.1:0.3.0") {
+		exclude module: 'serialization-hooks'
+		exclude module: "mclib"
+	}
 	// Enchants the Mind
 
 

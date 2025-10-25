@@ -29,7 +29,7 @@ public class FullLapixical {
     );
 
     public static void initHexical200Interop() {
-        PatchouliAPI.get().setConfigFlag("lapisworks:no_fulllapixical", false);
+        PatchouliAPI.get().setConfigFlag("lapisworks:fulllapixical", true);
         ModBlocks.pickACropTop("amel_constructs/holder", HOLDER);
         ModBlocks.dontForgetStockings("holder_entity_type", HOLDER_ENTITY_TYPE);
     }

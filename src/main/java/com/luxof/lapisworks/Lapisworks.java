@@ -80,6 +80,7 @@ public class Lapisworks implements ModInitializer {
 
 	public static boolean HEXTENDED_INTEROP = false;
 	public static boolean HEXICAL_INTEROP = false;
+	public static boolean HEXAL_INTEROP = false;
 
 	public static boolean isModLoaded(String modid) { return FabricLoader.getInstance().isModLoaded(modid); }
 	/** assumes the mod is actually loaded and that <code>targetVersion</code> doesn't cause an error.
@@ -109,6 +110,11 @@ public class Lapisworks implements ModInitializer {
 			HEXICAL_INTEROP = true;
 			anyInterop = true;
 			com.luxof.lapisworks.interop.hexical.Lapixical.initHexicalInterop();
+		}
+		if (isModLoaded("hexal")) {
+			HEXAL_INTEROP = true;
+			anyInterop = true;
+			com.luxof.lapisworks.interop.hexal.Lapisal.beCool();
 		}
 
 		ThemConfigFlags.declareEm();

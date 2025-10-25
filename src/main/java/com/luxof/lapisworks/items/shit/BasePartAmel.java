@@ -8,9 +8,9 @@ import net.minecraft.world.World;
 
 public interface BasePartAmel {
     /** ran every time the Imbue Amel spell imbues amel into this item.
-     * <br>the NBT thing is set already when this is called. */
+     * <br>the NBT tag "lapisworks:infused_amel" is set already when this is called. */
     public void onImbue(ItemStack stack, int addedAmel);
 
-    /** at the moment? i think this is broken. haven't checked. */
+    /** not implemented and thus isn't actually used yet. */
     default void onAttack(LivingEntity user, World world, Hand hand, Entity attacked) {};
 }
