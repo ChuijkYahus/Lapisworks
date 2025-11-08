@@ -49,6 +49,7 @@ public abstract class CircleExecutionStateMixin {
         @Local BlockPos herePos,
         @Local ICircleComponent cmp
     ) {
+        // jump slate needs to hijack here and add it's own exit destination, lest the spell circle fail as the exit is not directly adjacent.
         if (!(cmp instanceof JumpSlate jmpSlate)) return;
         Pair<Direction, BlockPos> exit = jmpSlate.getProbableExitPlace(enterDir, herePos, level);
         if (exit == null) return;
