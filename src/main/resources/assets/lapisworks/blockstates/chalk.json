@@ -1,0 +1,857 @@
+{
+    "variants": {
+        "lit=false,mode=0,attached=down,to_a=north,to_b=north": {
+            "model": "lapisworks:block/chalk/droplet_unlit",
+            "uvlock": true
+        },
+        "lit=false,mode=0,attached=up,to_a=north,to_b=north": {
+            "model": "lapisworks:block/chalk/droplet_unlit",
+            "uvlock": true,
+            "x": 180
+        },
+        "lit=false,mode=0,attached=north,to_a=north,to_b=north": {
+            "model": "lapisworks:block/chalk/droplet_unlit",
+            "uvlock": true,
+            "x": 270
+        },
+        "lit=false,mode=0,attached=west,to_a=north,to_b=north": {
+            "model": "lapisworks:block/chalk/droplet_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 90
+        },
+        "lit=false,mode=0,attached=south,to_a=north,to_b=north": {
+            "model": "lapisworks:block/chalk/droplet_unlit",
+            "uvlock": true,
+            "x": 90
+        },
+        "lit=false,mode=0,attached=east,to_a=north,to_b=north": {
+            "model": "lapisworks:block/chalk/droplet_unlit",
+            "uvlock": true,
+            "y": 270,
+            "x": 90
+        },
+
+        "lit=false,mode=3,attached=down,to_a=north,to_b=north": {
+            "model": "lapisworks:block/chalk/four_way_unlit",
+            "uvlock": true
+        },
+        "lit=false,mode=3,attached=up,to_a=north,to_b=north": {
+            "model": "lapisworks:block/chalk/four_way_unlit",
+            "uvlock": true,
+            "x": 180
+        },
+        "lit=false,mode=3,attached=north,to_a=north,to_b=north": {
+            "model": "lapisworks:block/chalk/four_way_unlit",
+            "uvlock": true,
+            "x": 270
+        },
+        "lit=false,mode=3,attached=west,to_a=north,to_b=north": {
+            "model": "lapisworks:block/chalk/four_way_unlit",
+            "uvlock": true,
+            "x": 90
+        },
+        "lit=false,mode=3,attached=south,to_a=north,to_b=north": {
+            "model": "lapisworks:block/chalk/four_way_unlit",
+            "uvlock": true,
+            "x": 90
+        },
+        "lit=false,mode=3,attached=east,to_a=north,to_b=north": {
+            "model": "lapisworks:block/chalk/four_way_unlit",
+            "uvlock": true,
+            "x": 90
+        },
+
+
+
+
+
+        "lit=false,mode=1,attached=down,to_a=north,to_b=west": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=north,to_b=south": {
+            "model": "lapisworks:block/chalk/two_way_unlit",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=north,to_b=east": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 270
+        },
+        "lit=false,mode=1,attached=down,to_a=north,to_b=up": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true
+        },
+
+        "lit=false,mode=1,attached=down,to_a=west,to_b=north": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=west,to_b=south": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 90
+        },
+        "lit=false,mode=1,attached=down,to_a=west,to_b=east": {
+            "model": "lapisworks:block/chalk/two_way_unlit",
+            "uvlock": true,
+            "y": 90
+        },
+        "lit=false,mode=1,attached=down,to_a=west,to_b=up": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 90
+        },
+
+        "lit=false,mode=1,attached=down,to_a=south,to_b=north": {
+            "model": "lapisworks:block/chalk/two_way_unlit",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=south,to_b=west": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 90
+        },
+        "lit=false,mode=1,attached=down,to_a=south,to_b=east": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 180
+        },
+        "lit=false,mode=1,attached=down,to_a=south,to_b=up": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "x": 270
+        },
+
+        "lit=false,mode=1,attached=down,to_a=east,to_b=north": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 270
+        },
+        "lit=false,mode=1,attached=down,to_a=east,to_b=west": {
+            "model": "lapisworks:block/chalk/two_way_unlit",
+            "uvlock": true,
+            "y": 90
+        },
+        "lit=false,mode=1,attached=down,to_a=east,to_b=south": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 180
+        },
+        "lit=false,mode=1,attached=down,to_a=east,to_b=up": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 270
+        },
+
+        "lit=false,mode=1,attached=down,to_a=up,to_b=north": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=up,to_b=west": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 270
+        },
+        "lit=false,mode=1,attached=down,to_a=up,to_b=south": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 180
+        },
+        "lit=false,mode=1,attached=down,to_a=up,to_b=east": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 90
+        },
+
+
+        "lit=false,mode=1,attached=north,to_a=north,to_b=west": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=north,to_a=north,to_b=up": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=north,to_a=north,to_b=down": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 180,
+            "x": 270
+        },
+
+        "lit=false,mode=1,attached=north,to_a=west,to_b=north": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=north,to_a=west,to_b=east": {
+            "model": "lapisworks:block/chalk/two_way_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=north,to_a=west,to_b=up": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=north,to_a=west,to_b=down": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "x": 270
+        },
+
+        "lit=false,mode=1,attached=north,to_a=east,to_b=north": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=north,to_a=east,to_b=west": {
+            "model": "lapisworks:block/chalk/two_way_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=north,to_a=east,to_b=up": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=north,to_a=east,to_b=down": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "x": 270
+        },
+
+        "lit=false,mode=1,attached=north,to_a=up,to_b=north": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=north,to_a=up,to_b=west": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 180,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=north,to_a=up,to_b=east": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=north,to_a=up,to_b=down": {
+            "model": "lapisworks:block/chalk/two_way_unlit",
+            "uvlock": true,
+            "x": 270
+        },
+
+        "lit=false,mode=1,attached=north,to_a=down,to_b=north": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=north,to_a=down,to_b=west": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 270,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=north,to_a=down,to_b=east": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=north,to_a=down,to_b=up": {
+            "model": "lapisworks:block/chalk/two_way_unlit",
+            "uvlock": true,
+            "x": 270
+        },
+
+
+        "lit=false,mode=1,attached=west,to_a=north,to_b=south": {
+            "model": "lapisworks:block/chalk/two_way_unlitz90",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=west,to_a=north,to_b=east": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz90",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=west,to_a=north,to_b=up": {
+            "model": "lapisworks:block/chalk/corner_unlitz90",
+            "uvlock": true,
+            "x": 90
+        },
+        "lit=false,mode=1,attached=west,to_a=north,to_b=down": {
+            "model": "lapisworks:block/chalk/corner_unlitz90",
+            "uvlock": true
+        },
+
+        "lit=false,mode=1,attached=west,to_a=south,to_b=north": {
+            "model": "lapisworks:block/chalk/two_way_unlitz90",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=west,to_a=south,to_b=east": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz90",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=west,to_a=south,to_b=up": {
+            "model": "lapisworks:block/chalk/corner_unlitz90",
+            "uvlock": true,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=west,to_a=south,to_b=down": {
+            "model": "lapisworks:block/chalk/corner_unlitz90",
+            "uvlock": true,
+            "x": 270
+        },
+
+        "lit=false,mode=1,attached=west,to_a=east,to_b=north": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz90",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=west,to_a=east,to_b=south": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz90",
+            "uvlock": true,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=west,to_a=east,to_b=up": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz90",
+            "uvlock": true,
+            "x": 90
+        },
+        "lit=false,mode=1,attached=west,to_a=east,to_b=down": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz270",
+            "uvlock": true,
+            "x": 270
+        },
+
+        "lit=false,mode=1,attached=west,to_a=up,to_b=north": {
+            "model": "lapisworks:block/chalk/corner_unlitz90",
+            "uvlock": true,
+            "x": 90
+        },
+        "lit=false,mode=1,attached=west,to_a=up,to_b=south": {
+            "model": "lapisworks:block/chalk/corner_unlitz90",
+            "uvlock": true,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=west,to_a=up,to_b=east": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz90",
+            "uvlock": true,
+            "x": 90
+        },
+        "lit=false,mode=1,attached=west,to_a=up,to_b=down": {
+            "model": "lapisworks:block/chalk/two_way_unlitz90",
+            "uvlock": true,
+            "x": 270
+        },
+
+        "lit=false,mode=1,attached=west,to_a=down,to_b=north": {
+            "model": "lapisworks:block/chalk/corner_unlitz90",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=west,to_a=down,to_b=south": {
+            "model": "lapisworks:block/chalk/corner_unlitz90",
+            "uvlock": true,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=west,to_a=down,to_b=east": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz90",
+            "uvlock": true,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=west,to_a=down,to_b=up": {
+            "model": "lapisworks:block/chalk/two_way_unlitz90",
+            "uvlock": true,
+            "x": 270
+        },
+
+
+        "lit=false,mode=1,attached=south,to_a=north,to_b=west": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz90",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=south,to_a=north,to_b=east": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz270",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=south,to_a=north,to_b=up": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=south,to_a=north,to_b=down": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "x": 270
+        },
+
+        "lit=false,mode=1,attached=south,to_a=west,to_b=north": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz90",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=south,to_a=west,to_b=east": {
+            "model": "lapisworks:block/chalk/two_way_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=south,to_a=west,to_b=up": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 180,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=south,to_a=west,to_b=down": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 270,
+            "x": 270
+        },
+
+        "lit=false,mode=1,attached=south,to_a=east,to_b=north": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz270",
+            "uvlock": true,
+            "y": 90
+        },
+        "lit=false,mode=1,attached=south,to_a=east,to_b=west": {
+            "model": "lapisworks:block/chalk/two_way_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=south,to_a=east,to_b=up": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=south,to_a=east,to_b=down": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz270",
+            "uvlock": true
+        },
+
+        "lit=false,mode=1,attached=south,to_a=up,to_b=north": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=south,to_a=up,to_b=west": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 180,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=south,to_a=up,to_b=east": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=south,to_a=up,to_b=down": {
+            "model": "lapisworks:block/chalk/two_way_unlit",
+            "uvlock": true,
+            "x": 270
+        },
+
+        "lit=false,mode=1,attached=south,to_a=down,to_b=north": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=south,to_a=down,to_b=west": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=south,to_a=down,to_b=east": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 270,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=south,to_a=down,to_b=up": {
+            "model": "lapisworks:block/chalk/two_way_unlit",
+            "uvlock": true,
+            "x": 270
+        },
+
+
+        "lit=false,mode=1,attached=east,to_a=north,to_b=west": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz270",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=east,to_a=north,to_b=south": {
+            "model": "lapisworks:block/chalk/two_way_unlitz270",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=east,to_a=north,to_b=up": {
+            "model": "lapisworks:block/chalk/corner_unlitz270",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=east,to_a=north,to_b=down": {
+            "model": "lapisworks:block/chalk/corner_unlitz270",
+            "uvlock": true,
+            "x": 90
+        },
+
+        "lit=false,mode=1,attached=east,to_a=west,to_b=north": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz270",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=east,to_a=west,to_b=south": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz270",
+            "uvlock": true,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=east,to_a=west,to_b=up": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 270
+        },
+        "lit=false,mode=1,attached=east,to_a=west,to_b=down": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz270",
+            "uvlock": true,
+            "x": 90
+        },
+
+        "lit=false,mode=1,attached=east,to_a=south,to_b=west": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz270",
+            "uvlock": true,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=east,to_a=south,to_b=north": {
+            "model": "lapisworks:block/chalk/two_way_unlitz270",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=east,to_a=south,to_b=up": {
+            "model": "lapisworks:block/chalk/corner_unlitz270",
+            "uvlock": true,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=east,to_a=south,to_b=down": {
+            "model": "lapisworks:block/chalk/corner_unlitz270",
+            "uvlock": true,
+            "x": 180
+        },
+
+        "lit=false,mode=1,attached=east,to_a=up,to_b=north": {
+            "model": "lapisworks:block/chalk/corner_unlitz270",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=east,to_a=up,to_b=west": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz270",
+            "uvlock": true,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=east,to_a=up,to_b=south": {
+            "model": "lapisworks:block/chalk/corner_unlitz270",
+            "uvlock": true,
+            "x": 270
+        },
+        "lit=false,mode=1,attached=east,to_a=up,to_b=down": {
+            "model": "lapisworks:block/chalk/two_way_unlitz270",
+            "uvlock": true,
+            "x": 270
+        },
+
+        "lit=false,mode=1,attached=east,to_a=down,to_b=north": {
+            "model": "lapisworks:block/chalk/corner_unlitz270",
+            "uvlock": true,
+            "x": 90
+        },
+        "lit=false,mode=1,attached=east,to_a=down,to_b=west": {
+            "model": "lapisworks:block/chalk/cross_faces_unlitz270",
+            "uvlock": true,
+            "x": 90
+        },
+        "lit=false,mode=1,attached=east,to_a=down,to_b=south": {
+            "model": "lapisworks:block/chalk/corner_unlitz270",
+            "uvlock": true,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=east,to_a=down,to_b=up": {
+            "model": "lapisworks:block/chalk/two_way_unlitz270",
+            "uvlock": true,
+            "x": 270
+        },
+
+        "lit=false,mode=1,attached=up,to_a=north,to_b=west": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=up,to_a=north,to_b=south": {
+            "model": "lapisworks:block/chalk/two_way_unlit",
+            "uvlock": true,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=up,to_a=north,to_b=east": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 180,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=up,to_a=north,to_b=down": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 180,
+            "x": 180
+        },
+
+        "lit=false,mode=1,attached=up,to_a=west,to_b=north": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=up,to_a=west,to_b=south": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=up,to_a=west,to_b=east": {
+            "model": "lapisworks:block/chalk/two_way_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=up,to_a=west,to_b=down": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 180
+        },
+
+        "lit=false,mode=1,attached=up,to_a=south,to_b=north": {
+            "model": "lapisworks:block/chalk/two_way_unlit",
+            "uvlock": true,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=up,to_a=south,to_b=west": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=up,to_a=south,to_b=east": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 270,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=up,to_a=south,to_b=down": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 180,
+            "x": 180
+        },
+
+        "lit=false,mode=1,attached=up,to_a=east,to_b=north": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 180,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=up,to_a=east,to_b=west": {
+            "model": "lapisworks:block/chalk/two_way_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=up,to_a=east,to_b=south": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true,
+            "y": 270,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=up,to_a=east,to_b=down": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 270,
+            "x": 180
+        },
+
+        "lit=false,mode=1,attached=up,to_a=down,to_b=north": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 180,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=up,to_a=down,to_b=west": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=up,to_a=down,to_b=south": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 180,
+            "x": 180
+        },
+        "lit=false,mode=1,attached=up,to_a=down,to_b=east": {
+            "model": "lapisworks:block/chalk/cross_faces_unlit",
+            "uvlock": true,
+            "y": 270,
+            "x": 180
+        },
+
+
+
+
+
+        "lit=false,mode=2,attached=down": {
+            "model": "lapisworks:block/chalk/three_way_unlit",
+            "uvlock": true
+        },
+        "lit=false,mode=2,attached=up": {
+            "model": "lapisworks:block/chalk/three_way_unlit",
+            "uvlock": true,
+            "x": 180
+        },
+        "lit=false,mode=2,attached=north": {
+            "model": "lapisworks:block/chalk/three_way_unlit",
+            "uvlock": true,
+            "x": 270
+        },
+        "lit=false,mode=2,attached=west": {
+            "model": "lapisworks:block/chalk/three_way_unlit",
+            "uvlock": true,
+            "y": 90,
+            "x": 90
+        },
+        "lit=false,mode=2,attached=south": {
+            "model": "lapisworks:block/chalk/three_way_unlit",
+            "uvlock": true,
+            "x": 90
+        },
+        "lit=false,mode=2,attached=east": {
+            "model": "lapisworks:block/chalk/three_way_unlit",
+            "uvlock": true,
+            "y": 270,
+            "x": 90
+        },
+
+
+
+
+
+
+
+
+
+
+        "lit=false,mode=1,attached=down,to_a=north,to_b=north": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=west,to_b=west": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=south,to_b=south": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=east,to_b=east": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=up,to_b=up": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=down,to_b=north": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=down,to_b=west": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=down,to_b=south": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=down,to_b=east": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=down,to_b=up": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=down,to_b=down": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+
+        "lit=false,mode=1,attached=down,to_a=north,to_b=down": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=west,to_b=down": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=south,to_b=down": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=down,to_a=east,to_b=down": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=north,to_a=north,to_b=south": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=north,to_a=north,to_b=east": {
+            "model": "lapisworks:block/chalk/corner_unlit",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=north,to_a=west,to_b=south": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=north,to_a=south,to_b=north": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=north,to_a=south,to_b=west": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=north,to_a=south,to_b=east": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=north,to_a=south,to_b=up": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=north,to_a=east,to_b=south": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=north,to_a=up,to_b=south": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=west,to_a=down,to_b=down": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        },
+        "lit=false,mode=1,attached=south,to_a=east,to_b=south": {
+            "model": "lapisworks:block/chalk/shouldntexist",
+            "uvlock": true
+        }
+    }
+}

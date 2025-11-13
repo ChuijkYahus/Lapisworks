@@ -20,9 +20,7 @@ import static com.luxof.lapisworks.Lapisworks.prettifyDouble;
 import static com.luxof.lapisworks.LapisworksIDs.MIND_BLOCK;
 
 import java.util.List;
-import java.util.Optional;
 
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 
 public class CognitionPrfn implements ConstMediaAction {
@@ -36,12 +34,10 @@ public class CognitionPrfn implements ConstMediaAction {
             MishapThrowerJava.throwMishap(needMind);
         }
 
-
-        Optional<BlockEntity> blockEntityOpt = ctx
-            .getWorld()
-            .getBlockEntity(mindPos, ModBlocks.MIND_ENTITY_TYPE);
-        if (blockEntityOpt.isEmpty()) { MishapThrowerJava.throwMishap(needMind); }
-        MindEntity blockEntity = (MindEntity)blockEntityOpt.get();
+        MindEntity blockEntity = MishapThrowerJava.throwIfEmpty(
+            ctx.getWorld().getBlockEntity(mindPos, ModBlocks.MIND_ENTITY_TYPE),
+            needMind
+        );
 
         return List.of(new DoubleIota(prettifyDouble((double)blockEntity.mindCompletion)));
     }

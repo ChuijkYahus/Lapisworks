@@ -26,10 +26,6 @@
             "allowed": [1, 3, 4]
         },
         {
-            "type": "patchouli:text",
-            "text": "pages.lapisworks.great.flay_artmind.ethics_forewarning"
-        },
-        {
             "type": "patchouli:spotlight",
             "item": "minecraft:budding_amethyst",
             "text": "pages.lapisworks.great.flay_artmind.budding_amethyst"
@@ -46,6 +42,30 @@
             "input": "vec, [0-24], 0-20",
             "output": "",
             "text": "pages.lapisworks.great.flay_artmind.teach_song.summary"
+        },
+        {
+            "type": "patchouli:spotlight",
+            "advancement": "hexcasting:enlightenment",
+            "item": "lapisworks:amel_constructs/simple_impetus",
+            "text": "pages.lapisworks.great.flay_artmind.simple_impetus"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "advancement": "hexcasting:enlightenment",
+            "op_id": "lapisworks:teach_simp",
+            "anchor": "lapisworks:teach_simp",
+            "input": "vec, pattern",
+            "output": "",
+            "text": "pages.lapisworks.great.flay_artmind.teach_simp.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "advancement": "hexcasting:enlightenment",
+            "op_id": "lapisworks:ask_simp",
+            "anchor": "lapisworks:ask_simp",
+            "input": "vec",
+            "output": "pattern|null",
+            "text": "pages.lapisworks.great.flay_artmind.ask_simp.summary"
         }
     ]
 }

@@ -1,12 +1,13 @@
 package com.luxof.lapisworks.interop.hexical.blocks;
 
-import com.luxof.lapisworks.interop.hexical.LargeItemEntity;
 import com.luxof.lapisworks.interop.hexical.Lapixical;
+import com.luxof.lapisworks.mixinsupport.ItemEntityMinterface;
 
 import java.util.UUID;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -20,7 +21,7 @@ import net.minecraft.world.World;
 
 public class CradleEntity extends BlockEntity implements Inventory {
     private ItemStack heldStack = ItemStack.EMPTY.copy();
-    public LargeItemEntity heldEntity = null;
+    public ItemEntity heldEntity = null;
     private UUID persistentUUID = UUID.randomUUID();
 
     public CradleEntity(BlockPos pos, BlockState state) {
@@ -49,18 +50,20 @@ public class CradleEntity extends BlockEntity implements Inventory {
         // just be over with please
         if (heldEntity == null || heldEntity.isRemoved()) {
             Vec3d pos = Vec3d.ofCenter(this.pos);
-            heldEntity = new LargeItemEntity(sWorld, pos.x, pos.y, pos.z, heldStack);
+            heldEntity = new ItemEntity(sWorld, pos.x, pos.y, pos.z, heldStack);
             heldEntity.setUuid(persistentUUID);
             configureItemEntity();
+            ((ItemEntityMinterface)heldEntity).setBlockPosOfCradle(this.pos);
             sWorld.spawnEntity(heldEntity);
         } else if (heldEntity.getStack() != heldStack) {
             persistentUUID = UUID.randomUUID();
             heldEntity.discard();
             heldEntity = null;
             Vec3d pos = Vec3d.ofCenter(this.pos);
-            heldEntity = new LargeItemEntity(sWorld, pos.x, pos.y, pos.z, heldStack);
+            heldEntity = new ItemEntity(sWorld, pos.x, pos.y, pos.z, heldStack);
             heldEntity.setUuid(persistentUUID);
             configureItemEntity();
+            ((ItemEntityMinterface)heldEntity).setBlockPosOfCradle(this.pos);
             sWorld.spawnEntity(heldEntity);
         }
         markDirty();

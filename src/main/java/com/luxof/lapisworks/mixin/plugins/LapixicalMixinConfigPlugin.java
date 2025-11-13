@@ -1,35 +1,19 @@
-package com.luxof.lapisworks.mixin;
+package com.luxof.lapisworks.mixin.plugins;
 
 import java.util.List;
 import java.util.Set;
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.Version;
-
-import org.jetbrains.annotations.Nullable;
 
 import org.objectweb.asm.tree.ClassNode;
 
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
-public class FullLapixicalMixinConfigPlugin implements IMixinConfigPlugin {
-	@Nullable
-	public static Integer verDifference(String modid, String targetVersion) {
-		try {
-			Version currentVer = FabricLoader.getInstance().getModContainer(modid).get()
-				.getMetadata().getVersion();
-			Version targetVer = Version.parse(targetVersion);
-			return currentVer.compareTo(targetVer);
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
+public class LapixicalMixinConfigPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        Integer verDiff = verDifference("hexical", "1.5.0");
-        return verDiff != null && verDiff > 0;
+        return FabricLoader.getInstance().isModLoaded("hexical");
     }
 
     @Override

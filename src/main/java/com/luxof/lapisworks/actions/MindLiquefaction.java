@@ -24,9 +24,7 @@ import com.luxof.lapisworks.init.ModBlocks;
 import static com.luxof.lapisworks.LapisworksIDs.MIND_BLOCK;
 
 import java.util.List;
-import java.util.Optional;
 
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
@@ -54,18 +52,16 @@ public class MindLiquefaction implements SpellAction {
             MishapThrowerJava.throwMishap(needMind);
         }
 
-
-        Optional<BlockEntity> blockEntityOpt = ctx
-            .getWorld()
-            .getBlockEntity(mindPos, ModBlocks.MIND_ENTITY_TYPE);
-        if (blockEntityOpt.isEmpty()) { MishapThrowerJava.throwMishap(needMind); }
-        MindEntity blockEntity = (MindEntity)blockEntityOpt.get();
-
+        MindEntity blockEntity = MishapThrowerJava.throwIfEmpty(
+            ctx.getWorld().getBlockEntity(mindPos, ModBlocks.MIND_ENTITY_TYPE),
+            needMind
+        );
 
         Mishap needRechargeable = MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "rechargeable");
         HeldItemInfo heldStackInfo = ctx.getHeldItemToOperateOn(MindLiquefaction::isMediaHolder);
         if (heldStackInfo == null) {
             MishapThrowerJava.throwMishap(needRechargeable);
+            return null; // VSCode likes complaining about null
         }
 
 

@@ -1,12 +1,13 @@
 package com.luxof.lapisworks.interop.hexical.blocks;
 
-import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 
 import com.luxof.lapisworks.blocks.entities.MindEntity;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.interop.hexical.Lapixical;
 
-import at.petrak.hexcasting.api.utils.NBTHelper;
+import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -90,18 +91,21 @@ public class Cradle extends BlockWithEntity {
     }
 
     @Override
-    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        super.onBreak(world, pos, state, player);
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+        if (state.getBlock() == newState.getBlock()) return;
         CradleEntity bE = (CradleEntity)world.getBlockEntity(pos);
         if (bE.heldEntity != null) {
             bE.heldEntity.discard();
             bE.heldEntity = null;
         }
-        if (!bE.getStack(0).isEmpty()) {
+        ItemStack stack = bE.getStack(0);
+        if (NBTHelper.contains(stack, IS_IN_CRADLE)) {
+            NBTHelper.remove(stack, IS_IN_CRADLE);
+        }
+        if (!stack.isEmpty()) {
             world.spawnEntity(
-                new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), bE.getStack(0))
+                new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), stack)
             );
-            NBTHelper.remove(bE.getStack(0), IS_IN_CRADLE);
         }
         bE.markDirty();
     }

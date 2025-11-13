@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 public interface LapisworksInterface {
     public class AllEnchantments {
@@ -35,7 +36,12 @@ public interface LapisworksInterface {
     void decrementEnchant(int whatEnchant, int amount);
 	/** resulting list is not mutable. */
     List<Integer> getEnchantments();
+    /** this is for some copying stuff. */
+    int[] getEnchantmentsArray();
 	/** this is for nbt stuff. */
     void setEnchantments(int[] levels);
     void setAllEnchantsToZero();
+
+    void copyCrossDeath(ServerPlayerEntity old);
+    void copyCrossDimensional(ServerPlayerEntity old);
 }

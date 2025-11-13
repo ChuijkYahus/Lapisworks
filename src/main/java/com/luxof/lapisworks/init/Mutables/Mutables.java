@@ -4,16 +4,19 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 
-import com.luxof.lapisworks.TriConsumer;
 import com.luxof.lapisworks.BeegInfusions.EnhanceEnchantedBook;
 import com.luxof.lapisworks.BeegInfusions.MakeGenericPartAmel;
+import com.luxof.lapisworks.SMindInfusions.MakeBuddingAmethyst;
+import com.luxof.lapisworks.SMindInfusions.MakeJukeboxLive;
+import com.luxof.lapisworks.SMindInfusions.MakeSimpleImpetus;
+import com.luxof.lapisworks.SMindInfusions.UnflayVillager;
 import com.luxof.lapisworks.VAULT.VAULT;
-import com.luxof.lapisworks.init.ModBlocks;
 
 import static com.luxof.lapisworks.init.ModItems.AMEL_RING;
 import static com.luxof.lapisworks.init.ModItems.AMEL_STAFF;
 import static com.luxof.lapisworks.init.ModItems.JUMP_SLATE_AM1;
 import static com.luxof.lapisworks.LapisworksIDs.AMEL_TAG;
+import static com.luxof.lapisworks.LapisworksIDs.EMPTY_IMP_INTO_SIMP;
 import static com.luxof.lapisworks.LapisworksIDs.ENCHSENT_ADVANCEMENT;
 import static com.luxof.lapisworks.LapisworksIDs.ENHANCE_ENCHANTED_BOOK;
 import static com.luxof.lapisworks.LapisworksIDs.FLAY_ARTMIND_ADVANCEMENT;
@@ -21,25 +24,23 @@ import static com.luxof.lapisworks.LapisworksIDs.HASTENATURE_ADVANCEMENT;
 import static com.luxof.lapisworks.LapisworksIDs.JUKEBOX_INTO_LIVE_JUKEBOX;
 import static com.luxof.lapisworks.LapisworksIDs.MAKE_GENERIC_PARTAMEL;
 import static com.luxof.lapisworks.LapisworksIDs.SIMPLE_MIND_INTO_AMETHYST;
+import static com.luxof.lapisworks.LapisworksIDs.UNFLAY_FLAYED_VILLAGER;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiPredicate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 /** all of the stuff here is stuff that's looked at when the player is in the world
  * so no need to rush registering all this before Lapisworks or something */
@@ -51,8 +52,7 @@ public class Mutables {
     private static Map<Item, Integer> infusionBaseCostMap = new HashMap<>();
     // like what the fuck are these types below me scoob
     private static Map<Identifier, BeegInfusion> beegInfusionRecipes = new HashMap<>();
-    private static Map<Identifier, BiPredicate<BlockPos, World>> imbueMindRecipeFilters = new HashMap<>();
-    private static Map<Identifier, TriConsumer<BlockPos, World, ServerPlayerEntity>> imbueMindRecipeDoers = new HashMap<>();
+    private static Map<Identifier, SMindInfusion> sMindInfusionRecipes = new HashMap<>();
 
 
     public static boolean isAmel(ItemStack stack) { return stack.isEmpty() ? false : stack.isIn(TagKey.of(RegistryKeys.ITEM, AMEL_TAG)); }
@@ -81,24 +81,36 @@ public class Mutables {
         }
         return ret;
     }
+
     /** Note: any of the params passed to your doer can be null. */
-    public static void registerImbueMindRecipe(
-        @NotNull BiPredicate<BlockPos, World> filter,
+    public static void registerSMindInfusion(
         @NotNull Identifier id,
-        // i'm sure log4j wouldn't mind lol
-        @NotNull TriConsumer<BlockPos, World, ServerPlayerEntity> doer
+        @NotNull SMindInfusion recipe
     ) {
-        imbueMindRecipeFilters.put(id, filter);
-        imbueMindRecipeDoers.put(id, doer);
+        sMindInfusionRecipes.put(id, recipe);
     }
-    public static Map<Identifier, TriConsumer<BlockPos, World, ServerPlayerEntity>> checkImbueMindRecipes(
-        BlockPos bp, World world
+    public static Map<Identifier, SMindInfusion> testSMindInfusionFilters(
+        BlockPos bp, CastingEnvironment ctx, List<? extends Iota> hexStack, VAULT vault
     ) {
-        // sure i could make the List<Pair<>> a Map<>, but this has silly uses, a'ight?
-        Map<Identifier, TriConsumer<BlockPos, World, ServerPlayerEntity>> ret = new HashMap<>();
-        for (Identifier key : imbueMindRecipeFilters.keySet()) {
-            if (imbueMindRecipeFilters.get(key).test(bp, world)) {
-                ret.put(key, imbueMindRecipeDoers.get(key));
+        Map<Identifier, SMindInfusion> ret = new HashMap<>();
+        for (Identifier key : sMindInfusionRecipes.keySet()) {
+            SMindInfusion recipe = sMindInfusionRecipes.get(key);
+            recipe.setUp(bp, ctx, hexStack, vault);
+            if (recipe.testBlock()) {
+                ret.put(key, sMindInfusionRecipes.get(key));
+            }
+        }
+        return ret;
+    }
+    public static Map<Identifier, SMindInfusion> testSMindInfusionFilters(
+        Entity ent, CastingEnvironment ctx, List<? extends Iota> hexStack, VAULT vault
+    ) {
+        Map<Identifier, SMindInfusion> ret = new HashMap<>();
+        for (Identifier key : sMindInfusionRecipes.keySet()) {
+            SMindInfusion recipe = sMindInfusionRecipes.get(key);
+            recipe.setUp(ent, ctx, hexStack, vault);
+            if (recipe.testEntity()) {
+                ret.put(key, sMindInfusionRecipes.get(key));
             }
         }
         return ret;
@@ -126,16 +138,10 @@ public class Mutables {
         registerBaseCostFor(AMEL_RING, 1);
         registerBaseCostFor(JUMP_SLATE_AM1, 20);
 
-        registerImbueMindRecipe(
-            (bp, world) -> world.getBlockState(bp).getBlock() == Blocks.AMETHYST_BLOCK,
-            SIMPLE_MIND_INTO_AMETHYST,
-            (bp, world, caster) -> world.setBlockState(bp, Blocks.BUDDING_AMETHYST.getDefaultState())
-        );
-        registerImbueMindRecipe(
-            (bp, world) -> world.getBlockState(bp).getBlock() == Blocks.JUKEBOX,
-            JUKEBOX_INTO_LIVE_JUKEBOX,
-            (bp, world, caster) -> world.setBlockState(bp, ModBlocks.LIVE_JUKEBOX_BLOCK.getDefaultState())
-        );
+        registerSMindInfusion(SIMPLE_MIND_INTO_AMETHYST, new MakeBuddingAmethyst());
+        registerSMindInfusion(JUKEBOX_INTO_LIVE_JUKEBOX, new MakeJukeboxLive());
+        registerSMindInfusion(EMPTY_IMP_INTO_SIMP, new MakeSimpleImpetus());
+        registerSMindInfusion(UNFLAY_FLAYED_VILLAGER, new UnflayVillager());
 
         registerBeegInfusionRecipe(ENHANCE_ENCHANTED_BOOK, new EnhanceEnchantedBook());
         registerBeegInfusionRecipe(MAKE_GENERIC_PARTAMEL, new MakeGenericPartAmel());

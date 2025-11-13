@@ -1,0 +1,12 @@
+{
+    "type": "lapisworks:brewery",
+    "brew": "potion",
+    "from": "minecraft:turtle_master",
+    "input": [
+        {
+            "item": "minecraft:redstone",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:long_turtle_master"
+}

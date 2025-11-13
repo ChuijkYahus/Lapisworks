@@ -1,0 +1,12 @@
+{
+    "type": "lapisworks:brewery",
+    "brew": "potion",
+    "from": "minecraft:awkward",
+    "input": [
+        {
+            "item": "minecraft:glistering_melon_slice",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:healing"
+}

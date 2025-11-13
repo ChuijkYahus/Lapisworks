@@ -18,11 +18,11 @@ import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.init.Mutables.BeegInfusion;
 import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.inv.HandsInv;
 import com.luxof.lapisworks.items.shit.BasePartAmel;
 import com.luxof.lapisworks.mishaps.MishapNotEnoughItems;
 import com.luxof.lapisworks.mixinsupport.GetStacks;
 import com.luxof.lapisworks.mixinsupport.GetVAULT;
-import com.luxof.lapisworks.recipes.HandsInv;
 import com.luxof.lapisworks.recipes.ImbuementRec;
 
 import static com.luxof.lapisworks.Lapisworks.getInfusedAmel;
@@ -57,7 +57,7 @@ public class ImbueAmel implements SpellAction {
         if (wantToInfuseAmount <= 0) {
             // go fuck yourself
             return new SpellAction.Result(
-                new DoNothingSpell(),
+                new DoNothing.DoNothingSpell(),
                 0L,
                 List.of(),
                 1
@@ -109,6 +109,7 @@ public class ImbueAmel implements SpellAction {
                 hand = held.hand();
             }
         }
+        if (items == null) return null; // VSCode likes complaining about null
 
         Item partAmel = recipe.getPartAmel();
         Item fullAmel = recipe.getFullAmel();
@@ -126,6 +127,7 @@ public class ImbueAmel implements SpellAction {
             MishapThrowerJava.throwMishap(
                 new MishapNotEnoughItems(AMEL, infuseAmount, fullInfuseCost)
             );
+            return null; // VSCode likes complaining about null
         } else {
             if (hasInfusedAmel(items)) newStack = items;
             else newStack = new ItemStack(partAmel);
@@ -175,19 +177,6 @@ public class ImbueAmel implements SpellAction {
 
         @Override
         public void cast(CastingEnvironment ctx) { this.recipe.accept(); }
-
-        @Override
-        public CastingImage cast(CastingEnvironment arg0, CastingImage arg1) {
-            return RenderedSpell.DefaultImpls.cast(this, arg0, arg1);
-        }
-    }
-
-    /** paranoia, ig */
-    public class DoNothingSpell implements RenderedSpell {
-        @Override
-        public void cast(CastingEnvironment arg0) {
-            return;
-        }
 
         @Override
         public CastingImage cast(CastingEnvironment arg0, CastingImage arg1) {

@@ -1,0 +1,44 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "lapisworks:item/focus_necklace_worn",
+		"particle": "lapisworks:item/focus_necklace_worn",
+		"missing": "lapisworks:item/focus_necklace_worn"
+	},
+	"elements": [
+		{
+			"from": [0, 16, 0],
+			"to": [16, 16, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 15, 7]},
+			"faces": {
+				"north": {"uv": [0, 15.5, 0.5, 16], "texture": "#0"},
+				"east": {"uv": [0, 8, 3.5, 8.5], "texture": "#missing"},
+				"south": {"uv": [0, 7.5, 8, 8], "texture": "#missing"},
+				"west": {"uv": [8, 0, 11.5, 0.5], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 5], "texture": "#0"},
+				"down": {"uv": [16, 0, 0, 5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [0, 4.5, 0],
+			"to": [16, 16, 0],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 5, 0]},
+			"faces": {
+				"north": {"uv": [0.5, 5, 15.5, 16], "texture": "#0"},
+				"east": {"uv": [0, 15.5, 0.5, 16], "texture": "#0"},
+				"south": {"uv": [15.5, 5, 0.5, 16], "texture": "#0"},
+				"west": {"uv": [0, 15.5, 0.5, 16], "texture": "#0"},
+				"up": {"uv": [0, 4.5, 16, 5], "texture": "#0"},
+				"down": {"uv": [0, 0, 8, 0.5], "texture": "#missing"}
+			}
+		}
+	],
+	"display": {
+		"head": {
+			"translation": [0, -13.6, 3.9],
+			"scale": [0.9, 0.9, 0.9]
+		}
+	}
+}

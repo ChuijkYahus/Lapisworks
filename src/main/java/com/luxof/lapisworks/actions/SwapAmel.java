@@ -12,8 +12,8 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
 
 import com.luxof.lapisworks.MishapThrowerJava;
+import com.luxof.lapisworks.inv.HandsInv;
 import com.luxof.lapisworks.mixinsupport.GetStacks;
-import com.luxof.lapisworks.recipes.HandsInv;
 import com.luxof.lapisworks.recipes.MoldRec;
 
 import java.util.List;

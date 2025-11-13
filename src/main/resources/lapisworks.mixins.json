@@ -13,7 +13,10 @@
 		"VillagerEntityMixin",
 		"CastingEnvironmentMixin",
 		"CircleExecutionStateMixin",
-		"ItemRendererMixin"
+		"ItemRendererMixin",
+		"ClientPlayerEntityMixin",
+		"ClientAdvancementsMixin",
+		"CircleExecutionStateMixin2"
 	],
 	"injectors": {
 		"defaultRequire": 1

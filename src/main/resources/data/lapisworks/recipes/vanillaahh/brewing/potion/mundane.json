@@ -1,0 +1,36 @@
+{
+    "type": "lapisworks:brewery",
+    "brew": "potion",
+    "from": "minecraft:water",
+    "input": [
+        {
+            "item": "minecraft:glistering_melon_slice",
+            "count": 1
+        },
+        {
+            "item": "minecraft:ghast_tear",
+            "count": 1
+        },
+        {
+            "item": "minecraft:rabbit_foot",
+            "count": 1
+        },
+        {
+            "item": "minecraft:blaze_powder",
+            "count": 1
+        },
+        {
+            "item": "minecraft:sugar",
+            "count": 1
+        },
+        {
+            "item": "minecraft:magma_cream",
+            "count": 1
+        },
+        {
+            "item": "minecraft:redstone",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:mundane"
+}

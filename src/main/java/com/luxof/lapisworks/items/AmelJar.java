@@ -41,7 +41,7 @@ public class AmelJar extends Item implements InventoryItem {
         List<Hand> otherHands
     ) {
         Hand amelHand = null;
-        ItemStack amelStack = null;
+        ItemStack amelStack = ItemStack.EMPTY.copy();
         for (Hand selectedHand : otherHands) {
             ItemStack possiblyAmel = user.getStackInHand(selectedHand);
             if (!Mutables.isAmel(possiblyAmel)) continue;

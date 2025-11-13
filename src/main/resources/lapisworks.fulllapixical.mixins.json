@@ -8,7 +8,7 @@
 	"injectors": {
 		"defaultRequire": 1
 	},
-	"plugin": "com.luxof.lapisworks.mixin.FullLapixicalMixinConfigPlugin",
+	"plugin": "com.luxof.lapisworks.mixin.plugins.FullLapixicalMixinConfigPlugin",
 	"overwrites": {
 		"requireAnnotations": true
 	}

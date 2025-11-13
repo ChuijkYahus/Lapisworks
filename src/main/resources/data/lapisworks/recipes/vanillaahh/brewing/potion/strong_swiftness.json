@@ -1,0 +1,12 @@
+{
+    "type": "lapisworks:brewery",
+    "brew": "potion",
+    "from": "minecraft:swiftness",
+    "input": [
+        {
+            "item": "minecraft:glowstone_dust",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:strong_swiftness"
+}

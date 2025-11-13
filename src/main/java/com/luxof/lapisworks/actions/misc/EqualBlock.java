@@ -28,6 +28,7 @@ public class EqualBlock implements ConstMediaAction {
     public List<Iota> execute(List<? extends Iota> args, CastingEnvironment ctx) {
         BlockState a = ctx.getWorld().getBlockState(confirmInAmbit(OperatorUtils.getBlockPos(args, 0, getArgc()), ctx));
         BlockState b = ctx.getWorld().getBlockState(confirmInAmbit(OperatorUtils.getBlockPos(args, 1, getArgc()), ctx));
+        // i have no fucking clue how an identity check ever returns true for these
         return List.of(new BooleanIota(a == b));
     }
 

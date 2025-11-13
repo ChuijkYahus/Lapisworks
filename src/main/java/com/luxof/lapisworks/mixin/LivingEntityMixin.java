@@ -17,6 +17,7 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -99,6 +100,11 @@ public abstract class LivingEntityMixin implements LapisworksInterface, DamageSu
 	}
 
 	@Override
+	public int[] getEnchantmentsArray() {
+		return this.enchantments.stream().mapToInt(Integer::intValue).toArray();
+	}
+
+	@Override
 	public void setEnchantments(int[] levels) {
 		for (int i = 0; i < levels.length && i < this.enchantments.size(); i++) {
 			this.enchantments.set(i, levels[i]);
@@ -110,8 +116,19 @@ public abstract class LivingEntityMixin implements LapisworksInterface, DamageSu
 		for (int i = 0; i < this.enchantments.size(); i++) { this.enchantments.set(i, 0); }
 	}
 
+	@Override
+	public void copyCrossDeath(ServerPlayerEntity oldplr) {}
+
+	@Override
+	public void copyCrossDimensional(ServerPlayerEntity oldplr) {
+		LapisworksInterface old = (LapisworksInterface)oldplr;
+		old.setLapisworksAttributes(old.getLapisworksAttributes());
+		old.setEnchantments(this.getEnchantmentsArray());
+	}
 
 
+
+	// not sure i even need this
 	@Inject(at = @At("HEAD"), method = "onDeath")
 	public void onDeath(DamageSource damageSource, CallbackInfo ci) {
 		this.setAllJuicedUpAttrsToZero();

@@ -19,7 +19,9 @@ public class BeegInfusion {
     public BeegInfusion() {}
 
     public BeegInfusion setUp(
-        List<HeldItemInfo> heldInfos, CastingEnvironment ctx, List<? extends Iota> hexStack,
+        List<HeldItemInfo> heldInfos,
+        CastingEnvironment ctx,
+        List<? extends Iota> hexStack,
         VAULT vault
     ) {
         this.heldInfos = heldInfos;

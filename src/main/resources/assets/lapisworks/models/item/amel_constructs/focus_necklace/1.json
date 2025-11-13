@@ -1,0 +1,16 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "lapisworks:item/focus_necklace"
+	},
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [-2.5, 5, 1.5]
+		},
+		"thirdperson_lefthand": {
+			"translation": [2.5, 5, 1.5]
+		}
+	}
+}

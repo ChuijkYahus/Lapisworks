@@ -1,0 +1,12 @@
+{
+    "type": "lapisworks:brewery",
+    "brew": "potion",
+    "from": "minecraft:awkward",
+    "input": [
+        {
+            "item": "minecraft:spider_eye",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:poison"
+}

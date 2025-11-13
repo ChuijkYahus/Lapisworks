@@ -3,7 +3,6 @@ package com.luxof.lapisworks.blocks;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
 import com.luxof.lapisworks.init.ModBlocks;
 
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -20,7 +19,9 @@ import net.minecraft.world.World;
 public class Mind extends BlockWithEntity {
     public Mind() {
         // strong as deepslate
-        super(AbstractBlock.Settings.create().sounds(BlockSoundGroup.DEEPSLATE_TILES).breakInstantly());
+        super(
+            Settings.create().sounds(BlockSoundGroup.DEEPSLATE_TILES).breakInstantly().nonOpaque()
+        );
     }
 
     // i REFUSE to use BERs (scawy)

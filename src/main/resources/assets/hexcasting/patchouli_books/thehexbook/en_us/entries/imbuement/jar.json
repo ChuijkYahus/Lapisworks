@@ -3,7 +3,7 @@
     "icon": "lapisworks:amel_jar",
     "advancement": "lapisworks:got_lapis",
     "category": "hexcasting:lapisworks/imbuement",
-    "sortnum": 1,
+    "sortnum": 7,
     "pages": [
         {
             "type": "patchouli:text",

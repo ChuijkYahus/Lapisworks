@@ -1,4 +1,4 @@
-package com.luxof.lapisworks.recipes;
+package com.luxof.lapisworks.inv;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 
-/** I use this for Imbue Amel. */
+/** I use this for some recipes. */
 public class HandsInv implements Inventory {
     public static final int MAINHAND = 0;
     public static final int OFFHAND = 1;

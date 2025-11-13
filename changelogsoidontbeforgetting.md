@@ -1,6 +1,6 @@
 Ah hell naw chat you're tweaking I can't do this fucking marathon
 Luxof didn't even DREAM of this shit in his prime (1.1.0-1.2.0)
-1.5.1
+# 1.5.1
 - Updated Cubic Exaltation and Spherical Exaltation's out-of-date names
 - Updated Cubic Exaltation's arguments to be `[pattern], vec, vec, bool` instead of `[pattern], vec, num, bool`
 - Fixed bug where Cubic Exaltation wouldn't clear the arguments after use
@@ -8,11 +8,11 @@ Luxof didn't even DREAM of this shit in his prime (1.1.0-1.2.0)
 - Added Thought Sieving
 - Added Mind Liquefaction
 - Added Cognition Purification
-1.5.1.5
+# 1.5.1.5
 - fixed bug where Simple Mind Container wouldn't gain Mind (tied to bug below, actually)
 - fixed bug where just by existing for long enough you could nullify villager consumption cd
 - fixed bug where Mind Liquefaction wouldn't take anything but a full container
-1.5.2
+# 1.5.2
 - Patchouli and hexdoc interop for per world shape patterns
 - Refactored like 40% of the code to be less painful to fw lmao
 - fixed a capitalization mistake and "Format Error:" in some places of the book
@@ -26,7 +26,7 @@ Luxof didn't even DREAM of this shit in his prime (1.1.0-1.2.0)
 - Added Imbue Mind with recipes:
     - Amethyst Block -> Budding Amethyst
     - Jukebox -> Live Jukebox
-1.5.3
+# 1.5.3
 - Fixed enchantments being able to take too much Amel and making negative nums
 - Fixed Imbue Amel taking too much media
 - Fixed Imbue Amel not properly doing it's fucking thing of repairing shit
@@ -43,7 +43,7 @@ Luxof didn't even DREAM of this shit in his prime (1.1.0-1.2.0)
 - Added Equal Block Dist.
 - Added Hastenature
 - Imbue Amel can now lowkey make enchanted books more powerful
-1.5.4
+# 1.5.4
 - Renamed the "Wrong Item In a Hand" mishap to "Wrong Item In Hand" in the book
 - Fixed Imbue Amel using the Incorrect Item mishap for the off-hand where it needs Amel and the
   Wrong Item In Hand mishap for the main-hand where it needs an imbueable item
@@ -56,12 +56,12 @@ Luxof didn't even DREAM of this shit in his prime (1.1.0-1.2.0)
 - Added variants of the Jump Slate
   gave em support with Mold Amel too
 - Turned the ancient wizard fully gender neutral this time (headcanon the gender yourself)
-1.5.4.5
+# 1.5.4.5
 Whoopsies
 - "pages.lapisworks.imbuement_artmind.reflection2" lmao deleted that
 - Fixed Jump Slate stuff appearing before enlightenment
   made it appear after enlightenment and got_lapis in a scuffed ahh way that is hopefully never seen
-1.5.5
+# 1.5.5
 - Fixed up the ingame book a little (stopped implying GSent was visible, etc.)
   Also fixed the bug where it wouldn't load on multiplayer!
 - Gave the Warped Infused Staff an actual translation key (bruh how did i forger that)
@@ -90,12 +90,13 @@ Whoopsies
 
 **NOTE FOR MIGRATORS:**
 per-world shape patterns have once again changed, this will be the last time. i think.
-1.5.5.5
+# 1.5.5.5
 - Fixed staffcasting not working if you don't have hextended (WTF????)
 - Also fixed some staves not opening their spellcasting gui
-1.1.7: "haha i added some funny swords"
+# 1.5.6
+1.1.7: "haha i added some funny swords"  
 1.5.6's honest reaction to that information:
-- Imbue Amel now costs 2xAmel *in dust*, not *in shards*
+- Imbue Amel now costs 2xAmel in *dust*, not in *shards*
 - Many patterns that previously took Amel are more convenient now.
 - Simple Mind Containers now look good in the offhand too
 - Refactored, like, another 40% of the codebase
@@ -123,104 +124,193 @@ per-world shape patterns have once again changed, this will be the last time. i 
 
 **NOTE FOR MIGRATORS:**
 Super sorry, but this is the LAST!! time per-world shape patterns change!
-1.5.6.5
+# 1.5.6.5
 - Fixed the Copper Rod and Amel-Copper Item Cradle and the Handed Prison not dropping their items
 - Fixed those items also not being mineable
-1.5.6.6
+# 1.5.6.6
 - Fixed up the book a little (online and patchouli)
 - Fixed Dark Primarine Staves having no Amel Imbuement recipe
 - Fixed crash lmao
-1.5.6.7
+# 1.5.6.7
 - Technically Amel Imbuement is datapack-friendlier now but untrusted (unfinished i think)
 - Fixed BeegInfusions not fucking working a lot of the time
 - Fixed no Amel Imbuement recipe for Casting Rings
-1.5.6.8
+# 1.5.6.8
 - Read 1.5.6.7's changelog. Yeah.
 - Fixed partially amel stuff's durability not changing.
-1.5.6.9
+# 1.5.6.9
 - Fixed requiring Hexical or it'll break the book :sob:
-1.5.7
-- Amel Imbuement is datapack-friendlier now
-- Fixed Imbue Mind giving you the wrong mishap desc (imbueable with Amel rather than a Simple Mind)
-- Fixed Jump Slates not working in Cleric Spell Circles
-- Fixed the Simple Mind Container looking FUCKED
-- Fixed the book.
-- Amel Jar's sprite's positioning continues.
-- Decreased the cost of Enchantments to 32 Amel.
-- Added interop with Hexal
-  - Enchanted Slipways
-    It's a Simple Mind Infusion recipe (that costs Amel as well)
-    They produce twice as many wandering wisps per second but they can't be turned into portals with Oneironaut
-  - Simple Minds, when infused into the air, produce a wandering wisp
-- Added the Geode Dowser
-  - Imbue 5 Amel into a compass
-  - Consumes 1 amethyst dust per use
-- Added the Simple Impetus
-  - Infuse a Simple Mind into an empty Impetus
-  - By default executes when ANY pattern is executed nearby
-  - Can be taught to only execute on specific patterns
-- Added Teach Simple Impetus
-  - Teaches the Simple Impetus at the target location the pattern it should focus on
-- Added the Enchanted Brewing Stand
-  - Imbue 10 Amel into a Brewing Stand
-  - 2x blaze usage for 2x speed
-  - Takes 1 amethyst dust per brewing session/step in brewing process
-- Added the Rote Brewer Stand
-  - Infuse a Simple Mind into a Brewing Stand
-  - Can remember up to 5 potion recipes
-  - Each write is permanent, stops brewing anything but remembered potions when at the limit
-  - When a potion from memory is selected, takes items automatically.
-  - ALWAYS takes 2 steps worth of time.
-    Manual brewing (or teaching it) is a pain as each step takes twice as long.
-    Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.
-- Imbue Mind can now imbue into entities
-  - this has potential
-  - currently it can be imbued into flayed villagers, which, when they get a j\*b, immediately
-    become level 2 or 3 (50/50)
-- Added Amethyst Chalk
-  - You can put chalk on specific blocks with it
-  - The chalk on the blocks itself currently does nothing
-- Added Amethyst Duster
-  - You can erase chalk with it
-  - Chalk disappears forever
-1.5.8
+# 1.5.7
+I randomly did like 20% of this update in one day, in 5 hours.
+Was I fucking LAZY before and after??? (Note from future me: yes.)
+## Additions:
+  - Empty Distillation
+    - has Visible Distillation's previous functionality
+  - Enchanted Brewing Stand
+    - Imbue 10 Amel into a Brewing Stand
+    - 2x blaze usage for 2x speed
+    - Takes 1 amethyst dust per brew
+  - Focus Necklace
+  - Geode Dowser
+    - Imbue 5 Amel into a compass
+    - Consumes 1 amethyst dust per use
+  - Simple Impetus
+    - Infuse a Simple Mind into an empty Impetus
+    - By default executes when ANY pattern is executed nearby
+    - Can be taught to only execute on specific patterns
+  - Teach Simple Impetus
+    - Teaches the Simple Impetus at the target location the pattern it should focus on
+  - Rote Brewer Stand
+    - Infuse a Simple Mind into a Brewing Stand
+    - Can remember up to 5 potion recipes
+    - Each write is permanent, stops brewing anything but remembered potions when at the limit
+    - When a potion from memory is selected, takes items automatically.
+    - ALWAYS takes 2 steps worth of time.
+      Manual brewing (or teaching it) is a pain as each step takes twice as long.
+      Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.
+## Changes:
+  - Amel Imbuement is datapack-friendlier now
+  - Casting Rings can be worn in an extra slot on your off-hand as well now.
+  - Decreased the base cost of Enchantments to 32 Amel.
+  - Envelop Feet In Amel enchantment has three levels now.
+  - Hastenature now has a +2.5 shard penalty if the target is Budding Amethyst.
+  - Imbue Mind can now imbue into entities
+    - This has potential ~~(to break my brain with overlapping recipes)~~
+    - Currently it can be imbued into flayed villagers to un-flay them
+  - Visible Distillation now tells you if an entity can see a block, unobstructed at a position.
+## Fixes:
+  - Attempted to fix the Amel-Infused Gold Sword's animation not dripping down in third person.
+    Mission (sorta) success. Now it looks kinda menacing because it's held so low???
+  - Amel Jar's sprite's repositioning haunts me no more!
+  - Fixed Duplication bug in Hexical interop ([#14](https://github.com/Real-Luxof/Lapisworks/issues/14))
+  - FIXED ENHANCEMENTS AND ENCHANTMENTS NOT TRANSFERRING ACROSS DIMENSIONS!! ([#15](https://github.com/Real-Luxof/Lapisworks/issues/15))
+  - Fixed Hastenature's book icon blending into the background.
+  - Fixed Imbue Mind giving you the wrong mishap description
+    (imbueable with Amel rather than a Simple Mind)
+  - Fixed spell circles crashing for whatever reason! (thanks alexyzer) (issue: [#12](https://github.com/Real-Luxof/Lapisworks/issues/12), pull request: [#17](https://github.com/Real-Luxof/Lapisworks/pull/17))
+  - Fixed the book and fixed it up a little too. Added some stuff as well.
+    - Like stopping the book from not working when Hexical <2.0.0 was installed. ([#13](https://github.com/Real-Luxof/Lapisworks/issues/13))
+    - Grammar
+    - The added stuff
+  - Fixed Teach Song being able to teach a Live Jukebox a song from any distance.
+    (Also made it cost less media)
+  - Fixed the Simple Mind Container looking FUCKED
+## Interop:
+  - Hexal
+    - Added Enchanted Slipways
+      It's a Simple Mind Infusion recipe (that costs Amel as well)
+      They produce twice as many wandering wisps per second but they can't be turned into portals with Oneironaut
+    - Simple Minds, when infused into the air, produce a wandering wisp
+# 1.5.8
 - Hierophantics interop
-  - Flaying "talented" into other villagers or vice versa works now
-  - Max experience fishermen villagers can be flayed into you
-    costs 64 amel and 10 charged amethyst
-    they only have the on_my_reference_found trigger, triggers when your reference is found in a stack of an
-    offender within "range"
-      starts with a "guess" vector pointing from you to the enemy
-    has a "vigilance" attribute which can range from 0-3
-      0: no notification
-      1: chat notification
-      2: chat + audio notification
-      3: chat + on-screen + audio notification
-    they also have a "range" attribute (0-256)
-      the higher, the more inaccurate the guess (err_margin=range/4)
-      e.g. range=64 means guess can be 16 blocks from the offender
-      or range=256 means guess can be 64 blocks from the offender
-      however, if the offender is in your ambit the guess is always precise
-  - Less than max experience fishermen can also be flayed into you
-    costs 48 amel and 10 charged amethyst
-    they are almost equivalent to the other mind
-    err=range/8 by default, err=range/32 when offender is within ambit
-    range is only 0-96
-    starts casting with an entity reference to the offender on the stack
-    has a 1 in err chance of not detecting the offender
+  - Max experience fishermen villagers can be flayed into you  
+    costs 32 amel and 10 charged amethyst  
+    they only have the on_my_reference_found trigger, triggers when your reference is found in a stack of an offender within "range"  
+      stack starts with a "guess" vector pointing from you to the enemy  
+    has a "vigilance" attribute which can range from 0-3  
+      0: no notification  
+      1: chat notification  
+      2: chat + audio notification  
+      3: chat + on-screen + audio notification  
+    they also have a "range" attribute (0-256)  
+      the higher, the more inaccurate the guess (err_margin=range/4)  
+      e.g. range=64 means guess can be 16 blocks from the offender  
+      or range=256 means guess can be 64 blocks from the offender  
+      err range is constant across all guesses  
+        so if offender is 64 blocks away but your range is 256, err can be 0-64  
+      however, if the offender is in your ambit the guess is always 100% precise  
+  - Less than max experience fishermen can also be flayed into you  
+    costs 16 amel and 10 charged amethyst  
+    they are almost equivalent to the other mind  
+    err=range/8 by default, none when offender is within ambit  
+    range can only be 0-96  
+    starts casting with an entity reference to the offender on the stack  
+    has a 1/err chance of not detecting the offender  
+  - "Jack" villager type  
+    villagers turn into "Jacks" when unflayed  
+    "Jacks" are jacks of all trades, and start with 2-3 levels of exp on every possible profession  
+    (but no trades until they pick one of those professions)
+  - FUCKING UNICORNS  
+	  IMBUE A SIMPLE MIND INTO A HORSE AND USE 16 AMEL
 - EMI interop
   - You can now see Imbue Amel, Mold Amel and Simple Mind Infusion recipes in EMI
   - You can also see BeegInfusion recipes in EMI
   - On that note, the same recipes also show up in Patchouli
-- Added Rituals
+- Hexal interop (YEAH BABY HEXAL IS BACK FOR MORE)
+  - Added the Media Condensing Unit which can store a very large amount of media that you can use to
+    recharge your shit
+  - Added Deposit Media (deposits media into a block, but costs some of that media to do so. Cost scales logarithmically) which is meant to be used by wisps with the Media Condensing Unit
+- Hexical interop (of course)
+  - the Media Jar is targetable by Deposit Media (Hexal-Hexical dual interop)
+- Added Chalk Rituals
+- Added Mind Control of entities into the game  
+  (reality check: gang, how lost are we in the sauce?)
+  - you have to un-flay with a Simple Mind first
+  - controllable movement
+  - new pattern, Recharge Entity. Recharges any entity that stores media within itself.
+  - media limit of 64 dust
+  - cannot overcast
+  - credits to Sheppo from the Hex Casting discord server for the next ideas!
+  - they can be pets
+  - VERY small ambit, at most 3 blocks and usually just 1 (by default too)
+  - can have pre-set conditions to cast a hex, e.g. on hurt (so kind of like Hierophantics!)
+    - not Sheppo: can only have one condition (in-lore: too much space occupied by condition and hex)
 - Added the Enchanted Scroll
   - It's literally a Hex Casting IDE.
+# 1.5.9
 - Heal your mind after breaking it.
-1.5.9
-- Hexic interop?
-1.6.0
+- Alchemy/potion-brewing overhaul (I'm deadass)
+  made some stuff obsolete but fuck vanilla, potion-brewing is basically non-existent anyway.
+- Hexic interop
+  WILL HAPPEN. I **WILL** RUN THROUGH HEXIC CODE AND THINK "nathan you genius"
+# 1.6.0
 You can have four arms now (procrastination slain)
-- Your third and fourth arms can auto-cast 20x a second
+- Your third and fourth arms can auto-cast 20x a second  
   Both must be devoted to auto-cast, but one can hold something (e.g. Focus, Amel-tuned Orb, etc.)
 - Your third and fourth arms can hold items
-- You may swap arms 1-2 with 3-4, or use them with mouse3-4 (yes middle click and mouse4, rebindable)
+- You may swap arms 1-2 with 3-4, and use them with mouse3-4 (yes middle click and mouse4, rebindable)
+- End overhaul
+  - the ender dragon bossfight is fun now (nathan adding this to his pack is a secondary motivation)
+  - there are new structures
+  - lore
+
+  
+# 1.7.0
+LAPISWORKS IS ON BOTH FORGE AND FABRIC NOW.
+
+
+# hm
+`for i in range(n)` pattern  
+clairvoyance (future-seeing)  
+noophaestus interop  
+hexcasting media display interop  
+iotic blocks interop  
+
+addons that may have interesting interop ideas waiting to be had but idk yet:  
+- hexcassettes? (`for i in range(n): enqueue(spell, tick_delay)`-like pattern)
+- oneironaut
+- hexchanting
+- hexmachina
+- slate works
+- ephemera
+- hexdeco
+- heartxxy
+
+much bigger phials  
+ability to extend pattern and stack limit by expending media  
+computers lmao
+- slab that you can use Craft Artifact on
+- you can send iotas to computers with a spell (which costs more the longer the distance)
+- sending iotas chunkloads
+- has ambit over itself and the adjacent blocks
+- casts on block update and iota sent
+
+KING CRIMSON (so what part, exactly, of this is Lapisworks-y?)
+- select area and time
+- area continues as normal for time
+- now those entities (including players) are locked in to that movement
+  - to prevent others from interfering use either an invisible barrier or do the same for around that area
+    (but prevent caster from going there)
+- caster is not locked in to that movement  
+
+port twokai's ideal condition

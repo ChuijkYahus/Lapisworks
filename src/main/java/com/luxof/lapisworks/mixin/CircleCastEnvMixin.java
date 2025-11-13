@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import net.minecraft.block.entity.BlockEntity;
+import miyucomics.hexical.features.pedestal.PedestalBlockEntity;
+
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -35,10 +36,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 // slightly higher prio than Miyu's mixin
-// this should make my @Injects run before hers
+// this should make my stuff run before hers
 // also makes this run before Slate Works' i think
 // so if Slate Works and Hexical disagreed on where the funcs should go first
-// i decide that pedestals have the first turn
+// i decide that pedestals have the first turn (unintended but ok)
 @Mixin(value = CircleCastEnv.class, remap = false, priority = 999)
 public abstract class CircleCastEnvMixin extends CastingEnvironment {
     protected CircleCastEnvMixin(ServerWorld world) { super(world); }
@@ -48,17 +49,15 @@ public abstract class CircleCastEnvMixin extends CastingEnvironment {
 
     @WrapMethod(method = {"getPrimaryStacks"})
     public List<HeldItemInfo> getPrimaryStacks(Operation<List<HeldItemInfo>> og) {
-        if (!HEXICAL_INTEROP) return og.call(new Object[0]);
         List<HeldItemInfo> init = new ArrayList<>(og.call(new Object[0]));
+        if (!HEXICAL_INTEROP) return init;
+
         NbtCompound userData = this.circleState().currentImage.getUserData();
         if (userData.contains(HEXICAL_IMPETUS_HAND)) {
-            miyucomics.hexical.features.pedestal.PedestalBlockEntity holder =
-                (miyucomics.hexical.features.pedestal.PedestalBlockEntity)this.getPedestal();
-            init.add(new HeldItemInfo(holder.getStack(0), Hand.OFF_HAND));
+            init.add(new HeldItemInfo(this.getPedestal().getStack(0), Hand.OFF_HAND));
         }
         if (userData.contains(RH_HOLDER)) {
-            HolderEntity holder = (HolderEntity)this.getRightHandedHolder();
-            init.add(holder.heldInfo);
+            init.add(this.getRightHandedHolder().heldInfo);
         }
         return init;
     }
@@ -89,19 +88,24 @@ public abstract class CircleCastEnvMixin extends CastingEnvironment {
         }
     }
 
-    private BlockEntity getRightHandedHolder() {
+    private HolderEntity getRightHandedHolder() {
         if (!HEXICAL_INTEROP) return null;
         int[] p = this.circleState().currentImage.getUserData().getIntArray(RH_HOLDER);
-        return this.getWorld().getBlockEntity(new BlockPos(p[0], p[1], p[2]));
+        HolderEntity holder = (HolderEntity)this.getWorld().getBlockEntity(
+            new BlockPos(p[0], p[1], p[2])
+        );
+
+        assert holder != null;
+
+        return holder;
     }
 
     @Unique
-    private BlockEntity getPedestal() {
+    private PedestalBlockEntity getPedestal() {
         if (!HEXICAL_INTEROP) return null;
         int[] position = this.circleState().currentImage.getUserData().getIntArray("impetus_hand");
-        ServerWorld world = ((CastingEnvironment)this).getWorld();
-        miyucomics.hexical.features.pedestal.PedestalBlockEntity pedestal =
-            (miyucomics.hexical.features.pedestal.PedestalBlockEntity)world.getBlockEntity(
+        ServerWorld world = this.getWorld();
+        PedestalBlockEntity pedestal = (PedestalBlockEntity)world.getBlockEntity(
             new BlockPos(position[0], position[1], position[2])
         );
 

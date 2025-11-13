@@ -1,7 +1,7 @@
 package com.luxof.lapisworks.interop.hexical;
 
 import com.google.common.collect.ImmutableSet;
-
+import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.ModItems;
 import com.luxof.lapisworks.interop.hexical.blocks.Holder;
@@ -29,6 +29,7 @@ public class FullLapixical {
     );
 
     public static void initHexical200Interop() {
+        Lapisworks.FULL_HEXICAL_INTEROP = true;
         PatchouliAPI.get().setConfigFlag("lapisworks:fulllapixical", true);
         ModBlocks.pickACropTop("amel_constructs/holder", HOLDER);
         ModBlocks.dontForgetStockings("holder_entity_type", HOLDER_ENTITY_TYPE);
