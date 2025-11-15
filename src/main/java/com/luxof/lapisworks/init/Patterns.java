@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.castables.Action;
 import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.lib.hex.HexActions;
 
 import static at.petrak.hexcasting.api.misc.MediaConstants.CRYSTAL_UNIT;
@@ -53,21 +54,24 @@ import java.util.List;
 
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 
 public class Patterns {
-    public static HexPattern ARCHON_OF_MEANINGLESSNESS = HexPattern.fromAngles(
-        // stupid signature that no one will use.
-        "eedqaqddadwddwaeaeadaeqaddwedwqdadedaqqwwqqewwwaeaedqqwwwqwawaedwqqdwwaqweeeqeeewawdwqe",
-        HexDir.WEST
-    );
+    // used for Simple Minds.
+    // it is this way for a mixin.
+    public static RegistryKey<ActionRegistryEntry> ARCHON_OF_MEANINGLESSNESS = null;
 
     public static void init() {
-        // used for Simple Minds.
-        // registered this way so it doesn't get caught by hexdoc.
-        Registry.register(
-            HexActions.REGISTRY,
-            id("archon_of_meaninglessness"),
-            new ActionRegistryEntry(ARCHON_OF_MEANINGLESSNESS, new DoNothing())
+        register(
+            "archon_of_meaninglessness",
+            // stupid signature that no one will use.
+            "eedqaqddadwddwaeaeadaeqaddwedwqdadedaqqwwqqewwwaeaedqqwwwqwawaedwqqdwwaqweeeqeeewawdwqe",
+            HexDir.WEST,
+            new DoNothing()
+        );
+        ARCHON_OF_MEANINGLESSNESS = RegistryKey.of(
+            HexRegistries.ACTION,
+            id("archon_of_meanginglessness")
         );
 
         MoarAttr MoarHealthAction = new MoarAttr(
@@ -117,11 +121,11 @@ public class Patterns {
         register("gib_dexterity", "aeaqqdeeeqewdwqwdwe", HexDir.WEST, GibDexterityAction);
         register("check_attr", "wwwaqeeqawww", HexDir.NORTH_EAST, new CheckAttr());
 
-        GenericEnchant fireyFists       = new GenericEnchant(1, 32, CRYSTAL_UNIT * 10, "lapisenchantments.lapisworks.fireyfists");
-        GenericEnchant lightningBending = new GenericEnchant(3, 32, CRYSTAL_UNIT * 20, "lapisenchantments.lapisworks.lightningbending");
+        GenericEnchant fireyFists       = new GenericEnchant(1, 48, CRYSTAL_UNIT * 10, "lapisenchantments.lapisworks.fireyfists");
+        GenericEnchant lightningBending = new GenericEnchant(3, 64, CRYSTAL_UNIT * 20, "lapisenchantments.lapisworks.lightningbending");
         GenericEnchant fallDmgRes       = new GenericEnchant(3, 20, CRYSTAL_UNIT * 5, "lapisenchantments.lapisworks.falldmgres");
         GenericEnchant longBreath       = new GenericEnchant(2, 10, CRYSTAL_UNIT, "lapisenchantments.lapisworks.longbreath");
-        GenericEnchant fireResist       = new GenericEnchant(1, 32, CRYSTAL_UNIT * 10, "lapisenchantments.lapisworks.fireresist");
+        GenericEnchant fireResist       = new GenericEnchant(1, 48, CRYSTAL_UNIT * 10, "lapisenchantments.lapisworks.fireresist");
         register("fireyfists", "wwewdawdewqewedadad", HexDir.EAST, fireyFists);
         register("lightningbending", "wewdawdewqewdqqeedqe", HexDir.EAST, lightningBending);
         register("falldmgres", "qqwwqqqadwewdeq", HexDir.SOUTH_WEST, fallDmgRes);
@@ -214,12 +218,12 @@ public class Patterns {
         );
     }
 
-    private static void register(
+    private static ActionRegistryEntry register(
         String name,
         String signature,
         HexDir startDir,
         Action action
     ) {
-        Registry.register(HexActions.REGISTRY, id(name), new ActionRegistryEntry(HexPattern.fromAngles(signature, startDir), action));
+        return Registry.register(HexActions.REGISTRY, id(name), new ActionRegistryEntry(HexPattern.fromAngles(signature, startDir), action));
     }
 }

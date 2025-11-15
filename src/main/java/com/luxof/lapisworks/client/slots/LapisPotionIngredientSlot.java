@@ -1,7 +1,5 @@
 package com.luxof.lapisworks.client.slots;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
-
 import com.luxof.lapisworks.recipes.BrewingRec;
 import com.luxof.lapisworks.recipes.BrewingRec.BrewerIngredientWithCount;
 
@@ -25,12 +23,9 @@ public class LapisPotionIngredientSlot extends Slot {
 
     public boolean matches(ItemStack stack) {
         for (BrewingRec rec : world.getRecipeManager().listAllOfType(BrewingRec.Type.INSTANCE)) {
-            LOGGER.info("testing recipe " + rec.getId());
             for (BrewerIngredientWithCount ing : rec.getPossibleInputs()) {
-                LOGGER.info("testing ing " + ing.ingredient.toString());
                 if (ing.ingredient.test(stack)) return true;
             }
-            LOGGER.info("nope");
         }
         return false;
     }

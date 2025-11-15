@@ -2,6 +2,9 @@ package com.luxof.lapisworks;
 
 import static com.luxof.lapisworks.Lapisworks.id;
 
+import net.minecraft.item.Item;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -22,7 +25,11 @@ public class LapisworksIDs {
 
     // items and shit
     public static final Identifier LAPIS_MAGIC_SHIT_GROUP = id("lapismagicshitgroup");
-    public static final Identifier AMEL_TAG = id("amel");
+    public static final Identifier AMEL_TAG_ID = id("amel");
+    public static final Identifier POTION_TAG_ID = id("potions");
+    // the tags themselves
+    public static final TagKey<Item> AMEL_TAG = TagKey.of(RegistryKeys.ITEM, AMEL_TAG_ID);
+    public static final TagKey<Item> POTION_TAG = TagKey.of(RegistryKeys.ITEM, POTION_TAG_ID);
 
     // advancements
     public static final Identifier ENCHSENT_ADVANCEMENT = id("rediscover_enchsent");

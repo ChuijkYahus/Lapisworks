@@ -1,13 +1,25 @@
 package com.luxof.lapisworks.client.screens;
 
+import at.petrak.hexcasting.common.lib.HexItems;
+
 import com.luxof.lapisworks.client.slots.LapisPotionIngredientSlot;
-import com.luxof.lapisworks.client.slots.LapisPotionSlot;
 import com.luxof.lapisworks.client.slots.SpecificItemSlot;
+import com.luxof.lapisworks.client.slots.TagSlot;
 import com.luxof.lapisworks.init.ModScreens;
 import com.luxof.lapisworks.inv.EnchBrewerInv;
 import com.luxof.lapisworks.recipes.BrewingRec;
 
-import at.petrak.hexcasting.common.lib.HexItems;
+import static com.luxof.lapisworks.LapisworksIDs.POTION_TAG;
+import static com.luxof.lapisworks.inv.EnchBrewerInv.IDX_BLAZE;
+import static com.luxof.lapisworks.inv.EnchBrewerInv.IDX_BREWINGINTO_1;
+import static com.luxof.lapisworks.inv.EnchBrewerInv.IDX_BREWINGINTO_2;
+import static com.luxof.lapisworks.inv.EnchBrewerInv.IDX_BREWINGINTO_3;
+import static com.luxof.lapisworks.inv.EnchBrewerInv.IDX_INPUT;
+import static com.luxof.lapisworks.inv.EnchBrewerInv.IDX_DUST;
+
+import java.util.List;
+import java.util.function.Supplier;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -17,16 +29,7 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 
-import static com.luxof.lapisworks.inv.EnchBrewerInv.IDX_BLAZE;
-import static com.luxof.lapisworks.inv.EnchBrewerInv.IDX_BREWINGINTO_1;
-import static com.luxof.lapisworks.inv.EnchBrewerInv.IDX_BREWINGINTO_2;
-import static com.luxof.lapisworks.inv.EnchBrewerInv.IDX_BREWINGINTO_3;
-import static com.luxof.lapisworks.inv.EnchBrewerInv.IDX_INPUT;
-import static com.luxof.lapisworks.inv.EnchBrewerInv.IDX_DUST;
 import static net.minecraft.item.ItemStack.EMPTY;
-
-import java.util.List;
-import java.util.function.Supplier;
 
 public class EnchBrewerScreenHandler extends ScreenHandler {
     public final EnchBrewerInv inventory;
@@ -51,11 +54,11 @@ public class EnchBrewerScreenHandler extends ScreenHandler {
         this.recipesSupplier = recipesSupplier;
 
         World world = plrInv.player.getWorld();
-        this.addSlot(new SpecificItemSlot(Items.BLAZE_POWDER, inventory, IDX_BLAZE, 79, 17));
-        this.addSlot(new LapisPotionIngredientSlot(world, inventory, IDX_INPUT, 79, 45));
-        this.addSlot(new LapisPotionSlot(world, inventory, IDX_BREWINGINTO_1, 56, 57));
-        this.addSlot(new LapisPotionSlot(world, inventory, IDX_BREWINGINTO_2, 79, 64));
-        this.addSlot(new LapisPotionSlot(world, inventory, IDX_BREWINGINTO_3, 102, 57));
+        this.addSlot(new SpecificItemSlot(Items.BLAZE_POWDER, inventory, IDX_BLAZE, 79, 45));
+        this.addSlot(new LapisPotionIngredientSlot(world, inventory, IDX_INPUT, 79, 17));
+        this.addSlot(new TagSlot(POTION_TAG, inventory, IDX_BREWINGINTO_1, 56, 57));
+        this.addSlot(new TagSlot(POTION_TAG, inventory, IDX_BREWINGINTO_2, 79, 64));
+        this.addSlot(new TagSlot(POTION_TAG, inventory, IDX_BREWINGINTO_3, 102, 57));
         this.addSlot(new SpecificItemSlot(HexItems.AMETHYST_DUST, inventory, IDX_DUST, 56, 31));
 
         // hell no i'm not even gonna ATTEMPT to understand the fabric wiki's shit
@@ -73,34 +76,27 @@ public class EnchBrewerScreenHandler extends ScreenHandler {
 
     @Override
     public ItemStack quickMove(PlayerEntity player, int slotIdx) {
-        // i have no clue why this is the way it is.
-        ItemStack newStack = EMPTY.copy();
+        // i have little clue why this is the way it is.
 
         Slot slot = this.getSlot(slotIdx);
-        if (slot == null || !slot.hasStack()) return newStack;
+        if (slot == null || !slot.hasStack()) return EMPTY.copy();
         ItemStack ogStack = slot.getStack();
-        newStack = ogStack.copy();
-        if (ogStack.isEmpty()) return newStack;
+        ItemStack newStack = ogStack.copy();
+        if (ogStack.isEmpty()) return ogStack;
 
         if (slotIdx < this.inventory.size()) {
-            if (!this.insertItem(ogStack, this.inventory.size(), this.slots.size(), true))
+            if (!insertItem(newStack, this.inventory.size(), this.slots.size(), true))
                 return EMPTY.copy();
 
-        } else if (ogStack.isOf(Items.BLAZE_POWDER)) {
-            if (!this.insertItem(ogStack, IDX_BLAZE, IDX_BLAZE + 1, false)) return EMPTY.copy();
-
-        } else if (ogStack.isOf(HexItems.AMETHYST_DUST)) {
-            if (!this.insertItem(ogStack, IDX_DUST, IDX_DUST + 1, false)) return EMPTY.copy();
-
-        // i can use these 2 vars because inputs and brewinginto are placed in a continuous line of idxes
-        } else if (!this.insertItem(ogStack, IDX_INPUT, IDX_BREWINGINTO_3 + 1, false)) return EMPTY.copy();
+        } else if (!insertItem(newStack, 0, this.inventory.size(), false))
+            return EMPTY.copy();
 
 
-        if (ogStack.isEmpty()) slot.setStack(EMPTY.copy());
+        if (newStack.isEmpty()) slot.setStack(EMPTY.copy());
         else slot.markDirty();
 
-        slot.onTakeItem(player, newStack);
-        return newStack;
+        slot.onTakeItem(player, ogStack);
+        return ogStack;
     }
 
     @Override

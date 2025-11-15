@@ -16,7 +16,8 @@
 		"ItemRendererMixin",
 		"ClientPlayerEntityMixin",
 		"ClientAdvancementsMixin",
-		"CircleExecutionStateMixin2"
+		"CircleExecutionStateMixin2",
+		"PatternIotaMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -3,6 +3,9 @@ package com.luxof.lapisworks.blocks.stuff;
 import com.luxof.lapisworks.inv.BrewerInv;
 import com.luxof.lapisworks.recipes.BrewingRec;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -18,21 +21,16 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
+import static net.minecraft.item.ItemStack.EMPTY;
 
 import org.jetbrains.annotations.Nullable;
-
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
-import static net.minecraft.item.ItemStack.EMPTY;
 
 public abstract class AbstractBrewerEntity extends BlockEntity implements NamedScreenHandlerFactory, Inventory {
     // logic similar to og brewing stand. no guarantee tho
     public int fuel = 0;
-    public int brewTime = 0;
-    // go ahead, fuck with these variables if you really want (command blocks work too)
-    public int maxFuel;
-    public int maxBrewTime;
+    public int brewTime = -1; // -1 means not brewing btw!
+    public final int maxFuel;
+    public final int maxBrewTime;
     protected List<BrewingRec> currentRecipes = new ArrayList<>();
     public BrewerInv inv = new BrewerInv(
         EMPTY.copy(), EMPTY.copy(), List.of(EMPTY.copy(), EMPTY.copy(), EMPTY.copy())
@@ -63,17 +61,13 @@ public abstract class AbstractBrewerEntity extends BlockEntity implements NamedS
 
     protected void attemptRefuel() {
         if (currentRecipes.size() <= 0) return;
-        if (fuel <= 0) {
-            LOGGER.info("taking blaze!");
+        if (fuel == 0) {
             if (inv.blaze.isEmpty() || inv.blaze.getCount() <= 0) return;
-            inv.blaze.decrement(0);
-            LOGGER.info("took blaze!");
+            inv.blaze.decrement(1);
             fuel = maxFuel;
-            LOGGER.info("fuel now: " + fuel);
             markDirty();
         }
         if (brewTime <= 0 && fuel > 0) {
-            LOGGER.info("refilling brew!");
             fuel -= 1;
             brewTime = maxBrewTime;
             markDirty();
@@ -81,8 +75,6 @@ public abstract class AbstractBrewerEntity extends BlockEntity implements NamedS
     }
 
     protected List<BrewingRec> updateRecipes(BrewerInv inv) {
-        if (brewTime == 0 && fuel == 0) return List.of();
-
         return new ArrayList<>(
             world.getRecipeManager().getAllMatches(BrewingRec.Type.INSTANCE, inv, world)
         );
@@ -93,7 +85,7 @@ public abstract class AbstractBrewerEntity extends BlockEntity implements NamedS
         inv.brewingInto = new ArrayList<>(crafted.subList(0, 3));
         inv.input = crafted.get(6);
 
-        for (ItemStack stack : crafted.subList(4, 7)) {
+        for (ItemStack stack : crafted.subList(3, 6)) {
             if (stack.isEmpty()) continue;
             ItemEntity item = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), stack);
             world.spawnEntity(item);
@@ -101,13 +93,7 @@ public abstract class AbstractBrewerEntity extends BlockEntity implements NamedS
     }
 
     public void tick(World world, BlockPos pos, BlockState state) {
-        attemptRefuel();
-        currentRecipes = updateRecipes(inv);
-        if (currentRecipes.size() == 0) return;
-        LOGGER.info("got recipes! " + currentRecipes.toString());
-
-        if (brewTime > 0) brewTime -= 1;
-        else {
+        if (brewTime == 0) {
             if (fuel > 0) {
                 fuel -= 1;
                 brewTime = maxBrewTime;
@@ -117,6 +103,11 @@ public abstract class AbstractBrewerEntity extends BlockEntity implements NamedS
             }
             currentRecipes.clear();
         }
+        attemptRefuel();
+        currentRecipes = updateRecipes(inv);
+        if (currentRecipes.size() == 0) return;
+
+        if (brewTime >= 0) brewTime -= 1;
         markDirty();
     }
 
@@ -126,8 +117,6 @@ public abstract class AbstractBrewerEntity extends BlockEntity implements NamedS
         inv.writeNbt(nbt);
         nbt.putInt("fuel", fuel);
         nbt.putInt("brewTime", brewTime);
-        nbt.putInt("maxFuel", maxFuel);
-        nbt.putInt("maxBrewTime", maxBrewTime);
     }
 
     @Override
@@ -136,8 +125,6 @@ public abstract class AbstractBrewerEntity extends BlockEntity implements NamedS
         inv.readNbt(nbt);
         fuel = nbt.getInt("fuel");
         brewTime = nbt.getInt("brewTime");
-        maxFuel = nbt.getInt("maxFuel");
-        nbt.getInt("maxBrewTime");
     }
 
     @Override @Nullable

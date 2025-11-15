@@ -6,11 +6,14 @@ import com.google.gson.JsonSyntaxException;
 
 import com.luxof.lapisworks.inv.BrewerInv;
 
+import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.potionEquals;
+import static net.minecraft.item.ItemStack.EMPTY;
+
 import com.mojang.datafixers.util.Either;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -24,8 +27,6 @@ import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
-
-import org.jetbrains.annotations.Nullable;
 
 public class BrewingRec implements Recipe<BrewerInv> {
     private final Identifier id;
@@ -132,51 +133,60 @@ public class BrewingRec implements Recipe<BrewerInv> {
     @Override
     public ItemStack getOutput(DynamicRegistryManager registryManager) { return ItemStack.EMPTY.copy(); }
 
-    @Nullable
-    private ItemStack getFirstValidBrewingInto(List<ItemStack> stacks) {
-        try {
-            return stacks.stream().filter(itemFrom.ingredient::test).findFirst().get();
-        } catch (NoSuchElementException e) { return null; }
-    }
-
     /** provides a separate result for each potion it's brewing into.
-     * does not mutate what's coming in, though it has many checks (doesn't always craft).
-     * returns 4th, 5th and 6th stacks which tell you what must be ejected.
-     * the 7th stack tells you how much of the input you've got left.
-     * the 7th element may not exist if this method is invoked without `recipe.matches(s,w) == true`. */
+     * does not mutate what's coming in.
+     * idx=3 to idx=5 tell you what must be ejected.
+     * idx=6 stack tells you how much of the input you've got left. */
     public List<ItemStack> craft(BrewerInv inv) {
-        ItemStack inputStack = inv.input;
 
         List<ItemStack> brewing = new ArrayList<>(inv.brewingInto);
+        List<ItemStack> brewed = new ArrayList<>();
         List<ItemStack> eject = new ArrayList<>();
 
         for (ItemStack brew : brewing) {
-            if (brew.isEmpty()) continue;
+            if (brew.isEmpty()) {
+                brewed.add(brew);
+                eject.add(EMPTY.copy());
+                continue;
+            }
             if (isItemBrew) {
-                Ingredient needFrom = itemFrom.ingredient;
+                Ingredient ingredient = itemFrom.ingredient;
                 int requiredForOneBatch = itemFrom.amount;
-                if (needFrom.test(brew) && brew.getCount() >= requiredForOneBatch) {
+                if (ingredient.test(brew) && brew.getCount() >= requiredForOneBatch) {
+                    brewed.add(this.itemOutput.copy());
                     eject.add(brew.copyWithCount(brew.getCount() - requiredForOneBatch));
-                    brew = this.itemOutput.copy();
                 }
+
             } else {
-                if (Potion.byId(potionFrom) == PotionUtil.getPotion(brew)) {
+                if (potionEquals(potionFrom, brew)) {
+                    ItemStack potionOut = brew.copy();
+                    PotionUtil.setPotion(potionOut, Potion.byId(potionOutput));
+                    brewed.add(potionOut);
                     eject.add(brew.copyWithCount(brew.getCount() - 1));
-                    PotionUtil.setPotion(brew, Potion.byId(potionOutput));
+
+                } else {
+                    brewed.add(brew);
+                    eject.add(EMPTY.copy());
                 }
             }
         }
-        
+        LOGGER.info("brewing len: " + brewing.size());
+        LOGGER.info("eject len: " + eject.size());
+
+        ItemStack inputStack = inv.input;
+
         for (BrewerIngredientWithCount ing : this.input) {
-            if (!ing.ingredient.test(inputStack) && ing.amount >= inputStack.getCount()) continue;
+            if (!(ing.ingredient.test(inputStack) && ing.amount >= inputStack.getCount())) continue;
             eject.add(inputStack.copyWithCount(inputStack.getCount() - ing.amount));
             break;
         }
+        LOGGER.info("brewing len after ing: " + brewing.size());
+        LOGGER.info("eject len after ing: " + eject.size());
 
-        brewing.addAll(eject);
-        return brewing;
+        brewed.addAll(eject);
+        return brewed;
     }
-    
+
     /** don't use this. */
     @Override
     public ItemStack craft(BrewerInv inventory, DynamicRegistryManager registryManager) {
@@ -196,8 +206,9 @@ public class BrewingRec implements Recipe<BrewerInv> {
 
         boolean validBrewingInto = inventory.brewingInto.stream()
             .filter(stack -> isItemBrew ?
-                itemFrom.ingredient.test(stack) && stack.getCount() >= itemFrom.amount :
-                PotionUtil.getPotion(stack) == Potion.byId(potionFrom))
+                itemFrom.ingredient.test(stack) && stack.getCount() >= itemFrom.amount
+                : potionEquals(stack, potionFrom)
+            )
             .count() > 0;
 
         return validInp && validBrewingInto;

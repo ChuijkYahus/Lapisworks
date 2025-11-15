@@ -120,7 +120,7 @@ dependencies {
 	modLocalRuntime "dev.kosmx.player-anim:player-animation-lib-fabric:${player_animator_version}"
 	// test 1.5.0
 	//modLocalRuntime "maven.modrinth:hexical:1.5.0-fabric,1.20.1"
-	// Lapisal
+	// Lapse
 	modLocalRuntime("com.eliotlash.mclib:mclib:20")
 	modCompileOnly("ram.talia.hexal:hexal-fabric-1.20.1:0.3.0") {
 		exclude module: 'serialization-hooks'

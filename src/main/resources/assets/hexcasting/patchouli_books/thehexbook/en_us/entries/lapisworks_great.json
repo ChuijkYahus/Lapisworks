@@ -64,6 +64,10 @@
             "input": "entity",
             "output": "",
             "text": "pages.lapisworks.lapisworks_great.fireresist.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.lapisworks_great.imgonnagoliedownnow"
         }
     ]
 }

@@ -1,11 +1,12 @@
 package com.luxof.lapisworks.client.screens;
 
+import com.luxof.lapisworks.recipes.BrewingRec;
+
 import static com.luxof.lapisworks.Lapisworks.id;
 
-import java.util.List;
-
-import com.luxof.lapisworks.recipes.BrewingRec;
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import java.util.List;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -64,6 +65,7 @@ public class EnchBrewerScreen extends HandledScreen<EnchBrewerScreenHandler> {
 
     private void drawBrewTimeRod(DrawContext ctx, int x, int y) {
         int brewTime = this.handler.getBrewTime();
+        if (brewTime <= 0) return; // i don't wanna know what happens here when brewTime is -1
         int rodHeight = 10;
         int maxBrewTime = 200;
         int filledHeight = brewTime * (rodHeight / maxBrewTime);

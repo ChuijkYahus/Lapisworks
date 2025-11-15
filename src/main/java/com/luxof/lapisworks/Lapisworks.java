@@ -42,6 +42,7 @@ import net.fabricmc.loader.api.Version;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
@@ -409,7 +410,10 @@ public class Lapisworks implements ModInitializer {
 	 * and a boolean which states if the raycast was interrupted suddenly instead of completing.
 	 * <p>to skip a pos in the final list, return <code>null</code> for the pos.
 	 * If you send a valid pos instead, it will be added to the final list.
-	 * <p>to terminate the line, simply return <code>false</code> for the boolean. */
+	 * <p>to terminate the line, simply return <code>false</code> for the boolean.
+	 * <p>P.S. this prioritizes accuracy and as such increments from start to end in steps of 0.1.
+	 * of course, all the positions passed to the function are unique, however you may not want to
+	 * use this if you value performance. */
 	public static Pair<List<BlockPos>, Boolean> castRay(
 		BlockPos startPos,
 		BlockPos endPos,
@@ -435,5 +439,22 @@ public class Lapisworks implements ModInitializer {
 			curr.add(dir);
 		}
 		return new Pair<>(positions, false);
+	}
+
+	private static String getPotion(ItemStack stack) {
+		NbtCompound comp = stack.getNbt();
+		if (comp == null) return "";
+		return comp.getString("Potion");
+	}
+	/** works in case of no potion too. */
+	public static boolean potionEquals(ItemStack stack1, ItemStack stack2) {
+		return getPotion(stack1).equals(getPotion(stack2));
+	}
+	public static boolean potionEquals(ItemStack stack, String potId) {
+		return getPotion(stack).equals(potId);
+	}
+	// convenience
+	public static boolean potionEquals(String potId, ItemStack stack) {
+		return potionEquals(stack, potId);
 	}
 }

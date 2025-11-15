@@ -23,6 +23,7 @@ import static com.luxof.lapisworks.LapisworksIDs.FLAY_ARTMIND_ADVANCEMENT;
 import static com.luxof.lapisworks.LapisworksIDs.HASTENATURE_ADVANCEMENT;
 import static com.luxof.lapisworks.LapisworksIDs.JUKEBOX_INTO_LIVE_JUKEBOX;
 import static com.luxof.lapisworks.LapisworksIDs.MAKE_GENERIC_PARTAMEL;
+import static com.luxof.lapisworks.LapisworksIDs.POTION_TAG;
 import static com.luxof.lapisworks.LapisworksIDs.SIMPLE_MIND_INTO_AMETHYST;
 import static com.luxof.lapisworks.LapisworksIDs.UNFLAY_FLAYED_VILLAGER;
 
@@ -55,8 +56,10 @@ public class Mutables {
     private static Map<Identifier, SMindInfusion> sMindInfusionRecipes = new HashMap<>();
 
 
-    public static boolean isAmel(ItemStack stack) { return stack.isEmpty() ? false : stack.isIn(TagKey.of(RegistryKeys.ITEM, AMEL_TAG)); }
+    public static boolean isAmel(ItemStack stack) { return stack.isEmpty() ? false : stack.isIn(AMEL_TAG); }
     public static boolean isAmel(Item item) { return isAmel(new ItemStack(item)); }
+    public static boolean isInPotionTag(ItemStack stack) { return stack.isEmpty() ? false : stack.isIn(POTION_TAG); }
+    public static boolean isInPotionTag(Item item) { return isInPotionTag(new ItemStack(item)); }
 
 
     public static void registerBaseCostFor(Item any, int cost) { infusionBaseCostMap.put(any, cost); }

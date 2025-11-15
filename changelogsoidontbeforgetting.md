@@ -146,10 +146,6 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
 ## Additions:
   - Empty Distillation
     - has Visible Distillation's previous functionality
-  - Enchanted Brewing Stand
-    - Imbue 10 Amel into a Brewing Stand
-    - 2x blaze usage for 2x speed
-    - Takes 1 amethyst dust per brew
   - Focus Necklace
   - Geode Dowser
     - Imbue 5 Amel into a compass
@@ -160,14 +156,14 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     - Can be taught to only execute on specific patterns
   - Teach Simple Impetus
     - Teaches the Simple Impetus at the target location the pattern it should focus on
-  - Rote Brewer Stand
-    - Infuse a Simple Mind into a Brewing Stand
-    - Can remember up to 5 potion recipes
-    - Each write is permanent, stops brewing anything but remembered potions when at the limit
-    - When a potion from memory is selected, takes items automatically.
-    - ALWAYS takes 2 steps worth of time.
-      Manual brewing (or teaching it) is a pain as each step takes twice as long.
-      Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.
+  - Added the Media Condensing Unit
+    - Deposit with Deposit Media (1/11 dust tax)
+    - Withdraw into phial in other hand with Withdraw Media (1/11 dust tax)
+    - stores an amount of media decided by the phial used in it's recipe
+    - Link Media Unit can be used to link them together
+      - costs 3 charged, and 1 amel per 32 blocks of distance (media part not scalable)
+      - links cost 0 upkeep and have 0 tax on transfer of media between units
+      - links only transfer on overflow or underflow
 ## Changes:
   - Amel Imbuement is datapack-friendlier now
   - Casting Rings can be worn in an extra slot on your off-hand as well now.
@@ -177,7 +173,8 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - Imbue Mind can now imbue into entities
     - This has potential ~~(to break my brain with overlapping recipes)~~
     - Currently it can be imbued into flayed villagers to un-flay them
-  - Visible Distillation now tells you if an entity can see a block, unobstructed at a position.
+  - Visible Distillation now tells you if an entity can see a block, unobstructed at a position.  
+    Empty Distillation has the original behaviour for if you need it.
 ## Fixes:
   - Attempted to fix the Amel-Infused Gold Sword's animation not dripping down in third person.
     Mission (sorta) success. Now it looks kinda menacing because it's held so low???
@@ -236,13 +233,21 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - You can now see Imbue Amel, Mold Amel and Simple Mind Infusion recipes in EMI
   - You can also see BeegInfusion recipes in EMI
   - On that note, the same recipes also show up in Patchouli
-- Hexal interop (YEAH BABY HEXAL IS BACK FOR MORE)
-  - Added the Media Condensing Unit which can store a very large amount of media that you can use to
-    recharge your shit
-  - Added Deposit Media (deposits media into a block, but costs some of that media to do so. Cost scales logarithmically) which is meant to be used by wisps with the Media Condensing Unit
-- Hexical interop (of course)
-  - the Media Jar is targetable by Deposit Media (Hexal-Hexical dual interop)
 - Added Chalk Rituals
+- Added the Enchanted Brewing Stand
+  - Imbue 10 Amel into a Brewing Stand
+  - 2x blaze usage for 2x speed
+  - Takes 1 amethyst dust per brew
+- Added the Rote Brewer Stand
+  - Infuse a Simple Mind into a Brewing Stand
+  - Can remember up to 5 potion recipes
+  - Each write is permanent, stops brewing anything but remembered potions when at the limit
+  - When a potion from memory is selected, takes items automatically.
+  - ALWAYS takes 2 steps worth of time.
+    Manual brewing (or teaching it) is a pain as each step takes twice as long.
+    Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.
+- Hexical interop (of course)
+  - the Media Jar is targetable by Deposit Media (not Withdraw Media tho)
 - Added Mind Control of entities into the game  
   (reality check: gang, how lost are we in the sauce?)
   - you have to un-flay with a Simple Mind first
@@ -257,6 +262,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     - not Sheppo: can only have one condition (in-lore: too much space occupied by condition and hex)
 - Added the Enchanted Scroll
   - It's literally a Hex Casting IDE.
+`for i in range(n)` pattern  
 # 1.5.9
 - Heal your mind after breaking it.
 - Alchemy/potion-brewing overhaul (I'm deadass)
@@ -264,23 +270,22 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
 - Hexic interop
   WILL HAPPEN. I **WILL** RUN THROUGH HEXIC CODE AND THINK "nathan you genius"
 # 1.6.0
-You can have four arms now (procrastination slain)
-- Your third and fourth arms can auto-cast 20x a second  
-  Both must be devoted to auto-cast, but one can hold something (e.g. Focus, Amel-tuned Orb, etc.)
-- Your third and fourth arms can hold items
-- You may swap arms 1-2 with 3-4, and use them with mouse3-4 (yes middle click and mouse4, rebindable)
+- You can have four arms now (procrastination slain)
+  - Your third and fourth arms can auto-cast 20x a second  
+    Both must be devoted to auto-cast, but one can hold something (e.g. Focus, Amel-tuned Orb, etc.)
+  - Your third and fourth arms can hold items
+  - You may swap arms 1-2 with 3-4, and use them with mouse4-5 (yes mouse4 and mouse5, rebindable)
 - End overhaul
   - the ender dragon bossfight is fun now (nathan adding this to his pack is a secondary motivation)
   - there are new structures
   - lore
 
-  
+
 # 1.7.0
 LAPISWORKS IS ON BOTH FORGE AND FABRIC NOW.
 
 
 # hm
-`for i in range(n)` pattern  
 clairvoyance (future-seeing)  
 noophaestus interop  
 hexcasting media display interop  
@@ -297,7 +302,9 @@ addons that may have interesting interop ideas waiting to be had but idk yet:
 - heartxxy
 
 much bigger phials  
-ability to extend pattern and stack limit by expending media  
+~~ability to extend pattern and stack limit by expending media~~ gave that to hexthings  
+  nvm hexthings threw it right back to me (infeasible for it)  
+  0.01 dust per iota per pattern (meaning it stays that extended for that many patterns)
 computers lmao
 - slab that you can use Craft Artifact on
 - you can send iotas to computers with a spell (which costs more the longer the distance)
@@ -305,7 +312,8 @@ computers lmao
 - has ambit over itself and the adjacent blocks
 - casts on block update and iota sent
 
-KING CRIMSON (so what part, exactly, of this is Lapisworks-y?)
+KING CRIMSON (so what part, exactly, of this is Lapisworks-y?)  
+(P.S. even Miyu doesn't want to do this. Are we deaduzz, chat?)
 - select area and time
 - area continues as normal for time
 - now those entities (including players) are locked in to that movement
@@ -313,4 +321,5 @@ KING CRIMSON (so what part, exactly, of this is Lapisworks-y?)
     (but prevent caster from going there)
 - caster is not locked in to that movement  
 
-port twokai's ideal condition
+port twokai's ideal condition  
+port hexxy dimensions  
