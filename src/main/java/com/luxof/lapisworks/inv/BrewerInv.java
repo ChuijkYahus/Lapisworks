@@ -115,14 +115,14 @@ public class BrewerInv implements Inventory {
             case 0 -> blaze.copyAndEmpty();
             case 1 -> input.copyAndEmpty();
             default -> EMPTY.copy();
-        } : brewingInto.set(slot - 2, brewingInto.get(slot - 2).copyAndEmpty());
+        } : brewingInto.get(slot - 2).copyAndEmpty();
     }
     @Override public ItemStack removeStack(int slot, int amount) {
         return slot < 2 ? switch (slot) {
             case 0 -> blaze.split(amount);
             case 1 -> input.split(amount);
             default -> EMPTY.copy();
-        } : brewingInto.set(slot - 2, brewingInto.get(slot - 2).split(amount));
+        } : brewingInto.get(slot - 2).split(amount);
     }
     @Override public void setStack(int slot, ItemStack set) {
         switch (slot) {
