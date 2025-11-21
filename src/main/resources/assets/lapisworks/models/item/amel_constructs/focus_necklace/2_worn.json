@@ -1,0 +1,8 @@
+{
+    "parent": "lapisworks:item/amel_constructs/focus_necklace/1_worn",
+    "texture_size": [32, 32],
+	"textures": {
+		"0": "lapisworks:item/focus_necklace2_worn",
+		"particle": "lapisworks:item/focus_necklace2_worn"
+	}
+}

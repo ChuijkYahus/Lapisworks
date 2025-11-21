@@ -1,0 +1,62 @@
+{
+    "name": "pages.lapisworks.imbuement.trinkets.title",
+    "icon": "lapisworks:amel_constructs/focus_necklace/2",
+    "advancement": "lapisworks:got_lapis",
+    "category": "hexcasting:lapisworks/imbuement",
+    "sortnum": 8,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.trinkets.intro"
+        },
+        {
+            "type": "patchouli:spotlight",
+            "item": "lapisworks:amel_constructs/focus_necklace/1",
+            "text": "pages.lapisworks.imbuement.trinkets.necklace.text"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:read_necklace",
+            "anchor": "lapisworks:read_necklace",
+            "input": "",
+            "output": "any",
+            "text": "pages.lapisworks.imbuement.trinkets.necklace.read_necklace.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:write_necklace",
+            "anchor": "lapisworks:write_necklace",
+            "input": "any",
+            "output": "",
+            "text": "pages.lapisworks.imbuement.trinkets.necklace.write_necklace.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:readable_necklace",
+            "anchor": "lapisworks:readable_necklace",
+            "input": "",
+            "output": "bool",
+            "text": "pages.lapisworks.imbuement.trinkets.necklace.readable_necklace.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:writeable_necklace",
+            "anchor": "lapisworks:writeable_necklace",
+            "input": "",
+            "output": "bool",
+            "text": "pages.lapisworks.imbuement.trinkets.necklace.writeable_necklace.summary"
+        },
+        {
+            "type": "patchouli:image",
+            "images": [
+                "lapisworks:textures/entries/focineckli.png"
+            ],
+            "text": "pages.lapisworks.imbuement.trinkets.necklace.img.desc"
+        },
+        {
+            "type": "patchouli:text",
+            "advancement": "hexcasting:opened_eyes",
+            "text": "pages.lapisworks.imbuement_artmind.reflection"
+        }
+    ]
+}

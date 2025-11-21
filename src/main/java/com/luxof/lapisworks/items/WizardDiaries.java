@@ -62,7 +62,6 @@ public class WizardDiaries extends Item {
             suser.sendMessage(GOT_ALL_DIARIES, true);
             suser.addExperience(100);
         } else {
-            // no clue if this'll work
             suser.getAdvancementTracker().grantCriterion(chosenAdvancement, "grant");
         }
 
@@ -75,17 +74,9 @@ public class WizardDiaries extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext ctx) {
-        tooltip.add(DIARIES_TOOLTIP_1.copy().formatted(
-            Formatting.DARK_PURPLE
-        ));
-        tooltip.add(DIARIES_TOOLTIP_2.copy().formatted(
-            Formatting.DARK_PURPLE
-        ));
-        tooltip.add(DIARIES_TOOLTIP_3.copy().formatted(
-            Formatting.DARK_PURPLE
-        ));
-        tooltip.add(DIARIES_TOOLTIP_4.copy().formatted(
-            Formatting.DARK_PURPLE
-        ));
+        tooltip.add(DIARIES_TOOLTIP_1.copy().formatted(Formatting.DARK_PURPLE));
+        tooltip.add(DIARIES_TOOLTIP_2.copy().formatted(Formatting.DARK_PURPLE));
+        tooltip.add(DIARIES_TOOLTIP_3.copy().formatted(Formatting.DARK_PURPLE));
+        tooltip.add(DIARIES_TOOLTIP_4.copy().formatted(Formatting.DARK_PURPLE));
     }
 }

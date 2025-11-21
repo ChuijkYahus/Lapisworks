@@ -20,10 +20,10 @@ import net.minecraft.util.math.RotationAxis;
 /**
  * @author WireSegal
  * Created at 9:50 AM on 7/25/22.
- * <p>(added because LensTrinketRenderer also has it)
+ * <p>(added because LensTrinketRenderer also has it even though the code is different)
  */
 public class JarTrinketRenderer implements TrinketRenderer {
-    // if i unravelled that many arguments it'd be even worse to read bruh wtf
+    // if i unravelled this many arguments it'd be even worse to read bruh wtf
     @Override
     @SuppressWarnings("unchecked")
     public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel,
@@ -40,7 +40,7 @@ public class JarTrinketRenderer implements TrinketRenderer {
         //TrinketRenderer.translateToRightLeg(matrices, playerModel, player);
         TrinketRenderer.translateToChest(matrices, playerModel, player);
 
-        matrices.translate(-0.2, 0.1, 0.0);
+        matrices.translate(-0.2, 0.1, 0.0275);
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0f));
         matrices.scale(0.35f, 0.35f, 0.35f);
 

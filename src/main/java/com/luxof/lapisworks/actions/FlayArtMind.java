@@ -9,19 +9,19 @@ import at.petrak.hexcasting.api.casting.eval.OperationResult;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.luxof.lapisworks.MishapThrowerJava;
-import com.luxof.lapisworks.TriConsumer;
-import com.luxof.lapisworks.blocks.Mind;
+import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
+import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.init.Mutables.SMindInfusion;
+import com.luxof.lapisworks.mixinsupport.GetVAULT;
 
-import static com.luxof.lapisworks.Lapisworks.toList;
 import static com.luxof.lapisworks.LapisworksIDs.FULL_SIMPLE_MIND;
-import static com.luxof.lapisworks.LapisworksIDs.IMBUEABLE;
+import static com.luxof.lapisworks.LapisworksIDs.INFUSEABLE_WITH_SMIND;
 import static com.luxof.lapisworks.LapisworksIDs.MIND_BLOCK;
 
 import java.util.List;
@@ -33,7 +33,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class FlayArtMind implements SpellAction {
     public int getArgc() {
@@ -43,21 +42,28 @@ public class FlayArtMind implements SpellAction {
     @Override
     public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
         BlockPos flayIntoPos = OperatorUtils.getBlockPos(args, 0, getArgc());
-        Map<Identifier, TriConsumer<BlockPos, World, ServerPlayerEntity>> flayers = Mutables.checkImbueMindRecipes(flayIntoPos, ctx.getWorld());
-        if (flayers.isEmpty()) {
+        VAULT vault = ((GetVAULT)ctx).grabVAULT();
+        Map<Identifier, SMindInfusion> recipes = Mutables.testSMindInfusionFilters(
+            flayIntoPos,
+            ctx,
+            args,
+            vault
+        );
+        if (recipes.isEmpty()) {
             MishapThrowerJava.throwMishap(new MishapBadBlock(
                 flayIntoPos,
-                IMBUEABLE
+                INFUSEABLE_WITH_SMIND
             ));
         }
+        SMindInfusion recipe = recipes.values().iterator().next();
+        recipe.mishapIfNeeded();
 
+        // be funny. come on. try it.
         BlockPos mindPos = OperatorUtils.getBlockPos(args, 1, getArgc());
-        Mishap needMind = new MishapBadBlock(mindPos, MIND_BLOCK);
-        if (!(ctx.getWorld().getBlockState(mindPos).getBlock() instanceof Mind) ||
-            !(ctx.getWorld().getBlockEntity(mindPos) instanceof MindEntity)) {
-            MishapThrowerJava.throwMishap(needMind);
-        }
-        MindEntity blockEntity = (MindEntity)ctx.getWorld().getBlockEntity(mindPos);
+        MindEntity blockEntity = MishapThrowerJava.throwIfEmpty(
+            ctx.getWorld().getBlockEntity(mindPos, ModBlocks.MIND_ENTITY_TYPE),
+            new MishapBadBlock(mindPos, MIND_BLOCK)
+        );
         if (blockEntity.mindCompletion < 100f) {
             MishapThrowerJava.throwMishap(new MishapBadBlock(
                 mindPos,
@@ -67,7 +73,7 @@ public class FlayArtMind implements SpellAction {
         blockEntity.mindCompletion = 0F;
 
         return new SpellAction.Result(
-            new Spell(flayIntoPos, toList(flayers.values()).get(ctx.getWorld().random.nextInt(flayers.size()))),
+            new Spell(flayIntoPos, recipe),
             MediaConstants.CRYSTAL_UNIT,
             List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 2, 15)),
             1
@@ -76,16 +82,16 @@ public class FlayArtMind implements SpellAction {
 
     public class Spell implements RenderedSpell {
         public final BlockPos flayIntoPos;
-        public final TriConsumer<BlockPos, World, ServerPlayerEntity> flayer;
+        public final SMindInfusion flayer;
 
-        public Spell(BlockPos flayIntoPos, TriConsumer<BlockPos, World, ServerPlayerEntity> flayer) {
+        public Spell(BlockPos flayIntoPos, SMindInfusion flayer) {
             this.flayIntoPos = flayIntoPos;
             this.flayer = flayer;
         }
 
 		@Override
 		public void cast(CastingEnvironment ctx) {
-            this.flayer.accept(flayIntoPos, ctx.getWorld(), getPlayerOrNull(ctx));
+            this.flayer.accept();
 		}
 
         @Override

@@ -1,0 +1,12 @@
+{
+    "type": "lapisworks:brewery",
+    "brew": "potion",
+    "from": "minecraft:awkward",
+    "input": [
+        {
+            "item": "minecraft:magma_cream",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:fire_resistance"
+}

@@ -13,11 +13,16 @@ import static com.luxof.lapisworks.Lapisworks.pickUsingSeed;
 import static com.luxof.lapisworks.Lapisworks.pickConfigFlags;
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.nullConfigFlags;
+import static com.luxof.lapisworks.LapisworksIDs.GEODE_DOWSER_REQUEST;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_PWSHAPE_PATS;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_SENT;
+import static com.luxof.lapisworks.init.ModItems.GEODE_DOWSER;
 import static com.luxof.lapisworks.init.ThemConfigFlags.turnChosenIntoNbt;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 import kotlin.Pair;
 
@@ -124,7 +129,12 @@ public class LapisworksServer {
         );
     }
 
+    /** public so anyone can easily fw it */
+    public static Map<String, BiConsumer<ServerPlayerEntity, PacketByteBuf>> dowseResultTakers = new HashMap<>();
+
     public static void lockIn() {
+        dowseResultTakers.put(GEODE_DOWSER_REQUEST, GEODE_DOWSER::serverHandleDowseResult);
+
         ServerPlayNetworking.registerGlobalReceiver(
             LapisworksIDs.OPEN_CASTING_GRID,
             (
@@ -133,8 +143,16 @@ public class LapisworksServer {
                 ServerPlayNetworkHandler handler,
                 PacketByteBuf buf,
                 PacketSender responseSender
+            ) -> handleCastingGridPacket(server, player, handler, buf, responseSender)
+        );
+        ServerPlayNetworking.registerGlobalReceiver(
+            LapisworksIDs.DOWSE_RESULT,
+            (
+                server, player, handler, buf, responseSender
             ) -> {
-                handleCastingGridPacket(server, player, handler, buf, responseSender);
+                BiConsumer<ServerPlayerEntity, PacketByteBuf> dowseResultTaker = dowseResultTakers.get(buf.readString());
+                if (dowseResultTaker == null) return;
+                dowseResultTaker.accept(player, buf);
             }
         );
 

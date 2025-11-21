@@ -1,0 +1,12 @@
+{
+    "type": "lapisworks:brewery",
+    "brew": "potion",
+    "from": "minecraft:long_night_vision",
+    "input": [
+        {
+            "item": "minecraft:fermented_spider_eye",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:long_invisibility"
+}

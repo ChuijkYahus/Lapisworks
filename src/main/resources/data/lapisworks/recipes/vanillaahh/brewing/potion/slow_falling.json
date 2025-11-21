@@ -1,0 +1,12 @@
+{
+    "type": "lapisworks:brewery",
+    "brew": "potion",
+    "from": "minecraft:awkward",
+    "input": [
+        {
+            "item": "minecraft:phantom_membrane",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:slow_falling"
+}

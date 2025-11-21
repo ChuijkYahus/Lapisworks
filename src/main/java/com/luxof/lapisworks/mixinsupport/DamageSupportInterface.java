@@ -19,6 +19,7 @@ public interface DamageSupportInterface {
 	// but PlayerEntity's damage() function already calls LivingEntity's damage()
 	// function
 	// oh well i guess i'll keep it then
+	// i could use events for this but fuuuuuuuuck
     default boolean damageHelper(
 		DamageSource source,
 		float amount,

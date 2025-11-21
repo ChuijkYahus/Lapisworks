@@ -1,5 +1,4 @@
 from importlib.resources import Package
-from pathlib import Path
 from typing_extensions import override
 
 from hexdoc.plugin import (

@@ -41,7 +41,6 @@ import java.util.Optional;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -95,12 +94,10 @@ public class HexResearchYoink implements SpellAction {
             MishapThrowerJava.throwMishap(needMind);
         }
 
-
-        Optional<BlockEntity> blockEntityOpt = ctx
-            .getWorld()
-            .getBlockEntity(mindPos, ModBlocks.MIND_ENTITY_TYPE);
-        if (blockEntityOpt.isEmpty()) { MishapThrowerJava.throwMishap(needMind); }
-        MindEntity blockEntity = (MindEntity)blockEntityOpt.get();
+        MindEntity blockEntity = MishapThrowerJava.throwIfEmpty(
+            ctx.getWorld().getBlockEntity(mindPos, ModBlocks.MIND_ENTITY_TYPE),
+            needMind
+        );
         if (blockEntity.mindCompletion < 100f) {
             MishapThrowerJava.throwMishap(new MishapBadBlock(mindPos, FULL_SIMPLE_MIND));
         }

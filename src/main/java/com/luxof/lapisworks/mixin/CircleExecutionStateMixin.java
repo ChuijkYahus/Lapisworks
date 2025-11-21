@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 /** I am simple man. I see original interesting thing, I write cursed ass shit to get it. */
-@Mixin(value = CircleExecutionState.class, remap = false)
+@Mixin(value = CircleExecutionState.class) //There is a net/minecraft/util/math/BlockPos class in the full annotation, so it had to be remap=true so mixin could find it.
 public abstract class CircleExecutionStateMixin {
     /** mixinextras is neat */
     @Inject(
@@ -40,15 +40,17 @@ public abstract class CircleExecutionStateMixin {
         locals = LocalCapture.CAPTURE_FAILHARD
     )
     private static void beforePossibleExitDirections(
-        BlockEntityAbstractImpetus _1,
-        ServerPlayerEntity _2,
-        CallbackInfoReturnable<Result<CircleExecutionState, BlockPos>> cir,
+        BlockEntityAbstractImpetus _impetus,
+        ServerPlayerEntity _player,
+        CallbackInfoReturnable<Result<CircleExecutionState, BlockPos>> callback,
         @Local ServerWorld level,
         @Local Stack<Pair<Direction, BlockPos>> todo,
         @Local Direction enterDir,
         @Local BlockPos herePos,
         @Local ICircleComponent cmp
     ) {
+        // jump slate needs to hijack here and add it's own exit destination, lest the spell circle fail
+        // because the exit is not directly adjacent.
         if (!(cmp instanceof JumpSlate jmpSlate)) return;
         Pair<Direction, BlockPos> exit = jmpSlate.getProbableExitPlace(enterDir, herePos, level);
         if (exit == null) return;

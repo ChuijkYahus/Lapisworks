@@ -47,11 +47,12 @@ public abstract class PlayerBasedCastEnvMixin extends CastingEnvironment {
 		Double sentAmbit = player.getEnchantedSentinelAmbit();
 
 		if (sentPos == null) { return false; }
-		if (vec.distanceTo(sentPos) > sentAmbit) { return false; }
+		if (vec.squaredDistanceTo(sentPos) > sentAmbit*sentAmbit) { return false; }
 
 		return true;
 	}
 
+	// really should let this apply to spell circles huh.
 	public boolean isVecInRangeOfOrb(Vec3d vec) {
 		List<HeldItemInfo> heldItems = ((GetStacks)this).getHeldStacks();
 		for (HeldItemInfo heldItem : heldItems) {

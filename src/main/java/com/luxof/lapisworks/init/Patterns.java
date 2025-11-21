@@ -5,19 +5,17 @@ import at.petrak.hexcasting.api.casting.castables.Action;
 import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.lib.hex.HexActions;
 
 import static at.petrak.hexcasting.api.misc.MediaConstants.CRYSTAL_UNIT;
 
-import static com.luxof.lapisworks.init.ThemConfigFlags.registerPWShapePattern;
-
-import java.util.List;
-
-import com.luxof.lapisworks.Lapisworks;
+import com.luxof.lapisworks.actions.AskSImp;
 import com.luxof.lapisworks.actions.CheckAttr;
 import com.luxof.lapisworks.actions.ImbueLap;
 import com.luxof.lapisworks.actions.MindLiquefaction;
 import com.luxof.lapisworks.actions.SwapAmel;
+import com.luxof.lapisworks.actions.TeachSImp;
 import com.luxof.lapisworks.actions.TeachSong;
 import com.luxof.lapisworks.actions.MoarAttr;
 import com.luxof.lapisworks.actions.ReclaimAmeth;
@@ -32,23 +30,50 @@ import com.luxof.lapisworks.actions.misc.EmptyPrfn;
 import com.luxof.lapisworks.actions.misc.EqualBlock;
 import com.luxof.lapisworks.actions.misc.EquivBlock;
 import com.luxof.lapisworks.actions.misc.ReadFromHand;
+import com.luxof.lapisworks.actions.misc.ReadNecklace;
 import com.luxof.lapisworks.actions.misc.ReadableInHand;
+import com.luxof.lapisworks.actions.misc.ReadableNecklace;
 import com.luxof.lapisworks.actions.misc.SphereDst;
 import com.luxof.lapisworks.actions.misc.VisibleDstl;
+import com.luxof.lapisworks.actions.misc.EmptyDstl;
 import com.luxof.lapisworks.actions.misc.WritableInHand;
+import com.luxof.lapisworks.actions.misc.WriteNecklace;
 import com.luxof.lapisworks.actions.misc.WriteToHand;
+import com.luxof.lapisworks.actions.misc.WriteableNecklace;
 import com.luxof.lapisworks.actions.CheckEnchant;
 import com.luxof.lapisworks.actions.CognitionPrfn;
+import com.luxof.lapisworks.actions.DoNothing;
 import com.luxof.lapisworks.actions.FlayArtMind;
 import com.luxof.lapisworks.actions.HexResearchYoink;
 import com.luxof.lapisworks.actions.ImbueAmel;
 
+import static com.luxof.lapisworks.Lapisworks.id;
+import static com.luxof.lapisworks.init.ThemConfigFlags.registerPWShapePattern;
+
+import java.util.List;
+
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraft.registry.RegistryKey;
 
 public class Patterns {
+    // used for Simple Minds.
+    // it is this way for a mixin.
+    public static RegistryKey<ActionRegistryEntry> ARCHON_OF_MEANINGLESSNESS = null;
+
     public static void init() {
+        register(
+            "archon_of_meaninglessness",
+            // stupid signature that no one will use.
+            "eedqaqddadwddwaeaeadaeqaddwedwqdadedaqqwwqqewwwaeaedqqwwwqwawaedwqqdwwaqweeeqeeewawdwqe",
+            HexDir.WEST,
+            new DoNothing()
+        );
+        ARCHON_OF_MEANINGLESSNESS = RegistryKey.of(
+            HexRegistries.ACTION,
+            id("archon_of_meanginglessness")
+        );
+
         MoarAttr MoarHealthAction = new MoarAttr(
             EntityAttributes.GENERIC_MAX_HEALTH,
             2.0,
@@ -96,11 +121,11 @@ public class Patterns {
         register("gib_dexterity", "aeaqqdeeeqewdwqwdwe", HexDir.WEST, GibDexterityAction);
         register("check_attr", "wwwaqeeqawww", HexDir.NORTH_EAST, new CheckAttr());
 
-        GenericEnchant fireyFists       = new GenericEnchant(1, 64, CRYSTAL_UNIT * 10, "lapisenchantments.lapisworks.fireyfists");
+        GenericEnchant fireyFists       = new GenericEnchant(1, 48, CRYSTAL_UNIT * 10, "lapisenchantments.lapisworks.fireyfists");
         GenericEnchant lightningBending = new GenericEnchant(3, 64, CRYSTAL_UNIT * 20, "lapisenchantments.lapisworks.lightningbending");
-        GenericEnchant fallDmgRes       = new GenericEnchant(2, 32, CRYSTAL_UNIT * 5, "lapisenchantments.lapisworks.falldmgres");
+        GenericEnchant fallDmgRes       = new GenericEnchant(3, 20, CRYSTAL_UNIT * 5, "lapisenchantments.lapisworks.falldmgres");
         GenericEnchant longBreath       = new GenericEnchant(2, 10, CRYSTAL_UNIT, "lapisenchantments.lapisworks.longbreath");
-        GenericEnchant fireResist       = new GenericEnchant(1, 64, CRYSTAL_UNIT * 10, "lapisenchantments.lapisworks.fireresist");
+        GenericEnchant fireResist       = new GenericEnchant(1, 48, CRYSTAL_UNIT * 10, "lapisenchantments.lapisworks.fireresist");
         register("fireyfists", "wwewdawdewqewedadad", HexDir.EAST, fireyFists);
         register("lightningbending", "wewdawdewqewdqqeedqe", HexDir.EAST, lightningBending);
         register("falldmgres", "qqwwqqqadwewdeq", HexDir.SOUTH_WEST, fallDmgRes);
@@ -112,8 +137,9 @@ public class Patterns {
         register("conjure_color", "qqaa", HexDir.NORTH_EAST, new ConjureColor());
         register("spherical_dstl", "wqwqwqwqwqwaeaqaaeaqaa", HexDir.NORTH_WEST, new SphereDst());
         register("cubic_exalt", "wqwawqwqqwqwq", HexDir.NORTH_WEST, new CubeExalt());
-        register("visible_dstl", "edeewadwewdwe", HexDir.SOUTH_EAST, new VisibleDstl());
         register("empty_prfn", "qwawqwaqwweqqqq", HexDir.NORTH_WEST, new EmptyPrfn());
+        register("empty_dstl", "dwewdwedwwwadwewdwedw", HexDir.NORTH_WEST, new EmptyDstl());
+        register("visible_dstl", "edeewadwewdwe", HexDir.SOUTH_EAST, new VisibleDstl());
         register("read_spechand", "aqqqqa", HexDir.EAST, new ReadFromHand());
         register("readable_spechand", "qqqqadww", HexDir.NORTH_WEST, new ReadableInHand());
         register("write_spechand", "deeeed", HexDir.EAST, new WriteToHand());
@@ -124,8 +150,14 @@ public class Patterns {
         register("thought_sieve", "qadaadadqaqdadqaq", HexDir.WEST, new HexResearchYoink());
         register("absorb_mind", "aawqqwqqqaede", HexDir.WEST, new MindLiquefaction());
         register("check_mind", "aawqqwqqq", HexDir.WEST, new CognitionPrfn());
-
         register("teach_song", "aawwawqwwdd", HexDir.WEST, new TeachSong());
+        register("teach_simp", "deaqqeawqqwwqqq", HexDir.SOUTH_EAST, new TeachSImp());
+        register("ask_simp", "eeeqwdeaqqeawqqwwqqq", HexDir.NORTH_EAST, new AskSImp());
+
+        register("read_necklace", "waaqqqqqe", HexDir.NORTH_WEST, new ReadNecklace());
+        register("write_necklace", "wadeeeeeq", HexDir.NORTH_WEST, new WriteNecklace());
+        register("readable_necklace", "wwaaqqqqqew", HexDir.NORTH_WEST, new ReadableNecklace());
+        register("writeable_necklace", "wwadeeeeeqw", HexDir.NORTH_WEST, new WriteableNecklace());
 
         // hol up, let him cook
         // i said LET HIM COOK
@@ -186,12 +218,12 @@ public class Patterns {
         );
     }
 
-    private static void register(
+    private static ActionRegistryEntry register(
         String name,
         String signature,
         HexDir startDir,
         Action action
     ) {
-        Registry.register(HexActions.REGISTRY, new Identifier(Lapisworks.MOD_ID, name), new ActionRegistryEntry(HexPattern.fromAngles(signature, startDir), action));
+        return Registry.register(HexActions.REGISTRY, id(name), new ActionRegistryEntry(HexPattern.fromAngles(signature, startDir), action));
     }
 }

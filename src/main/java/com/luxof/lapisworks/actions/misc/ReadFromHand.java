@@ -30,7 +30,6 @@ public class ReadFromHand implements ConstMediaAction {
         final Hand HAND = intToHand(hand);
         ItemStack heldStack = getStackFromHand(ctx, hand);
         ADIotaHolder iotaHolder = IXplatAbstractions.INSTANCE.findDataHolder(heldStack);
-        // no clue what these checks are for other than the first one
         if (iotaHolder == null ||
             (iotaHolder.readIota(ctx.getWorld()) == null &&
              iotaHolder.emptyIota() == null)) {
@@ -39,6 +38,7 @@ public class ReadFromHand implements ConstMediaAction {
                 READABLE,
                 HAND
             ));
+            return null; // VSCode likes complaining about null
         }
         return List.of(iotaHolder.readIota(ctx.getWorld()));
     }

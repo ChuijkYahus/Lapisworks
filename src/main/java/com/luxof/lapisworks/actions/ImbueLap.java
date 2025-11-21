@@ -38,6 +38,7 @@ public class ImbueLap implements SpellAction {
             //                              *shrug* i don't know why it's different either.
             // i now know: i was stupid
             MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "lapis_lazuli"));
+            return null; // VSCode likes complaining about null
         }
         int count = heldStackInfo.stack().getCount();
 

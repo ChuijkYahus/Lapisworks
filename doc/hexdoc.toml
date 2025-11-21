@@ -21,6 +21,10 @@ include = [
     "hexdoc",
 ]
 
+[template.extend_render]
+"index.css" = "lapisworks:lapisworks.css.jinja"
+"index.js" = "lapisworks:lapisworks.js.jinja"
+
 [template.args]
 mod_name = "Lapisworks"
 author = "Real-Luxof"

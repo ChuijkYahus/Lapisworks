@@ -1,0 +1,12 @@
+{
+    "type": "lapisworks:brewery",
+    "brew": "potion",
+    "from": "minecraft:awkward",
+    "input": [
+        {
+            "item": "minecraft:rabbit_foot",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:leaping"
+}

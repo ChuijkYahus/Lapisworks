@@ -1,12 +1,13 @@
 package com.luxof.lapisworks.init;
 
-import static com.luxof.lapisworks.LapisworksIDs.IMBUEMENT_RECIPE_ID;
-import static com.luxof.lapisworks.LapisworksIDs.MOLD_AMEL_RECIPE_ID;
-
+import com.luxof.lapisworks.recipes.BrewingRec;
+import com.luxof.lapisworks.recipes.BrewingRecSerializer;
 import com.luxof.lapisworks.recipes.ImbuementRec;
 import com.luxof.lapisworks.recipes.ImbuementRecSerializer;
 import com.luxof.lapisworks.recipes.MoldRec;
 import com.luxof.lapisworks.recipes.MoldRecSerializer;
+
+import static com.luxof.lapisworks.Lapisworks.id;
 
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
@@ -15,11 +16,18 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class ModRecipes {
+    public static final Identifier IMBUEMENT_RECIPE_ID = id("amel_imbuement");
+    public static final Identifier MOLD_AMEL_RECIPE_ID = id("mold_amel");
+    public static final Identifier BREWING_RECIPE_ID = id("brewery");
+
+    /** warcrimes will not be told */
     public static void apologizeForWarcrimes() {
         registerSerializer(IMBUEMENT_RECIPE_ID, ImbuementRecSerializer.INSTANCE);
         registerType(IMBUEMENT_RECIPE_ID, ImbuementRec.Type.INSTANCE);
         registerSerializer(MOLD_AMEL_RECIPE_ID, MoldRecSerializer.INSTANCE);
         registerType(MOLD_AMEL_RECIPE_ID, MoldRec.Type.INSTANCE);
+        registerType(BREWING_RECIPE_ID, BrewingRec.Type.INSTANCE);
+        registerSerializer(BREWING_RECIPE_ID, BrewingRecSerializer.INSTANCE);
     }
 
     public static void registerSerializer(

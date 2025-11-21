@@ -1,0 +1,12 @@
+{
+    "type": "lapisworks:brewery",
+    "brew": "potion",
+    "from": "minecraft:healing",
+    "input": [
+        {
+            "item": "minecraft:fermented_spider_eye",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:harming"
+}

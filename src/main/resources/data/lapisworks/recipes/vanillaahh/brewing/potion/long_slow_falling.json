@@ -1,0 +1,12 @@
+{
+    "type": "lapisworks:brewery",
+    "brew": "potion",
+    "from": "minecraft:slow_falling",
+    "input": [
+        {
+            "item": "minecraft:redstone",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:long_slow_falling"
+}

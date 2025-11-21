@@ -4,7 +4,10 @@ import com.luxof.lapisworks.items.AmelJar;
 import com.luxof.lapisworks.items.AmelRing;
 import com.luxof.lapisworks.items.AmelStaff;
 import com.luxof.lapisworks.items.CastingRing;
+//import com.luxof.lapisworks.items.Chalk;
 import com.luxof.lapisworks.items.DiamondSword;
+import com.luxof.lapisworks.items.FocusNecklace;
+import com.luxof.lapisworks.items.GeodeDowser;
 import com.luxof.lapisworks.items.GoldSword;
 import com.luxof.lapisworks.items.IronSword;
 import com.luxof.lapisworks.items.JumpSlateItem;
@@ -68,6 +71,15 @@ public class ModItems {
     public static final Item REBOUND_SLATE_2 = new JumpSlateItem(ModBlocks.REBOUND_SLATE_2, fullStack);
     public static final Item AMEL_JAR = new AmelJar(unstackable, 256, false);
     public static final Item ENERGY_CONTAINER = new AmelJar(unstackable, 1024, true);
+    public static final GeodeDowser GEODE_DOWSER = new GeodeDowser(unstackable);
+    public static final Item SIMPLE_IMPETUS = new BlockItem(ModBlocks.SIMPLE_IMPETUS, fullStack);
+    //public static final Chalk CHALK = new Chalk(new FabricItemSettings().maxCount(1).maxDamage(1024));
+    public static final FocusNecklace FOCUS_NECKLACE = new FocusNecklace(unstackable);
+    public static final FocusNecklace FOCUS_NECKLACE2 = new FocusNecklace(unstackable);
+    // 2 dummies i use for trinket rendering (model predicate providers don't work for no reason)
+    public static final FocusNecklace FOCUS_NECKLACE_WORN = new FocusNecklace(unstackable);
+    public static final FocusNecklace FOCUS_NECKLACE2_WORN = new FocusNecklace(unstackable);
+    public static final Item ENCH_BREWER = new BlockItem(ModBlocks.ENCH_BREWER, fullStack);
 
     private static List<String> itemNames = new ArrayList<>(List.of(
         "amel",
@@ -105,7 +117,15 @@ public class ModItems {
         "amel_constructs/jumpslate/rebound_1",
         "amel_constructs/jumpslate/rebound_2",
         "amel_jar",
-        "energy_container"
+        "energy_container",
+        "amel_constructs/geode_dowser",
+        "amel_constructs/simple_impetus",
+        //"chalk",
+        "amel_constructs/focus_necklace/1",
+        "amel_constructs/focus_necklace/2",
+        "amel_constructs/focus_necklace/1_worn",
+        "amel_constructs/focus_necklace/2_worn",
+        "amel_constructs/enchbrewer"
     ));
     private static List<Item> items = new ArrayList<>(List.of(
         AMEL_ITEM,
@@ -143,7 +163,15 @@ public class ModItems {
         REBOUND_SLATE_1,
         REBOUND_SLATE_2,
         AMEL_JAR,
-        ENERGY_CONTAINER
+        ENERGY_CONTAINER,
+        GEODE_DOWSER,
+        SIMPLE_IMPETUS,
+        //CHALK,
+        FOCUS_NECKLACE,
+        FOCUS_NECKLACE2,
+        FOCUS_NECKLACE_WORN,
+        FOCUS_NECKLACE2_WORN,
+        ENCH_BREWER
     ));
 
     public static ItemGroup LapisMagicShitGroup;

@@ -1,0 +1,18 @@
+{
+    "type": "lapisworks:brewery",
+    "brew": "item",
+    "from": {
+        "item": "minecraft:potion",
+        "count": 1
+    },
+    "input": [
+        {
+            "item": "minecraft:gunpowder",
+            "count": 1
+        }
+    ],
+    "to": {
+        "item": "minecraft:splash_potion",
+        "count": 1
+    }
+}

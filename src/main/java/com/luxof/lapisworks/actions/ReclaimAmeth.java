@@ -33,6 +33,7 @@ public class ReclaimAmeth implements SpellAction {
         HeldItemInfo heldStackInfo = ctx.getHeldItemToOperateOn(Mutables::isAmel);
         if (heldStackInfo == null) {
             MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "amel"));
+            return null; // VSCode likes complaining about null
         }
         int count = heldStackInfo.stack().getCount();
 

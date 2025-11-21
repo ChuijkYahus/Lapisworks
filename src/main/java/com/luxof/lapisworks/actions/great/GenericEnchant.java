@@ -87,6 +87,7 @@ public class GenericEnchant implements SpellAction {
         HeldItemInfo amelInfo = ctx.getHeldItemToOperateOn(Mutables::isAmel);
         if (amelInfo == null) {
             MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "amel"));
+            return null; // VSCode likes complaining about null
         } else if (amelInfo.stack().getCount() < this.requiredAmel) {
             MishapThrowerJava.throwMishap(new MishapNotEnoughItems(amelInfo.stack(), this.requiredAmel));
         }

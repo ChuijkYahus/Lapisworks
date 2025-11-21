@@ -1,0 +1,6 @@
+{
+    "parent": "lapisworks:item/amel_constructs/focus_necklace/1",
+    "textures": {
+        "layer0": "lapisworks:item/focus_necklace2"
+    }
+}

@@ -27,16 +27,16 @@ import org.jetbrains.annotations.Nullable;
 public class MindEntity extends BlockEntity {
     public float mindCompletion = 0f;
     // all of this is for you to fw
-    public static int maxVillagersForBrainGather = 3;
-    public static int gatherRange = 5;
+    public int maxVillagers = 3;
+    public int gatherRange = 5;
     // magic numbers: fills to 100 by the 4 minute mark
-    public static float villagerExhaustionRate = 100f / (4f * 60f * 20f);
+    public float villagerExhaustionRate = 100f / (4f * 60f * 20f);
     // magic numbers: 20 seconds
-    public static int villagerExhaustRegenCD = 20 * 20;
+    public int villagerExhaustRegenCD = 20 * 20;
     // magic number: entire minecraft day in ticks
-    public static int sleepingVillagerUseAgainCD = 24000;
+    public int sleepingVillagerUseAgainCD = 24000;
     // magic numbers: fills to 100 by the 20 minute mark
-    public static float mindCompleteRatePerVillager = 100f / (20f * 60f * 20f);
+    public float mindCompleteRatePerVillager = 100f / (20f * 60f * 20f);
 
     public MindEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.MIND_ENTITY_TYPE, pos, state);
@@ -53,7 +53,7 @@ public class MindEntity extends BlockEntity {
         return (int)Math.max(Math.min(Math.floor((double)filledPercent / 7.14), 14.0), 0.0);
     }
 
-    public static void consumeVillagerMinds(World world, BlockPos pos, MindEntity blockEntity) {
+    public void consumeVillagerMinds(World world, BlockPos pos) {
         Vec3d topLeftBack = pos.toCenterPos().subtract(gatherRange, gatherRange, gatherRange);
         Vec3d bottomRightFront = pos.toCenterPos().add(gatherRange, gatherRange, gatherRange);
         List<VillagerEntity> villagersNear = new ArrayList<VillagerEntity>(world.getEntitiesByClass(
@@ -65,12 +65,12 @@ public class MindEntity extends BlockEntity {
             }
         ));
         int usedVillagersCount = 0;
-        for (int i = 0; i < Math.min(villagersNear.size(), maxVillagersForBrainGather); i++) {
+        for (int i = 0; i < Math.min(villagersNear.size(), maxVillagers); i++) {
             int idx = world.random.nextInt(villagersNear.size());
             VillagerEntity villager = villagersNear.get(idx);
             if (villager.isSleeping() && usedVillagersCount == 0) {
-                blockEntity.mindCompletion += 15.0f;
-                blockEntity.mindCompletion = Math.min(100.0f, blockEntity.mindCompletion);
+                this.mindCompletion += 15.0f;
+                this.mindCompletion = Math.min(100.0f, this.mindCompletion);
                 ((ArtMindInterface)villager).setDontUseAgainTicks(sleepingVillagerUseAgainCD);
                 break;
             }
@@ -80,15 +80,16 @@ public class MindEntity extends BlockEntity {
             // i'm aware, and this doesn't matter that much
             ((ArtMindInterface)villager).incUsedMindPercentage(villagerExhaustionRate);
             ((ArtMindInterface)villager).setMindBeingUsedTicks(villagerExhaustRegenCD);
-            blockEntity.mindCompletion += mindCompleteRatePerVillager;
-            blockEntity.mindCompletion = Math.min(100.0f, blockEntity.mindCompletion);
+            this.mindCompletion += mindCompleteRatePerVillager;
+            this.mindCompletion = Math.min(100.0f, this.mindCompletion);
         }
     }
 
-    public static void tick(World world, BlockPos pos, BlockState state, BlockEntity bE) {
+    public static void tick(World world, BlockPos pos, BlockState state, BlockEntity bEnt) {
+        MindEntity bE = (MindEntity)bEnt;
         if (world.isClient) { return; }
         MindEntity blockEntity = (MindEntity)bE; // do this or function signature doesn't match???
-        if (blockEntity.mindCompletion < 100.0f) { consumeVillagerMinds(world, pos, blockEntity); }
+        if (blockEntity.mindCompletion < 100.0f) { bE.consumeVillagerMinds(world, pos); }
         int shouldBeAtState = computeFilledState(blockEntity.mindCompletion);
         if (state.get(Mind.FILLED) != shouldBeAtState) {
             world.setBlockState(pos, state.with(Mind.FILLED, shouldBeAtState));

@@ -11,9 +11,9 @@ import com.luxof.lapisworks.mixinsupport.GetVAULT;
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.getAllHands;
 
-import java.util.List;
-
 import com.mojang.authlib.GameProfile;
+
+import java.util.List;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -71,21 +71,17 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Ge
         nbt.putDouble("LAPISWORKS_EnchSent_Ambit", ambit);
     }
 
-    public Vec3d spawnAt = ((EnchSentInterface)this).getEnchantedSentinel();
-    public ParticleSpray particles = null;
     public void spawnEnchSentParticles() {
         Vec3d sentinelPosition = ((EnchSentInterface)this).getEnchantedSentinel();
-        if ((spawnAt == null && sentinelPosition != null) || spawnAt != sentinelPosition) {
-            spawnAt = sentinelPosition;
-            if (spawnAt != null) { particles = ParticleSpray.burst(spawnAt, 2, 1); }
-        }
-        else if (spawnAt == null) { return; }
-        particles.sprayParticles(
+        if (sentinelPosition == null) return;
+
+        ParticleSpray.burst(sentinelPosition, 2, 1).sprayParticles(
             (ServerWorld)this.getWorld(), // is it as simple as this? do I not need the whole chain?
             // damn, it IS as simple as that.
             IXplatAbstractions.INSTANCE.getPigment((PlayerEntity)(Object)this)
         );
     }
+
     public void spawnOrbParticles() {
         List<Hand> hands = getAllHands();
         for (Hand hand : hands) {

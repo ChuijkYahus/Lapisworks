@@ -8,40 +8,43 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.BooleanIota;
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.luxof.lapisworks.MishapThrowerJava;
 
-import java.util.List;
-import java.util.Optional;
+import static com.luxof.lapisworks.Lapisworks.castRay;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
+import java.util.List;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.util.Pair;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.RaycastContext.FluidHandling;
-import net.minecraft.world.RaycastContext.ShapeType;
 
 public class VisibleDstl implements ConstMediaAction {
     @Override
     public List<Iota> execute(List<? extends Iota> args, CastingEnvironment ctx) {
-        Optional<LivingEntity> casterOp = Optional.of(ctx.getCastingEntity());
-        if (casterOp.isEmpty()) { MishapThrowerJava.throwMishap(new MishapBadCaster()); }
-        Vec3d start = OperatorUtils.getVec3(args, 1, getArgc());
-        Vec3d endPoint = OperatorUtils.getVec3(args, 0, getArgc());
+        Entity entity = OperatorUtils.getEntity(args, 0, getArgc());
+        BlockPos start = BlockPos.ofFloored(entity.getEyePos());
+        BlockPos end = OperatorUtils.getBlockPos(args, 1, getArgc());
+
         try {
-            ctx.assertVecInRange(start);
-            ctx.assertVecInRange(endPoint);
-        } catch (MishapBadLocation e) {
-            MishapThrowerJava.throwMishap(e);
-        }
-        BlockHitResult hitResult = ctx.getWorld().raycast(
-            new RaycastContext(start, endPoint, ShapeType.OUTLINE, FluidHandling.NONE, casterOp.get())
-        );
-        return List.of(new BooleanIota(hitResult.getType() == HitResult.Type.MISS));
+            ctx.assertPosInRange(start);
+            ctx.assertPosInRange(end);
+        } catch (MishapBadLocation e) { MishapThrowerJava.throwMishap(e); }
+
+        Vec3d dir = end.toCenterPos().subtract(start.toCenterPos()).normalize();
+
+        return List.of(new BooleanIota(
+            entity.getRotationVector().dotProduct(dir) >= 0.1
+            && !castRay(
+                start,
+                BlockPos.ofFloored(end.toCenterPos().subtract(dir)),
+                pos -> 
+                    new Pair<>(pos, !ctx.getWorld().getBlockState(pos).isOpaque())
+            ).getRight()
+        ));
     }
 
     @Override

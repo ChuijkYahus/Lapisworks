@@ -1,13 +1,15 @@
 package com.luxof.lapisworks.client;
 
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
-import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 
 import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
+import com.luxof.lapisworks.client.screens.EnchBrewerScreen;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.ModItems;
+import com.luxof.lapisworks.init.ModScreens;
 import com.luxof.lapisworks.interop.hextended.items.AmelOrb;
+import com.luxof.lapisworks.mixinsupport.BlockDowser;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
@@ -16,14 +18,20 @@ import static com.luxof.lapisworks.Lapisworks.nullConfigFlags;
 import static com.luxof.lapisworks.Lapisworks.prettifyFloat;
 import static com.luxof.lapisworks.LapisworksIDs.AMEL_ORB_IS_FILLED;
 import static com.luxof.lapisworks.LapisworksIDs.BLOCKING_MPP;
+import static com.luxof.lapisworks.LapisworksIDs.DOWSE_RESULT;
+import static com.luxof.lapisworks.LapisworksIDs.DOWSE_TS;
 import static com.luxof.lapisworks.LapisworksIDs.SCRYING_MIND_END;
 import static com.luxof.lapisworks.LapisworksIDs.SCRYING_MIND_START;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_PWSHAPE_PATS;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_SENT;
+import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE;
+import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE2;
 import static com.luxof.lapisworks.init.ModItems.IRON_SWORD;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 
 import com.mojang.datafixers.util.Pair;
+
+import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 
 import java.util.Optional;
 
@@ -33,17 +41,25 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
-import net.minecraft.block.entity.BlockEntity;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+
 import vazkii.patchouli.api.PatchouliAPI;
 
 public class LapisworksClient implements ClientModInitializer {
@@ -56,8 +72,11 @@ public class LapisworksClient implements ClientModInitializer {
             IRON_SWORD,
             BLOCKING_MPP, // first person doesn't work but WHATEVER
             (stack, world, entity, seed) -> {
-                return entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F;
-            }    
+                return entity != null
+                    && entity.isUsingItem()
+                    && entity.getActiveItem() == stack
+                        ? 1.0F : 0.0F;
+            }
         );
         if (Lapisworks.HEXTENDED_INTEROP) {
             ModelPredicateProviderRegistry.register(
@@ -79,23 +98,41 @@ public class LapisworksClient implements ClientModInitializer {
         }
     }
 
+    public static void initInterop() {
+        if (Lapisworks.FULL_HEXICAL_INTEROP) {
+            com.luxof.lapisworks.interop.hexical.FullLapixicalClient.initTheFullLapixicalClient();
+        }
+        if (Lapisworks.HEXAL_INTEROP) {
+            com.luxof.lapisworks.interop.hexal.LapisalClient.beCoolOnTheClient();
+        }
+    }
+
     @Override
     public void onInitializeClient() {
         // the eternal fucking grammar battle with this simple Markiplier ass log will drive me insane
         // thankful i won't have to edit this file anymore
         // ^^^^ what was that, chief?
-        LOGGER.info("Hello everybody my name is LapisworksClient and today what we are going to do is: scrying lens tooltips, make blocks transparent, keybinds, networking, Model Predicate Providers, spin 4D hypercubes for the FUNNY, and client-side rendering!");
+        LOGGER.info("Hello everybody my name is LapisworksClient and today what we are going to do is: scrying lens tooltips, make blocks transparent, keybinds, networking, Model Predicate Providers, make blocks translucent, spin 4D hypercubes for the FUNNY, Block Entity Renderers (shudder), render trinkets, and client-side rendering!");
         LOGGER.info("Does NONE of that sound fun? Well, that's because it isn't. So let's get started, shall we?");
 
+        HandledScreens.register(ModScreens.ENCH_BREWER_SCREEN_HANDLER, EnchBrewerScreen::new);
+
+        initInterop();
+
         TrinketRendererRegistry.registerRenderer(ModItems.AMEL_JAR, new JarTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(FOCUS_NECKLACE, new NecklaceTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(FOCUS_NECKLACE2, new NecklaceTrinketRenderer());
 
         // we all thank hexxy for adding simple addDisplayer() instead of requiring mixin in unison
         ScryingLensOverlayRegistry.addDisplayer(
             ModBlocks.MIND_BLOCK,
             (lines, state, pos, observer, world, direction) -> {
-                Optional<BlockEntity> blockEntityOpt = world.getBlockEntity(pos, ModBlocks.MIND_ENTITY_TYPE);
-                if (blockEntityOpt.isEmpty()) { return; }
-                MindEntity blockEntity = (MindEntity)blockEntityOpt.get();
+                Optional<MindEntity> blockEntityOpt = world.getBlockEntity(
+                    pos,
+                    ModBlocks.MIND_ENTITY_TYPE
+                );
+                if (blockEntityOpt.isEmpty()) return;
+                MindEntity blockEntity = blockEntityOpt.get();
                 lines.add(
                     new Pair<ItemStack, Text>(
                         new ItemStack(ModItems.MIND),
@@ -112,10 +149,29 @@ public class LapisworksClient implements ClientModInitializer {
                 );
             }
         );
+        /*ScryingLensOverlayRegistry.addDisplayer(
+            ModBlocks.SIMPLE_IMPETUS,
+            (lines, state, pos, observer, world, direction) -> {
+                Optional<BlockEntity> opt = world.getBlockEntity(
+                    pos,
+                    ModBlocks.SIMPLE_IMPETUS_ENTITY_TYPE
+                );
+                if (opt.isEmpty()) return;
+                SimpleImpetusEntity bE = (SimpleImpetusEntity)opt.get();
+                lines.add(
+                    new Pair<ItemStack, Text>(
+                        new ItemStack(ModItems.SIMPLE_IMPETUS),
+
+                    )
+                )
+            }
+        );*/
+
         WorldRenderEvents.AFTER_TRANSLUCENT.register((ctx) -> {
             overlayWorld(ctx.matrixStack(), ctx.tickDelta());
         });
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MIND_BLOCK, RenderLayer.getTranslucent());
+        //BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.CHALK_BLOCK, RenderLayer.getTranslucent());
 
         KeyEvents.staticInit();
         ClientTickEvents.END_CLIENT_TICK.register(KeyEvents::endClientTick);
@@ -166,15 +222,30 @@ public class LapisworksClient implements ClientModInitializer {
             }
         );
 
+        ClientPlayNetworking.registerGlobalReceiver(
+            DOWSE_TS,
+            (client, handler, buf, responseSender) -> {
+                PacketByteBuf sendBuf = PacketByteBufs.create();
+                sendBuf.writeString(buf.readString());
+
+                Block find = Registries.BLOCK.get(buf.readIdentifier());
+                Pair<BlockPos, Double> result = ((BlockDowser)client.player).dowse(find);
+
+                sendBuf.writeBoolean(result != null);
+                if (result != null) {
+                    sendBuf.writeBlockPos(result.getFirst());
+                    sendBuf.writeDouble(result.getSecond());
+                }
+                ClientPlayNetworking.send(DOWSE_RESULT, sendBuf);
+            }
+        );
+
         ClientPlayConnectionEvents.JOIN.register((
             handler,
             sender,
             client
         ) -> {
-            if (client.player == null) {
-                LOGGER.error("Genuinely how the fuck is client.player null on JOIN??");
-                return;
-            }
+            ((BlockDowser)client.player).addTarget(Blocks.BUDDING_AMETHYST);
             this.playerHasJoined = true;
             ((EnchSentInterface)client.player).setEnchantedSentinel(
                 this.bufferSentinelPos,

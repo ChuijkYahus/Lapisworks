@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import com.luxof.lapisworks.MishapThrowerJava;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -36,10 +37,11 @@ public class Hastenature implements SpellAction {
         BlockPos pos = OperatorUtils.getBlockPos(args, 0, getArgc());
         int times = OperatorUtils.getPositiveInt(args, 1, getArgc());
         BlockState state = ctx.getWorld().getBlockState(pos);
+        int buddingAmethystPenalty = state.isOf(Blocks.BUDDING_AMETHYST) ? 3 : 1;
 
         return new SpellAction.Result(
             new Spell(state, pos, times),
-            MediaConstants.DUST_UNIT * 5 * times,
+            MediaConstants.SHARD_UNIT * buddingAmethystPenalty * times,
             List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 2, 15)),
             times
         );
