@@ -1,14 +1,16 @@
 package com.luxof.lapisworks.items;
 
-import java.util.UUID;
+import at.petrak.hexcasting.common.items.HexBaubleItem;
+import at.petrak.hexcasting.common.items.ItemStaff;
+import at.petrak.hexcasting.common.lib.HexAttributes;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-import at.petrak.hexcasting.common.items.HexBaubleItem;
-import at.petrak.hexcasting.common.items.ItemStaff;
-import at.petrak.hexcasting.common.lib.HexAttributes;
+import java.util.UUID;
+
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;

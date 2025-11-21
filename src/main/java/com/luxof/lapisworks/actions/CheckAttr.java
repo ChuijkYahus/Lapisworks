@@ -14,6 +14,8 @@ import at.petrak.hexcasting.api.misc.MediaConstants;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
 
+import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
+
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 
 public class CheckAttr implements ConstMediaAction {
@@ -21,12 +23,13 @@ public class CheckAttr implements ConstMediaAction {
         EntityAttributes.GENERIC_MAX_HEALTH,
         EntityAttributes.GENERIC_ATTACK_DAMAGE,
         EntityAttributes.GENERIC_MOVEMENT_SPEED,
-        EntityAttributes.GENERIC_ATTACK_SPEED
+        ReachEntityAttributes.REACH,
+        ReachEntityAttributes.ATTACK_RANGE
     );
 
     @Override
     public List<Iota> execute(List<? extends Iota> args, CastingEnvironment ctx) {
-        int chosen = OperatorUtils.getIntBetween(args, 0, 0, 3, getArgc());
+        int chosen = OperatorUtils.getIntBetween(args, 0, 0, 4, getArgc());
         return List.of(
             new DoubleIota(
                 ((LapisworksInterface)(

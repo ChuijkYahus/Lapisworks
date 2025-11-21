@@ -14,6 +14,7 @@ import com.luxof.lapisworks.init.ModPOIs;
 import com.luxof.lapisworks.init.ModRecipes;
 import com.luxof.lapisworks.init.ModScreens;
 import com.luxof.lapisworks.init.Patterns;
+import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
 import com.luxof.lapisworks.init.LapisworksLoot;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.ModEntities;
@@ -32,17 +33,22 @@ import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.Stack;
 import java.util.function.Function;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
@@ -456,5 +462,49 @@ public class Lapisworks implements ModInitializer {
 	// convenience
 	public static boolean potionEquals(String potId, ItemStack stack) {
 		return potionEquals(stack, potId);
+	}
+
+	/** does not simulate. */
+	public static long interactWithLinkableMediaBlocks(
+		ServerWorld world,
+		Set<BlockPos> first,
+		long amountToInteract,
+		boolean deposit
+	) {
+		return interactWithLinkableMediaBlocks(world, first, amountToInteract, deposit, false);
+	}
+	/** takes into account links. returns what was deposited/withdrawn. */
+	public static long interactWithLinkableMediaBlocks(
+		ServerWorld world,
+		Set<BlockPos> first,
+		long amountToInteract,
+		boolean deposit,
+		boolean simulate
+	) {
+		long interactionLeft = amountToInteract;
+		Stack<BlockPos> todo = new Stack<>();
+		
+		HashSet<BlockPos> seen = new HashSet<>();
+
+		seen.addAll(first);
+		todo.addAll(first);
+
+		while (!todo.isEmpty()) {
+			BlockPos currPos = todo.pop();
+			LinkableMediaBlock curr = (LinkableMediaBlock)world.getBlockEntity(currPos);
+
+			if (deposit) interactionLeft -= curr.depositMedia(interactionLeft, simulate);
+			else interactionLeft -= curr.withdrawMedia(interactionLeft, simulate);
+			if (interactionLeft == 0) return amountToInteract;
+
+			LOGGER.info("links: " + curr.getLinks());
+			for (BlockPos linked : curr.getLinks()) { if (seen.add(linked)) todo.add(linked); }
+		}
+
+		return amountToInteract - interactionLeft;
+	}
+
+	public static double getDistance(BlockPos pos1, BlockPos pos2) {
+		return Math.sqrt(pos2.getSquaredDistance(pos1));
 	}
 }

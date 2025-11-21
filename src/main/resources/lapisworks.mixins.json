@@ -17,7 +17,10 @@
 		"ClientPlayerEntityMixin",
 		"ClientAdvancementsMixin",
 		"CircleExecutionStateMixin2",
-		"PatternIotaMixin"
+		"PatternIotaMixin",
+		"BookEntryMixin",
+		"OpMakeBattery$SpellMixin",
+		"BlockEntityAbstractImpetusMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

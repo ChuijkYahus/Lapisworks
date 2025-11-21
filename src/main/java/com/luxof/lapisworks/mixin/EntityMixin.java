@@ -1,10 +1,17 @@
 package com.luxof.lapisworks.mixin;
 
+import com.google.common.collect.ImmutableMultimap;
+
+import com.luxof.lapisworks.actions.MoarReachYouBitch;
 import com.luxof.lapisworks.mixinsupport.ArtMindInterface;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface.AllEnchantments;
 
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.LapisworksIDs.REACH_ENHANCEMENT_UUID;
+
+import static com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes.ATTACK_RANGE;
+import static com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes.REACH;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,16 +44,22 @@ public class EntityMixin {
     @Inject(at = @At("HEAD"), method = "readNbt")
 	public void readNbt(NbtCompound nbt, CallbackInfo ci) {
         // oh yeah, it's backwards compat time
-        if ((Object)this instanceof LivingEntity) {
+        if ((Object)this instanceof LivingEntity living) {
             try {
                 ((LapisworksInterface)this).setLapisworksAttributes(new AttributeContainer(
                     DefaultAttributeContainer.builder()
                     .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, nbt.getDouble("LAPISWORKS_JUICED_FISTS"))
-                    .add(EntityAttributes.GENERIC_ATTACK_SPEED, nbt.getDouble("LAPISWORKS_JUICED_DEX"))
                     .add(EntityAttributes.GENERIC_MAX_HEALTH, nbt.getDouble("LAPISWORKS_JUICED_SKIN"))
                     .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, nbt.getDouble("LAPISWORKS_JUICED_FEET"))
                     .build()
                 ));
+                living.getAttributes().addTemporaryModifiers(
+                    nbt.getBoolean("LAPISWORKS_JUICED_REACH") ?
+                        ImmutableMultimap.of(
+                            REACH, MoarReachYouBitch.REACH_MODIFIER,
+                            ATTACK_RANGE, MoarReachYouBitch.ATTACK_REACH_MODIFIER
+                        ) : ImmutableMultimap.of()
+                );
             } catch (Exception e) {
                 LOGGER.warn("JUST FOUND AN ERROR, COULDN'T LOAD JUICED ATTRS!");
                 e.printStackTrace();
@@ -74,13 +87,16 @@ public class EntityMixin {
 
 	@Inject(at = @At("HEAD"), method = "writeNbt")
 	public void writeNbt(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
-        if ((Object)this instanceof LivingEntity) {
+        if ((Object)this instanceof LivingEntity living) {
             AttributeContainer attrs = ((LapisworksInterface)this).getLapisworksAttributes();
             nbt.putDouble("LAPISWORKS_JUICED_FISTS", attrs.getBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
-            nbt.putDouble("LAPISWORKS_JUICED_DEX", attrs.getBaseValue(EntityAttributes.GENERIC_ATTACK_SPEED));
             nbt.putDouble("LAPISWORKS_JUICED_SKIN", attrs.getBaseValue(EntityAttributes.GENERIC_MAX_HEALTH));
             nbt.putDouble("LAPISWORKS_JUICED_FEET", attrs.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
             nbt.putIntArray("LAPISWORKS_ENCHANTMENTS", ((LapisworksInterface)this).getEnchantments());
+            nbt.putBoolean(
+                "LAPISWORKS_JUICED_REACH",
+                living.getAttributes().hasModifierForAttribute(REACH, REACH_ENHANCEMENT_UUID)
+            );
             if ((Object)this instanceof VillagerEntity) {
                 nbt.putFloat("LAPISWORKS_MIND_USED", ((ArtMindInterface)this).getUsedMindPercentage());
                 nbt.putInt("LAPISWORKS_MIND_HEAL_COOLDOWN", ((ArtMindInterface)this).getMindBeingUsedTicks());

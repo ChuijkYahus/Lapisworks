@@ -1,4 +1,4 @@
-package com.luxof.lapisworks.actions;
+package com.luxof.lapisworks.actions.interact;
 
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.OperatorUtils;
@@ -39,14 +39,14 @@ import static com.luxof.lapisworks.LapisworksIDs.SCROLL;
 import java.util.List;
 import java.util.Optional;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.math.BlockPos;
+
+import org.jetbrains.annotations.Nullable;
 
 /** my excuses:
  *  - HexResearch is still stuck at 1.19.2
@@ -68,7 +68,7 @@ public class HexResearchYoink implements SpellAction {
                     ctx.getWorld().getSeed()
                 );
                 LOGGER.info("Scrungled name: " + key.getValue().toString());
-                if (scrungled.anglesSignature() == pattern.anglesSignature()) { return scrungled; }
+                if (scrungled.anglesSignature().equals(pattern.anglesSignature())) { return scrungled; }
                 else if (matchShape(scrungled, pattern)) { return scrungled; }
             }
         };

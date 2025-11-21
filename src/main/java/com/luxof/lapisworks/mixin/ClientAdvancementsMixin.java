@@ -3,6 +3,8 @@ package com.luxof.lapisworks.mixin;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 
+import static com.luxof.lapisworks.Lapisworks.LOGGER;
+
 import java.util.regex.Pattern;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,6 +20,7 @@ public class ClientAdvancementsMixin {
             return og.call(advancements);
 
         String[] advs = advancements.substring(1).split(Pattern.quote(","));
+        LOGGER.info("advs: " + advs.toString());
         boolean andOp = advancements.startsWith("&") ? true : false;
         boolean ret = andOp;
         for (String adv : advs) {

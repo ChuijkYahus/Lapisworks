@@ -10,9 +10,9 @@ import at.petrak.hexcasting.api.casting.iota.BooleanIota;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 
-import java.util.List;
-
 import com.luxof.lapisworks.MishapThrowerJava;
+
+import java.util.List;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;

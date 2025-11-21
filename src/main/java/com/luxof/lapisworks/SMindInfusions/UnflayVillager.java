@@ -14,6 +14,7 @@ public class UnflayVillager extends SMindInfusion {
             && IXplatAbstractions.INSTANCE.isBrainswept(villager);
     }
 
+    @SuppressWarnings("null")
     @Override
     public void accept() {
         VillagerEntity villager = (VillagerEntity)entity;

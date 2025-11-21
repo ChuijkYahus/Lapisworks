@@ -141,7 +141,7 @@ Super sorry, but this is the LAST!! time per-world shape patterns change!
 # 1.5.6.9
 - Fixed requiring Hexical or it'll break the book :sob:
 # 1.5.7
-I randomly did like 20% of this update in one day, in 5 hours.
+I randomly did like 15% of this update in one day, in 5 hours.
 Was I fucking LAZY before and after??? (Note from future me: yes.)
 ## Additions:
   - Empty Distillation
@@ -160,15 +160,19 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     - Deposit with Deposit Media (1/11 dust tax)
     - Withdraw into phial in other hand with Withdraw Media (1/11 dust tax)
     - stores an amount of media decided by the phial used in it's recipe
-    - Link Media Unit can be used to link them together
+    - Phiangle can be used to link them together
       - costs 3 charged, and 1 amel per 32 blocks of distance (media part not scalable)
-      - links cost 0 upkeep and have 0 tax on transfer of media between units
-      - links only transfer on overflow or underflow
+      - phianglements cost 0 upkeep and have 0 tax on transfer of media between units
+      - phiangled units only transfer on overflow or underflow
+    - Dephiangle when you have long ass links that you don't wanna break by breaking the block
+      - costs 3 charged
 ## Changes:
   - Amel Imbuement is datapack-friendlier now
   - Casting Rings can be worn in an extra slot on your off-hand as well now.
   - Decreased the base cost of Enchantments to 32 Amel.
+  - Enchant Arms now gives you reach instead.
   - Envelop Feet In Amel enchantment has three levels now.
+  - Envelop Feet In Amel enchantment no longer just nullifies but also cushions your fall.
   - Hastenature now has a +2.5 shard penalty if the target is Budding Amethyst.
   - Imbue Mind can now imbue into entities
     - This has potential ~~(to break my brain with overlapping recipes)~~
@@ -180,6 +184,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     Mission (sorta) success. Now it looks kinda menacing because it's held so low???
   - Amel Jar's sprite's repositioning haunts me no more!
   - Fixed Duplication bug in Hexical interop ([#14](https://github.com/Real-Luxof/Lapisworks/issues/14))
+  - Fixed Enchantments not taking Amel from your hotbar and trinkets n shit
   - FIXED ENHANCEMENTS AND ENCHANTMENTS NOT TRANSFERRING ACROSS DIMENSIONS!! ([#15](https://github.com/Real-Luxof/Lapisworks/issues/15))
   - Fixed Hastenature's book icon blending into the background.
   - Fixed Imbue Mind giving you the wrong mishap description
@@ -260,6 +265,8 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - VERY small ambit, at most 3 blocks and usually just 1 (by default too)
   - can have pre-set conditions to cast a hex, e.g. on hurt (so kind of like Hierophantics!)
     - not Sheppo: can only have one condition (in-lore: too much space occupied by condition and hex)
+- Added [a better Charon's Gambit]
+- Added an enchantment to be able to nullify **all** break block debuffs
 - Added the Enchanted Scroll
   - It's literally a Hex Casting IDE.
 `for i in range(n)` pattern  
@@ -323,3 +330,4 @@ KING CRIMSON (so what part, exactly, of this is Lapisworks-y?)
 
 port twokai's ideal condition  
 port hexxy dimensions  
+better Charon's Gambit (can break through more than one layer)  

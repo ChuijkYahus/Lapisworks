@@ -83,7 +83,11 @@ public abstract class AbstractBrewerEntity extends BlockEntity implements NamedS
     protected void craft(BrewingRec recipe, BrewerInv inv) {
         List<ItemStack> crafted = recipe.craft(inv);
         inv.brewingInto = new ArrayList<>(crafted.subList(0, 3));
-        inv.input = crafted.get(6);
+        try {
+            inv.input = crafted.get(6); // TODO: fix crash arising from consuming ingredients
+        } catch (Exception e) {
+            return;
+        }
 
         for (ItemStack stack : crafted.subList(3, 6)) {
             if (stack.isEmpty()) continue;

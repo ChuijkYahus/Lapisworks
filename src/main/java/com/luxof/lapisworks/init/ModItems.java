@@ -24,6 +24,7 @@ import java.util.List;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -80,6 +81,8 @@ public class ModItems {
     public static final FocusNecklace FOCUS_NECKLACE_WORN = new FocusNecklace(unstackable);
     public static final FocusNecklace FOCUS_NECKLACE2_WORN = new FocusNecklace(unstackable);
     public static final Item ENCH_BREWER = new BlockItem(ModBlocks.ENCH_BREWER, fullStack);
+    public static final BlockItem MEDIA_CONDENSER = new BlockItem(ModBlocks.MEDIA_CONDENSER, unstackable);
+    public static final BlockItem UNCRAFTED_CONDENSER = new BlockItem(ModBlocks.UNCRAFTED_CONDENSER, fullStack);
 
     private static List<String> itemNames = new ArrayList<>(List.of(
         "amel",
@@ -125,7 +128,9 @@ public class ModItems {
         "amel_constructs/focus_necklace/2",
         "amel_constructs/focus_necklace/1_worn",
         "amel_constructs/focus_necklace/2_worn",
-        "amel_constructs/enchbrewer"
+        "amel_constructs/enchbrewer",
+        "media_condenser_unit",
+        "uncrafted_condenser"
     ));
     private static List<Item> items = new ArrayList<>(List.of(
         AMEL_ITEM,
@@ -171,7 +176,9 @@ public class ModItems {
         FOCUS_NECKLACE2,
         FOCUS_NECKLACE_WORN,
         FOCUS_NECKLACE2_WORN,
-        ENCH_BREWER
+        ENCH_BREWER,
+        MEDIA_CONDENSER,
+        UNCRAFTED_CONDENSER
     ));
 
     public static ItemGroup LapisMagicShitGroup;

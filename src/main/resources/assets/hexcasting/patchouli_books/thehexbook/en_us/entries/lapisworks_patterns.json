@@ -63,11 +63,15 @@
         },
         {
             "type": "hexcasting:pattern",
-            "op_id": "lapisworks:gib_dexterity",
-            "anchor": "lapisworks:gib_dexterity",
-            "input": "entity, num",
+            "op_id": "lapisworks:gib_reach",
+            "anchor": "lapisworks:gib_reach",
+            "input": "entity",
             "output": "",
-            "text": "pages.lapisworks.lapisworks_patterns.gib_dexterity.summary"
+            "text": "pages.lapisworks.lapisworks_patterns.gib_reach.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.lapisworks_patterns.gib_reach.detailed"
         },
         {
             "type": "hexcasting:pattern",

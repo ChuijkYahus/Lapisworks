@@ -1,6 +1,7 @@
 package com.luxof.lapisworks.recipes;
 
 import com.google.gson.JsonObject;
+
 import com.luxof.lapisworks.inv.HandsInv;
 
 import java.util.List;

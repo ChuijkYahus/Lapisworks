@@ -1,0 +1,61 @@
+{
+    "name": "pages.lapisworks.imbuement.condenser.title",
+    "icon": "lapisworks:media_condenser_unit",
+    "advancement": "hexcasting:enlightenment",
+    "vazkii_why": "&lapisworks:got_lapis,hexcasting:enlightenment",
+    "category": "hexcasting:lapisworks/imbuement",
+    "sortnum": 9,
+    "pages": [
+        {
+            "type": "patchouli:spotlight",
+            "item": "lapisworks:media_condenser_unit",
+            "text": "pages.lapisworks.imbuement.condenser.text"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "lapisworks:base/uncrafted_condenser",
+            "text": "pages.lapisworks.imbuement.condenser.recipe.desc"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:deposit",
+            "anchor": "lapisworks:deposit",
+            "input": "vec, num",
+            "output": "",
+            "text": "pages.lapisworks.imbuement.condenser.deposit.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:withdraw",
+            "anchor": "lapisworks:withdraw",
+            "input": "vec, num",
+            "output": "",
+            "text": "pages.lapisworks.imbuement.condenser.withdraw.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "title": "pages.lapisworks.imbuement.condenser.phianglement.title",
+            "text": "pages.lapisworks.imbuement.condenser.phianglement.text"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:phiangle",
+            "anchor": "lapisworks:phiangle",
+            "input": "vec, vec",
+            "output": "",
+            "text": "pages.lapisworks.imbuement.condenser.phiangle.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:dephiangle",
+            "anchor": "lapisworks:dephiangle",
+            "input": "vec, vec",
+            "output": "",
+            "text": "pages.lapisworks.imbuement.condenser.dephiangle.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.condenser.btw"
+        }
+    ]
+}

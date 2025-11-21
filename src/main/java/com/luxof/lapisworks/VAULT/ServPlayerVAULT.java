@@ -93,6 +93,7 @@ public class ServPlayerVAULT extends VAULT {
     }
 
 
+    @SuppressWarnings("null")
     @Override
     public int drain(Predicate<Item> item, int amount, Flags flags) {
         Flags currFlags = null;
@@ -176,6 +177,7 @@ public class ServPlayerVAULT extends VAULT {
     }
 
 
+    @SuppressWarnings("null")
     @Override
     public int give(Predicate<Item> item, int amount, Flags flags) {
         Flags currFlags = null;

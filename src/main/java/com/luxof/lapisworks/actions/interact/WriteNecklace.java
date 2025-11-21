@@ -1,4 +1,4 @@
-package com.luxof.lapisworks.actions.misc;
+package com.luxof.lapisworks.actions.interact;
 
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.casting.RenderedSpell;

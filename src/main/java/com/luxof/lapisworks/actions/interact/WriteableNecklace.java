@@ -1,4 +1,4 @@
-package com.luxof.lapisworks.actions.misc;
+package com.luxof.lapisworks.actions.interact;
 
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction;
@@ -21,11 +21,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 
-public class ReadableNecklace implements ConstMediaAction {
+public class WriteableNecklace implements ConstMediaAction {
     @Override
     public List<Iota> execute(List<? extends Iota> args, CastingEnvironment ctx) {
         List<Iota> FALSE = List.of(new BooleanIota(false));
-        List<Iota> TRUE = List.of(new BooleanIota(true));
         LivingEntity ent = ctx.getCastingEntity();
         if (ent == null) return FALSE;
 
@@ -35,12 +34,11 @@ public class ReadableNecklace implements ConstMediaAction {
 
         ItemStack trinket = necklace.getRight();
         ADIotaHolder iotaHolder = IXplatAbstractions.INSTANCE.findDataHolder(trinket);
-        if (iotaHolder == null ||
-            (iotaHolder.readIota(ctx.getWorld()) == null &
-             iotaHolder.emptyIota() == null)) {
-            return FALSE;
-        }
-        return TRUE;
+        return List.of(new BooleanIota(
+            iotaHolder != null && (
+                iotaHolder.writeable()
+            )
+        ));
     }
 
     @Override

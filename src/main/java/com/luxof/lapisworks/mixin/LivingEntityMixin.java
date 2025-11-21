@@ -1,12 +1,19 @@
 package com.luxof.lapisworks.mixin;
 
+import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
+
+import static com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes.getAttackRange;
+import static com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes.getReachDistance;
+
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+ 
 import com.luxof.lapisworks.mixinsupport.DamageSupportInterface;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
@@ -18,21 +25,31 @@ import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin implements LapisworksInterface, DamageSupportInterface {
+public abstract class LivingEntityMixin extends Entity implements LapisworksInterface, DamageSupportInterface {
+	public LivingEntityMixin(EntityType<?> type, World world) { super(type, world); }
+
+	@Shadow @Final
+	private AttributeContainer attributes;
+
 	public AttributeContainer juicedUpVals = new AttributeContainer(
 		DefaultAttributeContainer.builder()
 			.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 0) // fists
-			.add(EntityAttributes.GENERIC_ATTACK_SPEED, 0) // dexterity
 			.add(EntityAttributes.GENERIC_MAX_HEALTH, 0) // skin
 			.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0) // feet
 			.build()
@@ -45,6 +62,11 @@ public abstract class LivingEntityMixin implements LapisworksInterface, DamageSu
 
 	@Override
 	public double getAmountOfAttrJuicedUpByAmel(EntityAttribute attribute) {
+		if (attribute == ReachEntityAttributes.REACH) {
+			return getReachDistance((LivingEntity)(Object)this, 0);
+		} else if (attribute == ReachEntityAttributes.ATTACK_RANGE) {
+			return getAttackRange((LivingEntity)(Object)this, 0);
+		}
 		return this.juicedUpVals.getCustomInstance(attribute).getBaseValue();
 	}
 
@@ -137,52 +159,69 @@ public abstract class LivingEntityMixin implements LapisworksInterface, DamageSu
 
 	@Inject(at = @At("HEAD"), method = "onAttacking")
 	public void onAttacking(Entity target, CallbackInfo ci) {
-		if (target instanceof LivingEntity && !target.getWorld().isClient) {
-			if (this.getEnchant(AllEnchantments.fireyFists) == 1) {
-				((LivingEntity)target).setOnFireFor(3);
-			}
-			int lightningbendingLevel = this.getEnchant(AllEnchantments.lightningBending);
-			World world = target.getWorld();
-			Vec3d targetPos = target.getPos();
+		if (!(target instanceof LivingEntity) || target.getWorld().isClient) return;
+		if (this.getEnchant(AllEnchantments.fireyFists) == 1) {
+			((LivingEntity)target).setOnFireFor(3);
+		}
+		int lightningbendingLevel = this.getEnchant(AllEnchantments.lightningBending);
+		ServerWorld world = (ServerWorld)target.getWorld();
+		Vec3d targetPos = target.getPos();
 
-			if ((lightningbendingLevel == 1 && world.isThundering()) ||
-				(lightningbendingLevel == 2 && (world.isRaining() || world.isRaining())) ||
-				lightningbendingLevel == 3) {
-				LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, world);
-				lightning.setPos(targetPos.x, targetPos.y, targetPos.z);
-				// why? vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-				world.getServer().getWorld(world.getRegistryKey()).tryLoadEntity(lightning);
-			}
+		if ((lightningbendingLevel == 1 && world.isThundering()) ||
+			(lightningbendingLevel == 2 && (world.isRaining() || world.isRaining())) ||
+			lightningbendingLevel == 3) {
+			LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, world);
+			lightning.setPos(targetPos.x, targetPos.y, targetPos.z);
+			world.tryLoadEntity(lightning);
 		}
 	}
 
-	@Inject(at = @At("HEAD"), method = "computeFallDamage", cancellable = true)
-	public void computeFallDamage(float fallDistance, float damageMultiplier, CallbackInfoReturnable<Integer> cir) {
-		if (fallDistance < 10 * this.getEnchant(AllEnchantments.fallDmgRes)) {
-			cir.setReturnValue(0);
-		}
-	}
-
-	@Inject(at = @At("HEAD"), method = "getNextAirUnderwater", cancellable = true)
-	public void getNextAirUnderwater(int air, CallbackInfoReturnable<Integer> cir) {
-		int i = EnchantmentHelper.getRespiration((LivingEntity)(Object)this); // this looks dangerous to me
-		cir.setReturnValue(
-			// can't shadow getRandom() for whatever reason
-			((LivingEntity)(Object)this).getRandom().nextInt(
-				i + (this.getEnchant(AllEnchantments.longBreath) * 2) + 1
-			) > 0 ? air : air - 1
+	@WrapMethod(method = {"computeFallDamage"})
+	public int computeFallDamage(float fallDistance, float damageMultiplier, Operation<Integer> og) {
+		return og.call(
+			Math.max(
+				fallDistance - 10 * this.getEnchant(AllEnchantments.fallDmgRes),
+				0
+			),
+			damageMultiplier
 		);
 	}
 
-	@Inject(at = @At("HEAD"), method = "getNextAirOnLand", cancellable = true)
-	public void getNextAirOnLand(int air, CallbackInfoReturnable<Integer> cir) {
-		cir.setReturnValue(
-			Math.min(
-				air + 4 + (2 * this.getEnchant(AllEnchantments.longBreath)),
-				// can't shadow getMaxAir either but it's because it's in Entity not LivingEntity
-				((LivingEntity)(Object)this).getMaxAir()
-			)
-		);
+	// no refMap loaded??
+	/*@Inject(
+		method = "getNextAirUnderwater",
+		at = @At(
+			value = "INVOKE_ASSIGN",
+			target = "net/minecraft/enchantment/EnchantmentHelper.getRespiration(Lnet/minecraft/entity/LivingEntity;)I",
+			shift = At.Shift.AFTER
+		)
+	)
+	public void getNextAirUnderwater(
+		int air,
+		CallbackInfoReturnable<Integer> cir,
+		@Local LocalRef<Integer> i
+	) {
+		LOGGER.info("i at first: " + i.get());
+		i.set(i.get() + this.getEnchant(AllEnchantments.longBreath) * 2);
+		LOGGER.info("i now: " + i.get());
+	}*/
+	@ModifyVariable(
+		method = "getNextAirUnderwater",
+		at = @At(
+			value = "INVOKE_ASSIGN",
+			target = "net/minecraft/enchantment/EnchantmentHelper.getRespiration(Lnet/minecraft/entity/LivingEntity;)I",
+			shift = At.Shift.AFTER
+		),
+		index = 2 // why is this supposed to be 2? there are only 2 variables in the entire method.
+	)
+	private int getLongBreathEffectUnderwater(int original) {
+		// TODO: according to logging, getEnchant sometimes returns 0 here. investigate, maybe?????
+		return original + this.getEnchant(AllEnchantments.longBreath) * 2;
+	}
+
+	@ModifyConstant(method = "getNextAirOnLand", constant = @Constant(intValue = 4))
+	private int getLongBreathEffectOnLand(int original) {
+		return original + this.getEnchant(AllEnchantments.longBreath) * 2;
 	}
 
 	@Inject(at = @At("HEAD"), method = "damage", cancellable = true)

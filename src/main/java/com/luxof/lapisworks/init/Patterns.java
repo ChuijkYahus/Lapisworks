@@ -10,42 +10,10 @@ import at.petrak.hexcasting.common.lib.hex.HexActions;
 
 import static at.petrak.hexcasting.api.misc.MediaConstants.CRYSTAL_UNIT;
 
-import com.luxof.lapisworks.actions.AskSImp;
-import com.luxof.lapisworks.actions.CheckAttr;
-import com.luxof.lapisworks.actions.ImbueLap;
-import com.luxof.lapisworks.actions.MindLiquefaction;
-import com.luxof.lapisworks.actions.SwapAmel;
-import com.luxof.lapisworks.actions.TeachSImp;
-import com.luxof.lapisworks.actions.TeachSong;
-import com.luxof.lapisworks.actions.MoarAttr;
-import com.luxof.lapisworks.actions.ReclaimAmeth;
-import com.luxof.lapisworks.actions.great.BanishMySent;
-import com.luxof.lapisworks.actions.great.BanishOtherSent;
-import com.luxof.lapisworks.actions.great.CreateEnchSent;
-import com.luxof.lapisworks.actions.great.GenericEnchant;
-import com.luxof.lapisworks.actions.great.Hastenature;
-import com.luxof.lapisworks.actions.misc.ConjureColor;
-import com.luxof.lapisworks.actions.misc.CubeExalt;
-import com.luxof.lapisworks.actions.misc.EmptyPrfn;
-import com.luxof.lapisworks.actions.misc.EqualBlock;
-import com.luxof.lapisworks.actions.misc.EquivBlock;
-import com.luxof.lapisworks.actions.misc.ReadFromHand;
-import com.luxof.lapisworks.actions.misc.ReadNecklace;
-import com.luxof.lapisworks.actions.misc.ReadableInHand;
-import com.luxof.lapisworks.actions.misc.ReadableNecklace;
-import com.luxof.lapisworks.actions.misc.SphereDst;
-import com.luxof.lapisworks.actions.misc.VisibleDstl;
-import com.luxof.lapisworks.actions.misc.EmptyDstl;
-import com.luxof.lapisworks.actions.misc.WritableInHand;
-import com.luxof.lapisworks.actions.misc.WriteNecklace;
-import com.luxof.lapisworks.actions.misc.WriteToHand;
-import com.luxof.lapisworks.actions.misc.WriteableNecklace;
-import com.luxof.lapisworks.actions.CheckEnchant;
-import com.luxof.lapisworks.actions.CognitionPrfn;
-import com.luxof.lapisworks.actions.DoNothing;
-import com.luxof.lapisworks.actions.FlayArtMind;
-import com.luxof.lapisworks.actions.HexResearchYoink;
-import com.luxof.lapisworks.actions.ImbueAmel;
+import com.luxof.lapisworks.actions.*;
+import com.luxof.lapisworks.actions.great.*;
+import com.luxof.lapisworks.actions.interact.*;
+import com.luxof.lapisworks.actions.misc.*;
 
 import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.init.ThemConfigFlags.registerPWShapePattern;
@@ -94,7 +62,7 @@ public class Patterns {
         // so what else is there to enchant to make yourself stronger?
         // man i wish i could, i had such a cool ass fucking pattern too
         // north east wwwaqeeeqawww
-        // yeah just gonna use CheckAttr instead
+        // yeah just gonna use CheckAttr for that instead
         MoarAttr MoarSpeedAction = new MoarAttr(
             EntityAttributes.GENERIC_MOVEMENT_SPEED,
             3.0,
@@ -103,14 +71,6 @@ public class Patterns {
             5,
             false
         );
-        MoarAttr GibDexterityAction = new MoarAttr(
-            EntityAttributes.GENERIC_ATTACK_SPEED,
-            1.0,
-            4.0,
-            1.0,
-            16,
-            true
-        );
         register("imbue_lap", "qadwawdaqqeae", HexDir.NORTH_EAST, new ImbueLap());
         register("reclaim_ameth", "awwqqqwwa", HexDir.SOUTH_EAST, new ReclaimAmeth());
         register("swap_amel", "wqwawwqwaqeq", HexDir.EAST, new SwapAmel());
@@ -118,7 +78,7 @@ public class Patterns {
         register("moar_health", "wqadaqwwawwwqwwawdwawwqwwwwa", HexDir.NORTH_EAST, MoarHealthAction);
         register("moar_attack", "qaqwweaeaqwww", HexDir.EAST, MoarAttackAction);
         register("moar_speed", "ddqwaqeqa", HexDir.WEST, MoarSpeedAction);
-        register("gib_dexterity", "aeaqqdeeeqewdwqwdwe", HexDir.WEST, GibDexterityAction);
+        register("gib_reach", "edewwqewdwwewdaw", HexDir.SOUTH_WEST, new MoarReachYouBitch());
         register("check_attr", "wwwaqeeqawww", HexDir.NORTH_EAST, new CheckAttr());
 
         GenericEnchant fireyFists       = new GenericEnchant(1, 48, CRYSTAL_UNIT * 10, "lapisenchantments.lapisworks.fireyfists");
@@ -158,6 +118,12 @@ public class Patterns {
         register("write_necklace", "wadeeeeeq", HexDir.NORTH_WEST, new WriteNecklace());
         register("readable_necklace", "wwaaqqqqqew", HexDir.NORTH_WEST, new ReadableNecklace());
         register("writeable_necklace", "wwadeeeeeqw", HexDir.NORTH_WEST, new WriteableNecklace());
+
+        register("deposit", "qaqqdwdwd", HexDir.NORTH_EAST, new Deposit());
+        register("withdraw", "qaqwwdwdw", HexDir.NORTH_EAST, new Withdraw());
+        // the term Phianglement comes from Miyu. it's like quantum entanglement but for phials
+        register("phiangle", "wadqaqdawewadqaqdaw", HexDir.NORTH_EAST, new LinkCondensers());
+        register("dephiangle", "wwqaqwwdwawwedeww", HexDir.SOUTH_WEST, new UnlinkCondensers());
 
         // hol up, let him cook
         // i said LET HIM COOK

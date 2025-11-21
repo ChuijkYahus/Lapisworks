@@ -15,7 +15,9 @@ public interface LapisworksInterface {
         public static final int fireResist = 4;
     }
 
+    /** has support for player reach and attack range for convenience. */
     double getAmountOfAttrJuicedUpByAmel(EntityAttribute attribute);
+    /** does not have support for player reach and attack range because wtf entity attrs. */
     void setAmountOfAttrJuicedUpByAmel(EntityAttribute attribute, double value);
     void setAllJuicedUpAttrsToZero();
     

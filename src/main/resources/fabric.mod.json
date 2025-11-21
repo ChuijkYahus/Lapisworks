@@ -39,6 +39,8 @@
 		"fabric-language-kotlin": ">=1.13.4+kotlin.2.2.0"
 	},
 	"suggests": {
-		"hextended": ">=2.0.1"
+		"hextended": ">=2.0.1",
+		"hexical": ">=1.5.0",
+		"hexal": ">=0.3.0"
 	}
 }

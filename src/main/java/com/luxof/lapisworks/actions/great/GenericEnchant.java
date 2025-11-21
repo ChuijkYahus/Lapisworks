@@ -6,27 +6,28 @@ import at.petrak.hexcasting.api.casting.RenderedSpell;
 import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.OperationResult;
-import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
 import at.petrak.hexcasting.api.casting.mishaps.MishapUnenlightened;
 
 import com.luxof.lapisworks.MishapThrowerJava;
+import com.luxof.lapisworks.VAULT.Flags;
+import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.init.EnchantCountKeeper;
 import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.mishaps.MishapAlreadyHasEnchantment;
 import com.luxof.lapisworks.mishaps.MishapNotEnoughItems;
+import com.luxof.lapisworks.mixinsupport.GetVAULT;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
+
+import static com.luxof.lapisworks.LapisworksIDs.AMEL;
 
 import java.util.List;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
-import net.minecraft.util.Hand;
 
 /** responsibility of mixin to make enchantment do something falls on the user of this.
  * Also take this' enchantmentIdx if you want the index you need to give to LapisworksInterface's stuff. */
@@ -84,16 +85,18 @@ public class GenericEnchant implements SpellAction {
             );
         }
 
-        HeldItemInfo amelInfo = ctx.getHeldItemToOperateOn(Mutables::isAmel);
-        if (amelInfo == null) {
-            MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "amel"));
-            return null; // VSCode likes complaining about null
-        } else if (amelInfo.stack().getCount() < this.requiredAmel) {
-            MishapThrowerJava.throwMishap(new MishapNotEnoughItems(amelInfo.stack(), this.requiredAmel));
+        VAULT vault = ((GetVAULT)ctx).grabVAULT();
+        int availableAmel = vault.fetch(Mutables::isAmel, Flags.PRESET_Stacks_InvItem_UpToHotbar);
+        if (availableAmel < this.requiredAmel) {
+            MishapThrowerJava.throwMishap(new MishapNotEnoughItems(
+                AMEL,
+                availableAmel,
+                this.requiredAmel
+            ));
         }
 
         return new SpellAction.Result(
-            new Spell(entity, amelInfo.stack(), amelInfo.hand()),
+            new Spell(entity, vault),
             this.requiredMedia,
             List.of(ParticleSpray.burst(entity.getPos(), 3, 25)),
             1
@@ -102,25 +105,15 @@ public class GenericEnchant implements SpellAction {
 
     public class Spell implements RenderedSpell {
         public final LivingEntity entity;
-        public final ItemStack stack;
-        public final Hand hand;
+        public final VAULT vault;
 
-        public Spell(LivingEntity entity, ItemStack stack, Hand hand) {
-            this.entity = entity; this.stack = stack; this.hand = hand;
+        public Spell(LivingEntity entity, VAULT vault) {
+            this.entity = entity; this.vault = vault;
         }
 
 		@Override
 		public void cast(CastingEnvironment ctx) {
-            ctx.replaceItem(
-                Mutables::isAmel,
-                this.stack.getCount() == requiredAmel ?
-                    ItemStack.EMPTY :
-                    new ItemStack(
-                        this.stack.getItem(),
-                        this.stack.getCount() - requiredAmel
-                    ),
-                 this.hand
-            );
+            vault.drain(Mutables::isAmel, requiredAmel, Flags.PRESET_Stacks_InvItem_UpToHotbar);
             ((LapisworksInterface)this.entity).incrementEnchant(enchantmentIdx);
 		}
 
