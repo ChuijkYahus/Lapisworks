@@ -154,12 +154,10 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     - Infuse a Simple Mind into an empty Impetus
     - By default executes when ANY pattern is executed nearby
     - Can be taught to only execute on specific patterns
-  - Teach Simple Impetus
-    - Teaches the Simple Impetus at the target location the pattern it should focus on
-  - Added the Media Condensing Unit
-    - Deposit with Deposit Media (1/11 dust tax)
-    - Withdraw into phial in other hand with Withdraw Media (1/11 dust tax)
-    - stores an amount of media decided by the phial used in it's recipe
+  - Media Condensing Unit
+    - Deposit with Deposit Media (10% dust tax)
+    - Withdraw into phial in other hand with Withdraw Media (10% dust tax)
+    - stores media in a block
     - Phiangle can be used to link them together
       - costs 3 charged, and 1 amel per 32 blocks of distance (media part not scalable)
       - phianglements cost 0 upkeep and have 0 tax on transfer of media between units
@@ -204,6 +202,39 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
       They produce twice as many wandering wisps per second but they can't be turned into portals with Oneironaut
     - Simple Minds, when infused into the air, produce a wandering wisp
 # 1.5.8
+## Additions:
+- [a better Charon's Gambit]
+- `for i in range(n)` pattern
+- Chalk Rituals
+- Enchanted Brewery
+  - Imbue 10 Amel into a Brewing Stand
+  - 2x blaze usage for 2x speed
+  - Takes 1 amethyst dust per brew
+- Enchanted Scroll
+  - It's literally a Hex Casting IDE.
+- More scrying patterns (notably for Media Condensing Units and Simple Impeti)
+- Mind Control of entities into the game  
+  (reality check: gang, how lost are we in the sauce?)
+  - you have to un-flay with a Simple Mind first
+  - controllable movement
+  - new pattern, Recharge Entity. Recharges any entity that stores media within itself.
+  - media limit of 64 dust
+  - cannot overcast
+  - credits to Sheppo from the Hex Casting discord server for the next ideas!
+  - they can be pets
+  - VERY small ambit, at most 3 blocks and usually just 1 (by default too)
+  - can have pre-set conditions to cast a hex, e.g. on hurt (so kind of like Hierophantics!)
+    - not Sheppo: can only have one condition (in-lore: too much space occupied by condition and hex)
+- Rote Brewery
+  - Infuse a Simple Mind into a Brewing Stand
+  - Can remember up to 5 potion recipes
+  - Each write is permanent, stops brewing anything but remembered potions when at the limit
+  - When a potion from memory is selected, takes items automatically.
+  - ALWAYS takes 2 steps worth of time.
+    Manual brewing (or teaching it) is a pain as each step takes twice as long.
+    Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.
+## Changes:
+## Interop:
 - Hierophantics interop
   - Max experience fishermen villagers can be flayed into you  
     costs 32 amel and 10 charged amethyst  
@@ -238,38 +269,8 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - You can now see Imbue Amel, Mold Amel and Simple Mind Infusion recipes in EMI
   - You can also see BeegInfusion recipes in EMI
   - On that note, the same recipes also show up in Patchouli
-- Added Chalk Rituals
-- Added the Enchanted Brewing Stand
-  - Imbue 10 Amel into a Brewing Stand
-  - 2x blaze usage for 2x speed
-  - Takes 1 amethyst dust per brew
-- Added the Rote Brewer Stand
-  - Infuse a Simple Mind into a Brewing Stand
-  - Can remember up to 5 potion recipes
-  - Each write is permanent, stops brewing anything but remembered potions when at the limit
-  - When a potion from memory is selected, takes items automatically.
-  - ALWAYS takes 2 steps worth of time.
-    Manual brewing (or teaching it) is a pain as each step takes twice as long.
-    Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.
 - Hexical interop (of course)
-  - the Media Jar is targetable by Deposit Media (not Withdraw Media tho)
-- Added Mind Control of entities into the game  
-  (reality check: gang, how lost are we in the sauce?)
-  - you have to un-flay with a Simple Mind first
-  - controllable movement
-  - new pattern, Recharge Entity. Recharges any entity that stores media within itself.
-  - media limit of 64 dust
-  - cannot overcast
-  - credits to Sheppo from the Hex Casting discord server for the next ideas!
-  - they can be pets
-  - VERY small ambit, at most 3 blocks and usually just 1 (by default too)
-  - can have pre-set conditions to cast a hex, e.g. on hurt (so kind of like Hierophantics!)
-    - not Sheppo: can only have one condition (in-lore: too much space occupied by condition and hex)
-- Added [a better Charon's Gambit]
-- Added an enchantment to be able to nullify **all** break block debuffs
-- Added the Enchanted Scroll
-  - It's literally a Hex Casting IDE.
-`for i in range(n)` pattern  
+  - the Media Jar is targetable by Deposit Media only
 # 1.5.9
 - Heal your mind after breaking it.
 - Alchemy/potion-brewing overhaul (I'm deadass)
