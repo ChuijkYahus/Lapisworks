@@ -35,8 +35,8 @@ show_landing_text = false
 "lapisworks:amel_constructs/iron_sword" = { texture = "lapisworks:textures/item/amel_isword_noanim.png" }
 "lapisworks:amel_constructs/gold_sword" = { texture = "lapisworks:textures/item/amel_gsword_noanim.png" }
 "lapisworks:energy_container" = { texture = "lapisworks:textures/item/energy_container.png" }
-"lapisworks:amel_constructs/1_worn" = { texture = "lapisworks:textures/item/focus_necklace_worn" }
-"lapisworks:amel_constructs/2_worn" = { texture = "lapisworks:textures/item/focus_necklace2_worn" }
+"lapisworks:amel_constructs/1_worn" = { texture = "lapisworks:textures/item/focus_necklace_worn.png" }
+"lapisworks:amel_constructs/2_worn" = { texture = "lapisworks:textures/item/focus_necklace2_worn.png" }
 
 [flags]
 "lapisworks:no_fulllapixical" = false
