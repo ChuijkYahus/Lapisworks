@@ -1,6 +1,5 @@
 {
     "type": "minecraft:crafting_shaped",
-    "minimum_dust": 64,
     "pattern": [
         "DAD",
         "S S",
