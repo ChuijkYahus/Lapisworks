@@ -29,8 +29,8 @@
         },
         {
             "type": "patchouli:text",
-            "flag": "mod:hexal",
-            "advancement": "&hexcasting:enlightenment,lapisworks:rediscover_flay_artmind",
+            "flag": "&mod:hexal,hexcasting:enlightenment",
+            "advancement": "lapisworks:rediscover_flay_artmind",
             "text": "pages.lapisworks.interop.lapisal.openslipway.clueless_still"
         },
         {
