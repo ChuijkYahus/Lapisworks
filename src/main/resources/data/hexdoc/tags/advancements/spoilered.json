@@ -1,6 +1,7 @@
 {
     "replace": false,
     "values": [
-        "lapisworks:rediscover_*"
+        "lapisworks:rediscover_*",
+        "lapisworks:enlightened"
     ]
 }
