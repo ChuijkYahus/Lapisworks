@@ -1,8 +1,7 @@
 {
     "name": "pages.lapisworks.imbuement.condenser.title",
     "icon": "lapisworks:media_condenser_unit",
-    "advancement": "hexcasting:enlightenment",
-    "vazkii_why": "&lapisworks:got_lapis,hexcasting:enlightenment",
+    "advancement": "lapisworks:enlightened",
     "category": "hexcasting:lapisworks/imbuement",
     "sortnum": 9,
     "pages": [
