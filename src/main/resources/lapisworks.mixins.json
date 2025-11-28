@@ -18,7 +18,6 @@
 		"ClientAdvancementsMixin",
 		"CircleExecutionStateMixin2",
 		"PatternIotaMixin",
-		"BookEntryMixin",
 		"OpMakeBattery$SpellMixin",
 		"BlockEntityAbstractImpetusMixin"
 	],
