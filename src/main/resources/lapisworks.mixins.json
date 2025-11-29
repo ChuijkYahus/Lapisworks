@@ -15,7 +15,6 @@
 		"CircleExecutionStateMixin",
 		"ItemRendererMixin",
 		"ClientPlayerEntityMixin",
-		"ClientAdvancementsMixin",
 		"CircleExecutionStateMixin2",
 		"PatternIotaMixin",
 		"OpMakeBattery$SpellMixin",
