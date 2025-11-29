@@ -15,14 +15,18 @@ import at.petrak.hexcasting.common.lib.HexItems;
 
 import com.google.common.collect.ImmutableSet;
 
+import static com.luxof.lapisworks.Lapisworks.fullLinkableMediaBlocksInteraction;
 import static com.luxof.lapisworks.Lapisworks.interactWithLinkableMediaBlocks;
 import static com.luxof.lapisworks.MishapThrowerJava.assertInRange;
 import static com.luxof.lapisworks.MishapThrowerJava.assertLinkableThere;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 
 public class Withdraw implements SpellAction {
@@ -42,13 +46,29 @@ public class Withdraw implements SpellAction {
             return stack.isOf(HexItems.BATTERY);
         }).stack();
 
+        Pair<Long, Set<BlockPos>> interactSimResult = fullLinkableMediaBlocksInteraction(
+            ctx.getWorld(),
+            Set.of(pos),
+            amount,
+            true,
+            true
+        );
+        long realAmount = Math.min(
+            interactSimResult.getLeft(),
+            ((ItemMediaBattery)phialStack.getItem()).getMaxMedia(phialStack)
+        );
+
+        List<ParticleSpray> particles = new ArrayList<>(List.of(
+            ParticleSpray.cloud(ctx.mishapSprayPos(), 3, 20)
+        ));
+        particles.addAll(interactSimResult.getRight().stream().map(
+            position -> ParticleSpray.cloud(position.toCenterPos(), 3, 10)
+        ).toList());
+
         return new SpellAction.Result(
-            new Spell(pos, phialStack, amount),
-            (long)(amount * 0.1),
-            List.of(
-                ParticleSpray.cloud(ctx.mishapSprayPos(), 3, 20),
-                ParticleSpray.cloud(pos.toCenterPos(), 3, 20)
-            ),
+            new Spell(pos, phialStack, realAmount),
+            (long)(realAmount * 0.1),
+            particles,
             1
         );
     }

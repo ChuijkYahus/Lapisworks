@@ -13,13 +13,17 @@ import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.google.common.collect.ImmutableSet;
 
+import static com.luxof.lapisworks.Lapisworks.fullLinkableMediaBlocksInteraction;
 import static com.luxof.lapisworks.Lapisworks.interactWithLinkableMediaBlocks;
 import static com.luxof.lapisworks.MishapThrowerJava.assertInRange;
 import static com.luxof.lapisworks.MishapThrowerJava.assertLinkableThere;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 
 public class Deposit implements SpellAction {
@@ -35,13 +39,26 @@ public class Deposit implements SpellAction {
         assertInRange(ctx, pos);
         assertLinkableThere(pos, ctx);
 
+        Pair<Long, Set<BlockPos>> interactSimResult = fullLinkableMediaBlocksInteraction(
+            ctx.getWorld(),
+            Set.of(pos),
+            amount,
+            true,
+            true
+        );
+        long realAmount = interactSimResult.getLeft();
+
+        List<ParticleSpray> particles = new ArrayList<>(List.of(
+            ParticleSpray.cloud(ctx.mishapSprayPos(), 3, 20)
+        ));
+        particles.addAll(interactSimResult.getRight().stream().map(
+            position -> ParticleSpray.cloud(position.toCenterPos(), 3, 10)
+        ).toList());
+
         return new SpellAction.Result(
-            new Spell(pos, amount),
-            amount + (long)(amount * 0.1),
-            List.of(
-                ParticleSpray.cloud(ctx.mishapSprayPos(), 3, 20),
-                ParticleSpray.cloud(pos.toCenterPos(), 3, 20)
-            ),
+            new Spell(pos, realAmount),
+            realAmount + (long)(realAmount * 0.1),
+            particles,
             1
         );
     }

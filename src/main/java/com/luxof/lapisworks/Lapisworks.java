@@ -464,17 +464,9 @@ public class Lapisworks implements ModInitializer {
 		return potionEquals(stack, potId);
 	}
 
-	/** does not simulate. */
-	public static long interactWithLinkableMediaBlocks(
-		ServerWorld world,
-		Set<BlockPos> first,
-		long amountToInteract,
-		boolean deposit
-	) {
-		return interactWithLinkableMediaBlocks(world, first, amountToInteract, deposit, false);
-	}
-	/** takes into account links. returns what was deposited/withdrawn. */
-	public static long interactWithLinkableMediaBlocks(
+	/** takes links into account.
+	 * <br>returns what was deposited/withdrawn first, and a set of all involved linkables second. */
+	public static Pair<Long, Set<BlockPos>> fullLinkableMediaBlocksInteraction(
 		ServerWorld world,
 		Set<BlockPos> first,
 		long amountToInteract,
@@ -495,13 +487,34 @@ public class Lapisworks implements ModInitializer {
 
 			if (deposit) interactionLeft -= curr.depositMedia(interactionLeft, simulate);
 			else interactionLeft -= curr.withdrawMedia(interactionLeft, simulate);
-			if (interactionLeft == 0) return amountToInteract;
+			if (interactionLeft == 0) return new Pair<>(amountToInteract, seen);
 
 			LOGGER.info("links: " + curr.getLinks());
 			for (BlockPos linked : curr.getLinks()) { if (seen.add(linked)) todo.add(linked); }
 		}
 
-		return amountToInteract - interactionLeft;
+		return new Pair<>(amountToInteract - interactionLeft, seen);
+	}
+
+	/** does not simulate. */
+	public static long interactWithLinkableMediaBlocks(
+		ServerWorld world,
+		Set<BlockPos> first,
+		long amountToInteract,
+		boolean deposit
+	) {
+		return interactWithLinkableMediaBlocks(world, first, amountToInteract, deposit, false);
+	}
+	/** takes into account links. returns what was deposited/withdrawn. */
+	public static long interactWithLinkableMediaBlocks(
+		ServerWorld world,
+		Set<BlockPos> first,
+		long amountToInteract,
+		boolean deposit,
+		boolean simulate
+	) {
+		return fullLinkableMediaBlocksInteraction(world, first, amountToInteract, deposit, simulate)
+			.getLeft();
 	}
 
 	public static double getDistance(BlockPos pos1, BlockPos pos2) {
