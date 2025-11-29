@@ -212,7 +212,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - Takes 1 amethyst dust per brew
 - Enchanted Scroll
   - It's literally a Hex Casting IDE.
-- More scrying patterns (notably for Media Condensing Units and Simple Impeti)
+- Scrying patterns for blocks added by the mod.
 - Mind Control of entities into the game  
   (reality check: gang, how lost are we in the sauce?)
   - you have to un-flay with a Simple Mind first
@@ -234,8 +234,11 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     Manual brewing (or teaching it) is a pain as each step takes twice as long.
     Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.
 ## Changes:
+- Book reformatting and shit
+- Deposit Media and Withdraw Media work conveniently now
+- You can't read an Ancient Tome before you have gotten Lapis now
 ## Interop:
-- Hierophantics interop
+- Hierophantics
   - Max experience fishermen villagers can be flayed into you  
     costs 32 amel and 10 charged amethyst  
     they only have the on_my_reference_found trigger, triggers when your reference is found in a stack of an offender within "range"  
@@ -264,12 +267,20 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     "Jacks" are jacks of all trades, and start with 2-3 levels of exp on every possible profession  
     (but no trades until they pick one of those professions)
   - FUCKING UNICORNS  
-	  IMBUE A SIMPLE MIND INTO A HORSE AND USE 16 AMEL
-- EMI interop
+	  - IMBUE A SIMPLE MIND INTO A HORSE AND USE 128 AMEL
+    - After being made, a Unicorn develops an affinity for you (and so is bound to you).
+    - You can only have one Unicorn bound to you (any attempts to make more fail).
+    - Unicorns are uncommonly seen, however they do appear around the player from time to time.  
+      They VERY rarely spawn during the night.
+    - Unicorns have a zone of influence around themselves with a radius of 32 blocks.
+    - No hostile mobs can spawn in the presence of a unicorn, and any that spawn outside it's zone  
+      of influence refuse to enter said zone of influence.
+    - No hexes execute within the zone of influence of a Unicorn, mishapping instead.
+- EMI
   - You can now see Imbue Amel, Mold Amel and Simple Mind Infusion recipes in EMI
   - You can also see BeegInfusion recipes in EMI
   - On that note, the same recipes also show up in Patchouli
-- Hexical interop (of course)
+- Hexical interop
   - the Media Jar is targetable by Deposit Media only
 # 1.5.9
 - Heal your mind after breaking it.
@@ -277,6 +288,11 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   made some stuff obsolete but fuck vanilla, potion-brewing is basically non-existent anyway.
 - Hexic interop
   WILL HAPPEN. I **WILL** RUN THROUGH HEXIC CODE AND THINK "nathan you genius"
+- Oneironaut interop (you will shit your pants playing Lapisworks and you will like it)  
+  so you like Subnautica?  
+  added the Congested Deep Noosphere  
+  note to self: might have to fuck with world build height limit for this, as some creatures are  
+  simply gargantuan!
 # 1.6.0
 - You can have four arms now (procrastination slain)
   - Your third and fourth arms can auto-cast 20x a second  
