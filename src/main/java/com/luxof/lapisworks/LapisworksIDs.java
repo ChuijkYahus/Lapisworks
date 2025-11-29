@@ -91,6 +91,7 @@ public class LapisworksIDs {
     public static final Text SCRYING_MIND_END = t("render.lapisworks.scryinglens.mind.end");
     public static final Text LAPISMAGICSHITGROUPTEXT = t("itemgroup.lapisworks.lapismagicshitgroup");
     public static final Text GOT_ALL_DIARIES = t("notif.lapisworks.wizard_diaries.all_gotten");
+    public static final Text DIARY_UNREADABLE = t("notif.lapisworks.wizard_diaries.unreadable_diary");
     public static final Text ENCHBOOK_WITH_ONE_ENCH = t("mishaps.lapisworks.descs.oneench_enchbook");
     public static final Text ENCHBOOK_WITH_NOTONE_ENCH = t("mishaps.lapisworks.descs.moreench_enchbook");
     public static final Text DOWSER_COULDNT_FIND = t("notif.lapisworks.dowser.couldnt_find");

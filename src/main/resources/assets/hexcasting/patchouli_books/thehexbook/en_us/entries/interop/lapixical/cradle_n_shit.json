@@ -1,0 +1,23 @@
+{
+    "name": "pages.lapisworks.interop.lapixical.cradle_n_shit.title",
+    "icon": "lapisworks:cradle",
+    "advancement": "lapisworks:got_lapis",
+    "flag": "mod:hexical",
+    "category": "hexcasting:lapisworks/interop/lapixical",
+    "sortnum": 1,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "flag": "mod:hexical",
+            "text": "pages.lapisworks.interop.lapixical.cradle_n_shit.text"
+        },
+        {
+            "type": "patchouli:crafting",
+            "flag": "mod:hexical",
+            "title": "pages.lapisworks.interop.lapixical.cradle_n_shit.recipes.title",
+            "recipe": "lapisworks:lapixical/rod",
+            "recipe2": "lapisworks:lapixical/cradle",
+            "text": "pages.lapisworks.interop.lapixical.cradle_n_shit.recipes.text"
+        }
+    ]
+}

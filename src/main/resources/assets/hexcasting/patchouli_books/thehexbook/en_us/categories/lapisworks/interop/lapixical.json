@@ -1,0 +1,7 @@
+{
+  "name": "categories.lapisworks.lapisworks.interop.lapixical.title",
+  "icon": "lapisworks:textures/entries/lapixical.png",
+  "description": "categories.lapisworks.lapisworks.interop.lapixical.desc",
+  "parent": "hexcasting:lapisworks/interop",
+  "sortnum": 2
+}

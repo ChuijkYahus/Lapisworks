@@ -1,0 +1,14 @@
+{
+    "name": "pages.lapisworks.interop.lapisal.makewisp.title",
+    "icon": "lapisworks:amel_constructs/mind",
+    "advancement": "lapisworks:rediscover_flay_artmind",
+    "flag": "mod:hexal",
+    "category": "hexcasting:lapisworks/interop/lapisal",
+    "sortnum": 1,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.interop.lapisal.makewisp.text"
+        }
+    ]
+}
