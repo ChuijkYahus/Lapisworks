@@ -1,6 +1,7 @@
 {
     "name": "pages.lapisworks.lapisworks_placeholder.title",
     "icon": "minecraft:target",
+    "advancement": "hexcasting:root",
     "category": "hexcasting:lapisworks",
     "sortnum": 1,
     "pages": [
