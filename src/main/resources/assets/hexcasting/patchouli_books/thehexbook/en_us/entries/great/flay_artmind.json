@@ -44,10 +44,23 @@
             "text": "pages.lapisworks.great.flay_artmind.teach_song.summary"
         },
         {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:song_purification",
+            "anchor": "lapisworks:song_purification",
+            "input": "vec",
+            "output": "([0-24], 0-20)",
+            "text": "pages.lapisworks.great.flay_artmind.song_purification.summary"
+        },
+        {
             "type": "patchouli:spotlight",
             "advancement": "hexcasting:enlightenment",
             "item": "lapisworks:amel_constructs/simple_impetus",
-            "text": "pages.lapisworks.great.flay_artmind.simple_impetus"
+            "text": "pages.lapisworks.great.flay_artmind.simple_impetus1"
+        },
+        {
+            "type": "patchouli:text",
+            "advancement": "hexcasting:enlightenment",
+            "text": "pages.lapisworks.great.flay_artmind.simple_impetus2"
         },
         {
             "type": "hexcasting:pattern",

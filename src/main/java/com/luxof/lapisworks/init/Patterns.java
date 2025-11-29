@@ -111,6 +111,7 @@ public class Patterns {
         register("absorb_mind", "aawqqwqqqaede", HexDir.WEST, new MindLiquefaction());
         register("check_mind", "aawqqwqqq", HexDir.WEST, new CognitionPrfn());
         register("teach_song", "aawwawqwwdd", HexDir.WEST, new TeachSong());
+        register("song_purification", "aqawwd", HexDir.WEST, new SongPrfn());
         register("teach_simp", "deaqqeawqqwwqqq", HexDir.SOUTH_EAST, new TeachSImp());
         register("ask_simp", "eeeqwdeaqqeawqqwwqqq", HexDir.NORTH_EAST, new AskSImp());
 
