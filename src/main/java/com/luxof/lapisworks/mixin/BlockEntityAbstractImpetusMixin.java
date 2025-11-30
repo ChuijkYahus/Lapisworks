@@ -5,8 +5,6 @@ import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 
 import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -71,6 +69,7 @@ public abstract class BlockEntityAbstractImpetusMixin extends HexBlockEntity imp
         return getPos();
     }
 
+    // I do this to make sure the impetus is un-interactable with by the network
     @Override
     public long depositMedia(long amount, boolean simulate) {
         return 0;
@@ -78,8 +77,11 @@ public abstract class BlockEntityAbstractImpetusMixin extends HexBlockEntity imp
 
     @Override
     public long withdrawMedia(long amount, boolean simulate) {
-        LOGGER.info("impetus got a withdrawal: " + amount + ", sim " + String.valueOf(simulate));
         return 0;
+    }
+    
+    @Override public long getMediaHere() {
+        return media;
     }
 
 

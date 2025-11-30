@@ -55,6 +55,22 @@
         {
             "type": "patchouli:text",
             "text": "pages.lapisworks.imbuement.condenser.btw"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:get_condenser_media",
+            "anchor": "lapisworks:get_condenser_media",
+            "input": "vec",
+            "output": "num",
+            "text": "pages.lapisworks.imbuement.condenser.get_condenser_media.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:get_linkable_links",
+            "anchor": "lapisworks:get_linkable_links",
+            "input": "vec",
+            "output": "[vec]",
+            "text": "pages.lapisworks.imbuement.condenser.get_linkable_links.summary"
         }
     ]
 }

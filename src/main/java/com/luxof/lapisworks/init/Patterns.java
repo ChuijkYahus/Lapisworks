@@ -125,6 +125,8 @@ public class Patterns {
         // the term Phianglement comes from Miyu. it's like quantum entanglement but for phials
         register("phiangle", "wadqaqdawewadqaqdaw", HexDir.NORTH_EAST, new LinkCondensers());
         register("dephiangle", "wwqaqwwdwawwedeww", HexDir.SOUTH_WEST, new UnlinkCondensers());
+        register("get_condenser_media", "wddwqwddweqeee", HexDir.NORTH_WEST, new GetCondenserMedia());
+        register("get_linkable_links", "qaqdaweqaqewaqwawaw", HexDir.NORTH_EAST, new GetLinkableLinks());
 
         // hol up, let him cook
         // i said LET HIM COOK

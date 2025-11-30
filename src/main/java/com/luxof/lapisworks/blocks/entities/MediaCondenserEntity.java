@@ -110,6 +110,7 @@ public class MediaCondenserEntity extends BlockEntity implements LinkableMediaBl
     @Override public Set<BlockPos> getLinks() { return linkedCondensers; }
     @Override public int getNumberOfLinks() { return linkedCondensers.size(); }
     @Override public BlockPos getThisPos() { return this.getPos(); }
+    @Override public long getMediaHere() { return media; }
     @Override
     public long depositMedia(long amount, boolean simulate) {
         long prevMedia = media;

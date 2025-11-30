@@ -153,4 +153,18 @@ public class MishapThrowerJava {
             return null;
         }
     }
+    public static <T extends Object> T assertIsThisBlock(
+        CastingEnvironment ctx,
+        BlockPos pos,
+        Class<T> thisBlock,
+        Text blockName
+    ) {
+        BlockEntity bE = ctx.getWorld().getBlockEntity(pos);
+        if (bE != null && thisBlock.isInstance(bE)) return thisBlock.cast(bE);
+        throwMishap(
+            new MishapBadBlock(pos, blockName)
+        );
+        // shut up
+        return null;
+    }
 }

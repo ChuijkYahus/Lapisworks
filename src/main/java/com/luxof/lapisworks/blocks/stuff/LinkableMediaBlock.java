@@ -16,6 +16,7 @@ public interface LinkableMediaBlock {
     public long depositMedia(long amount, boolean simulate);
     /** returns the amount that was withdrawn. */
     public long withdrawMedia(long amount, boolean simulate);
+    public long getMediaHere();
 
     // don't override these :pray:
     /** does not simulate. */

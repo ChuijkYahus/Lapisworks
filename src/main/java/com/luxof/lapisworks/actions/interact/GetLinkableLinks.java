@@ -6,40 +6,38 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.OperationResult;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
-import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.mishaps.Mishap;
-import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
+import at.petrak.hexcasting.api.casting.iota.ListIota;
+import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
 
-import com.luxof.lapisworks.MishapThrowerJava;
-import com.luxof.lapisworks.blocks.Mind;
-import com.luxof.lapisworks.blocks.entities.MindEntity;
-import com.luxof.lapisworks.init.ModBlocks;
+import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
 
-import static com.luxof.lapisworks.Lapisworks.prettifyDouble;
-import static com.luxof.lapisworks.LapisworksIDs.MIND_BLOCK;
+import static com.luxof.lapisworks.LapisworksIDs.LINKABLE_MEDIA_BLOCK;
+import static com.luxof.lapisworks.MishapThrowerJava.assertInRange;
+import static com.luxof.lapisworks.MishapThrowerJava.assertIsThisBlock;
 
 import java.util.List;
 
 import net.minecraft.util.math.BlockPos;
 
-public class CognitionPrfn implements ConstMediaAction {
+public class GetLinkableLinks implements ConstMediaAction {
     @Override
     public List<Iota> execute(List<? extends Iota> args, CastingEnvironment ctx) {
         BlockPos mindPos = OperatorUtils.getBlockPos(args, 0, getArgc());
-        try { ctx.assertPosInRange(mindPos); }
-        catch (Mishap mishap) { MishapThrowerJava.throwMishap(mishap); }
-        MishapBadBlock needMind = new MishapBadBlock(mindPos, MIND_BLOCK);
-        if (!(ctx.getWorld().getBlockState(mindPos).getBlock() instanceof Mind)) {
-            MishapThrowerJava.throwMishap(needMind);
-        }
+        assertInRange(ctx, mindPos);
 
-        MindEntity blockEntity = MishapThrowerJava.throwIfEmpty(
-            ctx.getWorld().getBlockEntity(mindPos, ModBlocks.MIND_ENTITY_TYPE),
-            needMind
+        LinkableMediaBlock condenserEntity = assertIsThisBlock(
+            ctx, mindPos, LinkableMediaBlock.class, LINKABLE_MEDIA_BLOCK
         );
 
-        return List.of(new DoubleIota(prettifyDouble((double)blockEntity.mindCompletion)));
+        return List.of(
+            new ListIota(
+                condenserEntity.getLinks()
+                    .stream()
+                    .map(pos -> (Iota)new Vec3Iota(pos.toCenterPos()))
+                    .toList()
+            )
+        );
     }
 
     @Override

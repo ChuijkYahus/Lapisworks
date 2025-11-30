@@ -238,6 +238,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - e.g. Villager un-flaying is actually documented now
 - Deposit Media and Withdraw Media work conveniently now
 - Gold-Diamond Casting Ring has been deleted in favour of the Amel variant
+- Mishap messages n shit
 - You can't read an Ancient Tome before you have gotten Lapis now
 ## Interop:
 - Hierophantics
