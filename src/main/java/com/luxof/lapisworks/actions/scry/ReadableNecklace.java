@@ -1,4 +1,4 @@
-package com.luxof.lapisworks.actions.interact;
+package com.luxof.lapisworks.actions.scry;
 
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction;

@@ -1,4 +1,4 @@
-package com.luxof.lapisworks.actions.interact;
+package com.luxof.lapisworks.actions.scry;
 
 import at.petrak.hexcasting.api.casting.OperatorUtils;
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction;
@@ -8,31 +8,38 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.api.casting.mishaps.Mishap;
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
 
-import com.luxof.lapisworks.blocks.entities.MediaCondenserEntity;
+import com.luxof.lapisworks.MishapThrowerJava;
+import com.luxof.lapisworks.blocks.Mind;
+import com.luxof.lapisworks.blocks.entities.MindEntity;
+import com.luxof.lapisworks.init.ModBlocks;
 
-import static com.luxof.lapisworks.LapisworksIDs.MEDIA_CONDENSER;
-import static com.luxof.lapisworks.MishapThrowerJava.assertInRange;
-import static com.luxof.lapisworks.MishapThrowerJava.assertIsThisBlock;
+import static com.luxof.lapisworks.Lapisworks.prettifyDouble;
+import static com.luxof.lapisworks.LapisworksIDs.MIND_BLOCK;
 
 import java.util.List;
 
 import net.minecraft.util.math.BlockPos;
 
-public class GetCondenserMedia implements ConstMediaAction {
+public class CognitionPrfn implements ConstMediaAction {
     @Override
     public List<Iota> execute(List<? extends Iota> args, CastingEnvironment ctx) {
         BlockPos mindPos = OperatorUtils.getBlockPos(args, 0, getArgc());
-        assertInRange(ctx, mindPos);
+        try { ctx.assertPosInRange(mindPos); }
+        catch (Mishap mishap) { MishapThrowerJava.throwMishap(mishap); }
+        MishapBadBlock needMind = new MishapBadBlock(mindPos, MIND_BLOCK);
+        if (!(ctx.getWorld().getBlockState(mindPos).getBlock() instanceof Mind)) {
+            MishapThrowerJava.throwMishap(needMind);
+        }
 
-        MediaCondenserEntity condenserEntity = assertIsThisBlock(
-            ctx, mindPos, MediaCondenserEntity.class, MEDIA_CONDENSER
+        MindEntity blockEntity = MishapThrowerJava.throwIfEmpty(
+            ctx.getWorld().getBlockEntity(mindPos, ModBlocks.MIND_ENTITY_TYPE),
+            needMind
         );
 
-        return List.of(
-            new DoubleIota(condenserEntity.getMediaHere() / (double)MediaConstants.DUST_UNIT)
-        );
+        return List.of(new DoubleIota(prettifyDouble((double)blockEntity.mindCompletion)));
     }
 
     @Override

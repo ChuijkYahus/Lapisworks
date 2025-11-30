@@ -116,6 +116,14 @@
             "input": "int",
             "output": "bool",
             "text": "pages.lapisworks.lapisworks_misc.writable_spechand.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:the_cooler_halt",
+            "anchor": "lapisworks:the_cooler_halt",
+            "input": "int",
+            "output": "",
+            "text": "pages.lapisworks.lapisworks_misc.the_cooler_halt.summary"
         }
     ]
 }
