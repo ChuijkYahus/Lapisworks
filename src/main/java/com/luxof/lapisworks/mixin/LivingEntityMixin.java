@@ -32,6 +32,7 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -47,21 +48,22 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	@Shadow @Final
 	private AttributeContainer attributes;
 
-	public AttributeContainer juicedUpVals = new AttributeContainer(
+	@Unique public AttributeContainer juicedUpVals = new AttributeContainer(
 		DefaultAttributeContainer.builder()
 			.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 0) // fists
 			.add(EntityAttributes.GENERIC_MAX_HEALTH, 0) // skin
 			.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0) // feet
 			.build()
 	);
-	public List<Integer> enchantments = new ArrayList<Integer>(List.of(0, 0, 0, 0, 0));
+	@Unique public List<Integer> enchantments = new ArrayList<Integer>(List.of(0, 0, 0, 0, 0));
 
+	@Unique
 	private void expandEnchantmentsIfNeeded(int idx) {
 		while (idx > this.enchantments.size() - 1) { this.enchantments.add(0); }
 	}
 
-	// implementation details
-	@Override
+	// specification details
+	@Unique @Override
 	public double getAmountOfAttrJuicedUpByAmel(EntityAttribute attribute) {
 		if (attribute == ReachEntityAttributes.REACH) {
 			return getReachDistance((LivingEntity)(Object)this, 0);
@@ -71,12 +73,12 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 		return this.juicedUpVals.getCustomInstance(attribute).getBaseValue();
 	}
 
-	@Override
+	@Unique @Override
 	public void setAmountOfAttrJuicedUpByAmel(EntityAttribute attribute, double value) {
 		this.juicedUpVals.getCustomInstance(attribute).setBaseValue(value);
 	}
 
-	@Override
+	@Unique @Override
 	public void setAllJuicedUpAttrsToZero() {
 		this.juicedUpVals.getAttributesToSend().forEach(
 			(EntityAttributeInstance inst) -> {
@@ -85,64 +87,65 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 		);
 	}
 
-	@Override
+	@Unique @Override
 	public AttributeContainer getLapisworksAttributes() { return this.juicedUpVals; }
-	@Override
+	@Unique @Override
 	public void setLapisworksAttributes(AttributeContainer attributes) { this.juicedUpVals = attributes; }
 
-	@Override
+	@Unique @Override
 	public int getEnchant(int whatEnchant) {
 		expandEnchantmentsIfNeeded(whatEnchant);
 		return this.enchantments.get(whatEnchant);
 	}
 
-	@Override
+	@Unique @Override
 	public void setEnchantmentLevel(int whatEnchant, int level) {
 		this.expandEnchantmentsIfNeeded(whatEnchant);
 		this.enchantments.set(whatEnchant, level);
 	}
 
 	// still not DRYer than your dms
-	@Override
+	@Unique @Override
 	public void incrementEnchant(int whatEnchant) { this.incrementEnchant(whatEnchant, 1); }
-	@Override
+	@Unique @Override
 	public void incrementEnchant(int whatEnchant, int amount) {
 		this.setEnchantmentLevel(
 			whatEnchant,
 			this.getEnchant(whatEnchant) + amount
 		);
 	}
-	@Override
+	@Unique @Override
 	public void decrementEnchant(int whatEnchant) { this.incrementEnchant(whatEnchant, -1); }
-	@Override
+	@Unique @Override
 	public void decrementEnchant(int whatEnchant, int amount) { this.incrementEnchant(whatEnchant, -amount); }
 
-	@Override
+	@Unique @Override
 	public List<Integer> getEnchantments() {
 		return List.copyOf(this.enchantments);
 	}
 
-	@Override
+	@Unique @Override
 	public int[] getEnchantmentsArray() {
 		return this.enchantments.stream().mapToInt(Integer::intValue).toArray();
 	}
 
-	@Override
+	@Unique @Override
 	public void setEnchantments(int[] levels) {
 		for (int i = 0; i < levels.length && i < this.enchantments.size(); i++) {
 			this.enchantments.set(i, levels[i]);
 		}
 	}
 
-	@Override
+	@Unique @Override
 	public void setAllEnchantsToZero() {
 		for (int i = 0; i < this.enchantments.size(); i++) { this.enchantments.set(i, 0); }
 	}
 
-	@Override
+	// may be changed in the future, i think??
+	@Unique @Override
 	public void copyCrossDeath(ServerPlayerEntity oldplr) {}
 
-	@Override
+	@Unique @Override
 	public void copyCrossDimensional(ServerPlayerEntity oldplr) {
 		LapisworksInterface old = (LapisworksInterface)oldplr;
 		this.setLapisworksAttributes(old.getLapisworksAttributes());
@@ -160,17 +163,21 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 
 	@Inject(at = @At("HEAD"), method = "onAttacking")
 	public void onAttacking(Entity target, CallbackInfo ci) {
-		if (!(target instanceof LivingEntity) || target.getWorld().isClient) return;
-		if (this.getEnchant(AllEnchantments.fireyFists) == 1) {
+
+		if (!(target instanceof LivingEntity) || target.getWorld().isClient)
+			return;
+		if (this.getEnchant(AllEnchantments.fireyFists) == 1)
 			((LivingEntity)target).setOnFireFor(3);
-		}
+
 		int lightningbendingLevel = this.getEnchant(AllEnchantments.lightningBending);
 		ServerWorld world = (ServerWorld)target.getWorld();
 		Vec3d targetPos = target.getPos();
 
-		if ((lightningbendingLevel == 1 && world.isThundering()) ||
+		if (
+			(lightningbendingLevel == 1 && world.isThundering()) ||
 			(lightningbendingLevel == 2 && (world.isRaining() || world.isRaining())) ||
-			lightningbendingLevel == 3) {
+			lightningbendingLevel == 3
+		) {
 			LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, world);
 			lightning.setPos(targetPos.x, targetPos.y, targetPos.z);
 			world.tryLoadEntity(lightning);
@@ -188,24 +195,6 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 		);
 	}
 
-	// no refMap loaded??
-	/*@Inject(
-		method = "getNextAirUnderwater",
-		at = @At(
-			value = "INVOKE_ASSIGN",
-			target = "net/minecraft/enchantment/EnchantmentHelper.getRespiration(Lnet/minecraft/entity/LivingEntity;)I",
-			shift = At.Shift.AFTER
-		)
-	)
-	public void getNextAirUnderwater(
-		int air,
-		CallbackInfoReturnable<Integer> cir,
-		@Local LocalRef<Integer> i
-	) {
-		LOGGER.info("i at first: " + i.get());
-		i.set(i.get() + this.getEnchant(AllEnchantments.longBreath) * 2);
-		LOGGER.info("i now: " + i.get());
-	}*/
 	@ModifyVariable(
 		method = "getNextAirUnderwater",
 		at = @At(

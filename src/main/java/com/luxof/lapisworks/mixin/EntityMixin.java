@@ -13,12 +13,6 @@ import static com.luxof.lapisworks.LapisworksIDs.REACH_ENHANCEMENT_UUID;
 import static com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes.ATTACK_RANGE;
 import static com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes.REACH;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
@@ -28,6 +22,12 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.tag.DamageTypeTags;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 public class EntityMixin {
@@ -43,27 +43,21 @@ public class EntityMixin {
 
     @Inject(at = @At("HEAD"), method = "readNbt")
 	public void readNbt(NbtCompound nbt, CallbackInfo ci) {
-        // oh yeah, it's backwards compat time
         if ((Object)this instanceof LivingEntity living) {
-            try {
-                ((LapisworksInterface)this).setLapisworksAttributes(new AttributeContainer(
-                    DefaultAttributeContainer.builder()
-                    .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, nbt.getDouble("LAPISWORKS_JUICED_FISTS"))
-                    .add(EntityAttributes.GENERIC_MAX_HEALTH, nbt.getDouble("LAPISWORKS_JUICED_SKIN"))
-                    .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, nbt.getDouble("LAPISWORKS_JUICED_FEET"))
-                    .build()
-                ));
-                living.getAttributes().addTemporaryModifiers(
-                    nbt.getBoolean("LAPISWORKS_JUICED_REACH") ?
-                        ImmutableMultimap.of(
-                            REACH, MoarReachYouBitch.REACH_MODIFIER,
-                            ATTACK_RANGE, MoarReachYouBitch.ATTACK_REACH_MODIFIER
-                        ) : ImmutableMultimap.of()
-                );
-            } catch (Exception e) {
-                LOGGER.warn("JUST FOUND AN ERROR, COULDN'T LOAD JUICED ATTRS!");
-                e.printStackTrace();
-            }
+            ((LapisworksInterface)this).setLapisworksAttributes(new AttributeContainer(
+                DefaultAttributeContainer.builder()
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, nbt.getDouble("LAPISWORKS_JUICED_FISTS"))
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, nbt.getDouble("LAPISWORKS_JUICED_SKIN"))
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, nbt.getDouble("LAPISWORKS_JUICED_FEET"))
+                .build()
+            ));
+            living.getAttributes().addTemporaryModifiers(
+                nbt.getBoolean("LAPISWORKS_JUICED_REACH") ?
+                    ImmutableMultimap.of(
+                        REACH, MoarReachYouBitch.REACH_MODIFIER,
+                        ATTACK_RANGE, MoarReachYouBitch.ATTACK_REACH_MODIFIER
+                    ) : ImmutableMultimap.of()
+            );
             try {
                 ((LapisworksInterface)this).setEnchantments(
                     nbt.getIntArray("LAPISWORKS_ENCHANTMENTS")
@@ -74,13 +68,8 @@ public class EntityMixin {
             }
 
             if ((Object)this instanceof VillagerEntity) {
-                try {
-                    ((ArtMindInterface)this).setUsedMindPercentage(nbt.getFloat("LAPISWORKS_MIND_USED"));
-                    ((ArtMindInterface)this).setMindBeingUsedTicks(nbt.getInt("LAPISWORKS_MIND_HEAL_COOLDOWN"));
-                } catch (Exception e) {
-                    LOGGER.warn("Couldn't load VillagerEntity shit!");
-                    e.printStackTrace();
-                }
+                ((ArtMindInterface)this).setUsedMindPercentage(nbt.getFloat("LAPISWORKS_MIND_USED"));
+                ((ArtMindInterface)this).setMindBeingUsedTicks(nbt.getInt("LAPISWORKS_MIND_HEAL_COOLDOWN"));
             }
         }
 	}

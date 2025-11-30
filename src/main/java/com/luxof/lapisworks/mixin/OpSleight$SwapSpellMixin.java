@@ -32,12 +32,14 @@ public abstract class OpSleight$SwapSpellMixin {
     @Inject(at = @At("HEAD"), method = "cast")
     public void cast(@NotNull CastingEnvironment env, CallbackInfo ci) {
         ItemEntity item = getItem();
-        if (NBTHelper.contains(item.getStack(), IS_IN_CRADLE))
-            NBTHelper.remove(item.getStack(), IS_IN_CRADLE);
+        NBTHelper.remove(item.getStack(), IS_IN_CRADLE);
+
         BlockPos cradlePos = ((ItemEntityMinterface)item).getBlockPosOfCradle();
         if (cradlePos == null) return;
+
         CradleEntity cradle = (CradleEntity)env.getWorld().getBlockEntity(cradlePos);
         if (cradle == null) return;
+
         cradle.clear();
     }
 }

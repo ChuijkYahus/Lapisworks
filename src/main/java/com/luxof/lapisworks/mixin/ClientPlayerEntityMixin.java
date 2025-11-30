@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -34,10 +35,11 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity implements Bl
         super(world, pos, yaw, gameProfile);
     }
 
-    private Map<Block, Pair<BlockPos, Double>> map = new HashMap<>();
-    private Map<Block, Pair<BlockPos, Double>> mapHOT = new HashMap<>();
+    @Unique private Map<Block, Pair<BlockPos, Double>> map = new HashMap<>();
+    @Unique private Map<Block, Pair<BlockPos, Double>> mapHOT = new HashMap<>();
+    @Unique
     protected void Dowser() {
-        LOGGER.info("The thread has started!");
+        LOGGER.info("The dowser's thread has started!");
         while (true) {
             if (MinecraftClient.getInstance().isPaused()) continue;
             mapHOT.forEach((block, any) -> {
@@ -73,9 +75,9 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity implements Bl
         }
     }
 
-    private long timeBetweenDowsesMillis = 1000;
+    @Unique private long timeBetweenDowsesMillis = 1000;
 
-    private Thread dowser = null;
+    @Unique private Thread dowser = null;
     @Inject(at = @At("HEAD"), method = "tick")
     public void tick(CallbackInfo ci) {
         if (dowser == null || !dowser.isAlive()) {
@@ -93,24 +95,24 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity implements Bl
         }
     }
 
-    @Override
+    @Unique @Override
     public boolean addTarget(Block block) {
         if (map.containsKey(block)) return false;
         map.put(block, null);
         mapHOT.put(block, null);
         return true;
     }
-    @Override
+    @Unique @Override
     public boolean removeTarget(Block block) {
         if (!map.containsKey(block)) return false;
         map.remove(block);
         mapHOT.remove(block);
         return true;
     }
-    @Override
+    @Unique @Override
     public List<Block> getTargets() {
         return map.keySet().stream().toList();
     }
-    @Override @Nullable
+    @Unique @Override @Nullable
     public Pair<BlockPos, Double> dowse(Block block) { return map.get(block); }
 }

@@ -10,8 +10,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 
 import com.luxof.lapisworks.init.ModItems;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
-
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -34,7 +32,6 @@ public abstract class OpMakeBattery$SpellMixin {
         Operation<Void> og
     ) {
         if (!getHandStack().isOf(ModItems.UNCRAFTED_CONDENSER)) {
-            LOGGER.info("the hand stack is an uncrafted condenser!");
             og.call(env);
             return;
         }

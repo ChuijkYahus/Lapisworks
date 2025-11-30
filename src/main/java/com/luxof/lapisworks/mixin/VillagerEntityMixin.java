@@ -1,30 +1,31 @@
 package com.luxof.lapisworks.mixin;
 
+import com.luxof.lapisworks.mixinsupport.ArtMindInterface;
+
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import com.luxof.lapisworks.mixinsupport.ArtMindInterface;
 
 import net.minecraft.entity.passive.VillagerEntity;
 
 @Mixin(VillagerEntity.class)
 public class VillagerEntityMixin implements ArtMindInterface {
-    public float usedMindPercentage = 0.0f;
-    public int mindBeingUsedTicks = 0;
-    public int dontUseAgainTicks = 0;
-    @Override public float getUsedMindPercentage() { return this.usedMindPercentage; }
-    @Override public void setUsedMindPercentage(float val) { this.usedMindPercentage = val; }
-    @Override public void incUsedMindPercentage(float amount) { this.usedMindPercentage += amount; }
-    @Override public int getMindBeingUsedTicks() { return this.mindBeingUsedTicks; }
-    @Override public void setMindBeingUsedTicks(int val) { this.mindBeingUsedTicks = val; }
-    @Override public void incMindBeingUsedTicks(int amount) { this.mindBeingUsedTicks += amount; }
-    @Override public void setDontUseAgainTicks(int ticks) { this.dontUseAgainTicks = ticks; }
-    @Override public void incDontUseAgainTicks(int ticks) { this.dontUseAgainTicks += ticks; }
-    @Override public int getDontUseAgainTicks() { return this.dontUseAgainTicks; }
+    @Unique public float usedMindPercentage = 0.0f;
+    @Unique public int mindBeingUsedTicks = 0;
+    @Unique public int dontUseAgainTicks = 0;
+    @Unique @Override public float getUsedMindPercentage() { return this.usedMindPercentage; }
+    @Unique @Override public void setUsedMindPercentage(float val) { this.usedMindPercentage = val; }
+    @Unique @Override public void incUsedMindPercentage(float amount) { this.usedMindPercentage += amount; }
+    @Unique @Override public int getMindBeingUsedTicks() { return this.mindBeingUsedTicks; }
+    @Unique @Override public void setMindBeingUsedTicks(int val) { this.mindBeingUsedTicks = val; }
+    @Unique @Override public void incMindBeingUsedTicks(int amount) { this.mindBeingUsedTicks += amount; }
+    @Unique @Override public void setDontUseAgainTicks(int ticks) { this.dontUseAgainTicks = ticks; }
+    @Unique @Override public void incDontUseAgainTicks(int ticks) { this.dontUseAgainTicks += ticks; }
+    @Unique @Override public int getDontUseAgainTicks() { return this.dontUseAgainTicks; }
 
     @Inject(at = @At("HEAD"), method = "tick")
     public void tick(CallbackInfo ci) {

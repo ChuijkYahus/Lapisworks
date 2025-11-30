@@ -8,7 +8,6 @@ import com.luxof.lapisworks.interop.hextended.items.AmelOrb;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 import com.luxof.lapisworks.mixinsupport.GetVAULT;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.getAllHands;
 
 import com.mojang.authlib.GameProfile;
@@ -26,6 +25,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -36,41 +36,38 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Ge
         super(world, pos, yaw, gameProfile);
     }
 
-    private final VAULT vault = VAULT.of((ServerPlayerEntity)(Object)this);
+    @Unique private final VAULT vault = VAULT.of((ServerPlayerEntity)(Object)this);
     // yall ever think of a word so long it starts lookin wrong despite being correctly spelled n shit?
     // this phenomena is called "semantic satiation" iirc
-    @Override public VAULT grabVAULT() { return this.vault; }
+    @Unique @Override public VAULT grabVAULT() { return this.vault; }
 
     @Inject(at = @At("HEAD"), method = "readCustomDataFromNbt")
     public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
-        try {
-            if (nbt.getBoolean("LAPISWORKS_EnchSent_exists")) {
-                Vec3d sentPos = new Vec3d(
-                    nbt.getDouble("LAPISWORKS_EnchSent_posX"),
-                    nbt.getDouble("LAPISWORKS_EnchSent_posY"),
-                    nbt.getDouble("LAPISWORKS_EnchSent_posZ")
-                );
-                double sentAmbit = nbt.getDouble("LAPISWORKS_EnchSent_Ambit");
-                ((EnchSentInterface)this).setEnchantedSentinel(sentPos, sentAmbit);
-            }
-        } catch (Exception e) {
-            LOGGER.warn("Couldn't load enchanted sentinel!");
-            e.printStackTrace();
-        }
+        if (!nbt.getBoolean("LAPISWORKS_EnchSent_exists")) return;
+        Vec3d sentPos = new Vec3d(
+            nbt.getDouble("LAPISWORKS_EnchSent_posX"),
+            nbt.getDouble("LAPISWORKS_EnchSent_posY"),
+            nbt.getDouble("LAPISWORKS_EnchSent_posZ")
+        );
+        double sentAmbit = nbt.getDouble("LAPISWORKS_EnchSent_Ambit");
+        ((EnchSentInterface)this).setEnchantedSentinel(sentPos, sentAmbit);
     }
 
     @Inject(at = @At("HEAD"), method = "writeCustomDataToNbt")
     public void writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
         Vec3d sentPos = ((EnchSentInterface)this).getEnchantedSentinel();
         Double ambit = ((EnchSentInterface)this).getEnchantedSentinelAmbit();
+
         nbt.putBoolean("LAPISWORKS_EnchSent_exists", sentPos != null);
         if (sentPos == null) return;
+
         nbt.putDouble("LAPISWORKS_EnchSent_posX", sentPos.x);
         nbt.putDouble("LAPISWORKS_EnchSent_posY", sentPos.y);
         nbt.putDouble("LAPISWORKS_EnchSent_posZ", sentPos.z);
         nbt.putDouble("LAPISWORKS_EnchSent_Ambit", ambit);
     }
 
+    @Unique
     public void spawnEnchSentParticles() {
         Vec3d sentinelPosition = ((EnchSentInterface)this).getEnchantedSentinel();
         if (sentinelPosition == null) return;
@@ -82,11 +79,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Ge
         );
     }
 
+    @Unique
     public void spawnOrbParticles() {
         List<Hand> hands = getAllHands();
         for (Hand hand : hands) {
             ItemStack stack = this.getStackInHand(hand);
             if (!(stack.getItem() instanceof AmelOrb orb)) continue;
+
             Vec3d placeInAmbit = orb.getPlaceInAmbit(stack);
             ParticleSpray particles = ParticleSpray.burst(placeInAmbit, 3, 2);
             particles.sprayParticles(

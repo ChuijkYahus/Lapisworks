@@ -34,57 +34,58 @@ public abstract class BlockEntityAbstractImpetusMixin extends HexBlockEntity imp
     @Shadow
     protected long media;
 
-    @Override
+    @Unique @Override
     public void addLink(BlockPos pos) {
         linked.add(pos);
     }
 
-    @Override
+    @Unique @Override
     public void removeLink(BlockPos pos) {
         linked.remove(pos);
     }
 
-    @Override
+    @Unique @Override
     public boolean isLinkedTo(BlockPos pos) {
         return linked.contains(pos);
     }
 
-    @Override
+    @Unique @Override
     public Set<BlockPos> getLinks() {
         return linked;
     }
 
-    @Override
+    @Unique @Override
     public int getNumberOfLinks() {
         return linked.size();
     }
 
-    @Override
+    @Unique @Override
     public int getMaxNumberOfLinks() {
         return 1;
     }
 
-    @Override
+    @Unique @Override
     public BlockPos getThisPos() {
         return getPos();
     }
 
     // I do this to make sure the impetus is un-interactable with by the network
-    @Override
+    @Unique @Override
     public long depositMedia(long amount, boolean simulate) {
         return 0;
     }
 
-    @Override
+    @Unique @Override
     public long withdrawMedia(long amount, boolean simulate) {
         return 0;
     }
     
-    @Override public long getMediaHere() {
+    @Unique @Override public long getMediaHere() {
         return media;
     }
 
 
+    @Unique
     private List<Integer> posToInts(HashSet<BlockPos> posList) {
         return posList.stream().flatMap(
             pos -> Stream.of(pos.getX(), pos.getY(), pos.getZ())
@@ -101,6 +102,7 @@ public abstract class BlockEntityAbstractImpetusMixin extends HexBlockEntity imp
         );
     }
 
+    @Unique
     private HashSet<BlockPos> intsToPos(int[] intArray) {
         HashSet<BlockPos> posList = new HashSet<>();
         int x = 0;
