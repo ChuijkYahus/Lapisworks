@@ -240,6 +240,8 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
 - Gold-Diamond Casting Ring has been deleted in favour of the Amel variant
 - Mishap messages n shit
 - You can't read an Ancient Tome before you have gotten Lapis now
+## Fixes:
+- enchantments and shit should ACTUALLY carry across dimensions now (:broken_heart:)
 ## Interop:
 - Hierophantics
   - Max experience fishermen villagers can be flayed into you  

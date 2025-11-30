@@ -60,6 +60,7 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 		while (idx > this.enchantments.size() - 1) { this.enchantments.add(0); }
 	}
 
+	// implementation details
 	@Override
 	public double getAmountOfAttrJuicedUpByAmel(EntityAttribute attribute) {
 		if (attribute == ReachEntityAttributes.REACH) {
@@ -144,8 +145,8 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	@Override
 	public void copyCrossDimensional(ServerPlayerEntity oldplr) {
 		LapisworksInterface old = (LapisworksInterface)oldplr;
-		old.setLapisworksAttributes(old.getLapisworksAttributes());
-		old.setEnchantments(this.getEnchantmentsArray());
+		this.setLapisworksAttributes(old.getLapisworksAttributes());
+		this.setEnchantments(old.getEnchantmentsArray());
 	}
 
 
