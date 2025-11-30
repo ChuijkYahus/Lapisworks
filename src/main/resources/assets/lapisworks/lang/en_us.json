@@ -52,7 +52,6 @@
 
     "item.lapisworks.staves.amel_ring": "Ring of Amethyst Lazuli",
     "item.lapisworks.staves.amel_ring2": "Ring of Amethyst Lazuli",
-    "item.lapisworks.staves.ring": "Gold-Diamond Casting Ring",
     "item.lapisworks.amel_jar": "Amel Jar",
     "item.lapisworks.amel_constructs.focus_necklace.1": "Focus Necklace",
     "item.lapisworks.amel_constructs.focus_necklace.2": "Amulet of Holding",
@@ -267,6 +266,7 @@
     "mishaps.lapisworks.equipped.not": "Expected %s to be equipped, but found nothing.",
     "mishaps.lapisworks.equipped.bad": "Found %s equipped, but it was not a/an %s",
 
+    "mishaps.lapisworks.descs.entityorblockposiota": "an entity or vector iota",
     "mishaps.lapisworks.descs.imbueable": "any item imbueable with Amethyst Lazuli (e.g. a staff)",
     "mishaps.lapisworks.descs.smind_infuseable": "any block infuseable with a Simple Mind (e.g. an Amethyst Block)",
     "mishaps.lapisworks.descs.readable": "a readable Iota holder (e.g. a Focus or a Thought-knot)",
@@ -457,7 +457,7 @@
 
     "pages.lapisworks.great.flay_artmind.title": "Imbue Mind",
     "pages.lapisworks.great.flay_artmind.lore": "Most of the pages are burned, and only the pattern with it's documentation and it's uses remain. Any questions like \"he had his own form of $(l:imbuement/artificial_mind)$(item)Simple Mind Containers$()?\", \"Why?\", etc. will probably have to be speculated about by me. Unfortunate.. In any case, I've documented the pattern on the next page and then it's uses on the pages after it.",
-    "pages.lapisworks.great.flay_artmind.summary": "Takes the location of a block with limited functionality and a full Simple Mind Container, and imbues the mind into the construct for five $(item)Charged Amethyst$(). $(l:patterns/great_spells/brainsweep)$(o)This shape reminds me of something..$()",
+    "pages.lapisworks.great.flay_artmind.summary": "Takes the location of a block or an entity and then the location of a full Simple Mind Container, and imbues the mind into it for five $(item)Charged Amethyst$(). $(l:patterns/great_spells/brainsweep)$(o)Déjà vu...?$()",
     "pages.lapisworks.great.flay_artmind.budding_amethyst": "An Amethyst Block, when imbued with a simple mind, turns into a Budding Amethyst block. Nothing too special, really. But I do wonder, if minds can be put into these blocks to make more amethyst, where did all the amethyst that's already here in this world come from?",
     "pages.lapisworks.great.flay_artmind.live_jukebox": "\"A mind so simple can be imbued into functional blocks with great ease and without stripping away unnecessary parts.\" I believe this line refers to the $(item)Jukebox$() on the same page (and others on other pages), which can be turned into a $(thing)Live Jukebox$(). A $(thing)Live Jukebox$() can be taught to play notes at a frequency, and then hit to play those notes.",
     "pages.lapisworks.great.flay_artmind.teach_song.summary": "Teach the $(thing)Live Jukebox$() at that location (which must be within ambit) these notes (a list of nums 0-24) at this frequency (0-20) for a shard of media. After being hit via $(thing)Use$(), it plays the notes like an automatic Note Block.",
@@ -466,7 +466,8 @@
     "pages.lapisworks.great.flay_artmind.simple_impetus2": "Moreover, it only casts when $(o)any valid pattern$() or the pattern it's listening for is cast (within 32 blocks of it). Teaching it a pattern to listen for will make it only listen for that pattern, and not trigger upon any other. Also, any pattern it's been taught to listen for will not mishap if it doesn't exist, given it was cast within range of the impetus.",
     "pages.lapisworks.great.flay_artmind.teach_simp.summary": "Teach the $(item)Simple Impetus$() at the provided coordinates (which must be within ambit) the provided pattern for two dust. The $(item)Simple Impetus$() will not remember this pattern when broken.",
     "pages.lapisworks.great.flay_artmind.ask_simp.summary": "$(item)Simple Impeti$() are pretty gullible. Returns the pattern the $(item)Simple Impetus$() at the given location (which must be within ambit) is listening for, or null if it's not listening for any particular pattern. Free.",
-    "pages.lapisworks.great.flay_artmind.entity_imbuement": "Apparently, this spell can be used to imbue Simple Minds into entities as well!",
+    "pages.lapisworks.great.flay_artmind.entity_imbuement": "Apparently, this spell can be used to imbue Simple Minds into entities as well! Any of those kinds of recipes are documented ahead.",
+    "pages.lapisworks.great.flay_artmind.unflay_villager": "This page has been decrypted with my $(thing)awakening$(), similar to some others. Apparently, I can imbue a Simple Mind into a villager that has lost possession of it's own mind to grant it a new one.",
 
     "pages.lapisworks.great.hastenature.title": "Hastenature",
     "pages.lapisworks.great.hastenature.lore": "This one was created when the wizard was extremely adept at pattern infusions with Amel, their final days. They were a master of it, to the point their infusion created extra patterns, or byproducts. The main pattern here was one that was supposed to be one that'd age enemies to death, a horrifying spell the pattern for which - for better or for worse - was burned.",

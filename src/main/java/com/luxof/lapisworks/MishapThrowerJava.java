@@ -1,8 +1,13 @@
 package com.luxof.lapisworks;
 
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.iota.EntityIota;
+import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
+import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota;
+import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs;
 
 import com.luxof.lapisworks.MishapThrower;
 import com.luxof.lapisworks.VAULT.Flags;
@@ -10,10 +15,12 @@ import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
 import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.mishaps.MishapNotEnoughItems;
 import com.luxof.lapisworks.mixinsupport.GetVAULT;
+import com.mojang.datafixers.util.Either;
 
 import static com.luxof.lapisworks.LapisworksIDs.AMEL;
 import static com.luxof.lapisworks.LapisworksIDs.LINKABLE_MEDIA_BLOCK;
 
+import java.util.List;
 import java.util.Optional;
 
 import net.minecraft.block.entity.BlockEntity;
@@ -120,5 +127,30 @@ public class MishapThrowerJava {
                     Text.translatable("mishaps.lapisworks.descs.nottoomanylinks_linkable")
                 )
             );
+    }
+    public static Either<BlockPos, Entity> getBlockPosOrEntity(
+        List<? extends Iota> args,
+        int idx,
+        int argc
+    ) {
+        if (idx > args.size()) throwMishap(new MishapNotEnoughArgs(idx, args.size()));
+        else if (args.size() < argc) throwMishap(new MishapNotEnoughArgs(argc, args.size()));
+
+
+        Iota iota = args.get(idx);
+
+        if (iota instanceof Vec3Iota vecIota) return Either.left(BlockPos.ofFloored(vecIota.getVec3()));
+
+        else if (iota instanceof EntityIota entIota) return Either.right(entIota.getEntity());
+
+        else {
+            throwMishap(new MishapInvalidIota(
+                iota,
+                idx,
+                Text.translatable("mishaps.lapisworks.descs.entityorblockposiota")
+            ));
+            // shut up
+            return null;
+        }
     }
 }

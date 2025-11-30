@@ -13,7 +13,7 @@
             "type": "hexcasting:lapisworks/pwshape",
             "op_id": "lapisworks:flay_artmind",
             "anchor": "lapisworks:flay_artmind",
-            "input": "vec, vec",
+            "input": "vec|entity, vec",
             "output": "",
             "text": "pages.lapisworks.great.flay_artmind.summary",
             "origins": [
@@ -79,6 +79,14 @@
             "input": "vec",
             "output": "pattern|null",
             "text": "pages.lapisworks.great.flay_artmind.ask_simp.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.great.flay_artmind.entity_imbuement"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.great.flay_artmind.unflay_villager"
         }
     ]
 }
