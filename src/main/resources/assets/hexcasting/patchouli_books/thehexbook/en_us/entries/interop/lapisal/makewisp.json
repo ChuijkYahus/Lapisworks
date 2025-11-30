@@ -1,6 +1,6 @@
 {
     "name": "pages.lapisworks.interop.lapisal.makewisp.title",
-    "icon": "lapisworks:amel_constructs/mind",
+    "icon": "lapisworks:mind",
     "advancement": "lapisworks:rediscover_flay_artmind",
     "flag": "mod:hexal",
     "category": "hexcasting:lapisworks/interop/lapisal",
