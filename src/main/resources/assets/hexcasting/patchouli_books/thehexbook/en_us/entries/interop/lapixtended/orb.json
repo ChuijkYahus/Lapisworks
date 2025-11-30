@@ -9,7 +9,11 @@
         {
             "type": "patchouli:spotlight",
             "item": "lapisworks:amel_constructs/amel_orb",
-            "text": "pages.lapisworks.interop.lapixtended.orb.text"
+            "text": "pages.lapisworks.interop.lapixtended.orb.text1"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.interop.lapixtended.orb.text2"
         }
     ]
 }
