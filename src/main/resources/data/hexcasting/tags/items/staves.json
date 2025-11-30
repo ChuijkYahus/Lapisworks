@@ -44,7 +44,6 @@
         { "id": "lapisworks:staves/incomplete/spruce_wand", "required": false },
         { "id": "lapisworks:staves/incomplete/warped_wand", "required": false },
         "lapisworks:staves/amel_ring",
-        "lapisworks:staves/amel_ring2",
-        "lapisworks:staves/ring"
+        "lapisworks:staves/amel_ring2"
     ]
 }

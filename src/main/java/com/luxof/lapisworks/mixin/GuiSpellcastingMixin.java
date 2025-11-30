@@ -21,11 +21,10 @@ public class GuiSpellcastingMixin {
             ci.cancel();
         }
         if (
-            Lapisworks.trinketEquipped(player, ModItems.CASTING_RING) ||
             Lapisworks.trinketEquipped(player, ModItems.AMEL_RING) ||
             Lapisworks.trinketEquipped(player, ModItems.AMEL_RING2)
         ) {
-            // PROBABLY should add check for if player opened casting menu
+            // PROBABLY should add a check for if the player intentionally opened the casting menu
             // but i'll let that be until it bites me in the ass
             ci.cancel();
         }

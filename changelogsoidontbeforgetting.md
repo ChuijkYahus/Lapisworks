@@ -234,8 +234,10 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     Manual brewing (or teaching it) is a pain as each step takes twice as long.
     Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.
 ## Changes:
-- Book reformatting and shit
+- Book reformatting and extra documentation and shit
+  - e.g. Villager un-flaying is actually documented now
 - Deposit Media and Withdraw Media work conveniently now
+- Gold-Diamond Casting Ring has been deleted in favour of the Amel variant
 - You can't read an Ancient Tome before you have gotten Lapis now
 ## Interop:
 - Hierophantics

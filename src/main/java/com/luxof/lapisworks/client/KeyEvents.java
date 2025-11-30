@@ -34,8 +34,7 @@ public class KeyEvents {
     public static void onPressUseCastingRing(MinecraftClient client) {
         if (client.player == null) { return; }
         else if (
-            !(trinketEquipped(client.player, ModItems.CASTING_RING) ||
-            trinketEquipped(client.player, (Item)ModItems.AMEL_RING) ||
+            !(trinketEquipped(client.player, (Item)ModItems.AMEL_RING) ||
             trinketEquipped(client.player, (Item)ModItems.AMEL_RING2))
         ) { return; }
 
