@@ -215,7 +215,7 @@
     "pages.lapisworks.imbuement_rings.amel_ring_pic_desc": "$(o)金具有优良的可塑性，因此如果不喜欢新外观，可以用模塑紫金石改变。$()",
 
     "pages.lapisworks.imbuement_staves.title": "灌注法杖",
-    "pages.lapisworks.imbuement_staves.lore": "向类似法杖的$(l:imbuement/casting_rings)施法戒指$()灌注紫金石，得到的是$(l:imbuement/casting_rings#lapisworks:amel_ring)紫金石戒指$()；它比其原型更强大。那么，向真正的法杖灌注紫金石，必定可以增强法杖的性能。法杖因其体积较大，灌注时需要的紫金石也更多，但所得产物更精准。不过，要是灌注不完全会怎么样呢？",
+    "pages.lapisworks.imbuement_staves.lore": "向类似法杖的$(l:imbuement/casting_rings)施法戒指$()灌注紫金石，得到的是$(thing)紫金石戒指$()；它比其原型更强大。那么，向真正的法杖灌注紫金石，必定可以增强法杖的性能。法杖因其体积较大，灌注时需要的紫金石也更多，但所得产物更精准。不过，要是灌注不完全会怎么样呢？",
     "pages.lapisworks.imbuement_staves.incomplete_staves.title": "未完全灌注的法杖",
     "pages.lapisworks.imbuement_staves.incomplete_staves.text": "$(o)我造出的所有未灌注完全的法杖。$()",
     "pages.lapisworks.imbuement_staves.incomplete_staves.detail": "向法杖灌注的紫金石数量若不足以令其完全蜕变，紫金石仍会深深嵌入法杖的结构，但嵌入的程度不够，无法长时间承受紫金石的能量抽取。产物不够高效、容易逸散媒质（也因此无法长时间使用），但同时比完全灌注的产物更精确（咒术网格范围更大）。",
