@@ -203,8 +203,6 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     - Simple Minds, when infused into the air, produce a wandering wisp
 # 1.5.8
 ## Additions:
-- [a better Charon's Gambit]
-- `for i in range(n)` pattern
 - Chalk Rituals
 - Enchanted Brewery
   - Imbue 10 Amel into a Brewing Stand
@@ -212,7 +210,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - Takes 1 amethyst dust per brew
 - Enchanted Scroll
   - It's literally a Hex Casting IDE.
-- Scrying patterns for blocks added by the mod.
+- Erebus' Gambit
 - Mind Control of entities into the game  
   (reality check: gang, how lost are we in the sauce?)
   - you have to un-flay with a Simple Mind first
@@ -225,6 +223,8 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - VERY small ambit, at most 3 blocks and usually just 1 (by default too)
   - can have pre-set conditions to cast a hex, e.g. on hurt (so kind of like Hierophantics!)
     - not Sheppo: can only have one condition (in-lore: too much space occupied by condition and hex)
+- Mintiest Gambit
+- Kitkat's Gambit
 - Rote Brewery
   - Infuse a Simple Mind into a Brewing Stand
   - Can remember up to 5 potion recipes
@@ -233,13 +233,14 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - ALWAYS takes 2 steps worth of time.
     Manual brewing (or teaching it) is a pain as each step takes twice as long.
     Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.
+- Scrying patterns for blocks added by the mod.
 ## Changes:
 - Book reformatting and extra documentation and shit
   - e.g. Villager un-flaying is actually documented now
 - Deposit Media and Withdraw Media work conveniently now
 - Gold-Diamond Casting Ring has been deleted in favour of the Amel variant
 - Mishap messages n shit
-- You can't read an Ancient Tome before you have gotten Lapis now
+- You can't read an Ancient Tome before you have gotten Lapisworks Research now
 ## Fixes:
 - enchantments and shit should ACTUALLY carry across dimensions now (:broken_heart:)
 ## Interop:
@@ -286,6 +287,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - You can also see BeegInfusion recipes in EMI
   - On that note, the same recipes also show up in Patchouli
 - Hexical interop
+  - the Cradle's item actually has a big hitbox now
   - the Media Jar is targetable by Deposit Media only
 # 1.5.9
 - Heal your mind after breaking it.
@@ -352,4 +354,5 @@ KING CRIMSON (so what part, exactly, of this is Lapisworks-y?)
 
 port twokai's ideal condition  
 port hexxy dimensions  
-better Charon's Gambit (can break through more than one layer)  
+Ra's Gambit
+- think up something motherfucker

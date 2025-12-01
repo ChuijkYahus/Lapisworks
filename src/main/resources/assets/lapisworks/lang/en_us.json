@@ -190,6 +190,10 @@
     "hexcasting.action.book.lapisworks:writeable_necklace": "Jeweler's Reflection",
     "hexcasting.action.lapisworks:the_cooler_halt": "Erebus' Gambit",
     "hexcasting.action.book.lapisworks:the_cooler_halt": "Erebus' Gambit",
+    "hexcasting.action.lapisworks:for_n_in_range": "Mintiest Gambit",
+    "hexcasting.action.book.lapisworks:for_n_in_range": "Mintiest Gambit",
+    "hexcasting.action.lapisworks:execute_many_times": "Kitkat's Gambit",
+    "hexcasting.action.book.lapisworks:execute_many_times": "Kitkat's Gambit",
 
     "hexcasting.action.lapisworks:thought_sieve": "Sieve Thoughts",
     "hexcasting.action.book.lapisworks:thought_sieve": "Sieve Thoughts",
@@ -351,6 +355,8 @@
     "pages.lapisworks.lapisworks_misc.write_spechand.summary": "Specific hand version of $(l:patterns/readwrite#hexcasting:write)$(thing)Scribe's Gambit$(). Writes the given Iota to the Iota holder in the specified hand.",
     "pages.lapisworks.lapisworks_misc.writable_spechand.summary": "Specific hand version of $(l:patterns/readwrite#hexcasting:writeable)$(thing)Assessor's Reflection$(). Pusher whether the item in the specified hand can be written to or not.",
     "pages.lapisworks.lapisworks_misc.the_cooler_halt.summary": "$(l:patterns/meta#hexcasting:halt)$(thing)Charon's Gambit$(), if it could break through more than one layer. This pattern is useful in cases where $(l:patterns/meta#hexcasting:halt)$(thing)Charon's Gambit$() is insufficient, however I wish not to delve into the complicated beast that is $(l:patterns/meta#hexcasting:eval/cc)$(thing)Iris' Gambit$().",
+    "pages.lapisworks.lapisworks_misc.for_n_in_range.summary": "$(o)A oney and a twoey and a you-know-what-to-doey!$()$(br2)Executes the given pattern list over a list of in(or de)crementing numbers, ranging from the first argument (inclusive) to the second (exclusive) as if $(thing)Thoth's Gambit$() were used.",
+    "pages.lapisworks.lapisworks_misc.execute_many_times.summary": "$(o)Do you know the definition of insanity?$()$(br2)Executes the given pattern list the specified number of times. The stack on start behaves like it does for $(thing)Thoth's Gambit$().",
 
     "pages.lapisworks.lapisworks_mishaps.title": "Lapisworks Mishaps",
     "pages.lapisworks.lapisworks_mishaps.summary": "With a new branch of Hex Casting comes new mishaps. I've documented them here.",

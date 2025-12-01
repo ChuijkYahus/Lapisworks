@@ -108,6 +108,8 @@ public class Patterns {
         register("equiv_block", "qqqqqeqeeeee", HexDir.NORTH_WEST, new EquivBlock());
         register("equal_block", "qwawqwadadwewdwe", HexDir.NORTH_WEST, new EqualBlock());
         register("the_cooler_halt", "wawqwdwewew", HexDir.SOUTH_WEST, new OpTheCoolerHalt());
+        register("for_n_in_range", "aqadadad", HexDir.NORTH_WEST, new OpForNInRange(false));
+        register("execute_many_times", "dedadada", HexDir.SOUTH_WEST, new OpForNInRange(true));
 
         register("thought_sieve", "qadaadadqaqdadqaq", HexDir.WEST, new HexResearchYoink());
         register("absorb_mind", "aawqqwqqqaede", HexDir.WEST, new MindLiquefaction());

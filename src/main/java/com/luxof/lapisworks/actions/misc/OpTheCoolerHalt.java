@@ -14,14 +14,12 @@ import java.util.List;
 import kotlin.Pair;
 
 public class OpTheCoolerHalt implements Action {
-    private int getArgc() { return 1; }
-
     @Override
     public OperationResult operate(CastingEnvironment ctx, CastingImage img, SpellContinuation cont) {
         List<Iota> newStack = img.getStack();
         // no getIntAbove?
         int lastIdx = newStack.size() - 1;
-        int done = OperatorUtils.getPositiveInt(newStack, lastIdx, getArgc());
+        int done = OperatorUtils.getPositiveInt(newStack, lastIdx, newStack.size());
         newStack.remove(lastIdx);
         // wouldn't it be funny if i renamed cont to cunny
         SpellContinuation newCont = cont;

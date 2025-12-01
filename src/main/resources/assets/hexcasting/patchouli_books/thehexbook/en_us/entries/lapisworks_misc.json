@@ -89,7 +89,7 @@
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:read_spechand",
             "anchor": "lapisworks:read_spechand",
-            "input": "int",
+            "input": "num",
             "output": "any",
             "text": "pages.lapisworks.lapisworks_misc.read_spechand.summary"
         },
@@ -97,7 +97,7 @@
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:readable_spechand",
             "anchor": "lapisworks:readable_spechand",
-            "input": "int",
+            "input": "num",
             "output": "bool",
             "text": "pages.lapisworks.lapisworks_misc.readable_spechand.summary"
         },
@@ -105,7 +105,7 @@
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:write_spechand",
             "anchor": "lapisworks:write_spechand",
-            "input": "any, int",
+            "input": "any, num",
             "output": "",
             "text": "pages.lapisworks.lapisworks_misc.write_spechand.summary"
         },
@@ -113,7 +113,7 @@
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:writable_spechand",
             "anchor": "lapisworks:writable_spechand",
-            "input": "int",
+            "input": "num",
             "output": "bool",
             "text": "pages.lapisworks.lapisworks_misc.writable_spechand.summary"
         },
@@ -121,9 +121,25 @@
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:the_cooler_halt",
             "anchor": "lapisworks:the_cooler_halt",
-            "input": "int",
+            "input": "positive num",
             "output": "",
             "text": "pages.lapisworks.lapisworks_misc.the_cooler_halt.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:for_n_in_range",
+            "anchor": "lapisworks:for_n_in_range",
+            "input": "num, num, [pattern]",
+            "output": "[any]",
+            "text": "pages.lapisworks.lapisworks_misc.for_n_in_range.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:execute_many_times",
+            "anchor": "lapisworks:execute_many_times",
+            "input": "num, [pattern]",
+            "output": "",
+            "text": "pages.lapisworks.lapisworks_misc.execute_many_times.summary"
         }
     ]
 }
