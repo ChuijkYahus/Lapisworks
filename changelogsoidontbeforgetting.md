@@ -223,8 +223,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - VERY small ambit, at most 3 blocks and usually just 1 (by default too)
   - can have pre-set conditions to cast a hex, e.g. on hurt (so kind of like Hierophantics!)
     - not Sheppo: can only have one condition (in-lore: too much space occupied by condition and hex)
-- Mintiest Gambit
-- Kitkat's Gambit
+- Mintiest and Kitkat's Gambits (`for i in range(n):`)
 - Rote Brewery
   - Infuse a Simple Mind into a Brewing Stand
   - Can remember up to 5 potion recipes
@@ -238,6 +237,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
 - Book reformatting and extra documentation and shit
   - e.g. Villager un-flaying is actually documented now
 - Deposit Media and Withdraw Media work conveniently now
+- Enchanted Slipways got changed to be 2x slipway wisp spawn (as i intended them to be)
 - Gold-Diamond Casting Ring has been deleted in favour of the Amel variant
 - Mishap messages n shit
 - You can't read an Ancient Tome before you have gotten Lapisworks Research now
