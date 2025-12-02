@@ -14,9 +14,9 @@ import net.minecraft.entity.passive.VillagerEntity;
 
 @Mixin(VillagerEntity.class)
 public class VillagerEntityMixin implements ArtMindInterface {
-    @Unique public float usedMindPercentage = 0.0f;
-    @Unique public int mindBeingUsedTicks = 0;
-    @Unique public int dontUseAgainTicks = 0;
+    @Unique private float usedMindPercentage = 0.0f;
+    @Unique private int mindBeingUsedTicks = 0;
+    @Unique private int dontUseAgainTicks = 0;
     @Unique @Override public float getUsedMindPercentage() { return this.usedMindPercentage; }
     @Unique @Override public void setUsedMindPercentage(float val) { this.usedMindPercentage = val; }
     @Unique @Override public void incUsedMindPercentage(float amount) { this.usedMindPercentage += amount; }

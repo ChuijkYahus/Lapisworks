@@ -21,8 +21,8 @@ import net.minecraft.world.World;
 public abstract class PlayerEntityMixin extends LivingEntity implements EnchSentInterface {
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) { super(entityType, world); }
 
-    @Unique public Vec3d enchSentPos = null;
-    @Unique public Double sentRange = null;
+    @Unique private Vec3d enchSentPos = null;
+    @Unique private Double sentRange = null;
 
     @Unique @Override @Nullable public Vec3d getEnchantedSentinel() { return this.enchSentPos; }
     @Unique @Override @Nullable public Double getEnchantedSentinelAmbit() { return this.sentRange; }

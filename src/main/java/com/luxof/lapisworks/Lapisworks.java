@@ -489,7 +489,6 @@ public class Lapisworks implements ModInitializer {
 			else interactionLeft -= curr.withdrawMedia(interactionLeft, simulate);
 			if (interactionLeft == 0) return new Pair<>(amountToInteract, seen);
 
-			LOGGER.info("links: " + curr.getLinks());
 			for (BlockPos linked : curr.getLinks()) { if (seen.add(linked)) todo.add(linked); }
 		}
 

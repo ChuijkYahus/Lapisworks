@@ -48,14 +48,14 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	@Shadow @Final
 	private AttributeContainer attributes;
 
-	@Unique public AttributeContainer juicedUpVals = new AttributeContainer(
+	@Unique private AttributeContainer juicedUpVals = new AttributeContainer(
 		DefaultAttributeContainer.builder()
 			.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 0) // fists
 			.add(EntityAttributes.GENERIC_MAX_HEALTH, 0) // skin
 			.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0) // feet
 			.build()
 	);
-	@Unique public List<Integer> enchantments = new ArrayList<Integer>(List.of(0, 0, 0, 0, 0));
+	@Unique private List<Integer> enchantments = new ArrayList<Integer>(List.of(0, 0, 0, 0, 0));
 
 	@Unique
 	private void expandEnchantmentsIfNeeded(int idx) {

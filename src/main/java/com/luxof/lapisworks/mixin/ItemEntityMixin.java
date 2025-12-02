@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemEntity.class)
 public class ItemEntityMixin implements ItemEntityMinterface {
-    @Unique public BlockPos cradlePos = null;
+    @Unique private BlockPos cradlePos = null;
 
     @Unique @Override public void setBlockPosOfCradle(BlockPos blockPos) { cradlePos = blockPos; }
     @Unique @Override public BlockPos getBlockPosOfCradle() { return cradlePos; }

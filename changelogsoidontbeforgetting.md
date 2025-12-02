@@ -288,7 +288,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - On that note, the same recipes also show up in Patchouli
 - Hexical interop
   - the Cradle's item actually has a big hitbox now
-  - the Media Jar is targetable by Deposit Media only
+  - the Media Jar and the Cradle are targets for Deposit Media, Withdraw Media and Condensed Media Prfn.
 # 1.5.9
 - Heal your mind after breaking it.
 - Alchemy/potion-brewing overhaul (I'm deadass)
