@@ -15,6 +15,7 @@ import at.petrak.hexcasting.common.lib.HexItems;
 
 import com.google.common.collect.ImmutableSet;
 
+import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.fullLinkableMediaBlocksInteraction;
 import static com.luxof.lapisworks.Lapisworks.interactWithLinkableMediaBlocks;
 import static com.luxof.lapisworks.MishapThrowerJava.assertInRange;
@@ -50,13 +51,15 @@ public class Withdraw implements SpellAction {
             ctx.getWorld(),
             Set.of(pos),
             amount,
-            true,
+            false,
             true
         );
         long realAmount = Math.min(
             interactSimResult.getLeft(),
             ((ItemMediaBattery)phialStack.getItem()).getMaxMedia(phialStack)
         );
+        LOGGER.info("interact res: " + interactSimResult.getLeft());
+        LOGGER.info("given realAmount: " + realAmount);
 
         List<ParticleSpray> particles = new ArrayList<>(List.of(
             ParticleSpray.cloud(ctx.mishapSprayPos(), 3, 20)
