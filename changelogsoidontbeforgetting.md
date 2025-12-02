@@ -211,6 +211,15 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
 - Enchanted Scroll
   - It's literally a Hex Casting IDE.
 - Erebus' Gambit
+- Hex familiar that lets you interact with the Media Condensing Network at a range.
+  - floating thing. like Terraria's flying piggy bank
+  - bind it to one linkable and it'll do all it's business with that one linkable
+    - this linkable is it's entrypoint into any network, basically
+    - can't make it auto-search for the nearest one because it needs to be not OP
+  - you may now pull from that by rmb on the pet with a phial (attempts to fill whole phial)
+  - you may also push to that by shift+rmb on the pet with a phial (attempts to drain whole phial)
+  - costs about 2 amel per 32 blocks of distance (so free within 32 blocks)
+  - i think it should be some kind of orb with a :3 face on it?
 - Mind Control of entities into the game  
   (reality check: gang, how lost are we in the sauce?)
   - you have to un-flay with a Simple Mind first
@@ -218,11 +227,11 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - new pattern, Recharge Entity. Recharges any entity that stores media within itself.
   - media limit of 64 dust
   - cannot overcast
-  - credits to Sheppo from the Hex Casting discord server for the next ideas!
-  - they can be pets
-  - VERY small ambit, at most 3 blocks and usually just 1 (by default too)
-  - can have pre-set conditions to cast a hex, e.g. on hurt (so kind of like Hierophantics!)
-    - not Sheppo: can only have one condition (in-lore: too much space occupied by condition and hex)
+  - credits to Sheppo from the Hex Casting discord server for these
+    - they can be pets
+    - VERY small ambit, at most 3 blocks and usually just 1 (by default too)
+    - can have pre-set conditions to cast a hex, e.g. on hurt (so kind of like Hierophantics!)
+      - not Sheppo: can only have one condition (in-lore: too much space occupied by condition and hex)
 - Mintiest and Kitkat's Gambits (`for i in range(n):`)
 - Rote Brewery
   - Infuse a Simple Mind into a Brewing Stand
@@ -293,6 +302,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
 - Heal your mind after breaking it.
 - Alchemy/potion-brewing overhaul (I'm deadass)
   made some stuff obsolete but fuck vanilla, potion-brewing is basically non-existent anyway.
+  herb stuff that leads to discovering Alchemy?
 - Hexic interop
   WILL HAPPEN. I **WILL** RUN THROUGH HEXIC CODE AND THINK "nathan you genius"
 - Oneironaut interop (you will shit your pants playing Lapisworks and you will like it)  
