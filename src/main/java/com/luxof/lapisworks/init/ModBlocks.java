@@ -10,18 +10,31 @@ import com.luxof.lapisworks.blocks.Mind;
 import com.luxof.lapisworks.blocks.ReboundSlate;
 import com.luxof.lapisworks.blocks.SimpleImpetus;
 import com.luxof.lapisworks.blocks.LiveJukebox;
+import com.luxof.lapisworks.blocks.MediaCondenser;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
 import com.luxof.lapisworks.blocks.entities.SimpleImpetusEntity;
 import com.luxof.lapisworks.blocks.stuff.AbstractBrewerEntity;
+
+import at.petrak.hexcasting.common.lib.HexBlocks;
+
 import com.luxof.lapisworks.blocks.entities.EnchBrewerEntity;
 import com.luxof.lapisworks.blocks.entities.LiveJukeboxEntity;
+import com.luxof.lapisworks.blocks.entities.MediaCondenserEntity;
 
 import static com.luxof.lapisworks.Lapisworks.id;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.block.AbstractBlock.Settings;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
 
 public class ModBlocks {
     public static ConjuredColorable CONJURED_COLORABLE = new ConjuredColorable();
@@ -35,6 +48,23 @@ public class ModBlocks {
     public static ReboundSlate REBOUND_SLATE_2 = new ReboundSlate();
     public static SimpleImpetus SIMPLE_IMPETUS = new SimpleImpetus();
     public static EnchBrewer ENCH_BREWER = new EnchBrewer();
+    public static MediaCondenser MEDIA_CONDENSER = new MediaCondenser();
+    // GET THE UPDATE OUT
+    public static Block UNCRAFTED_CONDENSER = new Block(Settings.copy(HexBlocks.SLATE_BLOCK)) {
+        public static final VoxelShape SHAPE = VoxelShapes.union(
+            Block.createCuboidShape(1, 0, 0, 15, 14, 16),
+            Block.createCuboidShape(0, 0, 1, 16, 14, 15),
+            Block.createCuboidShape(6, 14, 6, 10, 16, 10)
+        );
+        @Override
+        public BlockRenderType getRenderType(BlockState state) {
+            return BlockRenderType.MODEL;
+        }
+        @Override
+        public VoxelShape getOutlineShape(BlockState pState, BlockView pLevel, BlockPos pPos, ShapeContext pContext) {
+            return SHAPE;
+        }
+    };
     //public static ChalkBlock CHALK_BLOCK = new ChalkBlock();
     public static BlockEntityType<MindEntity> MIND_ENTITY_TYPE = new BlockEntityType<MindEntity>(
         MindEntity::new,
@@ -56,6 +86,11 @@ public class ModBlocks {
         ImmutableSet.of(ENCH_BREWER),
         null
     );
+    public static BlockEntityType<MediaCondenserEntity> MEDIA_CONDENSER_ENTITY_TYPE = new BlockEntityType<>(
+        MediaCondenserEntity::new,
+        ImmutableSet.of(MEDIA_CONDENSER),
+        null
+    );
 
     public static void wearASkirt() {
         pickACropTop("conjureable", CONJURED_COLORABLE);
@@ -69,11 +104,14 @@ public class ModBlocks {
         pickACropTop("amel_constructs/jumpslate/rebound_2", REBOUND_SLATE_2);
         pickACropTop("amel_constructs/simple_impetus", SIMPLE_IMPETUS);
         pickACropTop("amel_constructs/enchbrewer", ENCH_BREWER);
+        pickACropTop("media_condenser_unit", MEDIA_CONDENSER);
+        pickACropTop("uncrafted_condenser", UNCRAFTED_CONDENSER);
         //pickACropTop("chalk", CHALK_BLOCK);
         dontForgetStockings("mind_entity_type", MIND_ENTITY_TYPE);
         dontForgetStockings("live_jukebox_entity_type", LIVE_JUKEBOX_ENTITY_TYPE);
         dontForgetStockings("amel_constructs/simple_impetus", SIMPLE_IMPETUS_ENTITY_TYPE);
         dontForgetStockings("amel_constructs/enchbrewer", ENCH_BREWER_ENTITY_TYPE);
+        dontForgetStockings("media_condenser_unit", MEDIA_CONDENSER_ENTITY_TYPE);
     }
 
     public static void pickACropTop(String name, Block block) {

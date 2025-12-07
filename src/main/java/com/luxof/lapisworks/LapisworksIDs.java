@@ -2,6 +2,8 @@ package com.luxof.lapisworks;
 
 import static com.luxof.lapisworks.Lapisworks.id;
 
+import java.util.UUID;
+
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
@@ -11,6 +13,10 @@ import net.minecraft.util.Identifier;
 public class LapisworksIDs {
     /** shorthand */
     private static Text t(String str) { return Text.translatable(str); }
+
+    // entity attribute modifiers
+    public static final UUID REACH_ENHANCEMENT_UUID = UUID.fromString("53276a15-c1f6-4d56-ba0f-2b1d7312d679");
+    public static final UUID ATK_RANGE_ENHANCEMENT_UUID = UUID.fromString("46519d02-6197-46a6-9df5-f80dd263adb2");
 
     // packets
     public static final Identifier OPEN_CASTING_GRID = id("open_casting_grid");
@@ -57,6 +63,11 @@ public class LapisworksIDs {
     public static final Text DIARIES_TOOLTIP_3 = t("tooltips.lapisworks.wizard_diaries.3");
     public static final Text DIARIES_TOOLTIP_4 = t("tooltips.lapisworks.wizard_diaries.4");
 
+    // item n blocks n shi text
+    public static final Text AMEL = t("hexcasting.mishap.bad_item.amel");
+    public static final Text MEDIA_CONDENSER = t("block.lapisworks.media_condenser_unit");
+
+    public static final Text LINKABLE_MEDIA_BLOCK = t("mishaps.lapisworks.descs.linkable_media_block");
     public static final Text IMBUEABLE = t("mishaps.lapisworks.descs.imbueable");
     public static final Text INFUSEABLE_WITH_SMIND = t("mishaps.lapisworks.descs.smind_infuseable");
     public static final Text READABLE = t("mishaps.lapisworks.descs.readable");
@@ -80,9 +91,9 @@ public class LapisworksIDs {
     public static final Text SCRYING_MIND_END = t("render.lapisworks.scryinglens.mind.end");
     public static final Text LAPISMAGICSHITGROUPTEXT = t("itemgroup.lapisworks.lapismagicshitgroup");
     public static final Text GOT_ALL_DIARIES = t("notif.lapisworks.wizard_diaries.all_gotten");
+    public static final Text DIARY_UNREADABLE = t("notif.lapisworks.wizard_diaries.unreadable_diary");
     public static final Text ENCHBOOK_WITH_ONE_ENCH = t("mishaps.lapisworks.descs.oneench_enchbook");
     public static final Text ENCHBOOK_WITH_NOTONE_ENCH = t("mishaps.lapisworks.descs.moreench_enchbook");
-    public static final Text AMEL = t("hexcasting.mishap.bad_item.amel");
     public static final Text DOWSER_COULDNT_FIND = t("notif.lapisworks.dowser.couldnt_find");
 
     // mishaps

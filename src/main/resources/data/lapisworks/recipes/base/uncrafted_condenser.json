@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "DAD",
+        "S S",
+        " S "
+    ],
+    "key": {
+        "D": {
+            "item": "hexcasting:amethyst_dust"
+        },
+        "A": {
+            "tag": "lapisworks:amel"
+        },
+        "S": {
+            "item": "hexcasting:slate"
+        }
+    },
+    "result": {
+        "item": "lapisworks:uncrafted_condenser"
+    }
+}

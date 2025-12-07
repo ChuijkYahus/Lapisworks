@@ -3,7 +3,7 @@
     "pattern": [
         "AGG",
         "GDG",
-        "GGG"
+        "GGM"
     ],
     "key": {
         "A": {
@@ -14,9 +14,12 @@
         },
         "D": {
             "item": "minecraft:diamond"
+        },
+        "M": {
+            "tag": "lapisworks:amel"
         }
     },
     "result": {
-        "item": "lapisworks:staves/ring"
+        "item": "lapisworks:staves/amel_ring"
     }
 }

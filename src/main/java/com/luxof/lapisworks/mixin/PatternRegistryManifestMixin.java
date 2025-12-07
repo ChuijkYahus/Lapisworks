@@ -32,15 +32,15 @@ public abstract class PatternRegistryManifestMixin {
         // because hex will automatically validate the one that is chosen if this is it.
         if (!chosenFlags.values().contains(null)) {
             String sig = pat.anglesSignature();
+
             for (String patId : allPerWorldShapePatterns.keySet()) {
                 List<String> pats = allPerWorldShapePatterns.get(patId);
+
                 int idx = pats.indexOf(sig);
-                if (idx == -1) { continue; }
-                if (idx != chosenFlags.get(patId)) {
-                    shapeMatch = new PatternShapeMatch.Nothing();
-                } else {
-                    break; // approved!
-                }
+                if (idx == -1) continue;
+
+                else if (idx != chosenFlags.get(patId)) shapeMatch = new PatternShapeMatch.Nothing();
+                else break;
             }
             for (List<String> pats : allPerWorldShapePatterns.values()) {
                 if (!pats.contains(sig)) { continue; }

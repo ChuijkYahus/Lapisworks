@@ -1,0 +1,35 @@
+{
+  "parent": "lapisworks:got_lapis",
+  "display": {
+    "icon": {
+      "item": "lapisworks:amel"
+    },
+    "title": {
+      "translate": "advancements.lapisworks.enlightened.name"
+    },
+    "description": {
+      "translate": "advancements.lapisworks.enlightened.description"
+    },
+    "background": "hexcasting:textures/block/slate.png",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "be_enlightened_and_be_a_lapisworker": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": {
+          "type_specific": {
+            "type": "player",
+            "advancements": {
+              "lapisworks:got_lapis": true,
+              "hexcasting:enlightenment": true
+            }
+          }
+        }
+      }
+    }
+  }
+}

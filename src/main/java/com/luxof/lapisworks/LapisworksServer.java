@@ -92,7 +92,6 @@ public class LapisworksServer {
         // PlayerEntity.attributes is reset to the defaults (but then why doesn't health reset to default??)
         ServerPlayerEntity player = handler.getPlayer();
         juiceUpAttr(player, EntityAttributes.GENERIC_ATTACK_DAMAGE);
-        juiceUpAttr(player, EntityAttributes.GENERIC_ATTACK_SPEED);
         //juiceUpAttr(player, EntityAttributes.GENERIC_MAX_HEALTH);
         juiceUpAttr(player, EntityAttributes.GENERIC_MOVEMENT_SPEED);
     }

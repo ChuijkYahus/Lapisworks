@@ -1,6 +1,7 @@
 package com.luxof.lapisworks.recipes;
 
 import com.google.gson.JsonObject;
+
 import com.luxof.lapisworks.inv.HandsInv;
 
 import java.util.List;
@@ -61,20 +62,13 @@ public class MoldRec implements Recipe<HandsInv> {
     }
 
     @Override
-    public boolean fits(int width, int height) {
-        return true;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() { return MoldRecSerializer.INSTANCE; }
-
-    @Override
-    public RecipeType<?> getType() { return Type.INSTANCE; }
-
-    @Override
     public boolean matches(HandsInv inventory, World world) {
         return this.enabled ?
             inventory.getHands().stream().map(stack -> this.input.test(stack)).toList().contains(true)
             : false;
     }
+
+    @Override public boolean fits(int width, int height) { return true; }
+    @Override public RecipeSerializer<?> getSerializer() { return MoldRecSerializer.INSTANCE; }
+    @Override public RecipeType<?> getType() { return Type.INSTANCE; }
 }

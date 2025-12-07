@@ -75,11 +75,9 @@ public abstract class PatternIotaMixin {
     @Inject(
         method = "execute",
         at = @At(
-            value = "INVOKE",
+            value = "INVOKE_ASSIGN",
             // woah, being able to browse bytecode to just copy-paste is so fucking neat
-            target = "at/petrak/hexcasting/common/casting/PatternRegistryManifest.matchPattern (Lat/petrak/hexcasting/api/casting/math/HexPattern;Lat/petrak/hexcasting/api/casting/eval/CastingEnvironment;Z)Lat/petrak/hexcasting/api/casting/PatternShapeMatch;",
-            shift = At.Shift.BY,
-            by = 2 // shift by 2 because there's an ASTORE 5 right after that bytecode!
+            target = "at/petrak/hexcasting/common/casting/PatternRegistryManifest.matchPattern(Lat/petrak/hexcasting/api/casting/math/HexPattern;Lat/petrak/hexcasting/api/casting/eval/CastingEnvironment;Z)Lat/petrak/hexcasting/api/casting/PatternShapeMatch;"
         ),
         locals = LocalCapture.CAPTURE_FAILHARD
     )

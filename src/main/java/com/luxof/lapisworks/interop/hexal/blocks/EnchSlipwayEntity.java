@@ -51,10 +51,10 @@ public class EnchSlipwayEntity extends BlockEntity {
             (any) -> true
         ).size() < 40) {
             Random random = bE.getWorld().random;
-            // i have NO clue how to translate the other code to this so that the spawn rate is
-            // precisely double
+            // the spawn rate is now precisely double!
+            // gaussian distrib centered on 40 with a maximum (:pensive:) deviation of 10
             bE.nextSpawnTick = tick +
-                (int)(Math.max(20.0, 60.0 * random.nextGaussian()));
+                (int)(80 * random.nextGaussian() + (10 - 20 * random.nextGaussian()));
             WanderingWisp wisp = new WanderingWisp(sw, bp.toCenterPos());
             wisp.addVelocity(
                 new Vec3d(0.5-random.nextDouble(), 0.5-random.nextDouble(), 0.5-random.nextDouble())

@@ -1,8 +1,16 @@
 package com.luxof.lapisworks.interop.hexical.blocks;
 
+import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
+
+import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
 import com.luxof.lapisworks.interop.hexical.Lapixical;
+import com.luxof.lapisworks.mixinsupport.GetServerStatus;
 import com.luxof.lapisworks.mixinsupport.ItemEntityMinterface;
 
+import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
+
+import java.util.Set;
 import java.util.UUID;
 
 import net.minecraft.block.BlockState;
@@ -15,11 +23,10 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class CradleEntity extends BlockEntity implements Inventory {
+public class CradleEntity extends BlockEntity implements Inventory, LinkableMediaBlock {
     private ItemStack heldStack = ItemStack.EMPTY.copy();
     public ItemEntity heldEntity = null;
     private UUID persistentUUID = UUID.randomUUID();
@@ -73,10 +80,6 @@ public class CradleEntity extends BlockEntity implements Inventory {
         if (heldEntity == null) return;
         Vec3d pos = this.pos.toCenterPos();
         heldEntity.setPosition(pos);
-        heldEntity.setBoundingBox(new Box( // why the fuck doesn't this work?
-            pos.x - 1, pos.y - 1, pos.z - 1,
-            pos.x + 1, pos.y + 1, pos.z + 1
-        ));
         heldEntity.noClip = true;
         heldEntity.setNeverDespawn();
         heldEntity.setNoGravity(true);
@@ -84,21 +87,29 @@ public class CradleEntity extends BlockEntity implements Inventory {
         heldEntity.setInvulnerable(true);
         heldEntity.setVelocity(Vec3d.ZERO);
         heldEntity.setPickupDelayInfinite();
+        NBTHelper.putBoolean(heldEntity.getStack(), IS_IN_CRADLE, true);
+        heldEntity.calculateDimensions();
     }
 
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
         heldStack = ItemStack.fromNbt(nbt.getCompound("item"));
-        if (nbt.containsUuid("persistent_uuid")) persistentUUID = nbt.getUuid("persistent_uuid");
+        this.persistentUUID = nbt.getUuid("persistent_uuid");
     }
 
     @Override
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         nbt.put("item", heldStack.writeNbt(new NbtCompound()));
-        if (persistentUUID != null) {
-            nbt.putUuid("persistent_uuid", persistentUUID);
+        nbt.putUuid("persistent_uuid", persistentUUID);
+
+        if (world.isClient) return;
+        if (heldEntity != null && ((GetServerStatus)world.getServer()).isShuttingDown()) {
+            // the item entities always seem to become glitchy on world load
+            // i reckon it's because i can't grab them on world load
+            heldEntity.discard();
+            heldEntity = null;
         }
     }
 
@@ -164,4 +175,32 @@ public class CradleEntity extends BlockEntity implements Inventory {
 
     @Override
     public int size() { return 1; }
+
+    @Override public void addLink(BlockPos pos) {}
+    @Override public void removeLink(BlockPos pos) {}
+    @Override public boolean isLinkedTo(BlockPos pos) { return false; }
+    @Override public Set<BlockPos> getLinks() { return Set.of(); }
+    @Override public int getNumberOfLinks() { return 0; }
+    @Override public int getMaxNumberOfLinks() { return 0; }
+    @Override public BlockPos getThisPos() { return this.pos; }
+
+    @Override
+    public long depositMedia(long amount, boolean simulate) {
+        if (!(heldStack.getItem() instanceof ItemMediaBattery phial)) return 0;
+        phial.insertMedia(heldEntity.getStack(), amount, simulate);
+        return phial.insertMedia(heldStack, amount, simulate);
+    }
+
+    @Override
+    public long withdrawMedia(long amount, boolean simulate) {
+        if (!(heldStack.getItem() instanceof ItemMediaBattery phial)) return 0;
+        phial.withdrawMedia(heldEntity.getStack(), amount, simulate);
+        return phial.withdrawMedia(heldStack, amount, simulate);
+    }
+
+    @Override
+    public long getMediaHere() {
+        if (!(heldStack.getItem() instanceof ItemMediaBattery phial)) return 0;
+        return phial.getMedia(heldStack);
+    }
 }

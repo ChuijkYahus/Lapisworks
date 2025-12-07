@@ -5,6 +5,7 @@
 	"textures": {
 		"1": "lapisworks:block/amel_constructs/enchbrewer",
 		"particle": "lapisworks:block/amel_constructs/enchbrewer",
+		"missing": "lapisworks:block/amel_constructs/enchbrewer",
 		"stand": "block/brewing_stand"
 	},
 	"elements": [

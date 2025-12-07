@@ -1,9 +1,7 @@
 package com.luxof.lapisworks.init;
 
 import com.luxof.lapisworks.items.AmelJar;
-import com.luxof.lapisworks.items.AmelRing;
 import com.luxof.lapisworks.items.AmelStaff;
-import com.luxof.lapisworks.items.CastingRing;
 //import com.luxof.lapisworks.items.Chalk;
 import com.luxof.lapisworks.items.DiamondSword;
 import com.luxof.lapisworks.items.FocusNecklace;
@@ -15,6 +13,8 @@ import com.luxof.lapisworks.items.PartiallyAmelStaff;
 import com.luxof.lapisworks.items.WizardDiaries;
 import com.luxof.lapisworks.items.shit.AmelSword;
 
+import at.petrak.hexcasting.common.items.ItemStaff;
+
 import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.LapisworksIDs.LAPISMAGICSHITGROUPTEXT;
 import static com.luxof.lapisworks.LapisworksIDs.LAPIS_MAGIC_SHIT_GROUP;
@@ -24,6 +24,7 @@ import java.util.List;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -54,9 +55,8 @@ public class ModItems {
     public static final PartiallyAmelStaff PARTAMEL_OAK_STAFF = new PartiallyAmelStaff();
     public static final PartiallyAmelStaff PARTAMEL_SPRUCE_STAFF = new PartiallyAmelStaff();
     public static final PartiallyAmelStaff PARTAMEL_WARPED_STAFF = new PartiallyAmelStaff();
-    public static final Item AMEL_RING = new AmelRing(unstackable);
-    public static final Item AMEL_RING2 = new AmelRing(unstackable);
-    public static final CastingRing CASTING_RING = new CastingRing(unstackable);
+    public static final Item AMEL_RING = new ItemStaff(unstackable);
+    public static final Item AMEL_RING2 = new ItemStaff(unstackable);
     public static final AmelSword DIAMOND_SWORD = new DiamondSword();
     public static final AmelSword IRON_SWORD = new IronSword();
     public static final AmelSword GOLD_SWORD = new GoldSword();
@@ -80,6 +80,8 @@ public class ModItems {
     public static final FocusNecklace FOCUS_NECKLACE_WORN = new FocusNecklace(unstackable);
     public static final FocusNecklace FOCUS_NECKLACE2_WORN = new FocusNecklace(unstackable);
     public static final Item ENCH_BREWER = new BlockItem(ModBlocks.ENCH_BREWER, fullStack);
+    public static final BlockItem MEDIA_CONDENSER = new BlockItem(ModBlocks.MEDIA_CONDENSER, unstackable);
+    public static final BlockItem UNCRAFTED_CONDENSER = new BlockItem(ModBlocks.UNCRAFTED_CONDENSER, fullStack);
 
     private static List<String> itemNames = new ArrayList<>(List.of(
         "amel",
@@ -103,7 +105,6 @@ public class ModItems {
         "staves/incomplete/warped",
         "staves/amel_ring",
         "staves/amel_ring2",
-        "staves/ring",
         "amel_constructs/diamond_sword",
         "amel_constructs/iron_sword",
         "amel_constructs/gold_sword",
@@ -125,7 +126,9 @@ public class ModItems {
         "amel_constructs/focus_necklace/2",
         "amel_constructs/focus_necklace/1_worn",
         "amel_constructs/focus_necklace/2_worn",
-        "amel_constructs/enchbrewer"
+        "amel_constructs/enchbrewer",
+        "media_condenser_unit",
+        "uncrafted_condenser"
     ));
     private static List<Item> items = new ArrayList<>(List.of(
         AMEL_ITEM,
@@ -149,7 +152,6 @@ public class ModItems {
         PARTAMEL_WARPED_STAFF,
         AMEL_RING,
         AMEL_RING2,
-        CASTING_RING,
         DIAMOND_SWORD,
         IRON_SWORD,
         GOLD_SWORD,
@@ -171,7 +173,9 @@ public class ModItems {
         FOCUS_NECKLACE2,
         FOCUS_NECKLACE_WORN,
         FOCUS_NECKLACE2_WORN,
-        ENCH_BREWER
+        ENCH_BREWER,
+        MEDIA_CONDENSER,
+        UNCRAFTED_CONDENSER
     ));
 
     public static ItemGroup LapisMagicShitGroup;

@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -33,12 +34,12 @@ public abstract class PlayerBasedCastEnvMixin extends CastingEnvironment {
 	protected void canOvercast(CallbackInfoReturnable<Boolean> cir) {
 		double amountOfMaxHPJuicedUp = ((LapisworksInterface)getCastingEntity())
 			.getAmountOfAttrJuicedUpByAmel(EntityAttributes.GENERIC_MAX_HEALTH);
-		if (amountOfMaxHPJuicedUp > 0) {
-			cir.setReturnValue(false);
-		}
+
+		if (amountOfMaxHPJuicedUp > 0) cir.setReturnValue(false);
 	}
 
-	public boolean isVecInRangeOfEnchSent(Vec3d vec) {
+	@Unique
+	private boolean isVecInRangeOfEnchSent(Vec3d vec) {
 		if (this.getCastingEntity() == null) { return false; }
 		else if (!(this.getCastingEntity() instanceof PlayerEntity)) { return false; }
 
@@ -46,19 +47,22 @@ public abstract class PlayerBasedCastEnvMixin extends CastingEnvironment {
 		Vec3d sentPos = player.getEnchantedSentinel();
 		Double sentAmbit = player.getEnchantedSentinelAmbit();
 
-		if (sentPos == null) { return false; }
-		if (vec.squaredDistanceTo(sentPos) > sentAmbit*sentAmbit) { return false; }
+		if (sentPos == null) return false;
+		if (vec.squaredDistanceTo(sentPos) > sentAmbit*sentAmbit) return false;
 
 		return true;
 	}
 
-	// really should let this apply to spell circles huh.
+	// really should let this apply to spell circles too huh.
+	@Unique
 	public boolean isVecInRangeOfOrb(Vec3d vec) {
 		List<HeldItemInfo> heldItems = ((GetStacks)this).getHeldStacks();
 		for (HeldItemInfo heldItem : heldItems) {
 			if (!(heldItem.stack().getItem() instanceof AmelOrb orb)) continue;
+
 			Vec3d ambitOrigin = orb.getPlaceInAmbit(heldItem.stack());
 			if (ambitOrigin == null) continue;
+
 			double ambit = orb.ambitRadius;
 			if (vec.distanceTo(ambitOrigin) <= ambit) return true;
 		}

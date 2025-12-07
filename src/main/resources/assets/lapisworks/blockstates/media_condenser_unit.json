@@ -1,0 +1,19 @@
+{
+    "variants": {
+        "filled=0": { "model": "lapisworks:block/media_condenser_unit/14" },
+        "filled=1": { "model": "lapisworks:block/media_condenser_unit/13" },
+        "filled=2": { "model": "lapisworks:block/media_condenser_unit/12" },
+        "filled=3": { "model": "lapisworks:block/media_condenser_unit/11" },
+        "filled=4": { "model": "lapisworks:block/media_condenser_unit/10" },
+        "filled=5": { "model": "lapisworks:block/media_condenser_unit/9" },
+        "filled=6": { "model": "lapisworks:block/media_condenser_unit/8" },
+        "filled=7": { "model": "lapisworks:block/media_condenser_unit/7" },
+        "filled=8": { "model": "lapisworks:block/media_condenser_unit/6" },
+        "filled=9": { "model": "lapisworks:block/media_condenser_unit/5" },
+        "filled=10": { "model": "lapisworks:block/media_condenser_unit/4" },
+        "filled=11": { "model": "lapisworks:block/media_condenser_unit/3" },
+        "filled=12": { "model": "lapisworks:block/media_condenser_unit/2" },
+        "filled=13": { "model": "lapisworks:block/media_condenser_unit/1" },
+        "filled=14": { "model": "lapisworks:block/media_condenser_unit/0" }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "name": "pages.lapisworks.interop.lapixical.get_hexical_bro.title",
+    "icon": "lapisworks:textures/entries/question_mark.png",
+    "advancement": "lapisworks:got_lapis",
+    "flag": "!mod:hexical",
+    "category": "hexcasting:lapisworks/interop/lapixical",
+    "sortnum": 0,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.interop.lapixical.get_hexical_bro.text"
+        }
+    ]
+}

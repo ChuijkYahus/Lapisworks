@@ -6,7 +6,6 @@ import com.google.gson.JsonSyntaxException;
 
 import com.luxof.lapisworks.inv.BrewerInv;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.potionEquals;
 import static net.minecraft.item.ItemStack.EMPTY;
 
@@ -170,8 +169,6 @@ public class BrewingRec implements Recipe<BrewerInv> {
                 }
             }
         }
-        LOGGER.info("brewing len: " + brewing.size());
-        LOGGER.info("eject len: " + eject.size());
 
         ItemStack inputStack = inv.input;
 
@@ -180,8 +177,6 @@ public class BrewingRec implements Recipe<BrewerInv> {
             eject.add(inputStack.copyWithCount(inputStack.getCount() - ing.amount));
             break;
         }
-        LOGGER.info("brewing len after ing: " + brewing.size());
-        LOGGER.info("eject len after ing: " + eject.size());
 
         brewed.addAll(eject);
         return brewed;

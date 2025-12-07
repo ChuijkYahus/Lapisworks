@@ -19,16 +19,19 @@ import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.init.Mutables.SMindInfusion;
 import com.luxof.lapisworks.mixinsupport.GetVAULT;
+import com.mojang.datafixers.util.Either;
 
 import static com.luxof.lapisworks.LapisworksIDs.FULL_SIMPLE_MIND;
 import static com.luxof.lapisworks.LapisworksIDs.INFUSEABLE_WITH_SMIND;
 import static com.luxof.lapisworks.LapisworksIDs.MIND_BLOCK;
+import static com.luxof.lapisworks.MishapThrowerJava.getBlockPosOrEntity;
 
 import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -41,14 +44,28 @@ public class FlayArtMind implements SpellAction {
 
     @Override
     public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
-        BlockPos flayIntoPos = OperatorUtils.getBlockPos(args, 0, getArgc());
+        Either<BlockPos, Entity> flayInto = getBlockPosOrEntity(args, 0, getArgc());
+        BlockPos flayIntoPos = flayInto.left().orElse(null);
+        Entity flayIntoEntity = flayInto.right().orElse(null);
+
         VAULT vault = ((GetVAULT)ctx).grabVAULT();
-        Map<Identifier, SMindInfusion> recipes = Mutables.testSMindInfusionFilters(
-            flayIntoPos,
-            ctx,
-            args,
-            vault
-        );
+        Map<Identifier, SMindInfusion> recipes = Map.of();
+
+        if (flayIntoPos != null) {
+            recipes = Mutables.testSMindInfusionFilters(
+                flayIntoPos,
+                ctx,
+                args,
+                vault
+            );
+        } else if (flayIntoEntity != null) {
+            recipes = Mutables.testSMindInfusionFilters(
+                flayIntoEntity,
+                ctx,
+                args,
+                vault
+            );
+        }
         if (recipes.isEmpty()) {
             MishapThrowerJava.throwMishap(new MishapBadBlock(
                 flayIntoPos,

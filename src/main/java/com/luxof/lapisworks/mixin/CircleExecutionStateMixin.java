@@ -32,8 +32,7 @@ public abstract class CircleExecutionStateMixin {
         method = "createNew",
         at = @At(
             value = "INVOKE",
-            //at.petrak.hexcasting.api.casting.circles.ICircleComponent.possibleExitDirections(net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState bs, net.minecraft.world.World world)
-            //target = "Ljava/util/ArrayList;add(Ljava/lang/Object;)Z",
+            // how does this make sense in the slightest, why isn't it trying to remap this shit
             target = "Lat/petrak/hexcasting/api/casting/circles/ICircleComponent;possibleExitDirections(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;)Ljava/util/EnumSet;",
             shift = At.Shift.AFTER
         ),

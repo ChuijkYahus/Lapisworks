@@ -6,7 +6,6 @@ import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-
 import com.luxof.lapisworks.interop.hexical.blocks.HolderEntity;
 
 import static com.luxof.lapisworks.LapisworksIDs.HEXICAL_IMPETUS_HAND;
@@ -88,6 +87,7 @@ public abstract class CircleCastEnvMixin extends CastingEnvironment {
         }
     }
 
+    @Unique
     private HolderEntity getRightHandedHolder() {
         if (!HEXICAL_INTEROP) return null;
         int[] p = this.circleState().currentImage.getUserData().getIntArray(RH_HOLDER);

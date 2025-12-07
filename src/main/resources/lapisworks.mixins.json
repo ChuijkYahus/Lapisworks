@@ -15,9 +15,10 @@
 		"CircleExecutionStateMixin",
 		"ItemRendererMixin",
 		"ClientPlayerEntityMixin",
-		"ClientAdvancementsMixin",
 		"CircleExecutionStateMixin2",
-		"PatternIotaMixin"
+		"PatternIotaMixin",
+		"OpMakeBattery$SpellMixin",
+		"BlockEntityAbstractImpetusMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

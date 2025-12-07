@@ -1,0 +1,29 @@
+{
+    "name": "pages.lapisworks.interop.lapisal.openslipway.title",
+    "icon": "lapisworks:textures/entries/lapisal.png",
+    "advancement": "lapisworks:enlightened",
+    "flag": "mod:hexal",
+    "category": "hexcasting:lapisworks/interop/lapisal",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.interop.lapisal.openslipway.clueless"
+        },
+        {
+            "type": "patchouli:text",
+            "advancement": "lapisworks:rediscover_flay_artmind",
+            "text": "pages.lapisworks.interop.lapisal.openslipway.clueless_still"
+        },
+        {
+            "type": "patchouli:text",
+            "advancement": "lapisworks:cluedin",
+            "text": "pages.lapisworks.interop.lapisal.openslipway.cluedin"
+        },
+        {
+            "type": "patchouli:text",
+            "advancement": "lapisworks:cluedin",
+            "text": "pages.lapisworks.interop.lapisal.openslipway.cluedin_compromise"
+        }
+    ]
+}

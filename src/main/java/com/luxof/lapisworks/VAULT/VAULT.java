@@ -24,6 +24,8 @@ import net.minecraft.util.Identifier;
 public abstract class VAULT {
     protected VAULT() {}
     // this is the part you can mixin to add support
+    /** if you want a VAULT, use ((GetVAULT)thething).grabVAULT(), not this.
+     * This is meant to be stored in classes via mixin so you can grab a VAULT. */
     @Nullable
     public static <ANY extends Object> VAULT of(ANY literallyFuckingAnything) {
         if (literallyFuckingAnything instanceof ServerPlayerEntity player) {

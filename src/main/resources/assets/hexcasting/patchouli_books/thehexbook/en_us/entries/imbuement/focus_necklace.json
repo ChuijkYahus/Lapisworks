@@ -15,6 +15,11 @@
             "text": "pages.lapisworks.imbuement.trinkets.necklace.text"
         },
         {
+            "type": "patchouli:crafting",
+            "recipe": "lapisworks:base/focus_necklace",
+            "text": "pages.lapisworks.imbuement.trinkets.necklace.recipe.desc"
+        },
+        {
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:read_necklace",
             "anchor": "lapisworks:read_necklace",
@@ -52,11 +57,6 @@
                 "lapisworks:textures/entries/focineckli.png"
             ],
             "text": "pages.lapisworks.imbuement.trinkets.necklace.img.desc"
-        },
-        {
-            "type": "patchouli:text",
-            "advancement": "hexcasting:opened_eyes",
-            "text": "pages.lapisworks.imbuement_artmind.reflection"
         }
     ]
 }

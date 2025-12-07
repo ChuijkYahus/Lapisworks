@@ -1,8 +1,11 @@
 package com.luxof.lapisworks.client;
 
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
+import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.common.lib.HexItems;
 
 import com.luxof.lapisworks.Lapisworks;
+import com.luxof.lapisworks.blocks.entities.MediaCondenserEntity;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
 import com.luxof.lapisworks.client.screens.EnchBrewerScreen;
 import com.luxof.lapisworks.init.ModBlocks;
@@ -166,6 +169,28 @@ public class LapisworksClient implements ClientModInitializer {
                 )
             }
         );*/
+        ScryingLensOverlayRegistry.addDisplayer(
+            ModBlocks.MEDIA_CONDENSER,
+            (lines, state, pos, observer, world, direction) -> {
+                Optional<MediaCondenserEntity> blockEntityOpt = world.getBlockEntity(
+                    pos,
+                    ModBlocks.MEDIA_CONDENSER_ENTITY_TYPE
+                );
+                if (blockEntityOpt.isEmpty()) return;
+                MediaCondenserEntity blockEntity = blockEntityOpt.get();
+                lines.add(
+                    new Pair<ItemStack, Text>(
+                        new ItemStack(HexItems.AMETHYST_DUST),
+                        Text.translatable(
+                            "render.lapisworks.scryinglens.mediacondenser",
+                            prettifyFloat((float)blockEntity.media / (float)blockEntity.mediaCap * 100f),
+                            (double)blockEntity.media / (double)MediaConstants.DUST_UNIT,
+                            (double)blockEntity.mediaCap / (double)MediaConstants.DUST_UNIT
+                        ).formatted(Formatting.LIGHT_PURPLE)
+                    )
+                );
+            }
+        );
 
         WorldRenderEvents.AFTER_TRANSLUCENT.register((ctx) -> {
             overlayWorld(ctx.matrixStack(), ctx.tickDelta());

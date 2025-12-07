@@ -1,6 +1,16 @@
 {
-    "parent": "lapisworks:item/amel_constructs/focus_necklace/1",
-    "textures": {
-        "layer0": "lapisworks:item/focus_necklace2"
-    }
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "lapisworks:item/focus_necklace2"
+	},
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [-2.5, 5, 1.5]
+		},
+		"thirdperson_lefthand": {
+			"translation": [2.5, 5, 1.5]
+		}
+	}
 }

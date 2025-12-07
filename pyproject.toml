@@ -34,6 +34,7 @@ key = "mod_version"
 dependencies = [
     "hexdoc~=1!0.1.0a11",
     { package="hexdoc-hexcasting", op="~=", py-version="1.0", key="hexcasting_version" },
+    { package="hexdoc-hexical", op=">=", py-version="1.0.0", key="hexical_version" },
     "networkx~=3.5",
     "scipy~=1.16",
 ]

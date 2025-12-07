@@ -4,6 +4,8 @@
     { "id": "lapisworks:amel_constructs/holder", "required": false },
     { "id": "lapisworks:cradle", "required": false },
     { "id": "lapisworks:rod", "required": false },
-    "lapisworks:amel_constructs/simple_impetus"
+    "lapisworks:amel_constructs/simple_impetus",
+    "lapisworks:media_condenser_unit",
+    "lapisworks:uncrafted_condenser"
   ]
 }

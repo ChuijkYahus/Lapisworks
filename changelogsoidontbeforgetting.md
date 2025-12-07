@@ -141,7 +141,7 @@ Super sorry, but this is the LAST!! time per-world shape patterns change!
 # 1.5.6.9
 - Fixed requiring Hexical or it'll break the book :sob:
 # 1.5.7
-I randomly did like 20% of this update in one day, in 5 hours.
+I randomly did like 15% of this update in one day, in 5 hours.
 Was I fucking LAZY before and after??? (Note from future me: yes.)
 ## Additions:
   - Empty Distillation
@@ -154,21 +154,23 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     - Infuse a Simple Mind into an empty Impetus
     - By default executes when ANY pattern is executed nearby
     - Can be taught to only execute on specific patterns
-  - Teach Simple Impetus
-    - Teaches the Simple Impetus at the target location the pattern it should focus on
-  - Added the Media Condensing Unit
-    - Deposit with Deposit Media (1/11 dust tax)
-    - Withdraw into phial in other hand with Withdraw Media (1/11 dust tax)
-    - stores an amount of media decided by the phial used in it's recipe
-    - Link Media Unit can be used to link them together
+  - Media Condensing Unit
+    - Deposit with Deposit Media (10% dust tax)
+    - Withdraw into phial in other hand with Withdraw Media (10% dust tax)
+    - stores media in a block
+    - Phiangle can be used to link them together
       - costs 3 charged, and 1 amel per 32 blocks of distance (media part not scalable)
-      - links cost 0 upkeep and have 0 tax on transfer of media between units
-      - links only transfer on overflow or underflow
+      - phianglements cost 0 upkeep and have 0 tax on transfer of media between units
+      - phiangled units only transfer on overflow or underflow
+    - Dephiangle when you have long ass links that you don't wanna break by breaking the block
+      - costs 3 charged
 ## Changes:
   - Amel Imbuement is datapack-friendlier now
   - Casting Rings can be worn in an extra slot on your off-hand as well now.
   - Decreased the base cost of Enchantments to 32 Amel.
+  - Enchant Arms now gives you reach instead.
   - Envelop Feet In Amel enchantment has three levels now.
+  - Envelop Feet In Amel enchantment no longer just nullifies but also cushions your fall.
   - Hastenature now has a +2.5 shard penalty if the target is Budding Amethyst.
   - Imbue Mind can now imbue into entities
     - This has potential ~~(to break my brain with overlapping recipes)~~
@@ -180,6 +182,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     Mission (sorta) success. Now it looks kinda menacing because it's held so low???
   - Amel Jar's sprite's repositioning haunts me no more!
   - Fixed Duplication bug in Hexical interop ([#14](https://github.com/Real-Luxof/Lapisworks/issues/14))
+  - Fixed Enchantments not taking Amel from your hotbar and trinkets n shit
   - FIXED ENHANCEMENTS AND ENCHANTMENTS NOT TRANSFERRING ACROSS DIMENSIONS!! ([#15](https://github.com/Real-Luxof/Lapisworks/issues/15))
   - Fixed Hastenature's book icon blending into the background.
   - Fixed Imbue Mind giving you the wrong mishap description
@@ -199,7 +202,58 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
       They produce twice as many wandering wisps per second but they can't be turned into portals with Oneironaut
     - Simple Minds, when infused into the air, produce a wandering wisp
 # 1.5.8
-- Hierophantics interop
+## Additions:
+- Chalk Rituals
+- Enchanted Brewery
+  - Imbue 10 Amel into a Brewing Stand
+  - 2x blaze usage for 2x speed
+  - Takes 1 amethyst dust per brew
+- Enchanted Scroll
+  - It's literally a Hex Casting IDE.
+- Erebus' Gambit
+- Hex familiar that lets you interact with the Media Condensing Network at a range.
+  - floating thing. like Terraria's flying piggy bank
+  - bind it to one linkable and it'll do all it's business with that one linkable
+    - this linkable is it's entrypoint into any network, basically
+    - can't make it auto-search for the nearest one because it needs to be not OP
+  - you may now pull from that by rmb on the pet with a phial (attempts to fill whole phial)
+  - you may also push to that by shift+rmb on the pet with a phial (attempts to drain whole phial)
+  - costs about 2 amel per 32 blocks of distance (so free within 32 blocks)
+  - i think it should be some kind of orb with a :3 face on it?
+- Mind Control of entities into the game  
+  (reality check: gang, how lost are we in the sauce?)
+  - you have to un-flay with a Simple Mind first
+  - controllable movement
+  - new pattern, Recharge Entity. Recharges any entity that stores media within itself.
+  - media limit of 64 dust
+  - cannot overcast
+  - credits to Sheppo from the Hex Casting discord server for these
+    - they can be pets
+    - VERY small ambit, at most 3 blocks and usually just 1 (by default too)
+    - can have pre-set conditions to cast a hex, e.g. on hurt (so kind of like Hierophantics!)
+      - not Sheppo: can only have one condition (in-lore: too much space occupied by condition and hex)
+- Mintiest and Kitkat's Gambits (`for i in range(n):`)
+- Rote Brewery
+  - Infuse a Simple Mind into a Brewing Stand
+  - Can remember up to 5 potion recipes
+  - Each write is permanent, stops brewing anything but remembered potions when at the limit
+  - When a potion from memory is selected, takes items automatically.
+  - ALWAYS takes 2 steps worth of time.
+    Manual brewing (or teaching it) is a pain as each step takes twice as long.
+    Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.
+- Scrying patterns for blocks added by the mod.
+## Changes:
+- Book reformatting and extra documentation and shit
+  - e.g. Villager un-flaying is actually documented now
+- Deposit Media and Withdraw Media work conveniently now
+- Enchanted Slipways got changed to be 2x slipway wisp spawn (as i intended them to be)
+- Gold-Diamond Casting Ring has been deleted in favour of the Amel variant
+- Mishap messages n shit
+- You can't read an Ancient Tome before you have gotten Lapisworks Research now
+## Fixes:
+- enchantments and shit should ACTUALLY carry across dimensions now (:broken_heart:)
+## Interop:
+- Hierophantics
   - Max experience fishermen villagers can be flayed into you  
     costs 32 amel and 10 charged amethyst  
     they only have the on_my_reference_found trigger, triggers when your reference is found in a stack of an offender within "range"  
@@ -228,47 +282,34 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     "Jacks" are jacks of all trades, and start with 2-3 levels of exp on every possible profession  
     (but no trades until they pick one of those professions)
   - FUCKING UNICORNS  
-	  IMBUE A SIMPLE MIND INTO A HORSE AND USE 16 AMEL
-- EMI interop
+	  - IMBUE A SIMPLE MIND INTO A HORSE AND USE 128 AMEL
+    - After being made, a Unicorn develops an affinity for you (and so is bound to you).
+    - You can only have one Unicorn bound to you (any attempts to make more fail).
+    - Unicorns are uncommonly seen, however they do appear around the player from time to time.  
+      They VERY rarely spawn during the night.
+    - Unicorns have a zone of influence around themselves with a radius of 32 blocks.
+    - No hostile mobs can spawn in the presence of a unicorn, and any that spawn outside it's zone  
+      of influence refuse to enter said zone of influence.
+    - No hexes execute within the zone of influence of a Unicorn, mishapping instead.
+- EMI
   - You can now see Imbue Amel, Mold Amel and Simple Mind Infusion recipes in EMI
   - You can also see BeegInfusion recipes in EMI
   - On that note, the same recipes also show up in Patchouli
-- Added Chalk Rituals
-- Added the Enchanted Brewing Stand
-  - Imbue 10 Amel into a Brewing Stand
-  - 2x blaze usage for 2x speed
-  - Takes 1 amethyst dust per brew
-- Added the Rote Brewer Stand
-  - Infuse a Simple Mind into a Brewing Stand
-  - Can remember up to 5 potion recipes
-  - Each write is permanent, stops brewing anything but remembered potions when at the limit
-  - When a potion from memory is selected, takes items automatically.
-  - ALWAYS takes 2 steps worth of time.
-    Manual brewing (or teaching it) is a pain as each step takes twice as long.
-    Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.
-- Hexical interop (of course)
-  - the Media Jar is targetable by Deposit Media (not Withdraw Media tho)
-- Added Mind Control of entities into the game  
-  (reality check: gang, how lost are we in the sauce?)
-  - you have to un-flay with a Simple Mind first
-  - controllable movement
-  - new pattern, Recharge Entity. Recharges any entity that stores media within itself.
-  - media limit of 64 dust
-  - cannot overcast
-  - credits to Sheppo from the Hex Casting discord server for the next ideas!
-  - they can be pets
-  - VERY small ambit, at most 3 blocks and usually just 1 (by default too)
-  - can have pre-set conditions to cast a hex, e.g. on hurt (so kind of like Hierophantics!)
-    - not Sheppo: can only have one condition (in-lore: too much space occupied by condition and hex)
-- Added the Enchanted Scroll
-  - It's literally a Hex Casting IDE.
-`for i in range(n)` pattern  
+- Hexical interop
+  - the Cradle's item actually has a big hitbox now
+  - the Media Jar and the Cradle are targets for Deposit Media, Withdraw Media and Condensed Media Prfn.
 # 1.5.9
 - Heal your mind after breaking it.
 - Alchemy/potion-brewing overhaul (I'm deadass)
   made some stuff obsolete but fuck vanilla, potion-brewing is basically non-existent anyway.
+  herb stuff that leads to discovering Alchemy?
 - Hexic interop
   WILL HAPPEN. I **WILL** RUN THROUGH HEXIC CODE AND THINK "nathan you genius"
+- Oneironaut interop (you will shit your pants playing Lapisworks and you will like it)  
+  so you like Subnautica?  
+  added the Congested Deep Noosphere  
+  note to self: might have to fuck with world build height limit for this, as some creatures are  
+  simply gargantuan!
 # 1.6.0
 - You can have four arms now (procrastination slain)
   - Your third and fourth arms can auto-cast 20x a second  
@@ -323,3 +364,5 @@ KING CRIMSON (so what part, exactly, of this is Lapisworks-y?)
 
 port twokai's ideal condition  
 port hexxy dimensions  
+Ra's Gambit
+- think up something motherfucker

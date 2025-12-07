@@ -1,0 +1,14 @@
+{
+    "name": "pages.lapisworks.interop.lapixtended.get_hextended_b-baka.title",
+    "icon": "lapisworks:textures/entries/question_mark.png",
+    "advancement": "lapisworks:got_lapis",
+    "flag": "!mod:hextended",
+    "category": "hexcasting:lapisworks/interop/lapixtended",
+    "sortnum": 0,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.interop.lapixtended.get_hextended_b-baka.text"
+        }
+    ]
+}
