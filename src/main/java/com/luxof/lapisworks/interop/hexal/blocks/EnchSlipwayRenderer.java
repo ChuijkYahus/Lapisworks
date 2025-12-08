@@ -18,7 +18,8 @@ import net.minecraft.util.math.random.Random;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
-public class EnchSlipwayRenderer implements BlockEntityRenderer<EnchSlipwayEntity> {
+public class 
+EnchSlipwayRenderer implements BlockEntityRenderer<EnchSlipwayEntity> {
     private static final Identifier TEXTURE = id("textures/block/amel_constructs/animated_enchslipway2.png");
     private static final int FRAME_COUNT = 32;
     private static final int FRAME_WIDTH = 64;
@@ -39,9 +40,9 @@ public class EnchSlipwayRenderer implements BlockEntityRenderer<EnchSlipwayEntit
         Camera camera = MinecraftClient.getInstance().gameRenderer.getCamera();
         matrices.push();
         // magic numbers: fresh from my ass
-        float dx = 0.025f - random.nextFloat() * 0.06f;
-        float dy = 0.025f - random.nextFloat() * 0.06f;
-        float dz = 0.025f - random.nextFloat() * 0.06f;
+        float dx = 0.03f - random.nextFloat() * 0.06f;
+        float dy = 0.03f - random.nextFloat() * 0.06f;
+        float dz = 0.03f - random.nextFloat() * 0.06f;
         matrices.translate(0.5 + dx, 0.5 + dy, 0.5 + dz);
 
         // face the camera

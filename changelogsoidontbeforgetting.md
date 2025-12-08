@@ -203,16 +203,17 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     - Simple Minds, when infused into the air, produce a wandering wisp
 # 1.5.8
 ## Additions:
-- Chalk Rituals
+- Chalk Rituals (pre-enlightenment)  
+  - you can do blood magic shit with it
 - Enchanted Brewery
   - Imbue 10 Amel into a Brewing Stand
-  - 2x blaze usage for 2x speed
+  - 1.5x blaze usage for 2x speed
   - Takes 1 amethyst dust per brew
 - Enchanted Scroll
   - It's literally a Hex Casting IDE.
 - Erebus' Gambit
 - Hex familiar that lets you interact with the Media Condensing Network at a range.
-  - floating thing. like Terraria's flying piggy bank
+  - floating entity. like Terraria's flying piggy bank? or maybe just a wisp?
   - bind it to one linkable and it'll do all it's business with that one linkable
     - this linkable is it's entrypoint into any network, basically
     - can't make it auto-search for the nearest one because it needs to be not OP
@@ -222,7 +223,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - i think it should be some kind of orb with a :3 face on it?
 - Mind Control of entities into the game  
   (reality check: gang, how lost are we in the sauce?)
-  - you have to un-flay with a Simple Mind first
+  - you have to un-flay with a Simple Mind first?
   - controllable movement
   - new pattern, Recharge Entity. Recharges any entity that stores media within itself.
   - media limit of 64 dust
@@ -246,12 +247,14 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
 - Book reformatting and extra documentation and shit
   - e.g. Villager un-flaying is actually documented now
 - Deposit Media and Withdraw Media work conveniently now
-- Enchanted Slipways got changed to be 2x slipway wisp spawn (as i intended them to be)
+- Enchanted Slipways got changed to have nearly precisely 2x slipway wisp spawn rate  
+  (as i intended them to have when i first made them)
 - Gold-Diamond Casting Ring has been deleted in favour of the Amel variant
 - Mishap messages n shit
 - You can't read an Ancient Tome before you have gotten Lapisworks Research now
 ## Fixes:
 - enchantments and shit should ACTUALLY carry across dimensions now (:broken_heart:)
+- Enchanted Slipways no longer have a tendency to move 0.01f more in +XYZ than -XYZ (lmao)
 ## Interop:
 - Hierophantics
   - Max experience fishermen villagers can be flayed into you  
@@ -300,27 +303,28 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - the Media Jar and the Cradle are targets for Deposit Media, Withdraw Media and Condensed Media Prfn.
 # 1.5.9
 - Heal your mind after breaking it.
-- Alchemy/potion-brewing overhaul (I'm deadass)
-  made some stuff obsolete but fuck vanilla, potion-brewing is basically non-existent anyway.
-  herb stuff that leads to discovering Alchemy?
-- Hexic interop
-  WILL HAPPEN. I **WILL** RUN THROUGH HEXIC CODE AND THINK "nathan you genius"
+- Alchemy/potion-brewing overhaul (I'm deadass)  
+  made some stuff obsolete but fuck vanilla, potion-brewing is basically non-existent anyway.  
+  herb stuff that leads to discovering Alchemy?  
+  cauldron brewing! (definitely probably a part of herb stuff!)
 - Oneironaut interop (you will shit your pants playing Lapisworks and you will like it)  
   so you like Subnautica?  
   added the Congested Deep Noosphere  
   note to self: might have to fuck with world build height limit for this, as some creatures are  
   simply gargantuan!
+- Hexic interop
 # 1.6.0
 - You can have four arms now (procrastination slain)
   - Your third and fourth arms can auto-cast 20x a second  
     Both must be devoted to auto-cast, but one can hold something (e.g. Focus, Amel-tuned Orb, etc.)
   - Your third and fourth arms can hold items
   - You may swap arms 1-2 with 3-4, and use them with mouse4-5 (yes mouse4 and mouse5, rebindable)
+  - They can also do macro-work for you
 - End overhaul
   - the ender dragon bossfight is fun now (nathan adding this to his pack is a secondary motivation)
   - there are new structures
   - lore
-
+- Entity Construction
 
 # 1.7.0
 LAPISWORKS IS ON BOTH FORGE AND FABRIC NOW.
@@ -365,4 +369,11 @@ KING CRIMSON (so what part, exactly, of this is Lapisworks-y?)
 port twokai's ideal condition  
 port hexxy dimensions  
 Ra's Gambit
-- think up something motherfucker
+- think up something motherfucker  
+Gene Editing (as an extension of the 4-arm-getting system) and Entity Creation
+- making yourself a vampire is possible
+
+Make AVM staff as a variant of sorts of Hexical's Lightning Rod Staff
+- affix items to it
+- enchant it to make the fixations permanent
+- when enchanted, it uses the item as a power like in AVM

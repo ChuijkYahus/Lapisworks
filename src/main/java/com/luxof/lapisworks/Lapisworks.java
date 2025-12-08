@@ -15,6 +15,7 @@ import com.luxof.lapisworks.init.ModRecipes;
 import com.luxof.lapisworks.init.ModScreens;
 import com.luxof.lapisworks.init.Patterns;
 import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
+import com.luxof.lapisworks.init.LapisParticles;
 import com.luxof.lapisworks.init.LapisworksLoot;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.ModEntities;
@@ -142,6 +143,7 @@ public class Lapisworks implements ModInitializer {
 		ModPOIs.crawlOutOfHell();
 		ModRecipes.apologizeForWarcrimes();
 		ModScreens.whatWasThatTF2CommentAboutMakingBadGUICodeSoYouDontHaveToTouchItAgain();
+		LapisParticles.pawtickle();
 
         LOGGER.info("Luxof's pet Lapisworks is getting a bit hyperactive.");
 		LOGGER.info("\"Lapisworks! Lapis Lapis!\"");

@@ -1,6 +1,5 @@
 {
-    "type": "lapisworks:brewery",
-    "brew": "item",
+    "type": "lapisworks:brewery_item",
     "from": {
         "item": "minecraft:potion",
         "count": 1

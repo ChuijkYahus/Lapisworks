@@ -1,7 +1,6 @@
 package com.luxof.lapisworks.client.slots;
 
-import com.luxof.lapisworks.recipes.BrewingRec;
-import com.luxof.lapisworks.recipes.BrewingRec.BrewerIngredientWithCount;
+import com.luxof.lapisworks.recipes.BreweryRecipe;
 
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -22,10 +21,8 @@ public class LapisPotionIngredientSlot extends Slot {
     }
 
     public boolean matches(ItemStack stack) {
-        for (BrewingRec rec : world.getRecipeManager().listAllOfType(BrewingRec.Type.INSTANCE)) {
-            for (BrewerIngredientWithCount ing : rec.getPossibleInputs()) {
-                if (ing.ingredient.test(stack)) return true;
-            }
+        for (BreweryRecipe rec : world.getRecipeManager().listAllOfType(BreweryRecipe.Type.INSTANCE)) {
+            if (rec.catalystMatches(stack)) return true;
         }
         return false;
     }
