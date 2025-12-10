@@ -21,6 +21,7 @@ import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.ModEntities;
 import com.luxof.lapisworks.init.ThemConfigFlags;
 import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 import com.luxof.lapisworks.mixinsupport.GetStacks;
 
 import static com.luxof.lapisworks.LapisworksIDs.INFUSED_AMEL;
@@ -520,5 +521,12 @@ public class Lapisworks implements ModInitializer {
 
 	public static double getDistance(BlockPos pos1, BlockPos pos2) {
 		return Math.sqrt(pos2.getSquaredDistance(pos1));
+	}
+
+	public static boolean _shouldBreakSent(LivingEntity plr) {
+		EnchSentInterface eSentInterface = (EnchSentInterface)plr;
+		return eSentInterface.getEnchantedSentinel() == null ?
+			false :
+			plr.getPos().squaredDistanceTo(eSentInterface.getEnchantedSentinel()) > 32.0*32.0;
 	}
 }

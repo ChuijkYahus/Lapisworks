@@ -1,19 +1,22 @@
 package com.luxof.lapisworks.mixin;
 
-import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
+
+import static com.luxof.lapisworks.Lapisworks._shouldBreakSent;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import org.jetbrains.annotations.Nullable;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 // "you know you can just use Cardinal Components for this-"
 // Metal Gear Rising: Revengeance OST It Has To Be This Way Extended
@@ -33,9 +36,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements EnchSent
     }
     @Unique @Override
     public boolean shouldBreakSent() {
-        return this.getEnchantedSentinel() == null ?
-            false :
-            this.getPos().distanceTo(this.getEnchantedSentinel()) > 32.0;
+        return _shouldBreakSent((LivingEntity)this);
     }
     @Unique @Override
     public void breakSent() {
