@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.luxof.lapisworks.interop.valkyrienskies.ValkyrienUtils;
+import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
@@ -87,9 +88,12 @@ public class CreateEnchSent implements SpellAction {
 		public void cast(CastingEnvironment ctx) {
             ((EnchSentInterface)this.caster).setEnchantedSentinel(this.pos, this.ambit);
             // can you tell i have no clue what the fuck i'm doing?
-            PacketByteBuf buf = PacketByteBufs.create();
+            PacketByteBuf buf = PacketByteBufs.copy(Unpooled.buffer());
             buf.writeBoolean(false);
-            buf.writeVector3f(this.pos.toVector3f());
+            buf.writeDouble(this.pos.x);
+            buf.writeDouble(this.pos.y);
+            buf.writeDouble(this.pos.z);
+            //buf.writeVector3f(this.pos.toVector3f());
             buf.writeDouble(this.ambit);
             // "this code runs on the server, so the caster must be a ServerPlayerEntity"
             //   -my dumbass praying this code doesn't explode in my face

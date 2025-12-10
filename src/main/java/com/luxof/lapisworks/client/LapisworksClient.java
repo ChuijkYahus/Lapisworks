@@ -231,7 +231,7 @@ public class LapisworksClient implements ClientModInitializer {
                     }
                     return;
                 }
-                Vec3d newPos = new Vec3d(buf.readVector3f());
+                Vec3d newPos = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
                 Double newAmbit = buf.readDouble();
                 if (!this.playerHasJoined) {
                     this.bufferSentinelPos = newPos;

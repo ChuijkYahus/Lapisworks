@@ -16,7 +16,7 @@ public class ValkyrienUtils {
     public static Vec3d toWorldspace(World world, Vec3d shipyardPosition) {
         Ship ship = ValkyrienSkies.getShipManagingBlock(world, shipyardPosition);
         if (ship == null) return shipyardPosition;
-        return ValkyrienSkies.positionToWorld(ship, shipyardPosition);
+        return VectorConversionsMCKt.toMinecraft(ship.getShipToWorld().transformPosition(VectorConversionsMCKt.toJOML(shipyardPosition)));
     }
 
     public static Vec3d getShipScale(World world, Vec3d shipyardPosition) {

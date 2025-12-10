@@ -139,20 +139,20 @@ dependencies {
 	// Enchants the Mind
 
 	// Valkyrien Screaming into the Void
-	modApi("org.valkyrienskies:valkyrienskies-120-fabric:${project.vs2_version}") {
+	modCompileOnly("org.valkyrienskies:valkyrienskies-120-fabric:${project.vs2_version}") {
 		exclude group: "maven.modrinth", module: ""
 		exclude group: "teamreborn", module: ""
 		exclude group: "curse.maven", module: ""
 		exclude group: "com.simibubi.create", module: ""
 		exclude group: "com.tterrag.registrate_fabric", module: ""
 	}
-	implementation("org.valkyrienskies.core:api:${project.vscore_version}") {
+	compileOnly("org.valkyrienskies.core:api:${project.vscore_version}") {
 		exclude group: "org.joml", module: ""
 	}
-	implementation("org.valkyrienskies.core:internal:${project.vscore_version}") {
+	compileOnly("org.valkyrienskies.core:internal:${project.vscore_version}") {
 		exclude group: "org.joml", module: ""
 	}
-	implementation("org.valkyrienskies.core:util:${project.vscore_version}") {
+	compileOnly("org.valkyrienskies.core:util:${project.vscore_version}") {
 		exclude group: "org.joml", module: ""
 	}
 

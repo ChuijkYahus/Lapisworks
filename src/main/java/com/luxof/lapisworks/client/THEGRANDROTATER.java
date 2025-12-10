@@ -18,14 +18,17 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat.DrawMode;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 
+import net.minecraft.util.math.Vec3i;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Matrix4d;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.valkyrienskies.mod.common.util.VectorConversionsMCKt;
 
 public class THEGRANDROTATER {
     public static Matrix4f makeMatrix4f(
