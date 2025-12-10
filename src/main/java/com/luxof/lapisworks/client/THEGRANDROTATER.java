@@ -150,11 +150,12 @@ public class THEGRANDROTATER {
         float time = ClientTickCounter.getTotal() / 2; // why not? it's perfectly useable
         Matrix4f rotationMatrix = COMPUTETHEGRANDMATRIX(time);
 
-        ms.scale(2.0f, 2.0f, 2.0f);
         if (FabricLoader.getInstance().isModLoaded("valkyrienskies")) {
             Vec3d shipScale = ValkyrienUtils.getShipScale(mc.world, sentinel);
             ms.scale((float) shipScale.x, (float) shipScale.y, (float) shipScale.z);
         }
+        ms.scale(2.0f, 2.0f, 2.0f);
+
 
         Matrix4f matrix = ms.peek().getPositionMatrix();
         Matrix3f normalMatrix = ms.peek().getNormalMatrix();
