@@ -22,8 +22,10 @@ import static com.luxof.lapisworks.LapisworksIDs.SEND_SENT;
 import java.util.List;
 import java.util.Optional;
 
+import com.luxof.lapisworks.interop.valkyrienskies.ValkyrienUtils;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -50,7 +52,12 @@ public class CreateEnchSent implements SpellAction {
         PlayerEntity caster = (PlayerEntity)casterOp.get();
 
         Vec3d pos = OperatorUtils.getVec3(args, 0, getArgc());
-        if (caster.getPos().distanceTo(pos) > 32.0) {
+        double distance;
+        if (FabricLoader.getInstance().isModLoaded("valkyrienskies"))
+            distance = ValkyrienUtils.distance(ctx.getWorld(), caster.getPos(), pos);
+        else
+            distance = caster.getPos().distanceTo(pos);
+        if (distance > 32.0) {
             // you will NOT fuck with this to do better sent walk!
             MishapThrowerJava.throwMishap(new MishapBadLocation(pos, "too_far"));
         }

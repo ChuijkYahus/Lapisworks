@@ -2,12 +2,14 @@ package com.luxof.lapisworks.client;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
 
+import com.luxof.lapisworks.interop.valkyrienskies.ValkyrienUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import java.util.List;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Camera;
@@ -130,16 +132,29 @@ public class THEGRANDROTATER {
         MinecraftClient mc = MinecraftClient.getInstance();
         Camera cam = mc.gameRenderer.getCamera();
         Vec3d camPos = cam.getPos();
-        ms.translate(
-            sentinel.x - camPos.x,
-            sentinel.y - camPos.y,
-            sentinel.z - camPos.z
-        ); 
+        if (FabricLoader.getInstance().isModLoaded("valkyrienskies")) {
+            Vec3d worldspace = ValkyrienUtils.toWorldspace(mc.world, sentinel);
+            ms.translate(
+                    worldspace.x - camPos.x,
+                    worldspace.y - camPos.y,
+                    worldspace.z - camPos.z
+            );
+        } else {
+            ms.translate(
+                    sentinel.x - camPos.x,
+                    sentinel.y - camPos.y,
+                    sentinel.z - camPos.z
+            );
+        }
 
         float time = ClientTickCounter.getTotal() / 2; // why not? it's perfectly useable
         Matrix4f rotationMatrix = COMPUTETHEGRANDMATRIX(time);
 
         ms.scale(2.0f, 2.0f, 2.0f);
+        if (FabricLoader.getInstance().isModLoaded("valkyrienskies")) {
+            Vec3d shipScale = ValkyrienUtils.getShipScale(mc.world, sentinel);
+            ms.scale((float) shipScale.x, (float) shipScale.y, (float) shipScale.z);
+        }
 
         Matrix4f matrix = ms.peek().getPositionMatrix();
         Matrix3f normalMatrix = ms.peek().getNormalMatrix();

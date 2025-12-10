@@ -1,5 +1,7 @@
 package com.luxof.lapisworks.mixin;
 
+import com.luxof.lapisworks.interop.valkyrienskies.ValkyrienUtils;
+import net.fabricmc.loader.api.FabricLoader;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -35,7 +37,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements EnchSent
     public boolean shouldBreakSent() {
         return this.getEnchantedSentinel() == null ?
             false :
-            this.getPos().distanceTo(this.getEnchantedSentinel()) > 32.0;
+                (FabricLoader.getInstance().isModLoaded("valkyrienskies") ?
+                        ValkyrienUtils.distance(getWorld(), this.getPos(), this.getEnchantedSentinel()) :
+                        this.getPos().distanceTo(this.getEnchantedSentinel())) > 32.0;
     }
     @Unique @Override
     public void breakSent() {
