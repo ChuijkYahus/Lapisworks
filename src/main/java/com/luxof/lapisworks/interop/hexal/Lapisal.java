@@ -4,10 +4,10 @@ import com.google.common.collect.ImmutableSet;
 
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.Mutables.Mutables;
-import com.luxof.lapisworks.interop.hexal.SMindInfusions.MakeWisp;
-import com.luxof.lapisworks.interop.hexal.SMindInfusions.OpenSlipway;
 import com.luxof.lapisworks.interop.hexal.blocks.EnchSlipway;
 import com.luxof.lapisworks.interop.hexal.blocks.EnchSlipwayEntity;
+import com.luxof.lapisworks.interop.hexal.mindinfusions.MakeWisp;
+import com.luxof.lapisworks.interop.hexal.mindinfusions.OpenSlipway;
 
 import static com.luxof.lapisworks.LapisworksIDs.OPEN_DIMENSIONAL_RIFT;
 import static com.luxof.lapisworks.LapisworksIDs.TURN_MIND_TO_WISP;
@@ -36,7 +36,7 @@ public class Lapisal {
     public static void beCool() {
         ModBlocks.pickACropTop("amel_constructs/enchslipway", ENCH_SLIPWAY);
         ModBlocks.dontForgetStockings("ench_slipway_entity_type", ENCH_SLIPWAY_ENTITY_TYPE);
-        Mutables.registerSMindInfusion(OPEN_DIMENSIONAL_RIFT, new OpenSlipway());
-        Mutables.registerSMindInfusion(TURN_MIND_TO_WISP, new MakeWisp());
+        Mutables.SMindInfusions.put(OPEN_DIMENSIONAL_RIFT, new OpenSlipway());
+        Mutables.SMindInfusions.put(TURN_MIND_TO_WISP, new MakeWisp());
     }
 }

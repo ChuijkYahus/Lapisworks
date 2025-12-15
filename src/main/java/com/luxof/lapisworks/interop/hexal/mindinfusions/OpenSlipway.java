@@ -1,4 +1,4 @@
-package com.luxof.lapisworks.interop.hexal.SMindInfusions;
+package com.luxof.lapisworks.interop.hexal.mindinfusions;
 
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 

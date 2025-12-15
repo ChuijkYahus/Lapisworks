@@ -11,7 +11,6 @@ import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.mishaps.MishapBadHandItem;
 import com.luxof.lapisworks.mishaps.MishapNotEnoughItems;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.LapisworksIDs.AMEL;
 import static com.luxof.lapisworks.LapisworksIDs.ENCHBOOK_WITH_NOTONE_ENCH;
 import static com.luxof.lapisworks.LapisworksIDs.ENCHBOOK_WITH_ONE_ENCH;
@@ -58,8 +57,6 @@ public class EnhanceEnchantedBook extends BeegInfusion {
         // this seems a bit problematic for any other enchanted book handlers..
         // open an issue or something if you don't want this first mishap here vvv
         if (EnchantmentHelper.get(stack).values().size() != 1) {
-            LOGGER.info("enchantment size btw: " + EnchantmentHelper.get(stack).values().size());
-            LOGGER.info("enchants btw: " + EnchantmentHelper.get(stack).toString());
             MishapThrowerJava.throwMishap(new MishapBadHandItem(
                 stack,
                 ENCHBOOK_WITH_ONE_ENCH,

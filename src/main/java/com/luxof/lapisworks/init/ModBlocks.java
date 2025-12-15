@@ -6,9 +6,6 @@ import com.google.common.collect.ImmutableSet;
 
 import com.luxof.lapisworks.blocks.*;
 import com.luxof.lapisworks.blocks.entities.*;
-import com.luxof.lapisworks.blocks.entities.EnchBrewerEntity;
-import com.luxof.lapisworks.blocks.entities.LiveJukeboxEntity;
-import com.luxof.lapisworks.blocks.entities.MediaCondenserEntity;
 
 import static com.luxof.lapisworks.Lapisworks.id;
 

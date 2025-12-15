@@ -18,6 +18,7 @@ import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.init.Mutables.BeegInfusion;
 import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.init.Mutables.Mutables.BeegInfusions;
 import com.luxof.lapisworks.inv.HandsInv;
 import com.luxof.lapisworks.items.shit.BasePartAmel;
 import com.luxof.lapisworks.mishaps.MishapNotEnoughItems;
@@ -30,7 +31,6 @@ import static com.luxof.lapisworks.Lapisworks.hasInfusedAmel;
 import static com.luxof.lapisworks.Lapisworks.setInfusedAmel;
 import static com.luxof.lapisworks.LapisworksIDs.AMEL;
 import static com.luxof.lapisworks.LapisworksIDs.IMBUEABLE;
-import static com.luxof.lapisworks.init.Mutables.Mutables.testBeegInfusionFilters;
 
 import java.util.List;
 import java.util.Map;
@@ -42,10 +42,10 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 
-/** Object-object's honest reaction to seeing this:
+/** object-Object's honest reaction to seeing this:
  * "this code makes no sense"
  * "..and the code is incomprehensible anyway.."
- * I don't know if I should wear that like a badge of honour or what */
+ * I can confirm, this code is indeed incomprehensible. */
 public class ImbueAmel implements SpellAction {
     public int getArgc() {
         return 1;
@@ -82,7 +82,7 @@ public class ImbueAmel implements SpellAction {
         );
         if (recipeOpt.isEmpty()) {
             // if no recipe, must test BeegInfusions which are lower prio
-            Map<Identifier, BeegInfusion> beegInfusionRecipes = testBeegInfusionFilters(
+            Map<Identifier, BeegInfusion> beegInfusionRecipes = BeegInfusions.filter(
                 heldInfos,
                 ctx,
                 args,

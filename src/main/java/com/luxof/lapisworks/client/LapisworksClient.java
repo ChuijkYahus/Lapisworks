@@ -220,7 +220,6 @@ public class LapisworksClient implements ClientModInitializer {
                 buf,
                 responseSender
             ) -> {
-                LOGGER.info("Got a SEND_SENT packet!");
                 boolean banishSentinel = buf.readBoolean();
                 if (banishSentinel) {
                     if (!this.playerHasJoined) {
@@ -244,11 +243,9 @@ public class LapisworksClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(
             SEND_PWSHAPE_PATS,
             (client, handler, buf, responseSender) -> {
-                LOGGER.info("So we got sent the shit.");
                 NbtCompound nbt = buf.readNbt();
                 for (String flag : chosenFlags.keySet()) {
                     chosenFlags.put(flag, nbt.getInt(flag));
-                    LOGGER.info("For " + flag + " we have " + nbt.getInt(flag));
                     // vv unused but may allow for neat stuff in the future
                     PatchouliAPI.get().setConfigFlag(
                         flag + String.valueOf(nbt.getInt(flag)),

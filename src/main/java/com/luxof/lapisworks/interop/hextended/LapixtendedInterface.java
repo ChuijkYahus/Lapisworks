@@ -1,12 +1,14 @@
 package com.luxof.lapisworks.interop.hextended;
 
 import at.petrak.hexcasting.common.items.ItemStaff;
+import at.petrak.hexcasting.common.lib.HexItems;
 
 import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.init.ModItems;
 import com.luxof.lapisworks.items.shit.DurabilityPartAmel;
 
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +27,7 @@ public class LapixtendedInterface {
         return forItem instanceof ItemStaff ? ModItems.PARTAMEL_STAFF : null;
     }
 
-    /** <code>ofItem instanceof ItemExtendStaff ? AMEL_WAND : ofItem instanceof ItemStaff ? AMEL_STAFF : null</code> */
+    /** if it's an extended staff, gives you an amel wand. else, amel staff. */
     @Nullable
     public static Item getAppropriateFullAmel(Item ofItem) {
         if (Lapisworks.HEXTENDED_INTEROP) {
@@ -34,5 +36,20 @@ public class LapixtendedInterface {
             }
         }
         return ofItem instanceof ItemStaff ? ModItems.AMEL_STAFF : null;
+    }
+
+    /** gives a staff that is known to have a recipe. (oak, to be precise.)
+     * <p>if you pass in an extended staff, gives you an extended oak. else, regular oak.
+     * <p>Yes, this means the mod completely and utterly fucking dies if the recipe is disabled.
+     * <p>Do I care? */
+    public static Item getGenericStaffKnownToHaveRecipe(ItemStaff item) {
+        if (Lapisworks.HEXTENDED_INTEROP) {
+            if (item instanceof abilliontrillionstars.hextended.items.ItemExtendedStaff) {
+                return Registries.ITEM.get(
+                    abilliontrillionstars.hextended.LanisHextendedStaves.id("staff/long/oak")
+                );
+            }
+        }
+        return HexItems.STAFF_OAK;
     }
 }

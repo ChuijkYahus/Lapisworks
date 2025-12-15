@@ -6,8 +6,6 @@ import com.luxof.lapisworks.blocks.MediaCondenser;
 import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
 import com.luxof.lapisworks.init.ModBlocks;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -130,7 +128,6 @@ public class MediaCondenserEntity extends BlockEntity implements LinkableMediaBl
         long prevMedia = media;
 
         long nowMedia = Math.max(media - amount, 0);
-        LOGGER.info("withdrawal request of " + amount + "! " + (prevMedia - nowMedia) + " left!");
         if (!simulate) {
             media = nowMedia;
             this.markDirty();

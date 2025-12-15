@@ -204,7 +204,12 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
 # 1.5.8
 ## Additions:
 - Chalk Rituals (pre-enlightenment)  
-  - you can do blood magic shit with it
+  - same-plane-only
+  - 3-5 patterns per chalk on ground max (undecided)
+    - setting patterns requires a piece of amel  
+      in-lore this is explained as the amel attracting the flow of media and fulfilling the patterns
+    - clearing does not
+  - you can do blood magic shit with it too if that's your fancy
 - Enchanted Brewery
   - Imbue 10 Amel into a Brewing Stand
   - 1.5x blaze usage for 2x speed
@@ -221,11 +226,16 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - you may also push to that by shift+rmb on the pet with a phial (attempts to drain whole phial)
   - costs about 2 amel per 32 blocks of distance (so free within 32 blocks)
   - i think it should be some kind of orb with a :3 face on it?
-- Mind Control of entities into the game  
+- Mind Control of entities in the game  
   (reality check: gang, how lost are we in the sauce?)
-  - you have to un-flay with a Simple Mind first?
+  - you have to un-flay with a Simple Mind first
+  - you gain a "controllable" iota from the un-flaying.
+    - in-lore, this is a set of mappings for what brain points do what, what makes the entity
+      tick basically and also IO points for stuff (to store info for example)
+    - in the event that you lose this iota, there is a pattern to get it from an entity
+      that was un-flayed by you. this costs about a shard of amethyst
   - controllable movement
-  - new pattern, Recharge Entity. Recharges any entity that stores media within itself.
+  - Deposit Media can be used to recharge a controllable
   - media limit of 64 dust
   - cannot overcast
   - credits to Sheppo from the Hex Casting discord server for these
@@ -243,6 +253,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     Manual brewing (or teaching it) is a pain as each step takes twice as long.
     Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.
 - Scrying patterns for blocks added by the mod.
+- Simple Mind Infusions now have (kind of basic) datapacking support.
 ## Changes:
 - Book reformatting and extra documentation and shit
   - e.g. Villager un-flaying is actually documented now
@@ -253,8 +264,12 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
 - Mishap messages n shit
 - You can't read an Ancient Tome before you have gotten Lapisworks Research now
 ## Fixes:
-- enchantments and shit should ACTUALLY carry across dimensions now (:broken_heart:)
+- Enchantments and shit should ACTUALLY carry across dimensions now (:broken_heart:)
 - Enchanted Slipways no longer have a tendency to move 0.01f more in +XYZ than -XYZ (lmao)
+- Finally fixed that Cradle bug with items for fucking real, holy fucking shit
+- Logspam begone
+- Thought Sieving works gud now :thumbsup:
+- Sieve Thoughts works on a spell circle too now :thumbsup:
 ## Interop:
 - Hierophantics
   - Max experience fishermen villagers can be flayed into you  
@@ -281,9 +296,10 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     starts casting with an entity reference to the offender on the stack  
     has a 1/err chance of not detecting the offender  
   - "Jack" villager type  
-    villagers turn into "Jacks" when unflayed  
+    - villagers turn into "Jacks" when unflayed
     "Jacks" are jacks of all trades, and start with 2-3 levels of exp on every possible profession  
-    (but no trades until they pick one of those professions)
+    - (but no trades until they pick one of those professions)
+    - they're called "Jacks" because they're jacks of all trades
   - FUCKING UNICORNS  
 	  - IMBUE A SIMPLE MIND INTO A HORSE AND USE 128 AMEL
     - After being made, a Unicorn develops an affinity for you (and so is bound to you).
@@ -293,14 +309,15 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     - Unicorns have a zone of influence around themselves with a radius of 32 blocks.
     - No hostile mobs can spawn in the presence of a unicorn, and any that spawn outside it's zone  
       of influence refuse to enter said zone of influence.
-    - No hexes execute within the zone of influence of a Unicorn, mishapping instead.
+    - No patterns can execute within the zone of influence of a Unicorn, mishapping instead.
 - EMI
-  - You can now see Imbue Amel, Mold Amel and Simple Mind Infusion recipes in EMI
+  - You can now see Imbue Amel, Mold Amel and (most) Simple Mind Infusion recipes in EMI
   - You can also see BeegInfusion recipes in EMI
   - On that note, the same recipes also show up in Patchouli
 - Hexical interop
   - the Cradle's item actually has a big hitbox now
-  - the Media Jar and the Cradle are targets for Deposit Media, Withdraw Media and Condensed Media Prfn.
+  - the Media Jar and the Cradle are targets for Deposit Media, Withdraw Media and
+    Condensed Media Prfn.
 # 1.5.9
 - Heal your mind after breaking it.
 - Alchemy/potion-brewing overhaul (I'm deadass)  
@@ -310,9 +327,11 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
 - Oneironaut interop (you will shit your pants playing Lapisworks and you will like it)  
   so you like Subnautica?  
   added the Congested Deep Noosphere  
-  note to self: might have to fuck with world build height limit for this, as some creatures are  
+  note to self: might have to fuck with world build height limit for this, as some creatures are
   simply gargantuan!
 - Hexic interop
+  - note to self, use `InventoryView.Events.forBlock` from Hexic API to provide storage on a block
+    that is visible to Hexic
 # 1.6.0
 - You can have four arms now (procrastination slain)
   - Your third and fourth arms can auto-cast 20x a second  
@@ -320,11 +339,15 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - Your third and fourth arms can hold items
   - You may swap arms 1-2 with 3-4, and use them with mouse4-5 (yes mouse4 and mouse5, rebindable)
   - They can also do macro-work for you
+  - bro tip for luxof: manningham mills lets you fuck with enums
 - End overhaul
   - the ender dragon bossfight is fun now (nathan adding this to his pack is a secondary motivation)
   - there are new structures
   - lore
 - Entity Construction
+  - make a vessel
+  - flay entities into it to get their AI
+  - customize it's body and mind
 
 # 1.7.0
 LAPISWORKS IS ON BOTH FORGE AND FABRIC NOW.
@@ -337,15 +360,22 @@ hexcasting media display interop
 iotic blocks interop  
 
 addons that may have interesting interop ideas waiting to be had but idk yet:  
-- hexcassettes? (`for i in range(n): enqueue(spell, tick_delay)`-like pattern)
-- oneironaut
+- hexcassettes? (`for i in range(n): enqueue(spell, tick_delay)`-like pattern?)
 - hexchanting
 - hexmachina
 - slate works
 - ephemera
 - hexdeco
 - heartxxy
-
+- scryglass
+  - add the ability to unfocus your mouse
+  - add buttons
+  - add text inputs?
+- valkyrien skies interop
+  - ship variant of the jumpslate that jumps to the nearest ship in the specified radius
+  - wisp-ify a ship by imbuing a simple mind into it
+    - unlocks spells for fine-tuned ship movement?
+  
 much bigger phials  
 ~~ability to extend pattern and stack limit by expending media~~ gave that to hexthings  
   nvm hexthings threw it right back to me (infeasible for it)  
@@ -358,7 +388,7 @@ computers lmao
 - casts on block update and iota sent
 
 KING CRIMSON (so what part, exactly, of this is Lapisworks-y?)  
-(P.S. even Miyu doesn't want to do this. Are we deaduzz, chat?)
+(P.S. even Miyu didn't want to do this. Are we deaduzz, chat?)
 - select area and time
 - area continues as normal for time
 - now those entities (including players) are locked in to that movement
@@ -367,13 +397,14 @@ KING CRIMSON (so what part, exactly, of this is Lapisworks-y?)
 - caster is not locked in to that movement  
 
 port twokai's ideal condition  
-port hexxy dimensions  
+~~port hexxy dimensions~~ pool and scepticake took it  
 Ra's Gambit
 - think up something motherfucker  
 Gene Editing (as an extension of the 4-arm-getting system) and Entity Creation
-- making yourself a vampire is possible
+- making yourself a vampire is possible  
 
 Make AVM staff as a variant of sorts of Hexical's Lightning Rod Staff
 - affix items to it
 - enchant it to make the fixations permanent
-- when enchanted, it uses the item as a power like in AVM
+- when enchanted, it uses the item as a power like in AVM  
+

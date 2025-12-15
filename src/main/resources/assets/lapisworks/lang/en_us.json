@@ -93,6 +93,7 @@
     "block.lapisworks.amel_constructs.simple_impetus": "Simple Impetus",
     "block.lapisworks.media_condenser_unit": "Media Condensing Unit",
     "block.lapisworks.uncrafted_condenser": "Empty Unit",
+    "block.lapisworks.amel_constructs.enchbrewer": "Enchanted Brewery",
 
     "advancements.lapisworks.gotlapis.name": "Lapisworks Research",
     "advancements.lapisworks.gotlapis.description": "A deep blue, precious mineral. Just as they wrote..",
@@ -122,6 +123,12 @@
 
 
     "gui.lapisworks.enchbrewer.name": "Enchanted Brewery",
+
+    "tag.item.lapisworks.amel": "Amethyst Lazuli",
+    "tag.item.lapisworks.potions": "Brewables",
+    "emi.category.lapisworks.imbuement": "Amel Infusion",
+    "emi.category.lapisworks.mold": "Amel Molding",
+    "emi.category.lapisworks.simple_mind_infusion": "Simple Mind Infusion",
 
 
     "hexcasting.action.lapisworks:imbue_lap": "Imbue Lapis",
@@ -279,6 +286,7 @@
     "mishaps.lapisworks.descs.entityorblockposiota": "an entity or vector iota",
     "mishaps.lapisworks.descs.imbueable": "any item imbueable with Amethyst Lazuli (e.g. a staff)",
     "mishaps.lapisworks.descs.smind_infuseable": "any block infuseable with a Simple Mind (e.g. an Amethyst Block)",
+    "mishaps.lapisworks.descs.smind_infuseable_entity": "any entity infuseable with a Simple Mind",
     "mishaps.lapisworks.descs.readable": "a readable Iota holder (e.g. a Focus or a Thought-knot)",
     "mishaps.lapisworks.descs.writeable": "a writable Iota holder (e.g. a Focus)",
     "mishaps.lapisworks.descs.noniotaholder": "not an Iota holder",
