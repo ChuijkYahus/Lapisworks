@@ -7,7 +7,6 @@ import com.luxof.lapisworks.init.ModItems;
 import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.items.shit.InventoryItem;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.getAllHands;
 
 import java.util.List;
@@ -131,16 +130,11 @@ public class AmelJar extends Item implements InventoryItem {
     }
     @Override
     public int drain(ItemStack stack, Predicate<Item> item, int count) {
-        LOGGER.info("Testing.. " + item.test(ModItems.AMEL_ITEM));
         if (!item.test(ModItems.AMEL_ITEM)) return count;
         int takeAway = Math.min(this.getStored(stack), count);
         int remainingInStore = this.getStored(stack) - takeAway;
         int remainingToTake = count - takeAway;
         this.setStored(stack, remainingInStore);
-        LOGGER.info("they are requesting " + count + " from us.");
-        LOGGER.info("we have " + remainingInStore + " left.");
-        LOGGER.info("we have given " + takeAway + ".");
-        LOGGER.info("they need " + remainingToTake + " more.");
         return remainingToTake;
     }
     @Override

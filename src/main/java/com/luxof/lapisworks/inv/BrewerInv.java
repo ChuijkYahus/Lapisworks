@@ -134,4 +134,10 @@ public class BrewerInv implements Inventory {
             default -> EMPTY.copy();
         };
     }
+
+    private static final int BASE = IDX_BREWINGINTO_1;
+    public ItemStack getBrewingInto(int index) { return getStack(BASE + index); }
+    public ItemStack removeBrewingInto(int index) { return removeStack(BASE + index); }
+    public ItemStack removeBrewingInto(int idx, int am) { return removeStack(BASE + idx, am); }
+    public void setBrewingInto(int idx, ItemStack to) { setStack(BASE + idx, to); }
 }

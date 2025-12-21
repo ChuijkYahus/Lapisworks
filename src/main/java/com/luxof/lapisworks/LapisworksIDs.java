@@ -48,10 +48,10 @@ public class LapisworksIDs {
     public static final Identifier ENHANCE_ENCHANTED_BOOK = id("enhance_enchanted_book");
     public static final Identifier MAKE_GENERIC_PARTAMEL = id("make_generic_partamel");
     // simple mind infusions
-    public static final Identifier SIMPLE_MIND_INTO_AMETHYST = id("make_budding_am");
-    public static final Identifier JUKEBOX_INTO_LIVE_JUKEBOX = id("make_live_jukbx");
-    public static final Identifier EMPTY_IMP_INTO_SIMP = id("make_simp");
-    public static final Identifier UNFLAY_FLAYED_VILLAGER = id("unflay_flayed_villager");
+    public static final Identifier SIMPLE_MIND_INTO_AMETHYST = id("base/mind_infusion/budding_amethyst");
+    public static final Identifier JUKEBOX_INTO_LIVE_JUKEBOX = id("base/mind_infusion/live_jukebox");
+    public static final Identifier EMPTY_IMP_INTO_SIMP = id("base/mind_infusion/simple_impetus");
+    public static final Identifier UNFLAY_FLAYED_VILLAGER = id("base/mind_infusion/deflay_villager");
 
     // V.A.U.L.T.
     public static final Identifier PLAYER_VAULT = id("player_vault");
@@ -70,6 +70,7 @@ public class LapisworksIDs {
     public static final Text LINKABLE_MEDIA_BLOCK = t("mishaps.lapisworks.descs.linkable_media_block");
     public static final Text IMBUEABLE = t("mishaps.lapisworks.descs.imbueable");
     public static final Text INFUSEABLE_WITH_SMIND = t("mishaps.lapisworks.descs.smind_infuseable");
+    public static final Text ENTITY_INFUSEABLE_WITH_SMIND = t("mishaps.lapisworks.descs.smind_infuseable_entity");
     public static final Text READABLE = t("mishaps.lapisworks.descs.readable");
     public static final Text WRITEABLE = t("mishaps.lapisworks.descs.writeable");
     public static final Text NON_IOTAHOLDER = t("mishaps.lapisworks.descs.noniotaholder");

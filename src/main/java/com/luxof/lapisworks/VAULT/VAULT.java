@@ -103,5 +103,5 @@ public abstract class VAULT {
     /** Returns the amount that couldn't be given. */
     public abstract int give(Predicate<Item> itemPred, int amount, Flags flags);
     /** Returns the amount that couldn't be given. */
-    public int give(Item item, int amount, Flags flags) { return this.give(it -> it == item, amount, flags); };
+    public int give(Item item, int amount, Flags flags) { return this.give(it -> it == item, amount, flags); }
 }

@@ -1,20 +1,15 @@
 package com.luxof.lapisworks.client.screens;
 
-import com.luxof.lapisworks.recipes.BrewingRec;
+import com.luxof.lapisworks.blocks.entities.EnchBrewerEntity;
 
 import static com.luxof.lapisworks.Lapisworks.id;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import java.util.List;
-
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtil;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -25,7 +20,7 @@ public class EnchBrewerScreen extends HandledScreen<EnchBrewerScreenHandler> {
         super(handler, inventory, title);
     }
 
-    private void drawIsBrewing(DrawContext context, int x, int y) {
+    private void drawIsBrewingIcon(DrawContext context, int x, int y) {
         int isBrewingIconX = x + 102;
         int isBrewingIconY = y + 30;
 
@@ -42,150 +37,117 @@ public class EnchBrewerScreen extends HandledScreen<EnchBrewerScreenHandler> {
         );
     }
 
-    private void drawFuelRod(DrawContext ctx, int x, int y) {
-        int fuel = this.handler.getFuel();
-        int rodHeight = 10;
-        int filledHeight = fuel; // fuel is 0-10 anyway
-
-        int rodX = x + 79;
-        int rodY = y + 34 + (rodHeight - filledHeight);
-        int rodU = 176;
-        int rodV = rodHeight - filledHeight;
-
-        ctx.drawTexture(
-            TEXTURE,
-            rodX,
-            rodY,
-            rodU,
-            rodV,
-            3,
-            filledHeight
-        );
-    }
-
-    private void drawBrewTimeRod(DrawContext ctx, int x, int y) {
-        int brewTime = this.handler.getBrewTime();
-        if (brewTime <= 0) return; // i don't wanna know what happens here when brewTime is -1
-        int rodHeight = 10;
-        int maxBrewTime = 200;
-        int filledHeight = brewTime * (rodHeight / maxBrewTime);
-
-        int rodX = x + 92;
-        int rodY = y + 34 + (rodHeight - filledHeight);
-        int rodU = 179;
-        int rodV = rodHeight - filledHeight;
-
-        ctx.drawTexture(
-            TEXTURE,
-            rodX,
-            rodY,
-            rodU,
-            rodV,
-            3,
-            filledHeight
-        );
-    }
-
-    private void drawBrewingRods(DrawContext ctx, int x, int y) {
-        List<BrewingRec> recipes = handler.getRecipes();
-        List<ItemStack> brewingInto = handler.inventory.brewingInto;
-        drawBrewingRod(ctx, x + 73, y + 57, 5, 3, brewingInto.get(0), recipes);
-        drawBrewingRod(ctx, x + 86, y + 62, 3, 1, brewingInto.get(1), recipes);
-        drawBrewingRod(ctx, x + 96, y + 57, 5, 3, brewingInto.get(2), recipes);
-    }
-
-    private void drawBrewingRod(
+    private final int BREWING_ROD_HEIGHT = 10;
+    private void fillSomeOfBrewingRod(
         DrawContext ctx,
-        int rodX,
-        int rodY,
-        int width,
-        int height,
-        ItemStack stack,
-        List<BrewingRec> recipes
+        int rodU,
+        int rodV,
+        int filledU,
+        int filledV,
+        int accordingTo,
+        int max
     ) {
-        for (BrewingRec recipe : recipes) {
-            if (recipe.isItemBrew()) {
-                if (!recipe.getFrom().left().get().ingredient.test(stack)) continue;
-                drawOnBrewingRod(
-                    ctx,
-                    rodX,
-                    rodY,
-                    width,
-                    height,
-                    PotionUtil.getColor(recipe.getOutput().left().get())
-                );
-                break;
-            } else {
-                Potion fromPotion = Potion.byId(recipe.getFrom().right().get());
-                if (PotionUtil.getPotion(stack) != fromPotion) continue;
-                drawOnBrewingRod(
-                    ctx,
-                    rodX,
-                    rodY,
-                    width,
-                    height,
-                    PotionUtil.getColor(Potion.byId(recipe.getOutput().right().get()))
-                );
-                break;
-            }
-        }
+        if (accordingTo <= 0) return;
+        int rodX = this.x + rodU;
+        int rodY = this.y + rodV;
+        int filled = (int)Math.floor(accordingTo * ((double)BREWING_ROD_HEIGHT / (double)max));
+        int offsetY = BREWING_ROD_HEIGHT - filled;
+        ctx.drawTexture(
+            TEXTURE,
+            rodX,
+            rodY + offsetY,
+            filledU,
+            filledV + offsetY,
+            3,
+            filled
+        );
     }
 
+    /*private int offsetBits(int bits, int howMany) { return bits * (int)Math.pow(2, howMany); }
     private int darken(int color) {
-        int R = color & 255; // get lower 8 bits from the 24
-        int G = color & (255 * 256); // get mid 8 bits
-        int B = color & (255 * 256 * 256); // get upper 8 bits
+        int rangeOf8Bits = 0b1111111;
+        int R = color & rangeOf8Bits;
+        int G = color & offsetBits(rangeOf8Bits, 8);
+        int B = color & offsetBits(rangeOf8Bits, 16);
         return (
-            Math.max(R - 68, 0) + // R - 0x44
-            Math.max(G - 68 * 256, 0) +
-            Math.max(B - 68 * 256 * 256, 0)
+            Math.max(R - 0x44, 0) +
+            Math.max(G - offsetBits(0x44, 8), 0) +
+            Math.max(B - offsetBits(0x44, 16), 0)
         );
     }
 
-    private void drawOnBrewingRod(
-        DrawContext ctx,
-        int rodX,
-        int rodY,
-        int width,
-        int height,
-        int color // hex code
-    ) {
-        int border = darken(color);
-        if (width > height) {
-            ctx.drawHorizontalLine(rodX, rodX+width, rodY, border);
-            ctx.drawHorizontalLine(rodX, rodX+width, rodY+height-1, border);
-            for (int y = rodY; y < rodY+height-1; y++) {
-                ctx.drawVerticalLine(rodX, rodX+width, y, color);
-            }
-        } else {
-            ctx.drawVerticalLine(rodX, rodY, rodY+height, border);
-            ctx.drawVerticalLine(rodX+width-1, rodY, rodY+height, border);
-            for (int x = rodX; x < rodX+width-1; x++) {
-                ctx.drawVerticalLine(x, rodY, rodY+height, color);
-            }
-        }
-    }
+    // THIS SHIT DOESN'T FUCKING WORK AND I HAVE NOT A CLUE WHY
+    private void drawBrewingRods(DrawContext ctx, int x, int y) {
+        RenderSystem.disableDepthTest();
+        ctx.getMatrices().push();
+        ctx.getMatrices().translate(0.0F, 0.0F, 0.0F);
 
+        RenderLayer renderLayer = RenderLayer.getGuiOverlay();
+
+        int color = handler.getPotion1Color();
+        LOGGER.info("color we got " + color);
+        if (color != -1) {
+            LOGGER.info("running.");
+            int borderColor = darken(color);
+            LOGGER.info("darkened: " + borderColor);
+            ctx.drawHorizontalLine(renderLayer, x + 73, x + 77, y + 57, borderColor);
+            ctx.drawHorizontalLine(renderLayer, x + 73, x + 77, y + 58, color);
+            ctx.drawHorizontalLine(renderLayer, x + 73, x + 77, y + 59, borderColor);
+        }
+        color = handler.getPotion2Color();
+        if (color != -1) {
+            int borderColor = darken(color);
+            ctx.drawVerticalLine(renderLayer, x + 86, y + 62, y + 62, borderColor);
+            ctx.drawVerticalLine(renderLayer, x + 87, y + 62, y + 62, color);
+            ctx.drawVerticalLine(renderLayer, x + 88, y + 62, y + 62, borderColor);
+        }
+        color = handler.getPotion3Color();
+        if (color != -1) {
+            int borderColor = darken(color);
+            ctx.drawHorizontalLine(renderLayer, x + 86, x + 100, y + 57, borderColor);
+            ctx.drawHorizontalLine(renderLayer, x + 86, x + 100, y + 58, color);
+            ctx.drawHorizontalLine(renderLayer, x + 86, x + 100, y + 59, borderColor);
+        }
+
+        ctx.getMatrices().pop();
+        RenderSystem.enableDepthTest();
+    }*/
+
+    private int x = 0;
+    private int y = 0;
     @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
-        int x = (width - backgroundWidth) / 2;
-        int y = (height - backgroundHeight) / 2;
-        context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);
+        this.x = (this.width - this.backgroundWidth) / 2;
+        this.y = (this.height - this.backgroundHeight) / 2;
+        context.drawTexture(TEXTURE, x, y, 0, 0, this.backgroundWidth, this.backgroundHeight);
 
-        if (this.handler.getIsBrewing()) {
-            drawIsBrewing(context, x, y);
-            drawBrewingRods(context, x, y);
-        };
-        drawFuelRod(context, x, y);
-        drawBrewTimeRod(context, x, y);
+        if (handler.isBrewing()) {
+            drawIsBrewingIcon(context, x, y);
+            //drawBrewingRods(context, x, y);
+        }
+        fillSomeOfBrewingRod(
+            context,
+            79, 34,
+            176, 0,
+            handler.getBrewTime(),
+            EnchBrewerEntity.MAX_BREW_TIME
+        );
+        fillSomeOfBrewingRod(
+            context,
+            92, 34,
+            179, 0,
+            handler.getFuel(),
+            EnchBrewerEntity.MAX_FUEL
+        );
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         renderBackground(context);
+        drawBackground(context, delta, mouseX, mouseY);
         super.render(context, mouseX, mouseY, delta);
         drawMouseoverTooltip(context, mouseX, mouseY);
     }

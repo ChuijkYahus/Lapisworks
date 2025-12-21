@@ -20,6 +20,6 @@ public class TagSlot extends Slot {
     }
 
     public boolean matches(ItemStack stack) {
-        return stack.isEmpty() || stack.isIn(tag);
+        return stack.isIn(tag);
     }
 }

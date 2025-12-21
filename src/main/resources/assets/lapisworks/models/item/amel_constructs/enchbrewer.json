@@ -1,3 +1,6 @@
 {
-    "parent": "lapisworks:block/amel_constructs/enchbrewer"
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "lapisworks:item/enchbrewer"
+    }
 }

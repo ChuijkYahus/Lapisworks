@@ -1,13 +1,13 @@
 package com.luxof.lapisworks.items.shit;
 
-import java.util.function.Predicate;
-
 import com.luxof.lapisworks.VAULT.Flags;
+
+import java.util.function.Predicate;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-/** Makes this item accessible by the VAULT. */
+/** Makes this item accessible to the VAULT. */
 public interface InventoryItem {
     // implementing this? you should deal only with SEARCHING and WORK. Probably.
     public boolean canAccess(Flags flags);

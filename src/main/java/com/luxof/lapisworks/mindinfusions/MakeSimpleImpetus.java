@@ -1,11 +1,14 @@
-package com.luxof.lapisworks.SMindInfusions;
+package com.luxof.lapisworks.mindinfusions;
 
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster;
 import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 
 import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.VAULT.Flags;
+import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.blocks.SimpleImpetus;
 import com.luxof.lapisworks.blocks.entities.SimpleImpetusEntity;
 import com.luxof.lapisworks.init.ModBlocks;
@@ -15,31 +18,43 @@ import com.luxof.lapisworks.mishaps.MishapNotEnoughItems;
 
 import static com.luxof.lapisworks.LapisworksIDs.AMEL;
 
+import java.util.List;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
 
 public class MakeSimpleImpetus extends SMindInfusion {
     private BlockState state;
     private ServerWorld world;
 
     @Override
-    public boolean testBlock() {
-        world = ctx.getWorld();
-        state = world.getBlockState(blockPos);
+    public SMindInfusion setUp(
+        BlockPos blockPos,
+        CastingEnvironment ctx,
+        List<? extends Iota> hexStack,
+        VAULT vault
+    ) {
+        this.world = ctx.getWorld();
+        this.state = world.getBlockState(blockPos);
+        return super.setUp(blockPos, ctx, hexStack, vault);
+    }
+
+    @Override public boolean testBlock() {
         return ctx.isEnlightened()
-            && state.isOf(HexBlocks.IMPETUS_EMPTY);
+            && ctx.getWorld().getBlockState(blockPos).isOf(HexBlocks.IMPETUS_EMPTY);
     }
 
     @Override
     public void mishapIfNeeded() {
-        int got = vault.fetch(Mutables::isAmel, Flags.PRESET_Stacks_InvItem_UpToHotbar);
-        if (got < 5) MishapThrowerJava.throwMishap(new MishapNotEnoughItems(AMEL, got, 5));
-        else if (ctx.getCastingEntity() == null
+        int fetched = vault.fetch(Mutables::isAmel, Flags.PRESET_Stacks_InvItem_UpToHotbar);
+        if (fetched < 5) {
+            throw new MishapNotEnoughItems(AMEL, fetched, 5);
+        }
+        if (ctx.getCastingEntity() == null
             || !(ctx.getCastingEntity() instanceof ServerPlayerEntity)) {
             MishapThrowerJava.throwMishap(new MishapBadCaster());
-        } else if (state.get(BlockEmptyImpetus.ENERGIZED)) {
-
         }
     }
 

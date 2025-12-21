@@ -26,10 +26,10 @@ public abstract class AbstractBrewer extends BlockWithEntity {
     public void onStateReplaced(
         BlockState state, World world, BlockPos pos, BlockState newState, boolean moved
     ) {
-        super.onStateReplaced(state, world, pos, newState, moved);
         if (state.getBlock() == newState.getBlock()) return;
         if (!(world.getBlockEntity(pos) instanceof AbstractBrewerEntity bE)) return;
         ItemScatterer.spawn(world, pos, bE);
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     @Override

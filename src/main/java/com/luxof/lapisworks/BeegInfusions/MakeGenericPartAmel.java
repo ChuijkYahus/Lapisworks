@@ -10,11 +10,11 @@ import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.init.Mutables.BeegInfusion;
 import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.interop.hextended.LapixtendedInterface;
+import com.luxof.lapisworks.items.AmelStaff;
 import com.luxof.lapisworks.items.shit.DurabilityPartAmel;
 import com.luxof.lapisworks.mishaps.MishapNotEnoughItems;
 
 import static com.luxof.lapisworks.LapisworksIDs.AMEL;
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -34,22 +34,18 @@ public class MakeGenericPartAmel extends BeegInfusion {
             stack = heldInfo.stack();
             item = stack.getItem();
             hand = heldInfo.hand();
-            LOGGER.info("Hand: " + hand.toString());
-            if (item instanceof ItemStaff) {
+            if (item instanceof ItemStaff && !(item instanceof AmelStaff)) {
                 ret = true;
                 break;
             }
         }
         fullInfusionCost = item instanceof DurabilityPartAmel durab ?
             stack.getMaxDamage() / durab.getAmelWorthInDurability()
-            : Mutables.getBaseCostForInfusionOf(
-                LapixtendedInterface.getAppropriateFullAmel(item)
-            );
+            : Mutables.getCostForFullInfusionOfStaff((ItemStaff)item, ctx.getWorld());
         infusing = Math.min(
             OperatorUtils.getPositiveInt(hexStack, 0, hexStack.size()),
             fullInfusionCost
         );
-        LOGGER.info("full vs infusing: " + fullInfusionCost + " " + infusing);
         return ret;
     }
 

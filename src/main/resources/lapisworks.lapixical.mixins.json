@@ -5,8 +5,7 @@
 	"mixins": [
 		"OpSleight$SwapSpellMixin",
 		"ItemEntityMixin",
-		"MediaJarBlockEntityMixin",
-		"MinecraftServerMixin"
+		"MediaJarBlockEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

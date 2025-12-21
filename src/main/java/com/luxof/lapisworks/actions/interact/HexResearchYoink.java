@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.RenderedSpell;
 import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.OperationResult;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
@@ -15,7 +16,6 @@ import at.petrak.hexcasting.api.casting.math.EulerPathFinder;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
-import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexTags;
@@ -37,9 +37,7 @@ import static com.luxof.lapisworks.LapisworksIDs.PAT_SCROLL;
 import static com.luxof.lapisworks.LapisworksIDs.SCROLL;
 
 import java.util.List;
-import java.util.Optional;
 
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registry;
@@ -48,29 +46,30 @@ import net.minecraft.util.math.BlockPos;
 
 import org.jetbrains.annotations.Nullable;
 
-/** my excuses:
- *  - HexResearch is still stuck at 1.19.2
- *  - I think the artificial mind makes more sense in the context of Lapisworks' "materials
- *      interact with media" shtick (recipe-wise and lore-wise too)
- *  - artificial minds can't thought sieve in HexResearch and can only be flayed to make budding amethyst
- * but ultimately, those are just excuses.
- * sorry lmao
- */
+/** yes lmao */
 public class HexResearchYoink implements SpellAction {
     @Nullable
     public HexPattern getPerWorldPatternByShape(HexPattern pattern, CastingEnvironment ctx) {
         Registry<ActionRegistryEntry> registry = IXplatAbstractions.INSTANCE.getActionRegistry();
+
         for (RegistryKey<ActionRegistryEntry> key : registry.getKeys()) {
             ActionRegistryEntry action = registry.get(key);
-            if (HexUtils.isOfTag(registry, key, HexTags.Actions.PER_WORLD_PATTERN)) {
-                HexPattern scrungled = EulerPathFinder.findAltDrawing(
-                    action.prototype(),
-                    ctx.getWorld().getSeed()
-                );
-                LOGGER.info("Scrungled name: " + key.getValue().toString());
-                if (scrungled.anglesSignature().equals(pattern.anglesSignature())) { return scrungled; }
-                else if (matchShape(scrungled, pattern)) { return scrungled; }
-            }
+
+            if (!HexUtils.isOfTag(registry, key, HexTags.Actions.PER_WORLD_PATTERN)) continue;
+
+            HexPattern scrungled = EulerPathFinder.findAltDrawing(
+                action.prototype(),
+                ctx.getWorld().getSeed()
+            );
+            LOGGER.info("Scrungled name: \"" + key.getValue().toString() + "\"");
+
+            if (scrungled.anglesSignature().equals(pattern.anglesSignature())) { return scrungled; }
+            else if (matchShape(scrungled, pattern)) { return scrungled; }
+
+            if (!key.getValue().toString().equals("hexthingy:smite")) continue;
+            LOGGER.info("invalid!");
+            LOGGER.info("pattern given: " + pattern.anglesSignature() + " " + pattern.getStartDir().toString());
+            LOGGER.info("smite        : " + scrungled.anglesSignature() + " " + scrungled.getStartDir().toString());
         };
         return null;
     }
@@ -81,11 +80,6 @@ public class HexResearchYoink implements SpellAction {
 
     @Override
     public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
-        Optional<LivingEntity> casterOp = Optional.of(ctx.getCastingEntity());
-        if (casterOp.isEmpty()) { MishapThrowerJava.throwMishap(new MishapBadCaster()); }
-        LivingEntity caster = casterOp.get();
-
-
         BlockPos mindPos = OperatorUtils.getBlockPos(args, 0, getArgc());
         try { ctx.assertPosInRange(mindPos); }
         catch (Mishap mishap) { MishapThrowerJava.throwMishap(mishap); }
@@ -103,13 +97,18 @@ public class HexResearchYoink implements SpellAction {
         }
 
 
-        ItemStack offHandItems = caster.getOffHandStack();
-        if (!(offHandItems.getItem() instanceof ItemScroll)) {
+        HeldItemInfo held = ctx.getHeldItemToOperateOn(
+            stack -> (stack.getItem() instanceof ItemScroll)
+        );
+        if (held == null) {
             MishapThrowerJava.throwMishap(new MishapBadOffhandItem(
-                offHandItems,
+                ItemStack.EMPTY.copy(),
                 SCROLL
             ));
+            return null; // VSCode complains
         }
+
+        ItemStack offHandItems = held.stack();
         ItemScroll scroll = (ItemScroll)offHandItems.getItem();
 
 
@@ -123,7 +122,6 @@ public class HexResearchYoink implements SpellAction {
         }
 
 
-        // maybe i shouldn't calculate the pattern regardless of if it's going to even write it?
         HexPattern realPattern = getPerWorldPatternByShape(((PatternIota)iota).getPattern(), ctx);
         if (realPattern == null) {
             MishapThrowerJava.throwMishap(new MishapBadOffhandItem(
@@ -133,21 +131,21 @@ public class HexResearchYoink implements SpellAction {
         }
 
         return new SpellAction.Result(
-            new Spell(caster, blockEntity, realPattern, scroll),
+            new Spell(offHandItems, blockEntity, realPattern, scroll),
             MediaConstants.CRYSTAL_UNIT,
-            List.of(ParticleSpray.burst(caster.getPos(), 2, 15)),
+            List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 2, 15)),
             1
         );
     }
 
     public class Spell implements RenderedSpell {
-        public final LivingEntity caster;
+        public final ItemStack stack;
         public final MindEntity blockEntity;
         public final HexPattern pattern;
         public final ItemScroll scroll;
 
-        public Spell(LivingEntity caster, MindEntity blockEntity, HexPattern pattern, ItemScroll scroll) {
-            this.caster = caster;
+        public Spell(ItemStack stack, MindEntity blockEntity, HexPattern pattern, ItemScroll scroll) {
+            this.stack = stack;
             this.blockEntity = blockEntity;
             this.pattern = pattern;
             this.scroll = scroll;
@@ -158,7 +156,7 @@ public class HexResearchYoink implements SpellAction {
             this.blockEntity.mindCompletion -= 50.0f;
             this.blockEntity.markDirty();
             if (ctx.getWorld().random.nextInt(4) > 2) { return; } // 3/5 chance (number is 0-4 inclusive)
-            this.scroll.writeDatum(caster.getOffHandStack(), new PatternIota(this.pattern));
+            this.scroll.writeDatum(stack, new PatternIota(this.pattern));
 		}
 
         @Override

@@ -36,11 +36,8 @@ public class LiveJukeboxEntity extends BlockEntity {
     }
 
     public void startPlaying() {
-        LOGGER.info("Bet");
         this.hasBeenTimeBetweenNotes = 0;
         this.playingNotes = new ArrayList<>(this.notes);
-        LOGGER.info("notes: " + this.notes.toString());
-        LOGGER.info("now playing: " + this.playingNotes.toString());
         this.markDirty();
     }
 
@@ -61,7 +58,6 @@ public class LiveJukeboxEntity extends BlockEntity {
             blockEntity.hasBeenTimeBetweenNotes = 0;
             return;
         }
-        LOGGER.info("We must play notes!");
 
         double timePeriod = 1.0 / blockEntity.frequency;
 

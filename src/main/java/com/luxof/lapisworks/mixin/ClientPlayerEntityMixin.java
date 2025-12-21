@@ -39,6 +39,7 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity implements Bl
     @Unique private Map<Block, Pair<BlockPos, Double>> mapHOT = new HashMap<>();
     @Unique
     protected void Dowser() {
+        // i vaguely remember some issue where the explanation was about a tree falling in a forest
         LOGGER.info("The dowser's thread has started!");
         while (true) {
             if (MinecraftClient.getInstance().isPaused()) continue;

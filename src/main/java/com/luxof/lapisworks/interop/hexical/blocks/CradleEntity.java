@@ -5,7 +5,6 @@ import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 
 import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
 import com.luxof.lapisworks.interop.hexical.Lapixical;
-import com.luxof.lapisworks.mixinsupport.GetServerStatus;
 import com.luxof.lapisworks.mixinsupport.ItemEntityMinterface;
 
 import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
@@ -15,6 +14,7 @@ import java.util.UUID;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -41,6 +41,22 @@ public class CradleEntity extends BlockEntity implements Inventory, LinkableMedi
 		bE.configureItemEntity();
     }
 
+    private void heyGiveAnyFakerEntitiesAVibeCheckForMeRealQuick() {
+        if (world.isClient) return;
+        Entity entity = ((ServerWorld)world).getEntity(persistentUUID);
+        if (entity == null) return;
+        // this happens when a world loads.
+        // for some reason all cradle item entities, when loaded, bug the fuck out.
+        // no clue why.
+        // so just do this
+        persistentUUID = UUID.randomUUID();
+        // make sure not to kill something that wasn't at fault lol
+        // i know, UUIDs and allat but i'd rather not
+        if (
+            entity instanceof ItemEntity &&
+            ((ItemEntityMinterface)entity).getBlockPosOfCradle() != null
+        ) entity.discard();
+    }
     public void updateItemEntity() {
         if (world.isClient) return;
         if (heldStack.isEmpty()) {
@@ -52,20 +68,18 @@ public class CradleEntity extends BlockEntity implements Inventory, LinkableMedi
             return;
         }
 
+        if (heldEntity == null) heyGiveAnyFakerEntitiesAVibeCheckForMeRealQuick();
+
         ServerWorld sWorld = (ServerWorld)world;
 
-        // just be over with please
-        if (heldEntity == null || heldEntity.isRemoved()) {
-            Vec3d pos = Vec3d.ofCenter(this.pos);
-            heldEntity = new ItemEntity(sWorld, pos.x, pos.y, pos.z, heldStack);
-            heldEntity.setUuid(persistentUUID);
-            configureItemEntity();
-            ((ItemEntityMinterface)heldEntity).setBlockPosOfCradle(this.pos);
-            sWorld.spawnEntity(heldEntity);
-        } else if (heldEntity.getStack() != heldStack) {
+        boolean noItemEntity = heldEntity == null || heldEntity.isRemoved();
+        boolean mismatchingStacks = noItemEntity ? true : !heldEntity.getStack().equals(heldStack);
+        if (!noItemEntity && mismatchingStacks) {
             persistentUUID = UUID.randomUUID();
             heldEntity.discard();
             heldEntity = null;
+        }
+        if (noItemEntity || mismatchingStacks) {
             Vec3d pos = Vec3d.ofCenter(this.pos);
             heldEntity = new ItemEntity(sWorld, pos.x, pos.y, pos.z, heldStack);
             heldEntity.setUuid(persistentUUID);
@@ -103,14 +117,6 @@ public class CradleEntity extends BlockEntity implements Inventory, LinkableMedi
         super.writeNbt(nbt);
         nbt.put("item", heldStack.writeNbt(new NbtCompound()));
         nbt.putUuid("persistent_uuid", persistentUUID);
-
-        if (world.isClient) return;
-        if (heldEntity != null && ((GetServerStatus)world.getServer()).isShuttingDown()) {
-            // the item entities always seem to become glitchy on world load
-            // i reckon it's because i can't grab them on world load
-            heldEntity.discard();
-            heldEntity = null;
-        }
     }
 
     @Override

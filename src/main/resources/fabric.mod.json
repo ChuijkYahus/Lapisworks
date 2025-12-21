@@ -23,6 +23,9 @@
 		],
 		"client": [
 			"com.luxof.lapisworks.client.LapisworksClient"
+		],
+		"emi": [
+			"com.luxof.lapisworks.interop.emi.LapisworksEmiPlugin"
 		]
 	},
 	"mixins": [

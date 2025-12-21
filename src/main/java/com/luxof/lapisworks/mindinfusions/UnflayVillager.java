@@ -1,4 +1,4 @@
-package com.luxof.lapisworks.SMindInfusions;
+package com.luxof.lapisworks.mindinfusions;
 
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;

@@ -1,0 +1,11 @@
+{
+    "type": "lapisworks:simple_mind_infusion",
+    "input_block": "hexcasting:impetus/empty",
+    "display_input_item": {
+        "item": "hexcasting:impetus/empty"
+    },
+    "output_block": "lapisworks:amel_constructs/simple_impetus",
+    "display_output_item": "lapisworks:amel_constructs/simple_impetus",
+    "additional_costs": [],
+    "needs_enlightenment": true
+}

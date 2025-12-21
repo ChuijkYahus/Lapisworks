@@ -15,11 +15,13 @@ import com.luxof.lapisworks.init.ModRecipes;
 import com.luxof.lapisworks.init.ModScreens;
 import com.luxof.lapisworks.init.Patterns;
 import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
+import com.luxof.lapisworks.init.LapisParticles;
 import com.luxof.lapisworks.init.LapisworksLoot;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.ModEntities;
 import com.luxof.lapisworks.init.ThemConfigFlags;
 import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 import com.luxof.lapisworks.mixinsupport.GetStacks;
 
 import static com.luxof.lapisworks.LapisworksIDs.INFUSED_AMEL;
@@ -28,6 +30,8 @@ import static com.luxof.lapisworks.LapisworksIDs.OFFHAND;
 import static com.luxof.lapisworks.init.ThemConfigFlags.allPerWorldShapePatterns;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 
+import dev.emi.emi.api.stack.EmiIngredient;
+import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
@@ -142,6 +146,7 @@ public class Lapisworks implements ModInitializer {
 		ModPOIs.crawlOutOfHell();
 		ModRecipes.apologizeForWarcrimes();
 		ModScreens.whatWasThatTF2CommentAboutMakingBadGUICodeSoYouDontHaveToTouchItAgain();
+		LapisParticles.pawtickle();
 
         LOGGER.info("Luxof's pet Lapisworks is getting a bit hyperactive.");
 		LOGGER.info("\"Lapisworks! Lapis Lapis!\"");
@@ -345,6 +350,11 @@ public class Lapisworks implements ModInitializer {
 	public static boolean closeEnough(double a, double b, double epsilon) {
 		return Math.abs(b - a) < epsilon;
 	}
+	public static boolean closeEnough(Vec3d a, Vec3d b, double epsilon) {
+		return closeEnough(a.x, b.x, epsilon)
+			&& closeEnough(a.y, b.y, epsilon)
+			&& closeEnough(a.z, b.z, epsilon);
+	}
 
     /** returns null if hand isn't MAIN_HAND or OFF_HAND or inaccessible (i'll add more eventually..!!) */
     @Nullable
@@ -518,5 +528,19 @@ public class Lapisworks implements ModInitializer {
 
 	public static double getDistance(BlockPos pos1, BlockPos pos2) {
 		return Math.sqrt(pos2.getSquaredDistance(pos1));
+	}
+
+	public static boolean _shouldBreakSent(LivingEntity plr) {
+		EnchSentInterface eSentInterface = (EnchSentInterface)plr;
+		return eSentInterface.getEnchantedSentinel() == null ?
+			false :
+			plr.getPos().squaredDistanceTo(eSentInterface.getEnchantedSentinel()) > 32.0*32.0;
+	}
+
+	public static boolean testEmiIngredient(EmiIngredient ingredient, Item item) {
+		for (EmiStack stack : ingredient.getEmiStacks()) {
+			if (stack.getItemStack().isOf(item)) return true;
+		}
+		return false;
 	}
 }

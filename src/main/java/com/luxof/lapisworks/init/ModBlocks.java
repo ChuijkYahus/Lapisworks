@@ -1,25 +1,11 @@
 package com.luxof.lapisworks.init;
 
-import com.google.common.collect.ImmutableSet;
-
-//import com.luxof.lapisworks.blocks.ChalkBlock;
-import com.luxof.lapisworks.blocks.ConjuredColorable;
-import com.luxof.lapisworks.blocks.EnchBrewer;
-import com.luxof.lapisworks.blocks.JumpSlate;
-import com.luxof.lapisworks.blocks.Mind;
-import com.luxof.lapisworks.blocks.ReboundSlate;
-import com.luxof.lapisworks.blocks.SimpleImpetus;
-import com.luxof.lapisworks.blocks.LiveJukebox;
-import com.luxof.lapisworks.blocks.MediaCondenser;
-import com.luxof.lapisworks.blocks.entities.MindEntity;
-import com.luxof.lapisworks.blocks.entities.SimpleImpetusEntity;
-import com.luxof.lapisworks.blocks.stuff.AbstractBrewerEntity;
-
 import at.petrak.hexcasting.common.lib.HexBlocks;
 
-import com.luxof.lapisworks.blocks.entities.EnchBrewerEntity;
-import com.luxof.lapisworks.blocks.entities.LiveJukeboxEntity;
-import com.luxof.lapisworks.blocks.entities.MediaCondenserEntity;
+import com.google.common.collect.ImmutableSet;
+
+import com.luxof.lapisworks.blocks.*;
+import com.luxof.lapisworks.blocks.entities.*;
 
 import static com.luxof.lapisworks.Lapisworks.id;
 
@@ -49,6 +35,7 @@ public class ModBlocks {
     public static SimpleImpetus SIMPLE_IMPETUS = new SimpleImpetus();
     public static EnchBrewer ENCH_BREWER = new EnchBrewer();
     public static MediaCondenser MEDIA_CONDENSER = new MediaCondenser();
+    public static Chalk CHALK = new Chalk();
     // GET THE UPDATE OUT
     public static Block UNCRAFTED_CONDENSER = new Block(Settings.copy(HexBlocks.SLATE_BLOCK)) {
         public static final VoxelShape SHAPE = VoxelShapes.union(
@@ -66,22 +53,22 @@ public class ModBlocks {
         }
     };
     //public static ChalkBlock CHALK_BLOCK = new ChalkBlock();
-    public static BlockEntityType<MindEntity> MIND_ENTITY_TYPE = new BlockEntityType<MindEntity>(
+    public static BlockEntityType<MindEntity> MIND_ENTITY_TYPE = new BlockEntityType<>(
         MindEntity::new,
         ImmutableSet.of(MIND_BLOCK),
         null
     );
-    public static BlockEntityType<LiveJukeboxEntity> LIVE_JUKEBOX_ENTITY_TYPE = new BlockEntityType<LiveJukeboxEntity>(
+    public static BlockEntityType<LiveJukeboxEntity> LIVE_JUKEBOX_ENTITY_TYPE = new BlockEntityType<>(
         LiveJukeboxEntity::new,
         ImmutableSet.of(LIVE_JUKEBOX_BLOCK),
         null
     );
-    public static BlockEntityType<SimpleImpetusEntity> SIMPLE_IMPETUS_ENTITY_TYPE = new BlockEntityType<SimpleImpetusEntity>(
+    public static BlockEntityType<SimpleImpetusEntity> SIMPLE_IMPETUS_ENTITY_TYPE = new BlockEntityType<>(
         SimpleImpetusEntity::new,
         ImmutableSet.of(SIMPLE_IMPETUS),
         null
     );
-    public static BlockEntityType<AbstractBrewerEntity> ENCH_BREWER_ENTITY_TYPE = new BlockEntityType<AbstractBrewerEntity>(
+    public static BlockEntityType<EnchBrewerEntity> ENCH_BREWER_ENTITY_TYPE = new BlockEntityType<>(
         EnchBrewerEntity::new,
         ImmutableSet.of(ENCH_BREWER),
         null
@@ -89,6 +76,11 @@ public class ModBlocks {
     public static BlockEntityType<MediaCondenserEntity> MEDIA_CONDENSER_ENTITY_TYPE = new BlockEntityType<>(
         MediaCondenserEntity::new,
         ImmutableSet.of(MEDIA_CONDENSER),
+        null
+    );
+    public static BlockEntityType<ChalkEntity> CHALK_ENTITY_TYPE = new BlockEntityType<>(
+        ChalkEntity::new,
+        ImmutableSet.of(CHALK),
         null
     );
 
@@ -106,12 +98,13 @@ public class ModBlocks {
         pickACropTop("amel_constructs/enchbrewer", ENCH_BREWER);
         pickACropTop("media_condenser_unit", MEDIA_CONDENSER);
         pickACropTop("uncrafted_condenser", UNCRAFTED_CONDENSER);
-        //pickACropTop("chalk", CHALK_BLOCK);
+        pickACropTop("chalk", CHALK);
         dontForgetStockings("mind_entity_type", MIND_ENTITY_TYPE);
         dontForgetStockings("live_jukebox_entity_type", LIVE_JUKEBOX_ENTITY_TYPE);
         dontForgetStockings("amel_constructs/simple_impetus", SIMPLE_IMPETUS_ENTITY_TYPE);
         dontForgetStockings("amel_constructs/enchbrewer", ENCH_BREWER_ENTITY_TYPE);
         dontForgetStockings("media_condenser_unit", MEDIA_CONDENSER_ENTITY_TYPE);
+        dontForgetStockings("chalk", CHALK_ENTITY_TYPE);
     }
 
     public static void pickACropTop(String name, Block block) {

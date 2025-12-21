@@ -1,4 +1,4 @@
-package com.luxof.lapisworks.interop.hexal.SMindInfusions;
+package com.luxof.lapisworks.interop.hexal.mindinfusions;
 
 import com.luxof.lapisworks.init.Mutables.SMindInfusion;
 

@@ -1,19 +1,27 @@
 package com.luxof.lapisworks.mixin;
 
+import at.petrak.hexcasting.api.utils.NBTHelper;
+
 import com.luxof.lapisworks.mixinsupport.ItemEntityMinterface;
 
+import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
+
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemEntity.class)
-public class ItemEntityMixin implements ItemEntityMinterface {
+public abstract class ItemEntityMixin implements ItemEntityMinterface {
+    @Shadow public abstract ItemStack getStack();
+
     @Unique private BlockPos cradlePos = null;
 
     @Unique @Override public void setBlockPosOfCradle(BlockPos blockPos) { cradlePos = blockPos; }
@@ -27,6 +35,10 @@ public class ItemEntityMixin implements ItemEntityMinterface {
             compound.getInt("cradlePosY"),
             compound.getInt("cradlePosZ")
         );
+
+        if (compound.getBoolean(IS_IN_CRADLE)) {
+            NBTHelper.putBoolean(getStack(), IS_IN_CRADLE, true);
+        }
     }
     
     @Inject(at = @At("HEAD"), method = "writeCustomDataToNbt")
@@ -35,5 +47,9 @@ public class ItemEntityMixin implements ItemEntityMinterface {
         compound.putInt("cradlePosX", cradlePos.getX());
         compound.putInt("cradlePosY", cradlePos.getY());
         compound.putInt("cradlePosZ", cradlePos.getZ());
+
+        if (NBTHelper.contains(getStack(), IS_IN_CRADLE)) {
+            compound.putBoolean(IS_IN_CRADLE, true);
+        }
     }
 }

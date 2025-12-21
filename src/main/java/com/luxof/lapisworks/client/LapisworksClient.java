@@ -5,9 +5,11 @@ import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.common.lib.HexItems;
 
 import com.luxof.lapisworks.Lapisworks;
+import com.luxof.lapisworks.blocks.bers.EnchBrewerRenderer;
 import com.luxof.lapisworks.blocks.entities.MediaCondenserEntity;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
 import com.luxof.lapisworks.client.screens.EnchBrewerScreen;
+import com.luxof.lapisworks.init.LapisParticles;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.ModItems;
 import com.luxof.lapisworks.init.ModScreens;
@@ -33,6 +35,8 @@ import static com.luxof.lapisworks.init.ModItems.IRON_SWORD;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 
 import com.mojang.datafixers.util.Pair;
+
+import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 
 import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 
@@ -115,8 +119,10 @@ public class LapisworksClient implements ClientModInitializer {
         // the eternal fucking grammar battle with this simple Markiplier ass log will drive me insane
         // thankful i won't have to edit this file anymore
         // ^^^^ what was that, chief?
-        LOGGER.info("Hello everybody my name is LapisworksClient and today what we are going to do is: scrying lens tooltips, make blocks transparent, keybinds, networking, Model Predicate Providers, make blocks translucent, spin 4D hypercubes for the FUNNY, Block Entity Renderers (shudder), render trinkets, and client-side rendering!");
+        LOGGER.info("Hello everybody my name is LapisworksClient and today what we are going to do is: scrying lens tooltips, make blocks transparent, keybinds, networking, Model Predicate Providers, make blocks translucent, spin 4D hypercubes for the FUNNY, Block Entity Renderers (shudder), render trinkets, make particles, and client-side rendering!");
         LOGGER.info("Does NONE of that sound fun? Well, that's because it isn't. So let's get started, shall we?");
+
+        LapisParticles.clientTicklesPaw();
 
         HandledScreens.register(ModScreens.ENCH_BREWER_SCREEN_HANDLER, EnchBrewerScreen::new);
 
@@ -125,6 +131,11 @@ public class LapisworksClient implements ClientModInitializer {
         TrinketRendererRegistry.registerRenderer(ModItems.AMEL_JAR, new JarTrinketRenderer());
         TrinketRendererRegistry.registerRenderer(FOCUS_NECKLACE, new NecklaceTrinketRenderer());
         TrinketRendererRegistry.registerRenderer(FOCUS_NECKLACE2, new NecklaceTrinketRenderer());
+
+        BlockEntityRendererRegistry.register(
+            ModBlocks.ENCH_BREWER_ENTITY_TYPE,
+            EnchBrewerRenderer::new
+        );
 
         // we all thank hexxy for adding simple addDisplayer() instead of requiring mixin in unison
         ScryingLensOverlayRegistry.addDisplayer(
@@ -209,7 +220,6 @@ public class LapisworksClient implements ClientModInitializer {
                 buf,
                 responseSender
             ) -> {
-                LOGGER.info("Got a SEND_SENT packet!");
                 boolean banishSentinel = buf.readBoolean();
                 if (banishSentinel) {
                     if (!this.playerHasJoined) {
@@ -233,11 +243,9 @@ public class LapisworksClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(
             SEND_PWSHAPE_PATS,
             (client, handler, buf, responseSender) -> {
-                LOGGER.info("So we got sent the shit.");
                 NbtCompound nbt = buf.readNbt();
                 for (String flag : chosenFlags.keySet()) {
                     chosenFlags.put(flag, nbt.getInt(flag));
-                    LOGGER.info("For " + flag + " we have " + nbt.getInt(flag));
                     // vv unused but may allow for neat stuff in the future
                     PatchouliAPI.get().setConfigFlag(
                         flag + String.valueOf(nbt.getInt(flag)),
