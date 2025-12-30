@@ -94,6 +94,7 @@
     "block.lapisworks.media_condenser_unit": "Media Condensing Unit",
     "block.lapisworks.uncrafted_condenser": "Empty Unit",
     "block.lapisworks.amel_constructs.enchbrewer": "Enchanted Brewery",
+    "block.lapisworks.chalk": "Amethyst Chalk",
 
     "advancements.lapisworks.gotlapis.name": "Lapisworks Research",
     "advancements.lapisworks.gotlapis.description": "A deep blue, precious mineral. Just as they wrote..",
@@ -122,6 +123,7 @@
     "render.lapisworks.scryinglens.mediacondenser": "%d%% filled. (%d/%d dust)",
 
 
+    "gui.lapisworks.chalk_with_pattern.name": "Amethyst Chalk",
     "gui.lapisworks.enchbrewer.name": "Enchanted Brewery",
 
     "tag.item.lapisworks.amel": "Amethyst Lazuli",
@@ -230,6 +232,9 @@
     "hexcasting.action.lapisworks:get_linkable_links": "Phianglement Purification",
     "hexcasting.action.book.lapisworks:get_linkable_links": "Phianglement Prfn.",
 
+    "hexcasting.action.lapisworks:hadamard": "Hadamard Distillation",
+    "hexcasting.action.book.lapisworks:hadamard": "Hadamard Distillation",
+
     "hexcasting.action.lapisworks:create_enchsent0": "Summon Enchanted Sentinel",
     "hexcasting.action.lapisworks:create_enchsent1": "Summon Enchanted Sentinel",
     "hexcasting.action.lapisworks:create_enchsent2": "Summon Enchanted Sentinel",
@@ -302,7 +307,6 @@
     "mishaps.lapisworks.descs.unlinked_linkable": "a Linkable Media Block/phiangleable not linked to %d, %d, %d",
     "mishaps.lapisworks.descs.nottoomanylinks_linkable": "a Linkable Media Block/phiangleable without too many links",
 
-    "notif.lapisworks.you_used_the_enchant_bug": "You used the Enchant X pattern bug before 1.5.6. Media cost is 0, attribute reset to the limit.",
     "notif.lapisworks.wizard_diaries.all_gotten": "It seems I have rediscovered all the surviving ancient tomes.",
     "notif.lapisworks.wizard_diaries.unreadable_diary": "Blank. Perhaps this has the same encryption as every other Lapisworker text? I suppose I'll unlock it in time, then.",
     "notif.lapisworks.dowser.not_enough_media": "Failure. It couldn't find enough media (%d dust, precisely) for fuel.",
@@ -336,18 +340,18 @@
     "pages.lapisworks.lapisworks_great.title": "Enchantments",
     "pages.lapisworks.lapisworks_great.aahhhhelp": "i have seen i have seen go back give me back my sanity must not lose self have no time must document before",
     "pages.lapisworks.lapisworks_great.explanation": "my eyes hurt so much it hurts to read it hurts to see it hurts to exist the pages the patterns the radiance in the corners of my vision gathered together and blinded me must write down. All of these patterns cost 32 $(item)Amel$() if not stated otherwise. They do not carry over bad dreams like this this is a bad dream right it's gonna end soon what if it's not a dream and it ends soon i'm going to die",
-    "pages.lapisworks.lapisworks_great.checkenchant.summary": "Gives the level of the specified enchantment enchantment enchantment enchantment why do they always shine purple $(l)MUST WRITE DOWN$() on the given entity for little cost and no $(item)Amel$().",
-    "pages.lapisworks.lapisworks_great.fireyfists.summary": "It costs 10 $(item)Charged Amethyst$() and it's like $(thing)Fire Aspect$() for fists that's so funny teehee heeheeheeHAHAHAHA $(l)NO NO STOP.$() One level. ID = 0.",
-    "pages.lapisworks.lapisworks_great.lightningbending.summary": "The heavens bend to my will with each of my strikes. 20 $(item)Charged Amethyst$() and a stack of $(item)Amel$() per level. Three levels. ID = 1.",
+    "pages.lapisworks.lapisworks_great.checkenchant.summary": "Gives the level of the specified (with ID) enchantment on the given entity for little cost and no $(item)Amel$().",
+    "pages.lapisworks.lapisworks_great.fireyfists.summary": "Like $(thing)Fire Aspect$() but for my hands. Costs 10 $(item)Charged Amethyst$() 48 $(item)Amel$(). Has one level. ID = 0.",
+    "pages.lapisworks.lapisworks_great.lightningbending.summary": "20 $(item)Charged Amethyst$() and a stack of $(item)Amel$() per level to bend the heavens to my will with my strikes. Three levels. ID = 1.",
     "pages.lapisworks.lapisworks_great.lightningbending.detailed": "please i'm so scared every tiny movement feels like i i i i feel like i'm about to $(l)NO NO CANNOT END HERE$(). At level one, the lightning channeling effect only works during thunderstorms. At level two, it works during rain as well. At level three, even clear skies will not stop me.",
-    "pages.lapisworks.lapisworks_great.falldmgres.summary": "This cushions up to 10 blocks of fall damage per level and costs 5 $(item)Charged Amethyst$() and 20 $(item)Amel$() per level. Three levels. ID = 2.",
-    "pages.lapisworks.lapisworks_great.longbreath.summary": "what is the point of inflating my lungs any more my lungs already feel like $(o)stop please.$() Achieve the $(thing)Respiration$() enchantment but twice as strong. Two levels. 1 charged, 10 $(item)Amel$(). ID = 3.",
-    "pages.lapisworks.lapisworks_great.fireresist.summary": "Wield the energy of an entire stack of $(item)Amel$() and 10 $(item)Charged Amethyst$() to make me hell-borne. One level. ID = 4. im more afraid of the light than fire",
+    "pages.lapisworks.lapisworks_great.falldmgres.summary": "Cushions up to 10 blocks of fall damage per level, costing 5 $(item)Charged Amethyst$() and 20 $(item)Amel$() per level. Three levels. ID = 2.",
+    "pages.lapisworks.lapisworks_great.longbreath.summary": "Enchant my lungs themselves and achieve the $(thing)Respiration$() enchantment but twice as strong. Two levels. 1 $(item)Charged Amethyst$(), 10 $(item)Amel$(). ID = 3.",
+    "pages.lapisworks.lapisworks_great.fireresist.summary": "Wield the energy of an entire stack of $(item)Amel$() and 10 $(item)Charged Amethyst$() to make me hell-borne and impervious to all heat. One level. ID = 4.",
     "pages.lapisworks.lapisworks_great.imgonnagoliedownnow": "the light that shines in the corners of my eyesight is so so so so so so so bright how do i make it stop please make it stop help me$(br2)am i going to die here? no no no no i can't die here i don't wanna die i'm scared i don't wanna die$(br2)im gonna go lie down now",
 
     "pages.lapisworks.lapisworks_misc.title": "Enchanted Patterns",
-    "pages.lapisworks.lapisworks_misc.intro": "These ancient texts recount an old and wise wizard, extremely knowledgeable of all sorcery, yet spiteful of all creatures living, dead, undead or unborn. It is told they were poor in sources of media and many came after them, but they always managed to survive. This wizard left behind a treasure trove of knowledge on their demise (collected by curious adventurers) including $(thing)Enchanted Patterns.$()$(br)$(o)Will I ever be capable of this feat?$()",
-    "pages.lapisworks.lapisworks_misc.intro2": "Frustratingly enough, the wizard attempted to burn most of them and was extremely successful, leaving only a few that were recovered by the heroes that defeated them. Among these few are enhanced forms of $(l:patterns/spells/blockworks#hexcasting:conjure_block)Conjure Block$(), $(l:patterns/consts#hexcasting:const/vec/0)some Vector patterns$(), $(l:patterns/basics#hexcasting:raycast)Archer's Distillation$(), among some others.",
+    "pages.lapisworks.lapisworks_misc.intro": "These ancient texts recount an old and wise wizard, extremely knowledgeable of all sorcery, yet spiteful of all that crossed their path. It is told they were poor in sources of media and many came after them, but they always managed to survive. This wizard left behind a treasure trove of knowledge on their demise (collected by curious adventurers) including $(thing)Enchanted Patterns.$()$(br)$(o)Will I ever be capable of this feat?$()",
+    "pages.lapisworks.lapisworks_misc.intro2": "Frustratingly enough, the wizard attempted to burn most of them and was extremely successful, leaving only a few that were recovered by the heroes that defeated them. Among these few are enhanced forms of $(l:patterns/spells/blockworks#hexcasting:conjure_block)Conjure Block$(), $(l:patterns/consts#hexcasting:const/vec/0)some Vector patterns$(), $(l:patterns/basics#hexcasting:raycast)Archer's Distillation$(), among some others. I should also note that $(thing)Enchanted Patterns$() aren't always \"better\" than the original, instead sometimes they extend their functionality or specialize it.",
     "pages.lapisworks.lapisworks_misc.conjure_color.summary": "Pass in a vector within Ambit and a dye color, to conjure a fragile but solid, colored block. This costs two amethyst dust and the number states which dye I want to dye the colored block. More explanation on the next page.",
     "pages.lapisworks.lapisworks_misc.conjure_color.detail": "The number states the index (starting from 0) of the dye I wish to use if they were all sorted alphabetically. All mappings:$(br)0 - Black      1 - Blue      $(br)2 - Brown      3 - Cyan      $(br)4 - Gray       5 - Green     $(br)6 - Light Blue 7 - Light Gray$(br)8 - Lime       9 - Magenta   $(br)10 - Orange    11 - Pink     $(br)12 - Purple    13 - Red      $(br)14 - White     15 - Yellow$(br)Additionally the block glows with the $(o)dye$() of my pigment's color and purple if no such dye exists.",
     "pages.lapisworks.lapisworks_misc.spherical_dstl.summary": "Evaluates (exactly like Thoth's Gambit) the given pattern list over a hollow sphere with the given radius (non-decimal, at least 1, at most 64) around the given position.",
@@ -357,7 +361,7 @@
     "pages.lapisworks.lapisworks_misc.visible_dstl.summary": "Negligible cost. Pushes whether or not the specified entity (within ambit) is able to see the specified block (also within ambit).",
     "pages.lapisworks.lapisworks_misc.equiv_block.summary": "Returns whether the two blocks are equivalent/roughly equal (the same kind of block), so wheat seeds equals a full wheat crop. Both blocks must be within my ambit.",
     "pages.lapisworks.lapisworks_misc.equal_block.summary": "Returns whether the two blocks are $(o)exactly$() equal, so wheat seeds do NOT equal a full wheat crop. Blocks must be within my ambit.",
-    "pages.lapisworks.lapisworks_misc.rwpatternsheadsup": "It seems Nature searches for items for patterns like $(l:patterns/readwrite#hexcasting:read)$(thing)Scribe's Reflection$() by finding the first valid item in my hands, starting from my off-hand. This can be a problem when (e.g.) I have a Focus in both hands. The next four patterns are for reading, writing or checking any specific hand of mine (specified in order of importance, so 0 for main, 1 for off-hand). This is a good point to note that $(thing)Enchanted Patterns$() aren't always \"better\" than the original. $(o)I wonder, if I had three arms, would these support the third as well?$()",
+    "pages.lapisworks.lapisworks_misc.rwpatternsheadsup": "It seems Nature searches for items for patterns like $(l:patterns/readwrite#hexcasting:read)$(thing)Scribe's Reflection$() by finding the first valid item in my hands from my other hand. This can be a problem when e.g. I have a Focus in both hands. The next four patterns are for reading, writing or checking any specific hand of mine (specified in order of importance. so 0 for main, 1 for off-hand). $(br)$(o)I wonder, if I had three arms, would these support the third as well?$()",
     "pages.lapisworks.lapisworks_misc.read_spechand.summary": "Specific hand version of $(l:patterns/readwrite#hexcasting:read)$(thing)Scribe's Reflection$(). Pushes the Iota stored in the Iota holder in the specified hand to the stack.",
     "pages.lapisworks.lapisworks_misc.readable_spechand.summary": "Specific hand version of $(l:patterns/readwrite#hexcasting:readable)$(thing)Auditor's Reflection$(). Pushes whether the item in the specified hand can be read from or not.",
     "pages.lapisworks.lapisworks_misc.write_spechand.summary": "Specific hand version of $(l:patterns/readwrite#hexcasting:write)$(thing)Scribe's Gambit$(). Writes the given Iota to the Iota holder in the specified hand.",
@@ -365,6 +369,7 @@
     "pages.lapisworks.lapisworks_misc.the_cooler_halt.summary": "$(l:patterns/meta#hexcasting:halt)$(thing)Charon's Gambit$(), if it could break through more than one layer. This pattern is useful in cases where $(l:patterns/meta#hexcasting:halt)$(thing)Charon's Gambit$() is insufficient, however I wish not to delve into the complicated beast that is $(l:patterns/meta#hexcasting:eval/cc)$(thing)Iris' Gambit$().",
     "pages.lapisworks.lapisworks_misc.for_n_in_range.summary": "$(o)A oney and a twoey and a you-know-what-to-doey!$()$(br2)Executes the given pattern list over a list of in(or de)crementing numbers, ranging from the first argument (inclusive) to the second (exclusive) as if $(thing)Thoth's Gambit$() were used.",
     "pages.lapisworks.lapisworks_misc.execute_many_times.summary": "$(o)Do you know the definition of insanity?$()$(br2)Executes the given pattern list the specified number of times. The stack on start behaves like it does for $(thing)Thoth's Gambit$().",
+    "pages.lapisworks.lapisworks_misc.hadamard.summary": "Based off the Hadamard Product, this pattern multiplies the respective elements of two vectors.",
 
     "pages.lapisworks.lapisworks_mishaps.title": "Lapisworks Mishaps",
     "pages.lapisworks.lapisworks_mishaps.summary": "With a new branch of Hex Casting comes new mishaps. I've documented them here.",
@@ -464,7 +469,8 @@
     "pages.lapisworks.imbuement.geode_dowser.text2": "It then spawns a burst of particles pointing to it, with the color indicating the distance. Blue means it's within 16 blocks, light blue means it's within 32, purple is 48, pink is 64, orange is 80, red is 96 and any more makes the particles black.",
 
     "pages.lapisworks.imbuement.enchbrewer.title": "Enchanted Brewery",
-    "pages.lapisworks.imbuement.enchbrewer.text": "Enchanting a $(item)Brewing Stand$() with ten pieces of $(item)Amel$() makes an $(item)Enchanted Brewery$(). It consumes 25%% more $(item)Blaze Dust$() than the $(item)Brewing Stand$() and requires one $(item)Amethyst Dust$() per brew, however, it brews potions twice as fast. In the future, due to how strongly the ingredients are shoved into potions, I may unlock more brewing possibilities with this than a regular $(item)Brewing Stand$().",
+    "pages.lapisworks.imbuement.enchbrewer.text": "Enchanting a $(item)Brewing Stand$() with ten pieces of $(item)Amel$() makes an $(item)Enchanted Brewery$(). It consumes 25%% more $(item)Blaze Dust$() than the $(item)Brewing Stand$() and requires one $(item)Amethyst Dust$() per brew in exchange for brewing potions twice as fast. In the future, due to how strongly the ingredients are shoved into potions, I may unlock more brewing possibilities with this than a regular $(item)Brewing Stand$().",
+    "pages.lapisworks.imbuement.enchbrewer.tease": "$(o)Perhaps I'll finally find out whether or not the Alchemists of the past were fools or if they really were chasing something very possible. What a sweet little thought.$()",
 
     "categories.lapisworks.lapisworks.great": "The Wizard's Spells",
     "categories.lapisworks.lapisworks.great.desc": "Some intellectuals and/or adventurers saved the old wizard's diaries. I've begun to divine some of the wizard's knowledge from these ancient tomes.",
@@ -532,7 +538,7 @@
     "pages.lapisworks.interop.lapixical.holder.title": "Handed Prison",
     "pages.lapisworks.interop.lapixical.holder.text": "The $(item)Pedestal$() does not have any shortcomings, yet as with all things, it is not perfect. It can ony act as my off-hand, yet there are $(l:lapisworks_patterns)many examples$() of patterns that work with a specific hand. $(thing)Amel Infusion$() has focused those to their specific-handed versions, thus I see no reason why it wouldn't work with the Pedestal. 15 Amel should do.",
     "pages.lapisworks.interop.lapixical.condenser_interactions.title": "Condenser Interactions",
-    "pages.lapisworks.interop.lapixical.condenser_interactions.text": "Three patterns I've been given as assistants for my work on $(l:imbuement/condenser)$(#00c)Media Condensing Units$() work on not only $(l:items/media_jar)$(item)Media Jars$(), but also $(l:interop/lapixical/cradle_n_shit)$(item)Item Cradles$() as well! These patterns are: $(l:imbuement/condenser#lapisworks:get_condenser_media)$(thing)Condensed Media Purification$(), $(l:imbuement/condenser#lapisworks:deposit)$(thing)Deposit Media$(), and $(l:imbuement/condenser#lapisworks:withdraw)$(thing)Withdraw Media$(). The only catches are that both cannot sustain any $(#00c)phianglements$(), and the $(l:interop/lapixical/cradle_n_shit)$(item)Item Cradles$() must contain a $(item)Phial$() to function in this manner.",
+    "pages.lapisworks.interop.lapixical.condenser_interactions.text": "Three patterns I've been given as assistants for my work on $(l:imbuement/condenser)$(#00c)Media Condensing Units$() work on not only $(item)Media Jars$(), but also $(l:interop/lapixical/cradle_n_shit)$(item)Item Cradles$() as well! These patterns are: $(l:imbuement/condenser#lapisworks:get_condenser_media)$(thing)Condensed Media Purification$(), $(l:imbuement/condenser#lapisworks:deposit)$(thing)Deposit Media$(), and $(l:imbuement/condenser#lapisworks:withdraw)$(thing)Withdraw Media$(). The only catches are that both cannot sustain any $(#00c)phianglements$(), and the $(l:interop/lapixical/cradle_n_shit)$(item)Item Cradles$() must contain a $(item)Phial$() to function in this manner.",
 
     "categories.lapisworks.lapisworks.interop.lapisal.title": "Lapse",
     "categories.lapisworks.lapisworks.interop.lapisal.desc": "I wonder, would something as intangible as a $(thing)wisp$() be capable of being enchanted?",
