@@ -36,10 +36,12 @@ public class MediaCondenserEntity extends BlockEntity implements LinkableMediaBl
     public void tick(World world, BlockPos pos, BlockState state) {
         if (world.isClient) return;
         ServerWorld sw = (ServerWorld)world;
+
         int filledState;
         try {
             filledState = Math.min(14, (int)Math.floor(media / (mediaCap / 15.0)));
-        } catch (ArithmeticException e) { return; } // btw: does not return..????
+        } catch (ArithmeticException e) { return; } // btw: does not return..???? // what the fuck do you mean "does not return"?
+
         if (filledState == state.get(MediaCondenser.FILLED)) return;
         sw.setBlockState(
             pos,

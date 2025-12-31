@@ -2,7 +2,6 @@ package com.luxof.lapisworks.blocks.entities;
 
 import com.luxof.lapisworks.init.ModBlocks;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.closeEnough;
 
 import java.util.ArrayList;

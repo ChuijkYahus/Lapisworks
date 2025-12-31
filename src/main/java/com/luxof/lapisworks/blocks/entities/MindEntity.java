@@ -86,18 +86,19 @@ public class MindEntity extends BlockEntity {
     }
 
     public static void tick(World world, BlockPos pos, BlockState state, BlockEntity bEnt) {
-        MindEntity bE = (MindEntity)bEnt;
         if (world.isClient) { return; }
-        MindEntity blockEntity = (MindEntity)bE; // do this or function signature doesn't match???
-        if (blockEntity.mindCompletion < 100.0f) { bE.consumeVillagerMinds(world, pos); }
+
+        MindEntity blockEntity = (MindEntity)bEnt; // do this or function signature doesn't match???
+
+        if (blockEntity.mindCompletion < 100.0f) { blockEntity.consumeVillagerMinds(world, pos); }
+
         int shouldBeAtState = computeFilledState(blockEntity.mindCompletion);
         if (state.get(Mind.FILLED) != shouldBeAtState) {
             world.setBlockState(pos, state.with(Mind.FILLED, shouldBeAtState));
         }
+
         blockEntity.markDirty();
-        if (!world.isClient) {
-            world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
-        }
+        world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
     }
 
     @Override
