@@ -21,16 +21,16 @@ public class ModEntities {
     // "I'm gonna go fight MC codebase"
     // "Damn MC codebase got hands"
     // made by imbuing a simple mind into a flayed villager
-    public static VillagerProfession JACK_PROFESSION;
+    //public static VillagerProfession JACK_PROFESSION;
 
     /** :clueless: */
     public static void doSomethingFun() {
-        JACK_PROFESSION = registerProf(
+        /*JACK_PROFESSION = registerProf(
             "jack",
             any -> true, // stick around, until ye find another job.
             VillagerProfession.IS_ACQUIRABLE_JOB_SITE,
             (SoundEvent)null
-        );
+        );*/
     }
 
     /*private static VillagerProfession registerProf(
