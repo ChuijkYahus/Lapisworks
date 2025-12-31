@@ -4,11 +4,12 @@ import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
-import com.luxof.lapisworks.SpellActionNoCarpalTunnel;
 import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
 import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.mixinsupport.GetVAULT;
+import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
+import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 
 import static com.luxof.lapisworks.Lapisworks.getDistance;
 import static com.luxof.lapisworks.MishapThrowerJava.assertAmelAmount;
@@ -23,11 +24,11 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 
 // :face_holding_back_tears:
-public class LinkCondensers extends SpellActionNoCarpalTunnel {
+public class LinkCondensers extends SpellActionNCT {
     public int argc = 2;
 
     @Override
-    public Result execute(hexStack stack, CastingEnvironment ctx) {
+    public Result execute(HexIotaStack stack, CastingEnvironment ctx) {
         BlockPos pos1 = stack.getBlockPos(0);
         BlockPos pos2 = stack.getBlockPos(1);
 
@@ -55,7 +56,7 @@ public class LinkCondensers extends SpellActionNoCarpalTunnel {
         );
     }
     
-    public class Spell implements RenderedSpellNoCarpalTunnel {
+    public class Spell implements RenderedSpellNCT {
         public final BlockPos pos1;
         public final BlockPos pos2;
         public final int amel;
