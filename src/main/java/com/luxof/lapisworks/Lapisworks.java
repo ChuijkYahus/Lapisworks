@@ -47,7 +47,6 @@ import java.util.function.Function;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -65,9 +64,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.Util;
 
 import org.jetbrains.annotations.Nullable;
-
 import org.joml.Random;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -397,7 +394,7 @@ public class Lapisworks implements ModInitializer {
 	public static int getInfusedAmel(ItemStack stack) {
 		return NBTHelper.getInt(stack, INFUSED_AMEL, 0);
 	}
-	
+
 	public static void setInfusedAmel(ItemStack stack, int count) {
 		NBTHelper.putInt(stack, INFUSED_AMEL, count);
 	}

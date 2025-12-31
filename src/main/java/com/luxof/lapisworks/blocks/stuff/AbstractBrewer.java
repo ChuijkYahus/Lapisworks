@@ -12,7 +12,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-// AbsractBrewer? nah i wanna get shit out quickly rn
 public abstract class AbstractBrewer extends BlockWithEntity {
     protected AbstractBrewer(Settings settings) { super(settings); }
 

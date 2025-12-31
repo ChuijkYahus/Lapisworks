@@ -1,3 +1,6 @@
+waddup  
+this IS a changelog for me to keep track of stuff but it's also a todo-list, which is why some stuff is so detailed  
+
 Ah hell naw chat you're tweaking I can't do this fucking marathon
 Luxof didn't even DREAM of this shit in his prime (1.1.0-1.2.0)
 # 1.5.1
@@ -199,24 +202,36 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - Hexal
     - Added Enchanted Slipways
       It's a Simple Mind Infusion recipe (that costs Amel as well)
-      They produce twice as many wandering wisps per second but they can't be turned into portals with Oneironaut
+      They produce twice as many wandering wisps per second but they can't be turned into portals
+      with Oneironaut
     - Simple Minds, when infused into the air, produce a wandering wisp
 # 1.5.8
+# ALL OF MY SENSES, I'LL POUR THEM ALL INTO THESE MOMENTS!!
 ## Additions:
-- Chalk Rituals (pre-enlightenment)  
-  - same-plane-only
+- Amethyst/Chalk Rituals (pre-enlightenment)  
+  - same-plane-only (no wall-to-floor or wall-to-ceiling etc.)
   - 3-5 patterns per chalk on ground max (undecided)
     - setting patterns requires a piece of amel  
       in-lore this is explained as the amel attracting the flow of media and fulfilling the patterns
     - clearing does not
-  - you can do blood magic shit with it too if that's your fancy
+  - plant little chunks of amethyst (like large amethyst buds but thinner)
+    - tune them with Tune Media (costs amel)
+    - rituals with the same frequency have ambit around that chunk of amethyst now
+    - by default has 1 block of ambit, that being the tuned amethyst itself. this is the lower limit
+      - Deposit Media to make the ambit larger (upper limit of 32 blocks maybe?)
+      - Withdraw Media to make the ambit smaller
+  - draw a BIG ASS fucking pattern on the ground
+    - 9 blocks of chalk-with-pattern on the ground make a multiblock
+    - media discount
+    - uses your staff stack
+    - uses your ambit
+    - one-time use
 - Enchanted Brewery
   - Imbue 10 Amel into a Brewing Stand
   - 1.5x blaze usage for 2x speed
   - Takes 1 amethyst dust per brew
-- Enchanted Scroll
-  - It's literally a Hex Casting IDE.
 - Erebus' Gambit
+- Hadamard's Distillation
 - Hex familiar that lets you interact with the Media Condensing Network at a range.
   - floating entity. like Terraria's flying piggy bank? or maybe just a wisp?
   - bind it to one linkable and it'll do all it's business with that one linkable
@@ -226,6 +241,8 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - you may also push to that by shift+rmb on the pet with a phial (attempts to drain whole phial)
   - costs about 2 amel per 32 blocks of distance (so free within 32 blocks)
   - i think it should be some kind of orb with a :3 face on it?
+  - summon the pet via wearing a necklace for a minute
+    - make it exclusive with the focus necklace :>
 - Mind Control of entities in the game  
   (reality check: gang, how lost are we in the sauce?)
   - you have to un-flay with a Simple Mind first
@@ -264,12 +281,16 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
 - Mishap messages n shit
 - You can't read an Ancient Tome before you have gotten Lapisworks Research now
 ## Fixes:
-- Enchantments and shit should ACTUALLY carry across dimensions now (:broken_heart:)
-- Enchanted Slipways no longer have a tendency to move 0.01f more in +XYZ than -XYZ (lmao)
+- Amel Jar throwing the Amel in your other hand into the void if you attempted to withdraw
+  with a full stack already there
+- Damage and movement speed enhancements stacking on world join (you need to kys ingame to reset tho)
+- Enchanted Slipways having a tendency to move 0.01f more in +XYZ than -XYZ (lmao)
+- Enchantments not carrying across dimensions (:broken_heart:)
+- Enchantment Purification's order of arguments being flipped
 - Finally fixed that Cradle bug with items for fucking real, holy fucking shit
-- Logspam begone
-- Thought Sieving works gud now :thumbsup:
-- Sieve Thoughts works on a spell circle too now :thumbsup:
+  (still jumpscares me. WHY)
+- Logspam
+- Sieve Thoughts not working on a spell circle
 ## Interop:
 - Hierophantics
   - Max experience fishermen villagers can be flayed into you  
@@ -314,24 +335,31 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - You can now see Imbue Amel, Mold Amel and (most) Simple Mind Infusion recipes in EMI
   - You can also see BeegInfusion recipes in EMI
   - On that note, the same recipes also show up in Patchouli
-- Hexical interop
+- Hexical
   - the Cradle's item actually has a big hitbox now
   - the Media Jar and the Cradle are targets for Deposit Media, Withdraw Media and
     Condensed Media Prfn.
 # 1.5.9
-- Heal your mind after breaking it.
+- Heal your mind after breaking it. (Jacked O' Lantern finale)
 - Alchemy/potion-brewing overhaul (I'm deadass)  
-  made some stuff obsolete but fuck vanilla, potion-brewing is basically non-existent anyway.  
   herb stuff that leads to discovering Alchemy?  
   cauldron brewing! (definitely probably a part of herb stuff!)
 - Oneironaut interop (you will shit your pants playing Lapisworks and you will like it)  
   so you like Subnautica?  
   added the Congested Deep Noosphere  
+  diving suit required to even exist in there (added bonus of not drowning)  
   note to self: might have to fuck with world build height limit for this, as some creatures are
   simply gargantuan!
-- Hexic interop
-  - note to self, use `InventoryView.Events.forBlock` from Hexic API to provide storage on a block
-    that is visible to Hexic
+- Valkyrien Skies interop
+  air pocket in fully closed ship protects you from congested deep noosphere effects too
+- better simple mind infusion datapacking
+  - entity mind infusions!
+  - predicates! like how vanilla advancement predicates work
+  - displays can now be textures!
+- Enchanted Scroll
+  - It's literally a Hex Casting IDE.  
+- Enchantweave? (formerly part of Hexic interop)
+- blacksmithing in hex casting (Sleepyboi's profession is far too cool not to add)
 # 1.6.0
 - You can have four arms now (procrastination slain)
   - Your third and fourth arms can auto-cast 20x a second  
@@ -371,7 +399,7 @@ addons that may have interesting interop ideas waiting to be had but idk yet:
   - add the ability to unfocus your mouse
   - add buttons
   - add text inputs?
-- valkyrien skies interop
+- hexxyskies interop
   - ship variant of the jumpslate that jumps to the nearest ship in the specified radius
   - wisp-ify a ship by imbuing a simple mind into it
     - unlocks spells for fine-tuned ship movement?
@@ -408,3 +436,45 @@ Make AVM staff as a variant of sorts of Hexical's Lightning Rod Staff
 - enchant it to make the fixations permanent
 - when enchanted, it uses the item as a power like in AVM  
 
+enchanted amethyst
+- not the first time i've thought about it, maybe see where it goes  
+
+COOL WIZARD DRIP  
+
+backdrawn patterns
+- free exquisite idea no one's done before, like per world pattern shapes  
+  probably equally painful  
+  this time the pain isn't in hexdoc, but in inline etc.!  
+  fun for the whole family
+- fix inline
+- modify pattern drawing?
+- there's an UncheckedHexPattern(? not sure if that's the name) now, use it
+- might need a diff pattern iota to match it to stuff in a separate registry?
+  - actually maybe mixin to PatternRegistryManifest (bro getting flooded)
+- inverted color in book and grid + end of drawing to represent backstroke visually
+- to represent it, the letter is "s"  
+
+zone dstl projectile  
+
+Impulse over time spell (schedules x velocity be applied in y time on an entity z)
+- lets you do curve shots  
+- name "Pull", "Sustain", "Impulse: Flow", "Tween", "Drive"?  
+- Pull.
+
+JIT compilation
+- not sure if i can do this or if it'd even be worth it
+- it would be very funny if i did add this though lmao
+- also is a novel idea no one's added yet similar to PW pattern shapes
+- reduce lag on cube eval hexes for example
+- basically:
+  - interpret the code of the pattern list
+  - turn it into effects (hard-coded)
+  - if there is an unsupported pattern, fail JIT
+  - if this succeeds, the code just executes a bunch of effects now with the stack like a map
+  - optimize stuff
+    - Explode, Fireball, Wither Nadir, Clean Effects -> Explode, Fireball, incur some media cost
+    - Raycast mantra raycast block stack manip raycast architect -> raycast to block + face  
+
+make the addon more hexxy
+- "mechanics should fit into Hex Casting like legos, combinable with other stuff and robust"  
+  (paraphrased from Lani)  
