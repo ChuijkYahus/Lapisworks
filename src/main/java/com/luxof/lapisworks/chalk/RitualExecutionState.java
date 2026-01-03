@@ -103,8 +103,8 @@ public abstract class RitualExecutionState {
             posNbt.getInt("y"),
             posNbt.getInt("z")
         );
-        
-        Direction forward = Direction.valueOf(nbt.getString("forward"));
+
+        Direction forward = Direction.byName(nbt.getString("forward"));
 
         CastingImage currentImage = CastingImage.loadFromNbt(nbt.getCompound("image"), world);
 

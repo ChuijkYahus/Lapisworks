@@ -2,12 +2,9 @@ package com.luxof.lapisworks;
 
 import com.luxof.lapisworks.chalk.OneTimeRitualExecutionState;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -45,7 +42,6 @@ public class LapisPersistentState extends PersistentState {
     }
     
     public static LapisPersistentState readNbt(NbtCompound nbt, ServerWorld world) {
-        LOGGER.info("Reading from nbt!");
         LapisPersistentState state = new LapisPersistentState();
 
         for (String str : nbt.getKeys()) {
@@ -57,11 +53,6 @@ public class LapisPersistentState extends PersistentState {
                     ).toList()
                 )
             );
-        }
-
-        LOGGER.info("How many rituals?!");
-        for (Entry<String, ArrayList<OneTimeRitualExecutionState>> entry : state.rituals.entrySet()) {
-            LOGGER.info(entry.getKey() + ": " + String.valueOf(entry.getValue().size()));
         }
 
         return state;

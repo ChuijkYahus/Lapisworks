@@ -114,12 +114,13 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
         
         RitualComponent ritualComponent = (RitualComponent)world.getBlockEntity(currentPos);
         Pair<BlockPos, CastingImage> result = ritualComponent.execute(env);
+        world.setBlockState(currentPos.offset(forward.getOpposite()), Blocks.AIR.getDefaultState());
+
         if (result == null || result.getLeft() == null) {
             world.setBlockState(currentPos, Blocks.AIR.getDefaultState());
             return false;
         }
 
-        world.setBlockState(currentPos.offset(forward.getOpposite()), Blocks.AIR.getDefaultState());
         forward = Direction.fromVector(
             result.getLeft().getX() - currentPos.getX(),
             result.getLeft().getY() - currentPos.getY(),
