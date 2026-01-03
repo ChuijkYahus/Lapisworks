@@ -36,6 +36,7 @@ public class ModBlocks {
     public static EnchBrewer ENCH_BREWER = new EnchBrewer();
     public static MediaCondenser MEDIA_CONDENSER = new MediaCondenser();
     public static Chalk CHALK = new Chalk();
+    public static ChalkWithPattern CHALK_WITH_PATTERN = new ChalkWithPattern();
     // GET THE UPDATE OUT
     public static Block UNCRAFTED_CONDENSER = new Block(Settings.copy(HexBlocks.SLATE_BLOCK)) {
         public static final VoxelShape SHAPE = VoxelShapes.union(
@@ -83,6 +84,11 @@ public class ModBlocks {
         ImmutableSet.of(CHALK),
         null
     );
+    public static BlockEntityType<ChalkWithPatternEntity> CHALK_WITH_PATTERN_ENTITY_TYPE = new BlockEntityType<>(
+        ChalkWithPatternEntity::new,
+        ImmutableSet.of(CHALK_WITH_PATTERN),
+        null
+    );
 
     public static void wearASkirt() {
         pickACropTop("conjureable", CONJURED_COLORABLE);
@@ -99,12 +105,14 @@ public class ModBlocks {
         pickACropTop("media_condenser_unit", MEDIA_CONDENSER);
         pickACropTop("uncrafted_condenser", UNCRAFTED_CONDENSER);
         pickACropTop("chalk", CHALK);
+        pickACropTop("chalk_with_pattern", CHALK_WITH_PATTERN);
         dontForgetStockings("mind_entity_type", MIND_ENTITY_TYPE);
         dontForgetStockings("live_jukebox_entity_type", LIVE_JUKEBOX_ENTITY_TYPE);
         dontForgetStockings("amel_constructs/simple_impetus", SIMPLE_IMPETUS_ENTITY_TYPE);
         dontForgetStockings("amel_constructs/enchbrewer", ENCH_BREWER_ENTITY_TYPE);
         dontForgetStockings("media_condenser_unit", MEDIA_CONDENSER_ENTITY_TYPE);
         dontForgetStockings("chalk", CHALK_ENTITY_TYPE);
+        dontForgetStockings("chalk_with_pattern", CHALK_WITH_PATTERN_ENTITY_TYPE);
     }
 
     public static void pickACropTop(String name, Block block) {

@@ -4,10 +4,10 @@ import at.petrak.hexcasting.api.utils.NBTHelper;
 
 import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.init.ModItems;
-import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.items.shit.InventoryItem;
 
 import static com.luxof.lapisworks.Lapisworks.getAllHands;
+import static com.luxof.lapisworks.init.Mutables.Mutables.isAmel;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -37,31 +37,25 @@ public class AmelJar extends Item implements InventoryItem {
         PlayerEntity user,
         Hand hand,
         ItemStack stack,
-        List<Hand> otherHands
+        Hand otherHand
     ) {
-        Hand amelHand = null;
-        ItemStack amelStack = ItemStack.EMPTY.copy();
-        for (Hand selectedHand : otherHands) {
-            ItemStack possiblyAmel = user.getStackInHand(selectedHand);
-            if (!Mutables.isAmel(possiblyAmel)) continue;
-            amelHand = selectedHand;
-            amelStack = possiblyAmel.copy();
-        }
-        if (amelHand == null) return TypedActionResult.fail(stack);
-        int currentlyStored = this.getStored(stack);
-        int currentLimit = this.maxAmel - currentlyStored;
-        int amelWillBeLeft = Math.max(0, amelStack.getCount() - currentLimit);
-        user.setStackInHand(
-            amelHand,
-            // <= just to be safe
-            amelWillBeLeft <= 0 ?
-                ItemStack.EMPTY.copy() :
-                new ItemStack(
-                    amelStack.getItem(),
-                    amelWillBeLeft
-                )
+        ItemStack amelStack = user.getStackInHand(otherHand);
+
+        if (!isAmel(amelStack) || amelStack.isEmpty())
+            return TypedActionResult.fail(stack);
+
+        int wouldBeStoredNow = getStored(stack) + amelStack.getCount();
+        int shouldBeStoredNow = Math.min(maxAmel, wouldBeStoredNow);
+
+        int difference = wouldBeStoredNow - shouldBeStoredNow;
+        if (difference == 0) amelStack.copyAndEmpty();
+        else amelStack.setCount(difference);
+
+        setStored(
+            stack,
+            shouldBeStoredNow
         );
-        this.setStored(stack, Math.min(this.maxAmel, currentlyStored + amelStack.getCount()));
+
         return TypedActionResult.success(stack, true);
     }
 
@@ -69,36 +63,35 @@ public class AmelJar extends Item implements InventoryItem {
         PlayerEntity user,
         Hand hand,
         ItemStack stack,
-        List<Hand> otherHands
+        Hand otherHand
     ) {
-        Hand depositHand = null;
-        ItemStack depositStack = null;
-        for (Hand selectedHand : otherHands) {
-            ItemStack possiblyDeposit = user.getStackInHand(selectedHand);
-            if (!(Mutables.isAmel(possiblyDeposit) || possiblyDeposit.isEmpty())) continue;
-            depositHand = selectedHand;
-        }
-        if (depositHand == null) return TypedActionResult.fail(stack);
-        depositStack = user.getStackInHand(depositHand);
-        int withdrawAmel = Math.min(
-            64 - depositStack.getCount(),
-            this.getStored(stack)
+        ItemStack amelStack = user.getStackInHand(otherHand);
+
+        if (!isAmel(amelStack) && !amelStack.isEmpty())
+            return TypedActionResult.fail(stack);
+
+        int wouldBeWithdrawn = amelStack.getMaxCount() - amelStack.getCount();
+        int shouldBeWithdrawn = Math.min(getStored(amelStack), wouldBeWithdrawn);
+
+        user.setStackInHand(otherHand, new ItemStack(
+            amelStack.isEmpty() ? ModItems.AMEL_ITEM : amelStack.getItem(),
+            amelStack.isEmpty() ? 0 : amelStack.getCount() + shouldBeWithdrawn
+        ));
+
+        setStored(
+            stack,
+            getStored(stack) - shouldBeWithdrawn
         );
-        user.setStackInHand(
-            depositHand,
-            withdrawAmel == 0 ?
-                ItemStack.EMPTY.copy() :
-                new ItemStack(ModItems.AMEL_ITEM, depositStack.getCount() + withdrawAmel)
-        );
-        this.setStored(stack, this.getStored(stack) - withdrawAmel);
+
         return TypedActionResult.success(stack, true);
     }
-    
+
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         List<Hand> hands = getAllHands();
         hands.remove(hand);
+        Hand otherHand = hands.get(0);
         ItemStack stack = user.getStackInHand(hand);
-        return user.isSneaking() ? withdraw(user, hand, stack, hands) : deposit(user, hand, stack, hands);
+        return user.isSneaking() ? withdraw(user, hand, stack, otherHand) : deposit(user, hand, stack, otherHand);
     }
 
     public int getStored(ItemStack stack) { return NBTHelper.getInt(stack, STORED_AMEL); }

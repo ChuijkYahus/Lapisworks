@@ -18,7 +18,8 @@
 		"CircleExecutionStateMixin2",
 		"PatternIotaMixin",
 		"OpMakeBattery$SpellMixin",
-		"BlockEntityAbstractImpetusMixin"
+		"BlockEntityAbstractImpetusMixin",
+		"ServerWorldMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

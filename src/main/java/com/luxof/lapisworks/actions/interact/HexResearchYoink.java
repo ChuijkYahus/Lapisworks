@@ -28,7 +28,6 @@ import com.luxof.lapisworks.blocks.Mind;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
 import com.luxof.lapisworks.init.ModBlocks;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.matchShape;
 import static com.luxof.lapisworks.LapisworksIDs.FULL_SIMPLE_MIND;
 import static com.luxof.lapisworks.LapisworksIDs.GREAT_SCROLL;
@@ -61,15 +60,9 @@ public class HexResearchYoink implements SpellAction {
                 action.prototype(),
                 ctx.getWorld().getSeed()
             );
-            LOGGER.info("Scrungled name: \"" + key.getValue().toString() + "\"");
 
             if (scrungled.anglesSignature().equals(pattern.anglesSignature())) { return scrungled; }
             else if (matchShape(scrungled, pattern)) { return scrungled; }
-
-            if (!key.getValue().toString().equals("hexthingy:smite")) continue;
-            LOGGER.info("invalid!");
-            LOGGER.info("pattern given: " + pattern.anglesSignature() + " " + pattern.getStartDir().toString());
-            LOGGER.info("smite        : " + scrungled.anglesSignature() + " " + scrungled.getStartDir().toString());
         };
         return null;
     }

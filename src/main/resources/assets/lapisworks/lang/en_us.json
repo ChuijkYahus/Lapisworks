@@ -271,14 +271,20 @@
     "hexcasting.mishap.bad_item.lapis_lazuli": "Lapis Lazuli",
     "hexcasting.mishap.bad_item.amel": "Amethyst Lazuli",
 
+    "mishaps.lapisworks.ritual.invalid_chalk": "Expected a ritual component at %s, but found %s. (This is a bug in the mod.)",
+    "mishaps.lapisworks.ritual.cast_outside_ritual": "Expected this pattern to be cast in an Amethyst Ritual.",
+    "mishaps.lapisworks.ritual.cast_outside_one_time_ritual": "Expected this pattern to be cast in a one-time Amethyst Ritual.",
+
     "mishaps.lapisworks.not_enough_items": "At least %dx %s required, but only %dx %s was found on the user.",
     "mishaps.lapisworks.already_enchanted": "Cannot enchant %s with %s, as it is already enchanted with the maximum level of %s it can have right now (%d).",
     "mishaps.lapisworks.some_hand.no_item": "Expected %s in the %s, but found nothing.",
+
     "mishaps.lapisworks.some_hand.bad_item": "Expected %s in the %s, but found (%s) %dx %s",
     "hands.lapisworks.main": "main-hand",
     "hands.lapisworks.off": "off-hand",
     "hands.lapisworks.3": "third-hand",
     "hands.lapisworks.4": "fourth-hand",
+
     "mishaps.lapisworks.some_hand.bad_item.generic": "an incorrect item",
     "mishaps.lapisworks.bad_block.full_mind": "FULL Simple Mind Container",
     "mishaps.lapisworks.imbue_artmind.need_imbueable": "a block that can accept a simple mind right now",
@@ -353,7 +359,7 @@
     "pages.lapisworks.lapisworks_misc.intro": "These ancient texts recount an old and wise wizard, extremely knowledgeable of all sorcery, yet spiteful of all that crossed their path. It is told they were poor in sources of media and many came after them, but they always managed to survive. This wizard left behind a treasure trove of knowledge on their demise (collected by curious adventurers) including $(thing)Enchanted Patterns.$()$(br)$(o)Will I ever be capable of this feat?$()",
     "pages.lapisworks.lapisworks_misc.intro2": "Frustratingly enough, the wizard attempted to burn most of them and was extremely successful, leaving only a few that were recovered by the heroes that defeated them. Among these few are enhanced forms of $(l:patterns/spells/blockworks#hexcasting:conjure_block)Conjure Block$(), $(l:patterns/consts#hexcasting:const/vec/0)some Vector patterns$(), $(l:patterns/basics#hexcasting:raycast)Archer's Distillation$(), among some others. I should also note that $(thing)Enchanted Patterns$() aren't always \"better\" than the original, instead sometimes they extend their functionality or specialize it.",
     "pages.lapisworks.lapisworks_misc.conjure_color.summary": "Pass in a vector within Ambit and a dye color, to conjure a fragile but solid, colored block. This costs two amethyst dust and the number states which dye I want to dye the colored block. More explanation on the next page.",
-    "pages.lapisworks.lapisworks_misc.conjure_color.detail": "The number states the index (starting from 0) of the dye I wish to use if they were all sorted alphabetically. All mappings:$(br)0 - Black      1 - Blue      $(br)2 - Brown      3 - Cyan      $(br)4 - Gray       5 - Green     $(br)6 - Light Blue 7 - Light Gray$(br)8 - Lime       9 - Magenta   $(br)10 - Orange    11 - Pink     $(br)12 - Purple    13 - Red      $(br)14 - White     15 - Yellow$(br)Additionally the block glows with the $(o)dye$() of my pigment's color and purple if no such dye exists.",
+    "pages.lapisworks.lapisworks_misc.conjure_color.detail": "The number states the index (starting from 0) of the dye I wish to use if they were all sorted alphabetically. All mappings:$(br)0 - $(#050508)Black$()      1 - $(#1714FF)Blue$()      $(br)2 - $(#794521)Brown$()      3 - $(#4A9DBF)Cyan$()      $(br)4 - $(#545454)Gray$()       5 - $(#496A18)Green$()     $(br)6 - $(#8DB7F1)Light Blue$() 7 - $(#B8B8BF)Light Gray$()$(br)8 - $(#81D11C)Lime$()       9 - $(#C968C3)Magenta$()   $(br)10 - $(#D88929)Orange$()    11 - $(#F4B2D3)Pink$()     $(br)12 - $(#532C94)Purple$()    13 - $(#FF1919)Red$()      $(br)14 - White     15 - $(#E4E429)Yellow$()$(br)Additionally the block glows with the $(o)dye$() of my pigment's color and purple if no such dye exists.",
     "pages.lapisworks.lapisworks_misc.spherical_dstl.summary": "Evaluates (exactly like Thoth's Gambit) the given pattern list over a hollow sphere with the given radius (non-decimal, at least 1, at most 64) around the given position.",
     "pages.lapisworks.lapisworks_misc.cubic_exalt.summary": "Evaluates (exactly like Thoth's Gambit) the given pattern list over a (hollow if given True) cube-ish area from the given points A to B.",
     "pages.lapisworks.lapisworks_misc.empty_prfn.summary": "Answers the question, \"is there only air there?\" for negligible media cost. Vector must be in my ambit.",

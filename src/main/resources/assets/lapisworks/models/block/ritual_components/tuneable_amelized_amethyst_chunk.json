@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "lapisworks:block/ritual_components/tuneable_amelized_amethyst_chunk"
+  }
+}

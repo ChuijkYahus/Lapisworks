@@ -1,6 +1,8 @@
 package com.luxof.lapisworks;
 
+import at.petrak.hexcasting.api.casting.circles.CircleExecutionState;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.iota.EntityIota;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
@@ -8,12 +10,17 @@ import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs;
+import at.petrak.hexcasting.api.casting.mishaps.circle.MishapNoSpellCircle;
 
 import com.luxof.lapisworks.MishapThrower;
 import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
+import com.luxof.lapisworks.chalk.OneTimeRitualExecutionState;
+import com.luxof.lapisworks.chalk.RitualCastEnv;
+import com.luxof.lapisworks.chalk.RitualExecutionState;
 import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.mishaps.MishapNotEnoughItems;
+import com.luxof.lapisworks.mishaps.MishapOutsideOfRitual;
 import com.luxof.lapisworks.mixinsupport.GetVAULT;
 import com.mojang.datafixers.util.Either;
 
@@ -161,10 +168,23 @@ public class MishapThrowerJava {
     ) {
         BlockEntity bE = ctx.getWorld().getBlockEntity(pos);
         if (bE != null && thisBlock.isInstance(bE)) return thisBlock.cast(bE);
-        throwMishap(
-            new MishapBadBlock(pos, blockName)
-        );
-        // shut up
-        return null;
+        throw new MishapBadBlock(pos, blockName);
+    }
+    public static CircleExecutionState assertInSpellCircle(CastingEnvironment ctx) {
+        if (ctx instanceof CircleCastEnv circleCtx) return circleCtx.circleState();
+        throw new MishapNoSpellCircle();
+    }
+    public static RitualExecutionState assertInRitual(CastingEnvironment ctx) {
+        if (ctx instanceof RitualCastEnv ritualCtx) return ritualCtx.ritual();
+        throw new MishapOutsideOfRitual(false);
+    }
+    public static OneTimeRitualExecutionState assertInOneTimeRitual(CastingEnvironment ctx) {
+        if (
+            ctx instanceof RitualCastEnv ritualCtx &&
+            ritualCtx.ritual() instanceof OneTimeRitualExecutionState ritual
+        )
+            return ritual;
+        else
+            throw new MishapOutsideOfRitual(true);
     }
 }

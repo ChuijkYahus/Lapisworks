@@ -5,14 +5,9 @@ import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.common.lib.HexItems;
 
 import com.luxof.lapisworks.Lapisworks;
-import com.luxof.lapisworks.blocks.bers.EnchBrewerRenderer;
-import com.luxof.lapisworks.blocks.entities.MediaCondenserEntity;
-import com.luxof.lapisworks.blocks.entities.MindEntity;
-import com.luxof.lapisworks.client.screens.EnchBrewerScreen;
-import com.luxof.lapisworks.init.LapisParticles;
-import com.luxof.lapisworks.init.ModBlocks;
-import com.luxof.lapisworks.init.ModItems;
-import com.luxof.lapisworks.init.ModScreens;
+import com.luxof.lapisworks.blocks.bers.*;
+import com.luxof.lapisworks.blocks.entities.*;
+import com.luxof.lapisworks.init.*;
 import com.luxof.lapisworks.interop.hextended.items.AmelOrb;
 import com.luxof.lapisworks.mixinsupport.BlockDowser;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
@@ -53,7 +48,6 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -123,8 +117,7 @@ public class LapisworksClient implements ClientModInitializer {
         LOGGER.info("Does NONE of that sound fun? Well, that's because it isn't. So let's get started, shall we?");
 
         LapisParticles.clientTicklesPaw();
-
-        HandledScreens.register(ModScreens.ENCH_BREWER_SCREEN_HANDLER, EnchBrewerScreen::new);
+        ModScreens.registerOnClient();
 
         initInterop();
 
@@ -136,8 +129,16 @@ public class LapisworksClient implements ClientModInitializer {
             ModBlocks.ENCH_BREWER_ENTITY_TYPE,
             EnchBrewerRenderer::new
         );
+        BlockEntityRendererRegistry.register(
+            ModBlocks.CHALK_ENTITY_TYPE,
+            ChalkRenderer::new
+        );
+        BlockEntityRendererRegistry.register(
+            ModBlocks.CHALK_WITH_PATTERN_ENTITY_TYPE,
+            ChalkWithPatternRenderer::new
+        );
 
-        // we all thank hexxy for adding simple addDisplayer() instead of requiring mixin in unison
+        // we all thank hexxy for adding a simple addDisplayer() instead of requiring mixin in unison
         ScryingLensOverlayRegistry.addDisplayer(
             ModBlocks.MIND_BLOCK,
             (lines, state, pos, observer, world, direction) -> {
@@ -207,7 +208,6 @@ public class LapisworksClient implements ClientModInitializer {
             overlayWorld(ctx.matrixStack(), ctx.tickDelta());
         });
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MIND_BLOCK, RenderLayer.getTranslucent());
-        //BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.CHALK_BLOCK, RenderLayer.getTranslucent());
 
         KeyEvents.staticInit();
         ClientTickEvents.END_CLIENT_TICK.register(KeyEvents::endClientTick);

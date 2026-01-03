@@ -1,19 +1,9 @@
 package com.luxof.lapisworks.init;
 
-import com.luxof.lapisworks.items.AmelJar;
-import com.luxof.lapisworks.items.AmelStaff;
-//import com.luxof.lapisworks.items.Chalk;
-import com.luxof.lapisworks.items.DiamondSword;
-import com.luxof.lapisworks.items.FocusNecklace;
-import com.luxof.lapisworks.items.GeodeDowser;
-import com.luxof.lapisworks.items.GoldSword;
-import com.luxof.lapisworks.items.IronSword;
-import com.luxof.lapisworks.items.JumpSlateItem;
-import com.luxof.lapisworks.items.PartiallyAmelStaff;
-import com.luxof.lapisworks.items.WizardDiaries;
-import com.luxof.lapisworks.items.shit.AmelSword;
-
 import at.petrak.hexcasting.common.items.ItemStaff;
+
+import com.luxof.lapisworks.items.*;
+import com.luxof.lapisworks.items.shit.AmelSword;
 
 import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.LapisworksIDs.LAPISMAGICSHITGROUPTEXT;
@@ -24,7 +14,6 @@ import java.util.List;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -35,7 +24,8 @@ import net.minecraft.registry.Registry;
 public class ModItems {
     private static FabricItemSettings fullStack = new FabricItemSettings().maxCount(64);
     private static FabricItemSettings unstackable = new FabricItemSettings().maxCount(1);
-    
+
+    private static final Item HEXDOC_WHY = new Item(unstackable);
     public static final Item AMEL_ITEM = new Item(fullStack);
     public static final Item AMEL2_ITEM = new Item(fullStack);
     public static final Item AMEL3_ITEM = new Item(fullStack);
@@ -73,7 +63,6 @@ public class ModItems {
     public static final Item ENERGY_CONTAINER = new AmelJar(unstackable, 1024, true);
     public static final GeodeDowser GEODE_DOWSER = new GeodeDowser(unstackable);
     public static final Item SIMPLE_IMPETUS = new BlockItem(ModBlocks.SIMPLE_IMPETUS, fullStack);
-    //public static final Chalk CHALK = new Chalk(new FabricItemSettings().maxCount(1).maxDamage(1024));
     public static final FocusNecklace FOCUS_NECKLACE = new FocusNecklace(unstackable);
     public static final FocusNecklace FOCUS_NECKLACE2 = new FocusNecklace(unstackable);
     // 2 dummies i use for trinket rendering (model predicate providers don't work for no reason)
@@ -82,8 +71,10 @@ public class ModItems {
     public static final Item ENCH_BREWER = new BlockItem(ModBlocks.ENCH_BREWER, fullStack);
     public static final BlockItem MEDIA_CONDENSER = new BlockItem(ModBlocks.MEDIA_CONDENSER, unstackable);
     public static final BlockItem UNCRAFTED_CONDENSER = new BlockItem(ModBlocks.UNCRAFTED_CONDENSER, fullStack);
+    public static final BlockItem CHALK = new ChalkItem();
 
     private static List<String> itemNames = new ArrayList<>(List.of(
+        "media_jar_hexdoc",
         "amel",
         "amel2",
         "amel3",
@@ -121,16 +112,17 @@ public class ModItems {
         "energy_container",
         "amel_constructs/geode_dowser",
         "amel_constructs/simple_impetus",
-        //"chalk",
         "amel_constructs/focus_necklace/1",
         "amel_constructs/focus_necklace/2",
         "amel_constructs/focus_necklace/1_worn",
         "amel_constructs/focus_necklace/2_worn",
         "amel_constructs/enchbrewer",
         "media_condenser_unit",
-        "uncrafted_condenser"
+        "uncrafted_condenser",
+        "chalk"
     ));
     private static List<Item> items = new ArrayList<>(List.of(
+        HEXDOC_WHY,
         AMEL_ITEM,
         AMEL2_ITEM,
         AMEL3_ITEM,
@@ -168,14 +160,14 @@ public class ModItems {
         ENERGY_CONTAINER,
         GEODE_DOWSER,
         SIMPLE_IMPETUS,
-        //CHALK,
         FOCUS_NECKLACE,
         FOCUS_NECKLACE2,
         FOCUS_NECKLACE_WORN,
         FOCUS_NECKLACE2_WORN,
         ENCH_BREWER,
         MEDIA_CONDENSER,
-        UNCRAFTED_CONDENSER
+        UNCRAFTED_CONDENSER,
+        CHALK
     ));
 
     public static ItemGroup LapisMagicShitGroup;

@@ -24,6 +24,7 @@ public class LapisworksIDs {
     public static final Identifier SEND_PWSHAPE_PATS = id("send_pwshape_pats");
     public static final Identifier DOWSE_TS = id("dowse_ts");
     public static final Identifier DOWSE_RESULT = id("dowse_result");
+    public static final Identifier SET_PATTERNS_ON_CHALK = id("set_patterns_on_chalk");
 
     // mpp
     public static final Identifier BLOCKING_MPP = id("blocking");

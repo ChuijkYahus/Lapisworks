@@ -478,3 +478,6 @@ JIT compilation
 make the addon more hexxy
 - "mechanics should fit into Hex Casting like legos, combinable with other stuff and robust"  
   (paraphrased from Lani)  
+
+per world pattern shapes picking between a few handmade ones is boring..  
+add some randomness!
