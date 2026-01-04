@@ -31,11 +31,6 @@ public class HexIotaStack {
 
     public Iota get(int idx) { return stack.get(idx); }
     public BlockPos getBlockPos(int idx) { return OperatorUtils.getBlockPos(stack, idx, argc); }
-    public BlockPos getBlockPosInRange(int idx) {
-        BlockPos ret = getBlockPos(idx);
-        ctx.assertPosInRange(ret);
-        return ret;
-    }
     public boolean getBool(int idx) { return OperatorUtils.getBool(stack, idx, argc); }
     public double getDouble(int idx) { return OperatorUtils.getDouble(stack, idx, argc); }
     public double getDoubleBetween(int idx, double min, double max) { return OperatorUtils.getDoubleBetween(stack, idx, min, max, argc); }
@@ -59,6 +54,12 @@ public class HexIotaStack {
     public int getPositiveIntUnderInclusive(int idx, int under) { return OperatorUtils.getPositiveIntUnderInclusive(stack, idx, under, argc); }
     public long getPositiveLong(int idx) { return OperatorUtils.getPositiveLong(stack, idx, argc); }
     public Vec3d getVec3(int idx) { return OperatorUtils.getVec3(stack, idx, argc); }
+
+    public BlockPos getBlockPosInRange(int idx) {
+        BlockPos ret = getBlockPos(idx);
+        ctx.assertPosInRange(ret);
+        return ret;
+    }
     public Vec3d getVec3InRange(int idx) {
         Vec3d ret = getVec3(idx);
         ctx.assertVecInRange(ret);

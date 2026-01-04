@@ -134,10 +134,10 @@ public class MishapThrowerJava {
                 Text.translatable("mishaps.lapisworks.descs.entityorblockposiota")
             );
     }
-    public static <T extends Object> T assertIsThisBlock(
+    public static <ANY extends Object> ANY assertIsThisBlock(
         CastingEnvironment ctx,
         BlockPos pos,
-        Class<T> thisBlock,
+        Class<ANY> thisBlock,
         Text blockName
     ) {
         BlockEntity bE = ctx.getWorld().getBlockEntity(pos);

@@ -13,7 +13,6 @@ import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 
 import static com.luxof.lapisworks.Lapisworks.getDistance;
 import static com.luxof.lapisworks.MishapThrowerJava.assertAmelAmount;
-import static com.luxof.lapisworks.MishapThrowerJava.assertInRange;
 import static com.luxof.lapisworks.MishapThrowerJava.assertIsntLinked;
 import static com.luxof.lapisworks.MishapThrowerJava.assertLinkableThere;
 import static com.luxof.lapisworks.MishapThrowerJava.assertNotTooManyLinks;
@@ -29,11 +28,8 @@ public class LinkCondensers extends SpellActionNCT {
 
     @Override
     public Result execute(HexIotaStack stack, CastingEnvironment ctx) {
-        BlockPos pos1 = stack.getBlockPos(0);
-        BlockPos pos2 = stack.getBlockPos(1);
-
-        assertInRange(ctx, pos1);
-        assertInRange(ctx, pos2);
+        BlockPos pos1 = stack.getBlockPosInRange(0);
+        BlockPos pos2 = stack.getBlockPosInRange(1);
 
         LinkableMediaBlock linkable1 = assertLinkableThere(pos1, ctx);
         LinkableMediaBlock linkable2 = assertLinkableThere(pos2, ctx);

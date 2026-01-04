@@ -8,7 +8,6 @@ import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
 import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
 import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 
-import static com.luxof.lapisworks.MishapThrowerJava.assertInRange;
 import static com.luxof.lapisworks.MishapThrowerJava.assertIsLinked;
 import static com.luxof.lapisworks.MishapThrowerJava.assertLinkableThere;
 
@@ -22,11 +21,8 @@ public class UnlinkCondensers extends SpellActionNCT {
 
     @Override
     public Result execute(HexIotaStack stack, CastingEnvironment ctx) {
-        BlockPos pos1 = stack.getBlockPos(0);
-        BlockPos pos2 = stack.getBlockPos(1);
-
-        assertInRange(ctx, pos1);
-        assertInRange(ctx, pos2);
+        BlockPos pos1 = stack.getBlockPosInRange(0);
+        BlockPos pos2 = stack.getBlockPosInRange(1);
 
         LinkableMediaBlock linkable1 = assertLinkableThere(pos1, ctx);
         assertLinkableThere(pos2, ctx);
