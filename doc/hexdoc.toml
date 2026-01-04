@@ -5,8 +5,8 @@ default_branch = "main"
 
 resource_dirs = [  # top takes priority
     "resources",
-    "{$_common.src}/main/resources",
-    { path="{$_common.src}/generated/resources", required=false },
+    "{$_project.src}/main/resources",
+    { path="{$_project.src}/generated/resources", required=false },
     { modid="hexcasting" },
     { modid="minecraft" },
     { modid="hexdoc" },
@@ -14,6 +14,7 @@ resource_dirs = [  # top takes priority
 export_dir = "src/hexdoc_lapisworks/_export/generated"
 
 [template]
+# TODO: change this to point to your actual mod icon
 icon = "icon.png"
 include = [
     "lapisworks",
@@ -48,12 +49,11 @@ _pattern_regex = { "!Raw" = '(?P<is_per_world>register|registerPerWorld)\("(?P<n
 _per_world_value = "registerPerWorld"
 
 [[extra.hexcasting.pattern_stubs]]
-path = "{$_common.package}/init/Patterns.java"
+path = "{$_project.src}/main/java/com/luxof/lapisworks/init/Patterns.java"
 regex = "{^_pattern_regex}"
-per_world_value = "{^_per_world_value}"
 
-# platforms
+# source paths
 
-[_common]
+[_project]
 src = "../src"
 package = "{src}/main/java/com/luxof/lapisworks"

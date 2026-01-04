@@ -1,7 +1,7 @@
 [build-system]
 requires = [
     "hatchling",
-    "hatch-gradle-version>=0.8.0",
+    "hatch-gradle-version>=0.9.8",
 ]
 build-backend = "hatchling.build"
 
@@ -9,20 +9,20 @@ build-backend = "hatchling.build"
 
 [project]
 name = "hexdoc-lapisworks"
-description = "Python web book docgen and hexdoc plugin for Lapisworks."
+description = "Who up imbuing they Amel rn"
 readme = "doc/README.md"
 authors = [
-    { name="Real-Luxof" },
+    { name="Luxof" },
 ]
 keywords = ["hexdoc"]
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dynamic = ["version", "dependencies", "optional-dependencies"]
 
 [project.urls]
-Homepage = "https://real-luxof.github.io/Lapisworks/"
+Homepage = "https://real-luxof.github.io/Lapisworks"
 Source = "https://github.com/Real-Luxof/Lapisworks"
 
-# Gradle version/deps
+# project version
 
 [tool.hatch.version]
 scheme = "gradle"
@@ -30,6 +30,9 @@ source = "gradle-properties"
 py-path = "doc/src/hexdoc_lapisworks/__version__.py"
 key = "mod_version"
 
+# Python dependencies
+
+# required
 [tool.hatch.metadata.hooks.gradle-properties]
 dependencies = [
     "hexdoc~=1!0.1.0a11",
@@ -39,9 +42,10 @@ dependencies = [
     "scipy~=1.16",
 ]
 
-[tool.hatch.metadata.hooks.gradle-properties.optional-dependencies]
+# dev-only
+[dependency-groups]
 dev = [
-    "ruff~=0.11.2",
+    "ruff",
 ]
 
 # directory inclusion
@@ -67,54 +71,44 @@ lapisworks = "hexdoc_lapisworks._hooks:LapisworksPlugin"
 # linting
 
 [tool.pyright]
-pythonVersion = "3.11"
+pythonVersion = "3.12"
 pythonPlatform = "All"
 
 include = ["doc/src"]
 extraPaths = ["doc/src"]
 
-typeCheckingMode = "basic"
+typeCheckingMode = "standard"
 
 strictDictionaryInference = true
 strictListInference = true
 strictSetInference = true
 
-reportAssertAlwaysTrue = "error"
 reportConstantRedefinition = "error"
-reportDeprecated = "error"
-reportDuplicateImport = "error"
-reportFunctionMemberAccess = "error"
-reportIncompatibleMethodOverride = "error"
-reportIncompatibleVariableOverride = "error"
 reportIncompleteStub = "error"
 reportInconsistentConstructor = "error"
-reportInvalidStringEscapeSequence = "error"
 reportInvalidStubStatement = "error"
-reportInvalidTypeVarUse = "error"
-reportMatchNotExhaustive = "error"
-reportMissingParameterType = "error"
-reportMissingTypeStubs = "error"
-reportOverlappingOverload = "error"
-reportSelfClsParameterName = "error"
-reportTypeCommentUsage = "error"
-reportUnknownParameterType = "error"
-reportUnnecessaryCast = "error"
-reportUnnecessaryContains = "error"
-reportUnsupportedDunderAll = "error"
-reportUntypedBaseClass = "error"
-reportUntypedClassDecorator = "error"
-reportUntypedFunctionDecorator = "error"
-reportUntypedNamedTuple = "error"
-reportWildcardImportFromLibrary = "error"
 
+reportDeprecated = "warning"
+reportDuplicateImport = "warning"
+reportMatchNotExhaustive = "warning"
+reportMissingParameterType = "warning"
 reportMissingTypeArgument = "warning"
+reportMissingTypeStubs = "warning"
 reportPrivateUsage = "warning"
+reportTypeCommentUsage = "warning"
 reportUnknownArgumentType = "warning"
 reportUnknownLambdaType = "warning"
 reportUnknownMemberType = "warning"
+reportUnknownParameterType = "warning"
 reportUnknownVariableType = "warning"
+reportUnnecessaryCast = "warning"
 reportUnnecessaryComparison = "warning"
+reportUnnecessaryContains = "warning"
 reportUnnecessaryIsInstance = "warning"
+reportUntypedBaseClass = "warning"
+reportUntypedClassDecorator = "warning"
+reportUntypedFunctionDecorator = "warning"
+reportUntypedNamedTuple = "warning"
 reportUnusedClass = "warning"
 reportUnusedExpression = "warning"
 reportUnusedFunction = "warning"
