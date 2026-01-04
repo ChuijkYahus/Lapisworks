@@ -210,7 +210,8 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
 ## Additions:
 - Amethyst/Chalk Rituals (pre-enlightenment)  
   - same-plane-only (no wall-to-floor or wall-to-ceiling etc.)
-  - 3-5 patterns per chalk on ground max (undecided)
+  - 5 patterns per chalk on ground max
+    - one block per three ticks
     - setting patterns requires a piece of amel  
       in-lore this is explained as the amel attracting the flow of media and fulfilling the patterns
     - clearing does not
@@ -223,9 +224,13 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   - draw a BIG ASS fucking pattern on the ground
     - 9 blocks of chalk-with-pattern on the ground make a multiblock
     - media discount
-    - uses your staff stack
-    - uses your ambit
+    - uses your staff stack and casts as you with your ambit
     - one-time use
+  - one-time rituals
+    - right click with media item
+    - that media item becomes the media source for that ritual
+    - ritual burns chalk as it goes
+    - ritual uses half your ambit and half your greater sentinel's ambit
 - Enchanted Brewery
   - Imbue 10 Amel into a Brewing Stand
   - 1.5x blaze usage for 2x speed
@@ -346,10 +351,12 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
   cauldron brewing! (definitely probably a part of herb stuff!)
 - Oneironaut interop (you will shit your pants playing Lapisworks and you will like it)  
   so you like Subnautica?  
-  added the Congested Deep Noosphere  
-  diving suit required to even exist in there (added bonus of not drowning)  
-  note to self: might have to fuck with world build height limit for this, as some creatures are
+  - added the Congested Deep Noosphere
+  - diving suit required to even exist in there (added bonus of not drowning)
+    - or maybe just a Hexical Gasp spell daemon?
+  - note to self: might have to fuck with world build height limit for this, as some creatures are
   simply gargantuan!
+  - think this should be a progression of the enchanted slipway
 - Valkyrien Skies interop
   air pocket in fully closed ship protects you from congested deep noosphere effects too
 - better simple mind infusion datapacking

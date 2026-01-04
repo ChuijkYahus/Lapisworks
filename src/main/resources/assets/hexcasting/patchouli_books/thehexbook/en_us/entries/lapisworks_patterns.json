@@ -62,6 +62,10 @@
             "text": "pages.lapisworks.lapisworks_patterns.moar_speed.summary"
         },
         {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.lapisworks_patterns.moar_speed.tip"
+        },
+        {
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:gib_reach",
             "anchor": "lapisworks:gib_reach",
