@@ -18,6 +18,7 @@ export_dir = "src/hexdoc_lapisworks/_export/generated"
 icon = "icon.png"
 include = [
     "lapisworks",
+    "hexical",
     "hexcasting",
     "hexdoc",
 ]
