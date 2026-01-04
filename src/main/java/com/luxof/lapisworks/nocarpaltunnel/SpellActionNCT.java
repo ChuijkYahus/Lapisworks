@@ -39,12 +39,12 @@ public class SpellActionNCT implements SpellAction {
 
     @Override
     public Result execute(List<? extends Iota> stack, CastingEnvironment ctx) {
-        return execute(new HexIotaStack(stack, getArgc()), ctx);
+        return execute(new HexIotaStack(stack, getArgc(), ctx), ctx);
     }
 
     @Override
     public Result executeWithUserdata(List<? extends Iota> arg0, CastingEnvironment arg1, NbtCompound arg2) {
-        return executeWithUserdata(new HexIotaStack(arg0, getArgc()), arg1, arg2);
+        return executeWithUserdata(new HexIotaStack(arg0, getArgc(), arg1), arg1, arg2);
     }
 
 

@@ -6,7 +6,6 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster;
 import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.blocks.SimpleImpetus;
@@ -52,10 +51,11 @@ public class MakeSimpleImpetus extends SMindInfusion {
         if (fetched < 5) {
             throw new MishapNotEnoughItems(AMEL, fetched, 5);
         }
-        if (ctx.getCastingEntity() == null
-            || !(ctx.getCastingEntity() instanceof ServerPlayerEntity)) {
-            MishapThrowerJava.throwMishap(new MishapBadCaster());
-        }
+        if (
+            ctx.getCastingEntity() == null ||
+            !(ctx.getCastingEntity() instanceof ServerPlayerEntity)
+        )
+            throw new MishapBadCaster();
     }
 
     @Override

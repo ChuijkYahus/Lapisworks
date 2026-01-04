@@ -16,8 +16,6 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.luxof.lapisworks.MishapThrowerJava;
-
 import net.minecraft.util.math.Vec3d;
 
 public class SphereDst implements Action {
@@ -28,9 +26,9 @@ public class SphereDst implements Action {
     @Override
     public OperationResult operate(CastingEnvironment ctx, CastingImage img, SpellContinuation cont) {
         List<Iota> stack = new ArrayList<Iota>(img.getStack());
-        if (stack.size() < getArgc()) {
-            MishapThrowerJava.throwMishap(new MishapNotEnoughArgs(3, stack.size()));
-        }
+        if (stack.size() < getArgc())
+            throw new MishapNotEnoughArgs(3, stack.size());
+
         int lastIdx = stack.size() - 1;
         SpellList intrs = OperatorUtils.getList(stack, lastIdx - 2, getArgc());
         Vec3d pos = OperatorUtils.getVec3(stack, lastIdx - 1, getArgc());

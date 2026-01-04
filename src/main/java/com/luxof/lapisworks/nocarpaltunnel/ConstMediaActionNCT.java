@@ -27,12 +27,12 @@ public abstract class ConstMediaActionNCT implements ConstMediaAction {
 
     @Override
     public List<Iota> execute(List<? extends Iota> arg0, CastingEnvironment arg1) {
-        return execute(new HexIotaStack(arg0, getArgc()), arg1).stream().map(it -> (Iota)it).toList();
+        return execute(new HexIotaStack(arg0, getArgc(), arg1), arg1).stream().map(it -> (Iota)it).toList();
     }
 
     @Override
     public CostMediaActionResult executeWithOpCount(List<? extends Iota> arg0, CastingEnvironment arg1) {
-        return executeWithOpCount(new HexIotaStack(arg0, getArgc()), arg1);
+        return executeWithOpCount(new HexIotaStack(arg0, getArgc(), arg1), arg1);
     }
 
 

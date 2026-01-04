@@ -10,19 +10,15 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster;
 import at.petrak.hexcasting.api.casting.mishaps.MishapUnenlightened;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 
 import static com.luxof.lapisworks.LapisworksIDs.SEND_SENT;
 
 import java.util.List;
-import java.util.Optional;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 
@@ -40,15 +36,10 @@ public class BanishMySent implements ConstMediaAction {
 
     @Override
     public List<Iota> execute(List<? extends Iota> args, CastingEnvironment ctx) {
-        if (!ctx.isEnlightened()) {
-            MishapThrowerJava.throwMishap(new MishapUnenlightened());
-        }
-        Optional<LivingEntity> casterOp = Optional.of(ctx.getCastingEntity());
-        if (casterOp.isEmpty()) { MishapThrowerJava.throwMishap(new MishapBadCaster()); }
-        else if (!(casterOp.get() instanceof PlayerEntity)) {
-            MishapThrowerJava.throwMishap(new MishapBadCaster());
-        }
-        ServerPlayerEntity caster = (ServerPlayerEntity)casterOp.get();
+        if (!(ctx.getCastingEntity() instanceof ServerPlayerEntity caster))
+            throw new MishapBadCaster();
+        else if (!ctx.isEnlightened())
+            throw new MishapUnenlightened();
 
         ((EnchSentInterface)caster).setEnchantedSentinel(null, null);
         PacketByteBuf buf = PacketByteBufs.create();

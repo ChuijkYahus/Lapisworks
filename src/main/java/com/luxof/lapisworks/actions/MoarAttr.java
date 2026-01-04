@@ -5,7 +5,6 @@ import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.init.Mutables.Mutables;
@@ -77,13 +76,8 @@ public class MoarAttr extends SpellActionNCT {
         );
         int expendedAmel = (int)Math.ceil(addToVal * this.expendedAmelModifier);
 
-        if (availableAmel < expendedAmel) {
-            MishapThrowerJava.throwMishap(new MishapNotEnoughItems(
-                AMEL,
-                availableAmel,
-                expendedAmel
-            ));
-        }
+        if (availableAmel < expendedAmel)
+            throw new MishapNotEnoughItems(AMEL, availableAmel, expendedAmel);
 
         return new SpellAction.Result(
             // caster is kinda being operated on but that's not the main effect so 2nd prio

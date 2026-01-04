@@ -1,7 +1,5 @@
 package com.luxof.lapisworks.actions;
 
-import java.util.List;
-
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.RenderedSpell;
 import at.petrak.hexcasting.api.casting.castables.SpellAction;
@@ -14,13 +12,14 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
+import com.luxof.lapisworks.init.ModItems;
+
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
-
-import com.luxof.lapisworks.MishapThrowerJava;
-import com.luxof.lapisworks.init.ModItems;
 
 public class ImbueLap implements SpellAction {
     public int getArgc() {
@@ -34,12 +33,9 @@ public class ImbueLap implements SpellAction {
     @Override
     public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
         HeldItemInfo heldStackInfo = ctx.getHeldItemToOperateOn(ImbueLap::isLapis);
-        if (heldStackInfo == null) {
-            //                              *shrug* i don't know why it's different either.
-            // i now know: i was stupid
-            MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "lapis_lazuli"));
-            return null; // VSCode likes complaining about null
-        }
+        if (heldStackInfo == null)
+            throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "lapis_lazuli");
+
         int count = heldStackInfo.stack().getCount();
 
         return new SpellAction.Result(

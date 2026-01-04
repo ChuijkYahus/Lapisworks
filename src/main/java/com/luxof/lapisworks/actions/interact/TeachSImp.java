@@ -12,11 +12,11 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.blocks.entities.SimpleImpetusEntity;
 import com.luxof.lapisworks.init.ModBlocks;
 
 import static com.luxof.lapisworks.LapisworksIDs.SIMP_IMP_BLOCK;
+import static com.luxof.lapisworks.MishapThrowerJava.throwIfEmpty;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class TeachSImp implements SpellAction {
     @Override
     public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
         BlockPos pos = OperatorUtils.getBlockPos(args, 0, getArgc());
-        SimpleImpetusEntity blockEntity = MishapThrowerJava.throwIfEmpty(
+        SimpleImpetusEntity blockEntity = throwIfEmpty(
             ctx.getWorld().getBlockEntity(pos, ModBlocks.SIMPLE_IMPETUS_ENTITY_TYPE),
             new MishapBadBlock(pos, SIMP_IMP_BLOCK)
         );

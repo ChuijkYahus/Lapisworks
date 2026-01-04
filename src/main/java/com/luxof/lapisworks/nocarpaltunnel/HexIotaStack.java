@@ -2,6 +2,7 @@ package com.luxof.lapisworks.nocarpaltunnel;
 
 import at.petrak.hexcasting.api.casting.OperatorUtils;
 import at.petrak.hexcasting.api.casting.SpellList;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 
@@ -20,10 +21,21 @@ import net.minecraft.util.math.Vec3d;
 public class HexIotaStack {
     public List<? extends Iota> stack;
     public int argc;
+    public CastingEnvironment ctx;
 
-    public HexIotaStack(List<? extends Iota> stack, int argc) { this.stack = stack; this.argc = argc; }
+    public HexIotaStack(
+        List<? extends Iota> stack,
+        int argc,
+        CastingEnvironment ctx
+    ) { this.stack = stack; this.argc = argc; this.ctx = ctx; }
 
+    public Iota get(int idx) { return stack.get(idx); }
     public BlockPos getBlockPos(int idx) { return OperatorUtils.getBlockPos(stack, idx, argc); }
+    public BlockPos getBlockPosInRange(int idx) {
+        BlockPos ret = getBlockPos(idx);
+        ctx.assertPosInRange(ret);
+        return ret;
+    }
     public boolean getBool(int idx) { return OperatorUtils.getBool(stack, idx, argc); }
     public double getDouble(int idx) { return OperatorUtils.getDouble(stack, idx, argc); }
     public double getDoubleBetween(int idx, double min, double max) { return OperatorUtils.getDoubleBetween(stack, idx, min, max, argc); }
@@ -47,4 +59,9 @@ public class HexIotaStack {
     public int getPositiveIntUnderInclusive(int idx, int under) { return OperatorUtils.getPositiveIntUnderInclusive(stack, idx, under, argc); }
     public long getPositiveLong(int idx) { return OperatorUtils.getPositiveLong(stack, idx, argc); }
     public Vec3d getVec3(int idx) { return OperatorUtils.getVec3(stack, idx, argc); }
+    public Vec3d getVec3InRange(int idx) {
+        Vec3d ret = getVec3(idx);
+        ctx.assertVecInRange(ret);
+        return ret;
+    }
 }

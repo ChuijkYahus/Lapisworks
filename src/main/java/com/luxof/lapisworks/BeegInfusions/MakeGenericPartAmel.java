@@ -5,7 +5,6 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.common.items.ItemStaff;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.init.Mutables.BeegInfusion;
 import com.luxof.lapisworks.init.Mutables.Mutables;
@@ -53,11 +52,11 @@ public class MakeGenericPartAmel extends BeegInfusion {
     public void mishapIfNeeded() {
         int availableAmel = vault.fetch(Mutables::isAmel, Flags.PRESET_Stacks_InvItem_UpToHotbar);
         if (availableAmel < infusing) {
-            MishapThrowerJava.throwMishap(new MishapNotEnoughItems(
+            throw new MishapNotEnoughItems(
                 AMEL,
                 availableAmel,
                 infusing
-            ));
+            );
         }
     }
 

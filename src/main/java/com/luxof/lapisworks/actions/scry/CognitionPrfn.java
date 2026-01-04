@@ -8,35 +8,29 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
 
-import com.luxof.lapisworks.MishapThrowerJava;
-import com.luxof.lapisworks.blocks.Mind;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
 import com.luxof.lapisworks.init.ModBlocks;
+import com.luxof.lapisworks.nocarpaltunnel.ConstMediaActionNCT;
 
 import static com.luxof.lapisworks.Lapisworks.prettifyDouble;
 import static com.luxof.lapisworks.LapisworksIDs.MIND_BLOCK;
+import static com.luxof.lapisworks.MishapThrowerJava.throwIfEmpty;
 
 import java.util.List;
 
 import net.minecraft.util.math.BlockPos;
 
-public class CognitionPrfn implements ConstMediaAction {
+public class CognitionPrfn extends ConstMediaActionNCT {
     @Override
     public List<Iota> execute(List<? extends Iota> args, CastingEnvironment ctx) {
         BlockPos mindPos = OperatorUtils.getBlockPos(args, 0, getArgc());
-        try { ctx.assertPosInRange(mindPos); }
-        catch (Mishap mishap) { MishapThrowerJava.throwMishap(mishap); }
-        MishapBadBlock needMind = new MishapBadBlock(mindPos, MIND_BLOCK);
-        if (!(ctx.getWorld().getBlockState(mindPos).getBlock() instanceof Mind)) {
-            MishapThrowerJava.throwMishap(needMind);
-        }
+        ctx.assertPosInRange(mindPos);
 
-        MindEntity blockEntity = MishapThrowerJava.throwIfEmpty(
+        MindEntity blockEntity = throwIfEmpty(
             ctx.getWorld().getBlockEntity(mindPos, ModBlocks.MIND_ENTITY_TYPE),
-            needMind
+            new MishapBadBlock(mindPos, MIND_BLOCK)
         );
 
         return List.of(new DoubleIota(prettifyDouble((double)blockEntity.mindCompletion)));

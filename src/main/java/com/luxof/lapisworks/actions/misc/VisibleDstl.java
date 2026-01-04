@@ -8,10 +8,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.BooleanIota;
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation;
 import at.petrak.hexcasting.api.misc.MediaConstants;
-
-import com.luxof.lapisworks.MishapThrowerJava;
 
 import static com.luxof.lapisworks.Lapisworks.castRay;
 
@@ -29,10 +26,8 @@ public class VisibleDstl implements ConstMediaAction {
         BlockPos start = BlockPos.ofFloored(entity.getEyePos());
         BlockPos end = OperatorUtils.getBlockPos(args, 1, getArgc());
 
-        try {
-            ctx.assertPosInRange(start);
-            ctx.assertPosInRange(end);
-        } catch (MishapBadLocation e) { MishapThrowerJava.throwMishap(e); }
+        ctx.assertPosInRange(start);
+        ctx.assertPosInRange(end);
 
         Vec3d dir = end.toCenterPos().subtract(start.toCenterPos()).normalize();
 

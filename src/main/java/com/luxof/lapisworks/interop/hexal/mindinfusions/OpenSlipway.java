@@ -3,7 +3,6 @@ package com.luxof.lapisworks.interop.hexal.mindinfusions;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 
 import com.luxof.lapisworks.Lapisworks;
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.init.Mutables.SMindInfusion;
@@ -42,7 +41,7 @@ public class OpenSlipway extends SMindInfusion {
     @Override
     public void mishapIfNeeded() {
         if (amelCount >= neededAmel) return;
-        MishapThrowerJava.throwMishap(new MishapNotEnoughItems(AMEL, amelCount, neededAmel));
+        throw new MishapNotEnoughItems(AMEL, amelCount, neededAmel);
     }
 
     @Override
