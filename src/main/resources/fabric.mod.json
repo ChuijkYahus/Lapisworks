@@ -15,11 +15,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.luxof.lapisworks.Lapisworks",
-			{
-				"adapter": "kotlin",
-				"value": "com.luxof.lapisworks.MishapThrower"
-			}
+			"com.luxof.lapisworks.Lapisworks"
 		],
 		"client": [
 			"com.luxof.lapisworks.client.LapisworksClient"
