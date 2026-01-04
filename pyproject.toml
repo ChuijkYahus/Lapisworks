@@ -68,6 +68,12 @@ sources = ["doc/src"]
 [project.entry-points.hexdoc]
 lapisworks = "hexdoc_lapisworks._hooks:LapisworksPlugin"
 
+# lapisworks needs to import shit
+[tool.uv]
+override-dependencies = [
+    "hexdoc-hexcasting==0.11.3.*" # hexical fah
+]
+
 # linting
 
 [tool.pyright]

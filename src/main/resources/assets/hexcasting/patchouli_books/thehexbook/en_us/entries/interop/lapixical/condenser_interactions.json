@@ -2,7 +2,7 @@
     "name": "pages.lapisworks.interop.lapixical.condenser_interactions.title",
     "icon": "hexical:media_jar",
     "advancement": "lapisworks:enlightened",
-    "flag": "&mod:hexical",
+    "flag": "mod:hexical",
     "category": "hexcasting:lapisworks/interop/lapixical",
     "sortnum": 3,
     "pages": [
