@@ -2,6 +2,9 @@ version = 1
 revision = 3
 requires-python = ">=3.12"
 
+[manifest]
+overrides = [{ name = "hexdoc-hexcasting", specifier = "==0.11.3.*" }]
+
 [[package]]
 name = "annotated-types"
 version = "0.7.0"
@@ -389,11 +392,24 @@ wheels = [
 ]
 
 [[package]]
+name = "hexdoc-hexical"
+version = "1.5.0.1.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/66/7f/916b258b6c055bb550dd24e8817b996dfe857680980a16eede5e66fa72fe/hexdoc_hexical-1.5.0.1.0.0.tar.gz", hash = "sha256:9c14eadaab1cdc2b2ed32cfbb7f9f5100e046689ddae3e3d2afb458cee386275", size = 96955, upload-time = "2025-01-11T22:48:05.924Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5b/58/7bc21937d6bb24a9d5c52e5ea0d82f6d4f5f26fcf5fb66680d00bdebab84/hexdoc_hexical-1.5.0.1.0.0-py3-none-any.whl", hash = "sha256:7f55148d26f9201397ca9d6dc3ce347552cf42e211f3686f8de845cd1fa7edb6", size = 160628, upload-time = "2025-01-11T22:48:03.222Z" },
+]
+
+[[package]]
 name = "hexdoc-lapisworks"
 source = { editable = "." }
 dependencies = [
     { name = "hexdoc" },
     { name = "hexdoc-hexcasting" },
+    { name = "hexdoc-hexical" },
     { name = "networkx" },
     { name = "scipy" },
 ]
@@ -407,6 +423,7 @@ dev = [
 requires-dist = [
     { name = "hexdoc", specifier = "~=1!0.1.0a11" },
     { name = "hexdoc-hexcasting", specifier = "~=0.11.3.1.0" },
+    { name = "hexdoc-hexical", specifier = ">=1.5.0.1.0.0" },
     { name = "networkx", specifier = "~=3.5" },
     { name = "scipy", specifier = "~=1.16" },
 ]
