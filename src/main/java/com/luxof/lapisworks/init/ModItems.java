@@ -25,7 +25,6 @@ public class ModItems {
     private static FabricItemSettings fullStack = new FabricItemSettings().maxCount(64);
     private static FabricItemSettings unstackable = new FabricItemSettings().maxCount(1);
 
-    private static final Item HEXDOC_WHY = new Item(unstackable);
     public static final Item AMEL_ITEM = new Item(fullStack);
     public static final Item AMEL2_ITEM = new Item(fullStack);
     public static final Item AMEL3_ITEM = new Item(fullStack);
@@ -74,7 +73,6 @@ public class ModItems {
     public static final BlockItem CHALK = new ChalkItem();
 
     private static List<String> itemNames = new ArrayList<>(List.of(
-        "media_jar_hexdoc",
         "amel",
         "amel2",
         "amel3",
@@ -122,7 +120,6 @@ public class ModItems {
         "chalk"
     ));
     private static List<Item> items = new ArrayList<>(List.of(
-        HEXDOC_WHY,
         AMEL_ITEM,
         AMEL2_ITEM,
         AMEL3_ITEM,
