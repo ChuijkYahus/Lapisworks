@@ -2,7 +2,7 @@ package com.luxof.lapisworks.blocks;
 
 import com.luxof.lapisworks.blocks.entities.ChalkWithPatternEntity;
 import com.luxof.lapisworks.blocks.stuff.ChalkBlockInterface;
-import com.luxof.lapisworks.blocks.stuff.ChalkInterface;
+import com.luxof.lapisworks.blocks.stuff.AttachedBE;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.ModItems;
 
@@ -30,6 +30,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 import static net.minecraft.util.math.Direction.UP;
+import static com.luxof.lapisworks.LapisworksIDs.CHALK_CONNECTABLE_TAG;
 import static net.minecraft.util.math.Direction.DOWN;
 import static net.minecraft.util.math.Direction.NORTH;
 import static net.minecraft.util.math.Direction.WEST;
@@ -129,7 +130,7 @@ public class ChalkWithPattern extends BlockWithEntity implements ChalkBlockInter
         ChalkWithPatternEntity chalk = (ChalkWithPatternEntity)world.getBlockEntity(pos);
         BlockState fromState = world.getBlockState(fromPos);
 
-        if (!fromState.isOf(ModBlocks.CHALK) && !fromState.isOf(ModBlocks.CHALK_WITH_PATTERN)) {
+        if (!fromState.isIn(CHALK_CONNECTABLE_TAG)) {
             updateBracketRendering(world, pos, chalk);
             chalk.save();
             return;
@@ -140,6 +141,11 @@ public class ChalkWithPattern extends BlockWithEntity implements ChalkBlockInter
             fromPos.getY() - pos.getY(),
             fromPos.getZ() - pos.getZ()
         );
+
+        if (comingFrom == chalk.attachedTo) {
+            world.breakBlock(pos, false);
+            return;
+        }
 
         Direction leftOrRight = findLeftVector(chalk.attachedTo);
 
@@ -153,7 +159,7 @@ public class ChalkWithPattern extends BlockWithEntity implements ChalkBlockInter
     }
 
     private boolean validateDir(World world, BlockPos pos, Direction attachedTo) {
-        return world.getBlockEntity(pos) instanceof ChalkInterface someChalk
+        return world.getBlockEntity(pos) instanceof AttachedBE someChalk
             && someChalk.getAttachedTo() == attachedTo;
     }
     @Override

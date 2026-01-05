@@ -4,6 +4,7 @@ import static com.luxof.lapisworks.Lapisworks.id;
 
 import java.util.UUID;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
@@ -37,6 +38,13 @@ public class LapisworksIDs {
     // the tags themselves
     public static final TagKey<Item> AMEL_TAG = TagKey.of(RegistryKeys.ITEM, AMEL_TAG_ID);
     public static final TagKey<Item> POTION_TAG = TagKey.of(RegistryKeys.ITEM, POTION_TAG_ID);
+
+    // block tags
+    public static final Identifier CHALK_CONNECTABLE_TAG_ID = id("chalk_connectable");
+    public static final TagKey<Block> CHALK_CONNECTABLE_TAG = TagKey.of(
+        RegistryKeys.BLOCK,
+        CHALK_CONNECTABLE_TAG_ID
+    );
 
     // advancements
     public static final Identifier ENCHSENT_ADVANCEMENT = id("rediscover_enchsent");

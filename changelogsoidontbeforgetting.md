@@ -231,6 +231,7 @@ Locked in rah
     - that media item becomes the media source for that ritual
     - ritual burns chalk as it goes
     - ritual uses half your ambit and half your greater sentinel's ambit
+- chalk_connectable block tag
 - Enchanted Brewery
   - Imbue 10 Amel into a Brewing Stand
   - 1.5x blaze usage for 2x speed

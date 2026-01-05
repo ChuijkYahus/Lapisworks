@@ -89,12 +89,14 @@ public abstract class RitualExecutionState {
     }
     public abstract long extractMedia(long cost, boolean simulate);
     public abstract void printMessage(Text message, ServerWorld world);
-    public boolean isVecInAmbit(Vec3d vec, ServerWorld world) {
+    public boolean isVecInHalfAmbitOfCaster(Vec3d vec, ServerWorld world) {
         ServerPlayerEntity caster = getCaster(world);
         if (caster == null) return false;
 
+
         double playerAmbit = caster.getAttributeValue(HexAttributes.AMBIT_RADIUS) / 2;
         if (caster.getPos().squaredDistanceTo(vec) <= playerAmbit*playerAmbit) return true;
+
 
         Sentinel sentinel = HexAPI.instance().getSentinel(caster);
         double sentinelAmbit = caster.getAttributeValue(HexAttributes.SENTINEL_RADIUS);
@@ -106,6 +108,7 @@ public abstract class RitualExecutionState {
         )
             return true;
         
+
         EnchSentInterface enchantedSentinel = (EnchSentInterface)caster;
         Vec3d enchSentPos = enchantedSentinel.getEnchantedSentinel();
         double enchSentAmbit = enchantedSentinel.getEnchantedSentinelAmbit();
@@ -115,7 +118,11 @@ public abstract class RitualExecutionState {
         )
             return true;
 
+
         return false;
+    }
+    public boolean isVecInAmbit(Vec3d vec, ServerWorld world) {
+        return isVecInHalfAmbitOfCaster(vec, world);
     }
     /** Returns whether to continue. */
     public abstract boolean tick(ServerWorld world);

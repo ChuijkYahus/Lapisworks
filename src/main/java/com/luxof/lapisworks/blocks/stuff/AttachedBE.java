@@ -2,6 +2,6 @@ package com.luxof.lapisworks.blocks.stuff;
 
 import net.minecraft.util.math.Direction;
 
-public interface ChalkInterface {
+public interface AttachedBE {
     public Direction getAttachedTo();
 }

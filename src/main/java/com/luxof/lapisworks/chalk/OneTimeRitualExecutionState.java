@@ -1,10 +1,7 @@
 package com.luxof.lapisworks.chalk;
 
-import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
-import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.common.lib.HexAttributes;
 
 import java.util.UUID;
 
@@ -16,7 +13,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -64,11 +60,6 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
         ServerPlayerEntity caster = getCaster(world);
         if (caster == null) return;
         caster.sendMessage(message);
-    }
-
-    @Override
-    public boolean isVecInAmbit(Vec3d vec, ServerWorld world) {
-        return super.isVecInAmbit(vec, world);
     }
 
     @Override

@@ -2,8 +2,9 @@ package com.luxof.lapisworks.blocks;
 
 import com.luxof.lapisworks.blocks.entities.ChalkEntity;
 import com.luxof.lapisworks.blocks.stuff.ChalkBlockInterface;
-import com.luxof.lapisworks.blocks.stuff.ChalkInterface;
-import com.luxof.lapisworks.init.ModBlocks;
+import com.luxof.lapisworks.blocks.stuff.AttachedBE;
+
+import static com.luxof.lapisworks.LapisworksIDs.CHALK_CONNECTABLE_TAG;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -77,8 +78,9 @@ public class Chalk extends BlockWithEntity implements ChalkBlockInterface {
 
         boolean succ = chalk.setSideIsChalk(
             dir,
-            (adjState.isOf(ModBlocks.CHALK) || adjState.isOf(ModBlocks.CHALK_WITH_PATTERN)) &&
-            ((ChalkInterface)world.getBlockEntity(adjBlock)).getAttachedTo() == chalk.attachedTo
+            adjState.isIn(CHALK_CONNECTABLE_TAG) ||
+            (world.getBlockEntity(pos) instanceof AttachedBE attachedBE &&
+            attachedBE.getAttachedTo() == chalk.attachedTo)
         );
         if (!succ) return;
         chalk.save();
