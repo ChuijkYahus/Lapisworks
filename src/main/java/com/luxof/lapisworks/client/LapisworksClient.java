@@ -30,6 +30,8 @@ import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE2;
 import static com.luxof.lapisworks.init.ModItems.IRON_SWORD;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 
+import java.util.List;
+
 import com.mojang.datafixers.util.Pair;
 
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
@@ -110,9 +112,14 @@ public class LapisworksClient implements ClientModInitializer {
     private String inlineify(HexPattern pattern) {
         return "HexPattern["
                     + pattern.getStartDir().toString()
-                    + " "
+                    + ", "
                     + pattern.anglesSignature() +
                 "]";
+    }
+    private String inlineify(List<HexPattern> patterns) {
+        String ret = "";
+        for (HexPattern pattern : patterns) { ret += inlineify(pattern); }
+        return ret;
     }
     @Override
     public void onInitializeClient() {
@@ -175,7 +182,7 @@ public class LapisworksClient implements ClientModInitializer {
                 lines.add(
                     new Pair<ItemStack, Text>(
                         new ItemStack(ModItems.SIMPLE_IMPETUS),
-                        bE.getIsTuned() ? Text.translatable(
+                        tunedPattern != null ? Text.translatable(
                                 "render.lapisworks.scryinglens.simp.listening",
                                 inlineify(tunedPattern)
                             ) :
@@ -210,13 +217,7 @@ public class LapisworksClient implements ClientModInitializer {
                 lines.add(
                     new Pair<ItemStack, Text>(
                         new ItemStack(ModItems.CHALK),
-                        chalk.pats.size() > 0 ? Text.literal(
-                            chalk.pats.stream().collect(
-                                () -> "",
-                                (str, pat) -> str += inlineify(pat),
-                                (str1, str2) -> str1 += str2
-                            )
-                        ) :
+                        chalk.pats.size() > 0 ? Text.literal(inlineify(chalk.pats)) :
                         Text.translatable("render.lapisworks.scryinglens.chalk.no_patterns")
                     )
                 );

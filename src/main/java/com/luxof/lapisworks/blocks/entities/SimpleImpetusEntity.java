@@ -13,6 +13,7 @@ import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -56,27 +57,27 @@ public class SimpleImpetusEntity extends BlockEntityAbstractImpetus {
     @Override
     protected void saveModData(NbtCompound nbt) {
         super.saveModData(nbt);
+        nbt.putBoolean(TAG_IS_TUNED, tuned);
+
         if (pattern != null)
             nbt.put(TAG_TUNED_PAT, pattern.serializeToNBT());
-        nbt.putBoolean(TAG_IS_TUNED, tuned);
-        if (plr != null) {
+        if (plr != null)
             nbt.putUuid(TAG_PLAYER, plr);
-        } else {
-            LOGGER.warn("Player was null in a Simple Impetus. Don't do that!");
-        }
+        else
+            LOGGER.error("Player was null in a Simple Impetus. Don't do that!");
     }
 
     @Override
     protected void loadModData(NbtCompound nbt) {
         super.loadModData(nbt);
+        tuned = nbt.getBoolean(TAG_IS_TUNED);
+
         if (nbt.contains(TAG_TUNED_PAT))
             pattern = HexPattern.fromNBT(nbt.getCompound(TAG_TUNED_PAT));
-        tuned = nbt.getBoolean(TAG_IS_TUNED);
-        if (nbt.contains(TAG_PLAYER)) {
+        if (nbt.contains(TAG_PLAYER))
             plr = nbt.getUuid(TAG_PLAYER);
-        } else {
-            LOGGER.warn("Player was null in a Simple Impetus. Don't do that!");
-        }
+        else
+            LOGGER.error("Player was null in a Simple Impetus. Don't do that!");
     }
 
     /** returns whether or not the simple impetus was tuned to the pattern in question.
@@ -91,9 +92,10 @@ public class SimpleImpetusEntity extends BlockEntityAbstractImpetus {
     }
 
     public void tune(HexPattern pattern, boolean tuneOrNot) {
-        // looks explainable in the game data when i clear angSig too.
-        tuned = tuneOrNot;
-        pattern = tuneOrNot ? pattern : null;
+        this.tuned = tuneOrNot;
+        this.pattern = tuneOrNot ? pattern : null;
+        markDirty();
+        world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
     }
 
     public String getTuned() { return pattern.anglesSignature(); }

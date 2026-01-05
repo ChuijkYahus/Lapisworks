@@ -60,7 +60,6 @@ public class TeachSImp implements SpellAction {
 		@Override
 		public void cast(CastingEnvironment ctx) {
             this.blockEntity.tune(pattern, true);
-            this.blockEntity.markDirty();
 		}
 
         @Override

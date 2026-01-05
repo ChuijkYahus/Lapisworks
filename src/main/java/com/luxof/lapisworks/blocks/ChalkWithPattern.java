@@ -159,8 +159,9 @@ public class ChalkWithPattern extends BlockWithEntity implements ChalkBlockInter
     }
 
     private boolean validateDir(World world, BlockPos pos, Direction attachedTo) {
-        return world.getBlockEntity(pos) instanceof AttachedBE someChalk
-            && someChalk.getAttachedTo() == attachedTo;
+        return world.getBlockState(pos).isIn(CHALK_CONNECTABLE_TAG)
+            || (world.getBlockEntity(pos) instanceof AttachedBE someChalk
+            && someChalk.getAttachedTo() == attachedTo);
     }
     @Override
     public void onPlaced(

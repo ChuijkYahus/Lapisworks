@@ -31,7 +31,7 @@ public class AskSImp extends ConstMediaActionNCT {
 
         return List.of(
             simpleImpetus.getIsTuned() ?
-                new PatternIota(HexPattern.fromAngles(simpleImpetus.getTuned(), HexDir.EAST)) :
+                new PatternIota(simpleImpetus.getTunedPattern()) :
                 new NullIota()
         );
     }
