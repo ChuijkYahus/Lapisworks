@@ -79,7 +79,7 @@ public class Chalk extends BlockWithEntity implements ChalkBlockInterface {
         boolean succ = chalk.setSideIsChalk(
             dir,
             adjState.isIn(CHALK_CONNECTABLE_TAG) ||
-            (world.getBlockEntity(pos) instanceof AttachedBE attachedBE &&
+            (world.getBlockEntity(adjBlock) instanceof AttachedBE attachedBE &&
             attachedBE.getAttachedTo() == chalk.attachedTo)
         );
         if (!succ) return;
