@@ -4,8 +4,6 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
-import at.petrak.hexcasting.api.casting.math.HexDir;
-import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
 
 import com.luxof.lapisworks.blocks.entities.SimpleImpetusEntity;
