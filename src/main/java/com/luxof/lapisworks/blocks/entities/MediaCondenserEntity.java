@@ -18,9 +18,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -29,27 +27,20 @@ public class MediaCondenserEntity extends BlockEntity implements LinkableMediaBl
         super(ModBlocks.MEDIA_CONDENSER_ENTITY_TYPE, pos, state);
     }
 
-    public long media = 0;
-    public long mediaCap = MediaConstants.DUST_UNIT * 64;
+    public long media = 0L;
+    public long mediaCap = MediaConstants.DUST_UNIT * 64L;
     public HashSet<BlockPos> linkedCondensers = new HashSet<>();
 
-    public void tick(World world, BlockPos pos, BlockState state) {
-        if (world.isClient) return;
-        ServerWorld sw = (ServerWorld)world;
-
-        int filledState;
-        try {
-            filledState = Math.min(14, (int)Math.floor(media / (mediaCap / 15.0)));
-        } catch (ArithmeticException e) { return; } // btw: does not return..???? // what the fuck do you mean "does not return"?
+    @SuppressWarnings("deprecation")
+    public void updateState() {
+        BlockState state = world.getBlockState(pos);
+        int filledState = (int)Math.floor(media / (mediaCap / 14));
 
         if (filledState == state.get(MediaCondenser.FILLED)) return;
-        sw.setBlockState(
-            pos,
-            state.with(
-                MediaCondenser.FILLED,
-                filledState
-            )
-        );
+
+        BlockState newState = state.with(MediaCondenser.FILLED, filledState);
+        world.setBlockState(pos, newState);
+        setCachedState(newState);
     }
 
     private List<Integer> posToInts(HashSet<BlockPos> posList) {
@@ -118,9 +109,9 @@ public class MediaCondenserEntity extends BlockEntity implements LinkableMediaBl
         long nowMedia = Math.min(media + amount, mediaCap);
         if (!simulate) {
             media = nowMedia;
+            updateState();
             this.markDirty();
-            BlockState state = world.getBlockState(pos);
-            world.updateListeners(pos, state, state, Block.NOTIFY_LISTENERS);
+            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
         }
 
         return nowMedia - prevMedia;
@@ -132,9 +123,9 @@ public class MediaCondenserEntity extends BlockEntity implements LinkableMediaBl
         long nowMedia = Math.max(media - amount, 0);
         if (!simulate) {
             media = nowMedia;
+            updateState();
             this.markDirty();
-            BlockState state = world.getBlockState(pos);
-            world.updateListeners(pos, state, state, Block.NOTIFY_LISTENERS);
+            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
         }
 
         return prevMedia - nowMedia;
