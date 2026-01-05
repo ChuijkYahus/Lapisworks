@@ -1,0 +1,12 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    "hexcasting:charged_amethyst",
+    "minecraft:amethyst_shard",
+    "hexcasting:amethyst_dust"
+  ],
+  "result": {
+    "id": "lapisworks:chalk",
+    "count": 1
+  }
+}

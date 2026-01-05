@@ -68,21 +68,7 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
 
     @Override
     public boolean isVecInAmbit(Vec3d vec, ServerWorld world) {
-        ServerPlayerEntity caster = getCaster(world);
-        if (caster == null) return false;
-
-        double playerAmbit = caster.getAttributeValue(HexAttributes.AMBIT_RADIUS) / 2;
-        if (caster.getPos().squaredDistanceTo(vec) <= playerAmbit*playerAmbit) return true;
-
-        Sentinel sentinel = HexAPI.instance().getSentinel(caster);
-        double sentinelAmbit = caster.getAttributeValue(HexAttributes.SENTINEL_RADIUS);
-        if (sentinel != null &&
-            sentinel.extendsRange() &&
-            sentinel.position().squaredDistanceTo(vec) <=
-                sentinelAmbit*sentinelAmbit + 0.00000000001)
-            return true;
-
-        return false;
+        return super.isVecInAmbit(vec, world);
     }
 
     @Override

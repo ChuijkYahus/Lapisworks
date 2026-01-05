@@ -1,7 +1,10 @@
 package com.luxof.lapisworks.chalk;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.api.player.Sentinel;
+import at.petrak.hexcasting.common.lib.HexAttributes;
 
 import java.util.UUID;
 
@@ -14,6 +17,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 import org.jetbrains.annotations.Nullable;
+
+import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 
 public abstract class RitualExecutionState {
     public BlockPos currentPos;
@@ -84,7 +89,34 @@ public abstract class RitualExecutionState {
     }
     public abstract long extractMedia(long cost, boolean simulate);
     public abstract void printMessage(Text message, ServerWorld world);
-    public abstract boolean isVecInAmbit(Vec3d vec, ServerWorld world);
+    public boolean isVecInAmbit(Vec3d vec, ServerWorld world) {
+        ServerPlayerEntity caster = getCaster(world);
+        if (caster == null) return false;
+
+        double playerAmbit = caster.getAttributeValue(HexAttributes.AMBIT_RADIUS) / 2;
+        if (caster.getPos().squaredDistanceTo(vec) <= playerAmbit*playerAmbit) return true;
+
+        Sentinel sentinel = HexAPI.instance().getSentinel(caster);
+        double sentinelAmbit = caster.getAttributeValue(HexAttributes.SENTINEL_RADIUS);
+        if (
+            sentinel != null &&
+            sentinel.extendsRange() &&
+            sentinel.position().squaredDistanceTo(vec) <=
+                (sentinelAmbit*sentinelAmbit + 0.00000000001) / 2
+        )
+            return true;
+        
+        EnchSentInterface enchantedSentinel = (EnchSentInterface)caster;
+        Vec3d enchSentPos = enchantedSentinel.getEnchantedSentinel();
+        double enchSentAmbit = enchantedSentinel.getEnchantedSentinelAmbit();
+        if (
+            enchSentPos != null &&
+            enchSentPos.squaredDistanceTo(vec) <= enchSentAmbit*enchSentAmbit / 2
+        )
+            return true;
+
+        return false;
+    }
     /** Returns whether to continue. */
     public abstract boolean tick(ServerWorld world);
 
