@@ -206,7 +206,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
       with Oneironaut
     - Simple Minds, when infused into the air, produce a wandering wisp
 # 1.5.8
-# ALL OF MY SENSES, I'LL POUR THEM ALL INTO THESE MOMENTS!!
+Locked in rah
 ## Additions:
 - Amethyst/Chalk Rituals (pre-enlightenment)  
   - same-plane-only (no wall-to-floor or wall-to-ceiling etc.)
@@ -275,11 +275,13 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
     Manual brewing (or teaching it) is a pain as each step takes twice as long.
     Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.
 - Scrying patterns for blocks added by the mod.
+- Scrying lens overlays
 - Simple Mind Infusions now have (kind of basic) datapacking support.
 ## Changes:
 - Book reformatting and extra documentation and shit
   - e.g. Villager un-flaying is actually documented now
 - Deposit Media and Withdraw Media work conveniently now
+- Enchanted Sentinels actually use your base ambit instead of a flat 32 blocks around you
 - Enchanted Slipways got changed to have nearly precisely 2x slipway wisp spawn rate  
   (as i intended them to have when i first made them)
 - Gold-Diamond Casting Ring has been deleted in favour of the Amel variant
@@ -288,6 +290,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
 ## Fixes:
 - Amel Jar throwing the Amel in your other hand into the void if you attempted to withdraw
   with a full stack already there
+- "Bug in the mod" mishaps
 - Damage and movement speed enhancements stacking on world join (you need to kys ingame to reset tho)
 - Enchanted Slipways having a tendency to move 0.01f more in +XYZ than -XYZ (lmao)
 - Enchantments not carrying across dimensions (:broken_heart:)

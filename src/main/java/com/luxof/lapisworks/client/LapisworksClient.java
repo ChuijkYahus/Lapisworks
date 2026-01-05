@@ -1,5 +1,6 @@
 package com.luxof.lapisworks.client;
 
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -34,8 +35,6 @@ import com.mojang.datafixers.util.Pair;
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 
 import dev.emi.trinkets.api.client.TrinketRendererRegistry;
-
-import java.util.Optional;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -108,6 +107,13 @@ public class LapisworksClient implements ClientModInitializer {
         }
     }
 
+    private String inlineify(HexPattern pattern) {
+        return "HexPattern["
+                    + pattern.getStartDir().toString()
+                    + " "
+                    + pattern.anglesSignature() +
+                "]";
+    }
     @Override
     public void onInitializeClient() {
         // the eternal fucking grammar battle with this simple Markiplier ass log will drive me insane
@@ -142,12 +148,8 @@ public class LapisworksClient implements ClientModInitializer {
         ScryingLensOverlayRegistry.addDisplayer(
             ModBlocks.MIND_BLOCK,
             (lines, state, pos, observer, world, direction) -> {
-                Optional<MindEntity> blockEntityOpt = world.getBlockEntity(
-                    pos,
-                    ModBlocks.MIND_ENTITY_TYPE
-                );
-                if (blockEntityOpt.isEmpty()) return;
-                MindEntity blockEntity = blockEntityOpt.get();
+                MindEntity blockEntity = (MindEntity)world.getBlockEntity(pos);
+
                 lines.add(
                     new Pair<ItemStack, Text>(
                         new ItemStack(ModItems.MIND),
@@ -164,32 +166,29 @@ public class LapisworksClient implements ClientModInitializer {
                 );
             }
         );
-        /*ScryingLensOverlayRegistry.addDisplayer(
+        ScryingLensOverlayRegistry.addDisplayer(
             ModBlocks.SIMPLE_IMPETUS,
             (lines, state, pos, observer, world, direction) -> {
-                Optional<BlockEntity> opt = world.getBlockEntity(
-                    pos,
-                    ModBlocks.SIMPLE_IMPETUS_ENTITY_TYPE
-                );
-                if (opt.isEmpty()) return;
-                SimpleImpetusEntity bE = (SimpleImpetusEntity)opt.get();
+                SimpleImpetusEntity bE = (SimpleImpetusEntity)world.getBlockEntity(pos);
+                HexPattern tunedPattern = bE.getTunedPattern();
+
                 lines.add(
                     new Pair<ItemStack, Text>(
                         new ItemStack(ModItems.SIMPLE_IMPETUS),
-
+                        bE.getIsTuned() ? Text.translatable(
+                                "render.lapisworks.scryinglens.simp.listening",
+                                inlineify(tunedPattern)
+                            ) :
+                            Text.translatable("render.lapisworks.scryinglens.simp.not_listening")
                     )
-                )
+                );
             }
-        );*/
+        );
         ScryingLensOverlayRegistry.addDisplayer(
             ModBlocks.MEDIA_CONDENSER,
             (lines, state, pos, observer, world, direction) -> {
-                Optional<MediaCondenserEntity> blockEntityOpt = world.getBlockEntity(
-                    pos,
-                    ModBlocks.MEDIA_CONDENSER_ENTITY_TYPE
-                );
-                if (blockEntityOpt.isEmpty()) return;
-                MediaCondenserEntity blockEntity = blockEntityOpt.get();
+                MediaCondenserEntity blockEntity = (MediaCondenserEntity)world.getBlockEntity(pos);
+
                 lines.add(
                     new Pair<ItemStack, Text>(
                         new ItemStack(HexItems.AMETHYST_DUST),
@@ -199,6 +198,26 @@ public class LapisworksClient implements ClientModInitializer {
                             (double)blockEntity.media / (double)MediaConstants.DUST_UNIT,
                             (double)blockEntity.mediaCap / (double)MediaConstants.DUST_UNIT
                         ).formatted(Formatting.LIGHT_PURPLE)
+                    )
+                );
+            }
+        );
+        ScryingLensOverlayRegistry.addDisplayer(
+            ModBlocks.CHALK_WITH_PATTERN,
+            (lines, state, pos, observer, world, direction) -> {
+                ChalkWithPatternEntity chalk = (ChalkWithPatternEntity)world.getBlockEntity(pos);
+
+                lines.add(
+                    new Pair<ItemStack, Text>(
+                        new ItemStack(ModItems.CHALK),
+                        chalk.pats.size() > 0 ? Text.literal(
+                            chalk.pats.stream().collect(
+                                () -> "",
+                                (str, pat) -> str += inlineify(pat),
+                                (str1, str2) -> str1 += str2
+                            )
+                        ) :
+                        Text.translatable("render.lapisworks.scryinglens.chalk.no_patterns")
                     )
                 );
             }

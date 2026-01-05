@@ -121,6 +121,9 @@
     "render.lapisworks.scryinglens.holder.offhand": "Off-hand",
     "render.lapisworks.scryinglens.holder.items": "%dx %s",
     "render.lapisworks.scryinglens.mediacondenser": "%d%% filled. (%d/%d dust)",
+    "render.lapisworks.scryinglens.simp.listening": "Listening for pattern: %s",
+    "render.lapisworks.scryinglens.simp.not_listening": "Not listening for any patterns.",
+    "render.lapisworks.scryinglens.chalk.no_patterns": "No pattern present.",
 
 
     "gui.lapisworks.chalk_with_pattern.name": "Amethyst Chalk",
@@ -294,6 +297,7 @@
     "mishaps.lapisworks.equipped.not": "Expected %s to be equipped, but found nothing.",
     "mishaps.lapisworks.equipped.bad": "Found %s equipped, but it was not a/an %s",
 
+    "mishaps.lapisworks.descs.phial": "a Phial",
     "mishaps.lapisworks.descs.entityorblockposiota": "an entity or vector iota",
     "mishaps.lapisworks.descs.imbueable": "any item imbueable with Amethyst Lazuli (e.g. a staff)",
     "mishaps.lapisworks.descs.smind_infuseable": "any block infuseable with a Simple Mind (e.g. an Amethyst Block)",
@@ -389,7 +393,7 @@
 
 
     "categories.lapisworks.lapisworks.imbuement": "Imbuement",
-    "categories.lapisworks.lapisworks.imbuement.desc": "While I'd expect Lapisworks would just provide easier ways to $(o)enchant$() my tools like I can do at an $(item)Anvil$() or an $(item)Enchantment Table$(), the $(#00c)Lapisworkers$() of the past have discovered that it can do much more than that. Apparently some of the materials of this world have differing interactions with media. Let's see..",
+    "categories.lapisworks.lapisworks.imbuement.desc": "Apparently some of the materials of this world have differing interactions with media, including $(item)Amel$(). Let's see..",
 
     "pages.lapisworks.imbuement_spell.title": "Imbue Amel",
     "pages.lapisworks.imbuement_spell.summary": "The spell the ancient \"$(#00c)Lapisworkers$()\" would use very often. Imbue the item in my other hand (or main if nothing imbueable is in the other hand) with the specified amount of Amel, with no waste like the Enchant X spells. Costs 2x the amount of $(item)Amel$() being infused, in dust.",
@@ -444,7 +448,7 @@
 
     "pages.lapisworks.imbuement.jar.title": "Amel Storage",
     "pages.lapisworks.imbuement.jar.intro": "My new tools are fun to play around with, and the $(item)Amel$() being able to be drawn from the hotbar is also convenient. However.. I find that some things in this field require a rather inconvenient amount of $(item)Amel$() to carry. For example: the partially-infused staves, while they grant me a larger hex grid, need constant repairing with $(item)Amel$(). Another example is the Enchant X patterns, which require a bunch of $(item)Amel$() as well. They make my pockets ever fuller. I cannot make much space for other things as my hands and my hotbar are unfortunately full. Indeed, I must acquire a solution.",
-    "pages.lapisworks.imbuement.jar.jar": "And a solution I have acquired. By infusing just 5 pieces of $(item)Amel$() into an ordinary glass bottle, I can turn it into an $(item)Amel Jar$() which can store 4 stacks of $(item)Amel$(). This Jar can be worn on my belt (to prioritize it as the first source to draw $(item)Amel$() from), or held in my hand. I can press $(thing)$(k:use)$() with $(item)Amel$() in the other hand to deposit it, and if I sneak while doing it I can withdraw up to a stack of $(item)Amel$() at a time into the other hand.",
+    "pages.lapisworks.imbuement.jar.jar": "And a solution I have acquired. By infusing just 5 pieces of $(item)Amel$() into an ordinary glass bottle, I can turn it into an $(item)Amel Jar$() which can store 4 stacks of $(item)Amel$(). This Jar can be worn on my belt (to prioritize it as the first source to draw $(item)Amel$() from), or held in my hand. I can $(thing)$(k:use)$() with $(item)Amel$() in the other hand to deposit it, and if I sneak while doing it I can withdraw up to a stack of $(item)Amel$() at a time into the other hand.",
     "pages.lapisworks.imbuement.jar.recipe.title": "Enchantment Container",
     "pages.lapisworks.imbuement.jar.recipe.text": "Works the same way but stores 16 stacks and cannot be put on my belt due to it's unwieldiness. It can, however, be left in my hotbar and will still function.",
 
@@ -462,7 +466,7 @@
     "pages.lapisworks.imbuement.condenser.text": "I find my mediums of storing media rather.. Untidy and insufficient. Any media not in $(l:patterns/great_spells/make_battery)$(item)Phials$() must be stored in chests, in items that have varying media value. These items cannot be transported easily either, so I cannot have more than one base of operations lest I set up something complicated and convoluted. To combat these issues, $(l)I$(), one chosen, have invented the $(#00c)Media Condensing Unit$(). I can use $(l:patterns/great_spells/make_battery)$(thing)Craft Phial$() on it's base to construct it.",
     "pages.lapisworks.imbuement.condenser.recipe.desc": "$(o)A thin layer of slates covering the battery, with a media attracting substance and a dust-provided interface for interaction on top.$()",
     "pages.lapisworks.imbuement.condenser.deposit.summary": "Deposits into the given unit the amount of media specified, in dust. Costs the media specified, plus a tax of 10%% of it. Overflow is discarded!",
-    "pages.lapisworks.imbuement.condenser.withdraw.summary": "Withdraws, from the given unit, into the $(item)Phial$() in my other hand, the amount specified in dust. Costs 10%% of the media specified. Overflow into the $(l:patterns/great_spells/make_battery)$(item)Phial$() is discarded!",
+    "pages.lapisworks.imbuement.condenser.withdraw.summary": "Withdraws, from the given unit, into the $(l:patterns/great_spells/make_battery)$(item)Phial$() in my other hand, the amount specified in dust. Costs 10%% of the media specified. Overflow into the $(l:patterns/great_spells/make_battery)$(item)Phial$() is discarded!",
     "pages.lapisworks.imbuement.condenser.phianglement.title": "Phianglement",
     "pages.lapisworks.imbuement.condenser.phianglement.text": "$(#00c)Phianglement$() is a term for links between $(thing)phiangleable blocks$(). Two \"$(#00c)phiangled$()\" blocks bear a link so that when one is deposited into, the overflow collects in the other, and when one is withdrawn from, missing media is fulfilled by the other. A chain or even an interconnected network of units can be set up, however the amount of links for a single condenser can be no more than five. Links cost nothing to maintain once set up.",
     "pages.lapisworks.imbuement.condenser.phiangle.summary": "$(#00c)Phiangles$() two $(thing)phiangleables$(). Costs a flat three $(item)Charged Amethyst$(), and a scalable one $(item)Amel$() per 32 blocks of distance, with a minimum of one.",
@@ -478,6 +482,22 @@
     "pages.lapisworks.imbuement.enchbrewer.title": "Enchanted Brewery",
     "pages.lapisworks.imbuement.enchbrewer.text": "Enchanting a $(item)Brewing Stand$() with ten pieces of $(item)Amel$() makes an $(item)Enchanted Brewery$(). It consumes 25%% more $(item)Blaze Dust$() than the $(item)Brewing Stand$() and requires one $(item)Amethyst Dust$() per brew in exchange for brewing potions twice as fast. In the future, due to how strongly the ingredients are shoved into potions, I may unlock more brewing possibilities with this than a regular $(item)Brewing Stand$().",
     "pages.lapisworks.imbuement.enchbrewer.tease": "$(o)Perhaps I'll finally find out whether or not the Alchemists of the past were fools or if they really were chasing something very possible. What a sweet little thought.$()",
+
+
+    "categories.lapisworks.lapisworks.imbuement.rituals.title": "Amethyst Rituals",
+    "categories.lapisworks.lapisworks.imbuement.rituals.desc": "Alternative casting methods that do not require me... This could prove to be quite useful.",
+
+    "pages.lapisworks.imbuement.rituals.chalk.title": "Chalk",
+    "pages.lapisworks.imbuement.rituals.chalk.intro": "Those grand constructs lost to time that the $(l:items/slate)$(item)Slates$() were used in are said to be able to cast by themselves. I for one cannot fathom how such things would function-- it's components are simply rock! If not gain direct access, I may be able to $(o)imitate$() it. Simply putting the flow of media through patterns is enough, right? Then all I need to do is conduct media. The form I've decided for this is $(thing)Chalk$().",
+    "pages.lapisworks.imbuement.rituals.chalk.recipe.text": "$(o)Placed once it is a simple conductor, placed twice it gains space for up to five patterns. I'll dub these chalk constructs.. $(thing)Amethyst Rituals$()$(o).$()",
+    "pages.lapisworks.imbuement.rituals.chalk.general": "There are some general properties of $(thing)Amethyst Rituals$(). Firstly they cast as me and have precisely half my ambit even have half the ambit I have around any $(l:patterns/great_spells/greater_sentinel)$(thing)Greater Sentinel$() I may have.",
+
+    "pages.lapisworks.imbuement.rituals.onetime.title": "One-time Rituals",
+    "pages.lapisworks.imbuement.rituals.onetime.howto": "If I $(thing)$(k:use)$() some $(item)Amethyst Chalk$() with some source of media in the other hand, it kickstarts a $(thing)One-time Ritual$() with that source of media to draw from. $(thing)One-time Rituals$() are single-use and very fast, as they destroy all chalk they traverse over while moving at twenty chalk segments per second. By default, $(thing)One-time Rituals$() cast as me, however I may sever the connection to myself with the following patterns.$(br2)$(o)Casting these patterns outside of a $(thing)One-time Ritual$() $(o)will fail rather spectacularly.$()",
+    "pages.lapisworks.imbuement.rituals.onetime.stop_be_me.text": "The current $(thing)One-time Ritual$() will no longer cast as it's starter. Free.",
+    "pages.lapisworks.imbuement.rituals.onetime.be_me.text": "The current $(thing)One-time Ritual$() will cast as it's starter. Free.",
+    "pages.lapisworks.imbuement.rituals.onetime.are_u_me.text": "Pushes whether or not the current $(thing)One-time Ritual$() is casting as it's starter. Free.",
+
 
     "categories.lapisworks.lapisworks.great": "The Wizard's Spells",
     "categories.lapisworks.lapisworks.great.desc": "Some intellectuals and/or adventurers saved the old wizard's diaries. I've begun to divine some of the wizard's knowledge from these ancient tomes.",

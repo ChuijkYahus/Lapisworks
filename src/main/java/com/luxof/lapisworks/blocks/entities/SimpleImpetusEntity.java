@@ -3,6 +3,7 @@ package com.luxof.lapisworks.blocks.entities;
 import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.iota.EntityIota;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.mixinsupport.ControlCircleTickSpeed;
@@ -20,7 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 public class SimpleImpetusEntity extends BlockEntityAbstractImpetus {
-    private String angSig = "";
+    private HexPattern pattern = null;
     // because bookkeeper's - exists
     private boolean tuned = false;
     private UUID plr = null;
@@ -55,7 +56,8 @@ public class SimpleImpetusEntity extends BlockEntityAbstractImpetus {
     @Override
     protected void saveModData(NbtCompound nbt) {
         super.saveModData(nbt);
-        nbt.putString(TAG_TUNED_PAT, angSig);
+        if (pattern != null)
+            nbt.put(TAG_TUNED_PAT, pattern.serializeToNBT());
         nbt.putBoolean(TAG_IS_TUNED, tuned);
         if (plr != null) {
             nbt.putUuid(TAG_PLAYER, plr);
@@ -67,7 +69,8 @@ public class SimpleImpetusEntity extends BlockEntityAbstractImpetus {
     @Override
     protected void loadModData(NbtCompound nbt) {
         super.loadModData(nbt);
-        angSig = nbt.getString(TAG_TUNED_PAT);
+        if (nbt.contains(TAG_TUNED_PAT))
+            pattern = HexPattern.fromNBT(nbt.getCompound(TAG_TUNED_PAT));
         tuned = nbt.getBoolean(TAG_IS_TUNED);
         if (nbt.contains(TAG_PLAYER)) {
             plr = nbt.getUuid(TAG_PLAYER);
@@ -81,20 +84,20 @@ public class SimpleImpetusEntity extends BlockEntityAbstractImpetus {
      * <p><code>isValidPat</code> makes sure an untuned Simple Impetus doesn't go off on an invalid
      * pattern. */
     public boolean tryTrigger(String pat, boolean isValidPat, @Nullable ServerPlayerEntity sp) {
-        // so == checks identity, while .equals(Object) checks whatever the type on the left says
-        // it should, so you should use .equals(Object) whenever it's a non-primitive. Qhar??
-        if ((!tuned && isValidPat) || angSig.equals(pat)) startExecution(sp);
-        return tuned && angSig.equals(pat);
+        boolean signatureMatches = pattern.anglesSignature().equals(pat);
+
+        if ((!tuned && isValidPat) || signatureMatches) startExecution(sp);
+        return tuned && signatureMatches;
     }
 
-    public void tune(String pat, boolean tuneOrNot) {
+    public void tune(HexPattern pattern, boolean tuneOrNot) {
         // looks explainable in the game data when i clear angSig too.
         tuned = tuneOrNot;
-        angSig = tuneOrNot ? pat : "";
+        pattern = tuneOrNot ? pattern : null;
     }
 
-    public String getTuned() { return angSig; }
-
+    public String getTuned() { return pattern.anglesSignature(); }
+    public HexPattern getTunedPattern() { return pattern; }
     public boolean getIsTuned() { return tuned; }
 
     @Nullable

@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.eval.OperationResult;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
@@ -40,7 +41,7 @@ public class TeachSImp implements SpellAction {
         );
 
         return new SpellAction.Result(
-            new Spell(blockEntity, OperatorUtils.getPattern(args, 1, getArgc()).anglesSignature()),
+            new Spell(blockEntity, OperatorUtils.getPattern(args, 1, getArgc())),
             MediaConstants.DUST_UNIT * 2,
             List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 2, 15)),
             1
@@ -49,16 +50,16 @@ public class TeachSImp implements SpellAction {
 
     public class Spell implements RenderedSpell {
         public final SimpleImpetusEntity blockEntity;
-        public final String angSig;
+        public final HexPattern pattern;
 
-        public Spell(SimpleImpetusEntity blockEntity, String angSig) {
+        public Spell(SimpleImpetusEntity blockEntity, HexPattern pattern) {
             this.blockEntity = blockEntity;
-            this.angSig = angSig;
+            this.pattern = pattern;
         }
 
 		@Override
 		public void cast(CastingEnvironment ctx) {
-            this.blockEntity.tune(angSig, true);
+            this.blockEntity.tune(pattern, true);
             this.blockEntity.markDirty();
 		}
 
