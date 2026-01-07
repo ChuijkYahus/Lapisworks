@@ -14,7 +14,7 @@ import java.util.List;
 
 import net.minecraft.nbt.NbtCompound;
 
-public class SpellActionNCT implements SpellAction {
+public class SpellActionNCT implements SpellAction, NCTHelpers {
 
     public Result execute(HexIotaStack stack, CastingEnvironment ctx) {
         throw new IllegalStateException("call executeWithUserdata instead.");

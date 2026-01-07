@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.SpellList;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs;
 
 import com.mojang.datafixers.util.Either;
 
@@ -21,7 +22,8 @@ import net.minecraft.util.math.Vec3d;
 public class HexIotaStack {
     public List<? extends Iota> stack;
     public int argc;
-    public CastingEnvironment ctx;
+    /** keeping you believing in magic, one stupid implementation at a time */
+    protected CastingEnvironment ctx;
 
     public HexIotaStack(
         List<? extends Iota> stack,
@@ -29,7 +31,6 @@ public class HexIotaStack {
         CastingEnvironment ctx
     ) { this.stack = stack; this.argc = argc; this.ctx = ctx; }
 
-    public Iota get(int idx) { return stack.get(idx); }
     public BlockPos getBlockPos(int idx) { return OperatorUtils.getBlockPos(stack, idx, argc); }
     public boolean getBool(int idx) { return OperatorUtils.getBool(stack, idx, argc); }
     public double getDouble(int idx) { return OperatorUtils.getDouble(stack, idx, argc); }
@@ -55,6 +56,13 @@ public class HexIotaStack {
     public long getPositiveLong(int idx) { return OperatorUtils.getPositiveLong(stack, idx, argc); }
     public Vec3d getVec3(int idx) { return OperatorUtils.getVec3(stack, idx, argc); }
 
+    public Iota get(int idx) {
+        try {
+            return stack.get(idx);
+        } catch (IndexOutOfBoundsException e) {
+            throw new MishapNotEnoughArgs(idx + 1, stack.size());
+        }
+    }
     public BlockPos getBlockPosInRange(int idx) {
         BlockPos ret = getBlockPos(idx);
         ctx.assertPosInRange(ret);
