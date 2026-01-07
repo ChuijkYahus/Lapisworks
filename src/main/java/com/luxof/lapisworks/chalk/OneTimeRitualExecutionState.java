@@ -13,6 +13,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -48,18 +49,9 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
     }
 
     @Override
-    public long extractMedia(long cost, boolean simulate) {
-        long take = Math.min(cost, media);
-        cost -= take;
-        if (!simulate) media -= take;
-        return cost;
-    }
-
-    @Override
-    public void printMessage(Text message, ServerWorld world) {
-        ServerPlayerEntity caster = getCaster(world);
-        if (caster == null) return;
-        caster.sendMessage(message);
+    public boolean isVecInAmbit(Vec3d vec, ServerWorld world) {
+        return isVecInAmbitOfPlayer(vec, world, 0.5)
+            || isVecInAmbitOfTuneableAmethyst(vec, world, 1);
     }
 
     @Override
@@ -78,6 +70,21 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
             base.pigment(),
             nbt.getLong("media")
         );
+    }
+
+    @Override
+    public long extractMedia(long cost, boolean simulate) {
+        long take = Math.min(cost, media);
+        cost -= take;
+        if (!simulate) media -= take;
+        return cost;
+    }
+
+    @Override
+    public void printMessage(Text message, ServerWorld world) {
+        ServerPlayerEntity caster = getCaster(world);
+        if (caster == null) return;
+        caster.sendMessage(message);
     }
 
     @Override

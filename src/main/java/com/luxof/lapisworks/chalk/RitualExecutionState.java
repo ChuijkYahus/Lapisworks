@@ -2,9 +2,15 @@ package com.luxof.lapisworks.chalk;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.lib.HexAttributes;
+
+import com.luxof.lapisworks.blocks.entities.TuneableAmethystEntity;
+import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
+import com.luxof.lapisworks.mixinsupport.RitualsUtil;
 
 import java.util.UUID;
 
@@ -18,8 +24,6 @@ import net.minecraft.util.math.Vec3d;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
-
 public abstract class RitualExecutionState {
     public BlockPos currentPos;
     /** for intersections. In case of 3-ways where forward exists not, simply pick a random side. */
@@ -27,6 +31,7 @@ public abstract class RitualExecutionState {
     public CastingImage currentImage;
     @Nullable public UUID caster;
     @Nullable public FrozenPigment pigment;
+    @Nullable public Iota tunedFrequency;
 
     protected RitualExecutionState(
         BlockPos currentPos,
@@ -40,6 +45,22 @@ public abstract class RitualExecutionState {
         this.currentImage = currentImage;
         this.caster = caster;
         this.pigment = pigment;
+        this.tunedFrequency = null;
+    }
+    protected RitualExecutionState(
+        BlockPos currentPos,
+        Direction forward,
+        CastingImage currentImage,
+        @Nullable UUID caster,
+        @Nullable FrozenPigment pigment,
+        @Nullable Iota tunedFrequency
+    ) {
+        this.currentPos = currentPos;
+        this.forward = forward;
+        this.currentImage = currentImage;
+        this.caster = caster;
+        this.pigment = pigment;
+        this.tunedFrequency = tunedFrequency;
     }
     protected RitualExecutionState(
         NbtCompound nbt,
@@ -62,6 +83,55 @@ public abstract class RitualExecutionState {
         return pigment;
     }
 
+    public boolean isVecInAmbitOfPlayer(Vec3d vec, ServerWorld world, double ambitMult) {
+        ServerPlayerEntity caster = getCaster(world);
+        if (caster == null) return false;
+
+
+        double playerAmbit = caster.getAttributeValue(HexAttributes.AMBIT_RADIUS) * ambitMult;
+        if (caster.getPos().squaredDistanceTo(vec) <= playerAmbit*playerAmbit) return true;
+
+
+        Sentinel sentinel = HexAPI.instance().getSentinel(caster);
+        double sentinelAmbit = caster.getAttributeValue(HexAttributes.SENTINEL_RADIUS);
+        if (
+            sentinel != null &&
+            sentinel.extendsRange() &&
+            sentinel.position().squaredDistanceTo(vec) <=
+                (sentinelAmbit*sentinelAmbit + 0.00000000001) * ambitMult
+        )
+            return true;
+        
+
+        EnchSentInterface enchantedSentinel = (EnchSentInterface)caster;
+        Vec3d enchSentPos = enchantedSentinel.getEnchantedSentinel();
+        double enchSentAmbit = enchantedSentinel.getEnchantedSentinelAmbit();
+        if (
+            enchSentPos != null &&
+            enchSentPos.squaredDistanceTo(vec) <= enchSentAmbit*enchSentAmbit * ambitMult
+        )
+            return true;
+
+
+        return false;
+    }
+    public boolean isVecInAmbitOfTuneableAmethyst(Vec3d vec, ServerWorld world, double ambitMult) {
+        RitualsUtil ritualsUtil = (RitualsUtil)world;
+
+        if (tunedFrequency == null) return false;
+
+        for (BlockPos tunedPos : ritualsUtil.getTuneables(tunedFrequency)) {
+            TuneableAmethystEntity tuned = (TuneableAmethystEntity)world.getBlockEntity(tunedPos);
+
+            if (tunedPos.getSquaredDistance(vec) <= tuned.getAmbitSqr()*ambitMult)
+                return true;
+        }
+
+        return false;
+    }
+    public abstract boolean isVecInAmbit(Vec3d vec, ServerWorld world);
+
+
     protected void saveBase(NbtCompound nbt) {
         NbtCompound posNbt = new NbtCompound();
         posNbt.putInt("x", currentPos.getX());
@@ -78,54 +148,16 @@ public abstract class RitualExecutionState {
 
         if (pigment != null)
             nbt.put("pigment", pigment.serializeToNBT());
+
+        if (tunedFrequency != null)
+            nbt.put("tuned", tunedFrequency.serialize());
     }
-
-
     public abstract void save(NbtCompound nbt);
     public NbtCompound save() {
         NbtCompound nbt = new NbtCompound();
         save(nbt);
         return nbt;
     }
-    public abstract long extractMedia(long cost, boolean simulate);
-    public abstract void printMessage(Text message, ServerWorld world);
-    public boolean isVecInHalfAmbitOfCaster(Vec3d vec, ServerWorld world) {
-        ServerPlayerEntity caster = getCaster(world);
-        if (caster == null) return false;
-
-
-        double playerAmbit = caster.getAttributeValue(HexAttributes.AMBIT_RADIUS) / 2;
-        if (caster.getPos().squaredDistanceTo(vec) <= playerAmbit*playerAmbit) return true;
-
-
-        Sentinel sentinel = HexAPI.instance().getSentinel(caster);
-        double sentinelAmbit = caster.getAttributeValue(HexAttributes.SENTINEL_RADIUS);
-        if (
-            sentinel != null &&
-            sentinel.extendsRange() &&
-            sentinel.position().squaredDistanceTo(vec) <=
-                (sentinelAmbit*sentinelAmbit + 0.00000000001) / 2
-        )
-            return true;
-        
-
-        EnchSentInterface enchantedSentinel = (EnchSentInterface)caster;
-        Vec3d enchSentPos = enchantedSentinel.getEnchantedSentinel();
-        double enchSentAmbit = enchantedSentinel.getEnchantedSentinelAmbit();
-        if (
-            enchSentPos != null &&
-            enchSentPos.squaredDistanceTo(vec) <= enchSentAmbit*enchSentAmbit / 2
-        )
-            return true;
-
-
-        return false;
-    }
-    public boolean isVecInAmbit(Vec3d vec, ServerWorld world) {
-        return isVecInHalfAmbitOfCaster(vec, world);
-    }
-    /** Returns whether to continue. */
-    public abstract boolean tick(ServerWorld world);
 
 
     protected static final record BaseConstructorArguments (
@@ -133,7 +165,8 @@ public abstract class RitualExecutionState {
         Direction forward,
         CastingImage currentImage,
         @Nullable UUID caster,
-        @Nullable FrozenPigment pigment
+        @Nullable FrozenPigment pigment,
+        @Nullable Iota tunedFrequency
     ) {}
     protected static BaseConstructorArguments loadBase(NbtCompound nbt, ServerWorld world) {
         NbtCompound posNbt = nbt.getCompound("currentPos");
@@ -145,7 +178,7 @@ public abstract class RitualExecutionState {
 
         Direction forward = Direction.byName(nbt.getString("forward"));
 
-        CastingImage currentImage = CastingImage.loadFromNbt(nbt.getCompound("image"), world);
+        CastingImage img = CastingImage.loadFromNbt(nbt.getCompound("image"), world);
 
         UUID caster = null;
         if (nbt.contains("caster")) caster = nbt.getUuid("caster");
@@ -153,6 +186,15 @@ public abstract class RitualExecutionState {
         FrozenPigment pigment = null;
         if (nbt.contains("pigment")) pigment = FrozenPigment.fromNBT(nbt.getCompound("pigment"));
 
-        return new BaseConstructorArguments(currentPos, forward, currentImage, caster, pigment);
+        Iota tuned = null;
+        if (nbt.contains("tuned")) tuned = IotaType.deserialize(nbt.getCompound("tuned"), world);
+
+        return new BaseConstructorArguments(currentPos, forward, img, caster, pigment, tuned);
     }
+
+
+    public abstract long extractMedia(long cost, boolean simulate);
+    public abstract void printMessage(Text message, ServerWorld world);
+    /** Returns whether to continue. */
+    public abstract boolean tick(ServerWorld world);
 }

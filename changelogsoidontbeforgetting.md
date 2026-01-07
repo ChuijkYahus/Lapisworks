@@ -211,27 +211,32 @@ Locked in rah
 - Amethyst/Chalk Rituals (pre-enlightenment)  
   - same-plane-only (no wall-to-floor or wall-to-ceiling etc.)
   - 5 patterns per chalk on ground max
-    - one block per three ticks
-    - setting patterns requires a piece of amel  
-      in-lore this is explained as the amel attracting the flow of media and fulfilling the patterns
-    - clearing does not
   - plant little chunks of amethyst (like large amethyst buds but thinner)
     - tune them with Tune Media (costs amel)
     - rituals with the same frequency have ambit around that chunk of amethyst now
     - by default has 1 block of ambit, that being the tuned amethyst itself. this is the lower limit
       - Deposit Media to make the ambit larger (upper limit of 32 blocks maybe?)
       - Withdraw Media to make the ambit smaller
+      - radius of ambit = sqrt(deposited media)
   - draw a BIG ASS fucking pattern on the ground
     - 9 blocks of chalk-with-pattern on the ground make a multiblock
-    - media discount
+    - media discount (20%?)
     - uses your staff stack and casts as you with your ambit
-    - one-time use
+    - burns up after use
   - one-time rituals
-    - right click with media item
-    - that media item becomes the media source for that ritual
+    - right click with media item to absorb all of it into the ritual
+      - alternatively Deposit Media
     - ritual burns chalk as it goes
-    - ritual uses half your ambit and half your greater sentinel's ambit
-- chalk_connectable block tag
+    - ritual uses half your ambit (including gsent and enchsent)
+    - hotswap tuned frequency and whether or not it casts as the starter
+    - casting as the starter determines if it uses your ambit
+  - permanent rituals
+    - right click the start block
+    - ritual does not burn chalk as it goes
+    - rituals uses 1/8th of your ambit (including gsent and enchsent)
+    - tuned frequency and whether or not it casts as the caster must be configured in the start block
+    - casting as the starter determines if it uses your ambit
+- chalk_connectable block tag (all chalk attempts to connect to blocks in this tag)
 - Enchanted Brewery
   - Imbue 10 Amel into a Brewing Stand
   - 1.5x blaze usage for 2x speed
@@ -330,7 +335,7 @@ Locked in rah
     "Jacks" are jacks of all trades, and start with 2-3 levels of exp on every possible profession  
     - (but no trades until they pick one of those professions)
     - they're called "Jacks" because they're jacks of all trades
-  - FUCKING UNICORNS  
+  - FUCKING UNICORNS
 	  - IMBUE A SIMPLE MIND INTO A HORSE AND USE 128 AMEL
     - After being made, a Unicorn develops an affinity for you (and so is bound to you).
     - You can only have one Unicorn bound to you (any attempts to make more fail).
@@ -370,7 +375,6 @@ Locked in rah
 - Enchanted Scroll
   - It's literally a Hex Casting IDE.  
 - Enchantweave? (formerly part of Hexic interop)
-- blacksmithing in hex casting (Sleepyboi's profession is far too cool not to add)
 # 1.6.0
 - You can have four arms now (procrastination slain)
   - Your third and fourth arms can auto-cast 20x a second  
@@ -400,12 +404,28 @@ iotic blocks interop
 
 addons that may have interesting interop ideas waiting to be had but idk yet:  
 - hexcassettes? (`for i in range(n): enqueue(spell, tick_delay)`-like pattern?)
+- Hexpose interop
+  - spell to remove a status effect from the entity that has it
+    - negative effects take power^2*time_multiplier dust to remove the status effect
+    - positive effects take power^3*time_multiplier dust to remove the status effect
 - hexchanting
+  - modify the existing items to have spellbook-like functionality!
+  - "i'm applying everything i've learned" or something
+  - i'd hate to add superior stuff with amel infusion..
+  - i don't want people downloading hexchanting just because of lapisworks
+  - what do i do?
+- complexhex
+  - add qubits to hex casting (this is useless lmao)
 - hexmachina
 - slate works
+  - make a loci that enhances cleric ambit around player to chalk circle levels!
+  - costs amel
 - ephemera
 - hexdeco
 - heartxxy
+  - uhhh???
+  - instant adult-ification spell, i guess?
+  - like the counterpart to Hastenature, i mean
 - scryglass
   - add the ability to unfocus your mouse
   - add buttons
@@ -436,9 +456,10 @@ KING CRIMSON (so what part, exactly, of this is Lapisworks-y?)
 - caster is not locked in to that movement  
 
 port twokai's ideal condition  
-~~port hexxy dimensions~~ pool and scepticake took it  
+~~port hexxy dimensions~~ ~~pool and~~ scepticake took it  
 Ra's Gambit
-- think up something motherfucker  
+- think up something motherfucker
+- this name is way too fucking cool not to use!  
 Gene Editing (as an extension of the 4-arm-getting system) and Entity Creation
 - making yourself a vampire is possible  
 

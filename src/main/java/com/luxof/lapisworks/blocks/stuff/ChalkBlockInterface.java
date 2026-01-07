@@ -7,7 +7,7 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
 import com.luxof.lapisworks.chalk.OneTimeRitualExecutionState;
-import com.luxof.lapisworks.mixinsupport.OneTimeRitualsControl;
+import com.luxof.lapisworks.mixinsupport.RitualsUtil;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,7 +39,7 @@ public interface ChalkBlockInterface {
         else if (world.isClient) return ActionResult.SUCCESS;
 
         Vec3d playerFacing = player.getRotationVector();
-        ((OneTimeRitualsControl)world).addRitual(new OneTimeRitualExecutionState(
+        ((RitualsUtil)world).addRitual(new OneTimeRitualExecutionState(
             pos,
             Direction.getFacing(playerFacing.x, playerFacing.y, playerFacing.z),
             new CastingImage(),

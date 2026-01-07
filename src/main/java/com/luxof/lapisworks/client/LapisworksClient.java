@@ -228,6 +228,7 @@ public class LapisworksClient implements ClientModInitializer {
             overlayWorld(ctx.matrixStack(), ctx.tickDelta());
         });
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MIND_BLOCK, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TUNEABLE_AMETHYST, RenderLayer.getCutout());
 
         KeyEvents.staticInit();
         ClientTickEvents.END_CLIENT_TICK.register(KeyEvents::endClientTick);
