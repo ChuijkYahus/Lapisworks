@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.lib.HexAttributes;
@@ -29,9 +30,9 @@ public abstract class RitualExecutionState {
     /** for intersections. In case of 3-ways where forward exists not, simply pick a random side. */
     @Nullable public Direction forward;
     public CastingImage currentImage;
-    @Nullable public UUID caster;
-    @Nullable public FrozenPigment pigment;
-    @Nullable public Iota tunedFrequency;
+    @Nullable protected UUID caster;
+    @Nullable protected FrozenPigment pigment;
+    @Nullable protected Iota tunedFrequency;
 
     protected RitualExecutionState(
         BlockPos currentPos,
@@ -75,12 +76,20 @@ public abstract class RitualExecutionState {
         if (world.getEntity(caster) instanceof ServerPlayerEntity sp) return sp;
         return null;
     }
-    public FrozenPigment getPigment() {
-        return pigment;
-    }
+    @Nullable public FrozenPigment getPigment() { return pigment; }
+    @Nullable
     public FrozenPigment setPigment(@Nullable FrozenPigment pigment) {
+        FrozenPigment old = this.pigment;
         this.pigment = pigment;
-        return pigment;
+        return old;
+    }
+    @Nullable public Iota getTunedFrequency() { return tunedFrequency; }
+    /** to clear, you can also pass in a NullIota. */
+    @Nullable
+    public Iota setTunedFrequency(@Nullable Iota frequency) {
+        Iota old = tunedFrequency;
+        tunedFrequency = frequency instanceof NullIota ? null : frequency;
+        return old;
     }
 
     public boolean isVecInAmbitOfPlayer(Vec3d vec, ServerWorld world, double ambitMult) {

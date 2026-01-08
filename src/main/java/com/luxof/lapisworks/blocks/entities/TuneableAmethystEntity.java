@@ -38,24 +38,22 @@ public class TuneableAmethystEntity extends BlockEntity implements LinkableMedia
     public double getAmbit() { return Math.sqrt(media); }
     public double getAmbitSqr() { return media; }
 
-    /** to clear the tuned frequency, pass in a NullIota. */
-    public void tune(Iota frequency) {
+    /** to clear, you can also pass in a NullIota.
+     * <p>Server-only method. Throws if on client. */
+    public void tune(@Nullable Iota frequency) {
         // i'd do @Environment(EnvType.CLIENT) but that shit makes it disappear on the server(?!)
-        if (world.isClient) return;
+        if (world.isClient) throw new IllegalStateException("Server-only method.");
         RitualsUtil ritualsUtil = (RitualsUtil)world;
 
         if (tunedFrequency != null) {
-            if (Iota.tolerates(tunedFrequency, frequency)) return;
+            if (frequency != null && Iota.tolerates(tunedFrequency, frequency)) return;
 
             ritualsUtil.getTuneables(tunedFrequency).remove(pos);
         }
 
-        if (frequency instanceof NullIota)
-            tunedFrequency = null;
-        else {
-            tunedFrequency = frequency;
+        tunedFrequency = frequency instanceof NullIota ? null : frequency;
+        if (tunedFrequency != null)
             ritualsUtil.addTuneable(tunedFrequency, pos);
-        }
         save();
     }
     public Iota getTunedFrequency() { return tunedFrequency; }

@@ -1,4 +1,4 @@
-package com.luxof.lapisworks.actions.interact;
+package com.luxof.lapisworks.actions.ritual;
 
 import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
@@ -27,7 +27,7 @@ public class TuneAmethyst extends SpellActionNCT {
 
         return new Result(
             new Spell(pos, iota),
-            dust(0.01),
+            charged(1),
             List.of(),
             1
         );
