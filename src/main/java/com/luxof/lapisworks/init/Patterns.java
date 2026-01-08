@@ -139,6 +139,7 @@ public class Patterns {
         register("be_me", "qqqqqwqqq", HexDir.EAST, new EnableCaster());
         register("are_u_me", "aqqqwqqqd", HexDir.EAST, new IsCasterDisabled());
         register("tune_amethyst", "wewdwewedewaqwedwqa", HexDir.SOUTH_EAST, new TuneAmethyst());
+        register("tune_ritual", "wdwewdwdwwqdeddwqdeddwwqeeeeewdqdqdqdqdqde", HexDir.NORTH_WEST, new TuneRitual());
 
         // hol up, let him cook
         // i said LET HIM COOK
