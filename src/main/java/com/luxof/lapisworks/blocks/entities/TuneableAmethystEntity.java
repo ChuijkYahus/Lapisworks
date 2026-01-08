@@ -12,9 +12,6 @@ import com.luxof.lapisworks.mixinsupport.RitualsUtil;
 
 import java.util.Set;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -42,8 +39,9 @@ public class TuneableAmethystEntity extends BlockEntity implements LinkableMedia
     public double getAmbitSqr() { return media; }
 
     /** to clear the tuned frequency, pass in a NullIota. */
-    @Environment(EnvType.SERVER)
     public void tune(Iota frequency) {
+        // i'd do @Environment(EnvType.CLIENT) but that shit makes it disappear on the server(?!)
+        if (world.isClient) return;
         RitualsUtil ritualsUtil = (RitualsUtil)world;
 
         if (tunedFrequency != null) {
