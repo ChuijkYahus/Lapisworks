@@ -8,13 +8,15 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 
+import com.luxof.lapisworks.mixinsupport.GetVAULT;
+
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
 
 import java.util.List;
 
 import net.minecraft.nbt.NbtCompound;
 
-public class SpellActionNCT implements SpellAction, NCTHelpers {
+public class SpellActionNCT extends NCTBase implements SpellAction {
 
     public Result execute(HexIotaStack stack, CastingEnvironment ctx) {
         throw new IllegalStateException("call executeWithUserdata instead.");
@@ -39,11 +41,15 @@ public class SpellActionNCT implements SpellAction, NCTHelpers {
 
     @Override
     public Result execute(List<? extends Iota> stack, CastingEnvironment ctx) {
+        this.world = ctx.getWorld();
+        this.vault = ((GetVAULT)ctx).grabVAULT();
         return execute(new HexIotaStack(stack, getArgc(), ctx), ctx);
     }
 
     @Override
     public Result executeWithUserdata(List<? extends Iota> arg0, CastingEnvironment arg1, NbtCompound arg2) {
+        this.world = arg1.getWorld();
+        this.vault = ((GetVAULT)arg1).grabVAULT();
         return executeWithUserdata(new HexIotaStack(arg0, getArgc(), arg1), arg1, arg2);
     }
 

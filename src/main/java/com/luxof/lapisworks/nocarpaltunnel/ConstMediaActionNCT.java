@@ -7,11 +7,13 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 
+import com.luxof.lapisworks.mixinsupport.GetVAULT;
+
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
 
 import java.util.List;
 
-public abstract class ConstMediaActionNCT implements ConstMediaAction, NCTHelpers {
+public abstract class ConstMediaActionNCT extends NCTBase implements ConstMediaAction {
     public List<? extends Iota> execute(HexIotaStack stack, CastingEnvironment ctx) {
         throw new IllegalStateException("call executeWithOpCount instead.");
     }
@@ -27,11 +29,15 @@ public abstract class ConstMediaActionNCT implements ConstMediaAction, NCTHelper
 
     @Override
     public List<Iota> execute(List<? extends Iota> arg0, CastingEnvironment arg1) {
+        this.world = arg1.getWorld();
+        this.vault = ((GetVAULT)arg1).grabVAULT();
         return execute(new HexIotaStack(arg0, getArgc(), arg1), arg1).stream().map(it -> (Iota)it).toList();
     }
 
     @Override
     public CostMediaActionResult executeWithOpCount(List<? extends Iota> arg0, CastingEnvironment arg1) {
+        this.world = arg1.getWorld();
+        this.vault = ((GetVAULT)arg1).grabVAULT();
         return executeWithOpCount(new HexIotaStack(arg0, getArgc(), arg1), arg1);
     }
 
