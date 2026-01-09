@@ -11,7 +11,7 @@
         },
         {
             "type": "patchouli:crafting",
-            "recipe": "lapisworks:base/energy_container",
+            "recipe": "lapisworks:base/chalk",
             "text": "pages.lapisworks.imbuement.rituals.chalk.recipe.text"
         }
     ]
