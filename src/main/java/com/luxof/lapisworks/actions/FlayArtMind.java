@@ -13,7 +13,6 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadEntity;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
 import com.luxof.lapisworks.init.ModBlocks;
@@ -26,6 +25,7 @@ import static com.luxof.lapisworks.LapisworksIDs.FULL_SIMPLE_MIND;
 import static com.luxof.lapisworks.LapisworksIDs.INFUSEABLE_WITH_SMIND;
 import static com.luxof.lapisworks.LapisworksIDs.MIND_BLOCK;
 import static com.luxof.lapisworks.MishapThrowerJava.getBlockPosOrEntity;
+import static com.luxof.lapisworks.MishapThrowerJava.throwIfEmpty;
 
 import com.mojang.datafixers.util.Either;
 
@@ -69,15 +69,12 @@ public class FlayArtMind implements SpellAction {
 
         // be funny. come on. try it.
         BlockPos mindPos = OperatorUtils.getBlockPos(args, 1, getArgc());
-        MindEntity blockEntity = MishapThrowerJava.throwIfEmpty(
+        MindEntity blockEntity = throwIfEmpty(
             ctx.getWorld().getBlockEntity(mindPos, ModBlocks.MIND_ENTITY_TYPE),
             new MishapBadBlock(mindPos, MIND_BLOCK)
         );
         if (blockEntity.mindCompletion < 100f) {
-            MishapThrowerJava.throwMishap(new MishapBadBlock(
-                mindPos,
-                FULL_SIMPLE_MIND
-            ));
+            throw new MishapBadBlock(mindPos, FULL_SIMPLE_MIND);
         }
         blockEntity.mindCompletion = 0F;
 

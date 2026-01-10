@@ -64,7 +64,7 @@ public class CradleEntity extends BlockEntity implements Inventory, LinkableMedi
             persistentUUID = UUID.randomUUID();
             heldEntity.discard();
             heldEntity = null;
-            markDirty();
+            this.markDirty();
             return;
         }
 
@@ -87,7 +87,7 @@ public class CradleEntity extends BlockEntity implements Inventory, LinkableMedi
             ((ItemEntityMinterface)heldEntity).setBlockPosOfCradle(this.pos);
             sWorld.spawnEntity(heldEntity);
         }
-        markDirty();
+        this.markDirty();
     }
 
     public void configureItemEntity() {
@@ -141,7 +141,7 @@ public class CradleEntity extends BlockEntity implements Inventory, LinkableMedi
     public void clear() {
         heldStack = ItemStack.EMPTY.copy();
         updateItemEntity();
-        markDirty();
+        this.markDirty();
     }
 
     @Override
@@ -158,7 +158,7 @@ public class CradleEntity extends BlockEntity implements Inventory, LinkableMedi
         if (slot != 0) return ItemStack.EMPTY.copy();
         heldStack = ItemStack.EMPTY.copy();
         updateItemEntity();
-        markDirty();
+        this.markDirty();
         return heldStack;
     }
 
@@ -167,7 +167,7 @@ public class CradleEntity extends BlockEntity implements Inventory, LinkableMedi
         if (slot != 0) return ItemStack.EMPTY.copy();
         ItemStack removed = heldStack.split(amount);
         updateItemEntity();
-        markDirty();
+        this.markDirty();
         return removed;
     }
 
@@ -176,7 +176,7 @@ public class CradleEntity extends BlockEntity implements Inventory, LinkableMedi
         if (slot != 0) return;
         heldStack = stack;
         updateItemEntity();
-        markDirty();
+        this.markDirty();
     }
 
     @Override

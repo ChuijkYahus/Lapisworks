@@ -1,0 +1,7 @@
+{
+  "name": "categories.lapisworks.lapisworks.imbuement.rituals.title",
+  "icon": "lapisworks:chalk",
+  "description": "categories.lapisworks.lapisworks.imbuement.rituals.desc",
+  "parent": "hexcasting:lapisworks/imbuement",
+  "sortnum": 0
+}

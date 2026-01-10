@@ -14,6 +14,7 @@ import com.luxof.lapisworks.actions.*;
 import com.luxof.lapisworks.actions.great.*;
 import com.luxof.lapisworks.actions.interact.*;
 import com.luxof.lapisworks.actions.misc.*;
+import com.luxof.lapisworks.actions.ritual.*;
 import com.luxof.lapisworks.actions.scry.*;
 
 import static com.luxof.lapisworks.Lapisworks.id;
@@ -34,6 +35,7 @@ public class Patterns {
         register(
             "archon_of_meaninglessness",
             // stupid signature that no one will use.
+            // i wonder if hexcessible makes this available to all lmao.
             "eedqaqddadwddwaeaeadaeqaddwedwqdadedaqqwwqqewwwaeaedqqwwwqwawaedwqqdwwaqweeeqeeewawdwqe",
             HexDir.WEST,
             new DoNothing()
@@ -110,6 +112,7 @@ public class Patterns {
         register("the_cooler_halt", "wawqwdwewew", HexDir.SOUTH_WEST, new OpTheCoolerHalt());
         register("for_n_in_range", "aqadadad", HexDir.NORTH_WEST, new OpForNInRange(false));
         register("execute_many_times", "dedadada", HexDir.SOUTH_WEST, new OpForNInRange(true));
+        register("hadamard", "awddwde", HexDir.WEST, new Hadamard());
 
         register("thought_sieve", "qadaadadqaqdadqaq", HexDir.WEST, new HexResearchYoink());
         register("absorb_mind", "aawqqwqqqaede", HexDir.WEST, new MindLiquefaction());
@@ -129,8 +132,14 @@ public class Patterns {
         // the term Phianglement comes from Miyu. it's like quantum entanglement but for phials
         register("phiangle", "wadqaqdawewadqaqdaw", HexDir.NORTH_EAST, new LinkCondensers());
         register("dephiangle", "wwqaqwwdwawwedeww", HexDir.SOUTH_WEST, new UnlinkCondensers());
-        register("get_condenser_media", "wddwqwddweqeee", HexDir.NORTH_WEST, new GetCondenserMedia());
+        register("get_condenser_mdia", "wddwqwddweqeee", HexDir.NORTH_WEST, new GetCondenserMedia());
         register("get_linkable_links", "qaqdaweqaqewaqwawaw", HexDir.NORTH_EAST, new GetLinkableLinks());
+
+        register("stop_be_me", "adaqqqwqqq", HexDir.EAST, new DisableCaster());
+        register("be_me", "qqqqqwqqq", HexDir.EAST, new EnableCaster());
+        register("are_u_me", "aqqqwqqqd", HexDir.EAST, new IsCasterDisabled());
+        register("tune_amethyst", "wewdwewedewaqwedwqa", HexDir.SOUTH_EAST, new TuneAmethyst());
+        register("tune_ritual", "wdwewdwdwwqdeddwqdeddwwqeeeeewdqdqdqdqdqde", HexDir.NORTH_WEST, new TuneRitual());
 
         // hol up, let him cook
         // i said LET HIM COOK

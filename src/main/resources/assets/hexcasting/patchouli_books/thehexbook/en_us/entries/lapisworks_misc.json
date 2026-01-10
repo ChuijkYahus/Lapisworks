@@ -140,6 +140,14 @@
             "input": "num, [pattern]",
             "output": "",
             "text": "pages.lapisworks.lapisworks_misc.execute_many_times.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:hadamard",
+            "anchor": "lapisworks:hadamard",
+            "input": "vec, vec",
+            "output": "vec",
+            "text": "pages.lapisworks.lapisworks_misc.hadamard.summary"
         }
     ]
 }

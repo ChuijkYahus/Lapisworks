@@ -4,10 +4,10 @@ import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
-import com.luxof.lapisworks.SpellActionNoCarpalTunnel;
 import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
+import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
+import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 
-import static com.luxof.lapisworks.MishapThrowerJava.assertInRange;
 import static com.luxof.lapisworks.MishapThrowerJava.assertIsLinked;
 import static com.luxof.lapisworks.MishapThrowerJava.assertLinkableThere;
 
@@ -16,16 +16,13 @@ import java.util.List;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 
-public class UnlinkCondensers extends SpellActionNoCarpalTunnel {
+public class UnlinkCondensers extends SpellActionNCT {
     public int argc = 2;
 
     @Override
-    public Result execute(hexStack stack, CastingEnvironment ctx) {
-        BlockPos pos1 = stack.getBlockPos(0);
-        BlockPos pos2 = stack.getBlockPos(1);
-
-        assertInRange(ctx, pos1);
-        assertInRange(ctx, pos2);
+    public Result execute(HexIotaStack stack, CastingEnvironment ctx) {
+        BlockPos pos1 = stack.getBlockPosInRange(0);
+        BlockPos pos2 = stack.getBlockPosInRange(1);
 
         LinkableMediaBlock linkable1 = assertLinkableThere(pos1, ctx);
         assertLinkableThere(pos2, ctx);
@@ -43,7 +40,7 @@ public class UnlinkCondensers extends SpellActionNoCarpalTunnel {
         );
     }
     
-    public class Spell implements RenderedSpellNoCarpalTunnel {
+    public class Spell implements RenderedSpellNCT {
         public final BlockPos pos1;
         public final BlockPos pos2;
         public Spell(BlockPos pos1, BlockPos pos2) {

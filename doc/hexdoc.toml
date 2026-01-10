@@ -5,8 +5,9 @@ default_branch = "main"
 
 resource_dirs = [  # top takes priority
     "resources",
-    "{$_common.src}/main/resources",
-    { path="{$_common.src}/generated/resources", required=false },
+    "{$_project.src}/main/resources",
+    { path="{$_project.src}/generated/resources", required=false },
+    { modid="hexical" },
     { modid="hexcasting" },
     { modid="minecraft" },
     { modid="hexdoc" },
@@ -14,9 +15,11 @@ resource_dirs = [  # top takes priority
 export_dir = "src/hexdoc_lapisworks/_export/generated"
 
 [template]
+# TODO: change this to point to your actual mod icon
 icon = "icon.png"
 include = [
     "lapisworks",
+    "hexical",
     "hexcasting",
     "hexdoc",
 ]
@@ -38,7 +41,6 @@ show_landing_text = false
 # wtf?? whatever, at least it's never shown in the book.
 "lapisworks:amel_constructs/focus_necklace/1_worn" = { texture = "lapisworks:textures/item/focus_necklace_worn.png" }
 "lapisworks:amel_constructs/focus_necklace/2_worn" = { texture = "lapisworks:textures/item/focus_necklace2_worn.png" }
-"hexical:media_jar" = { texture = "lapisworks:textures/doc/media_jar.png" }
 
 [flags]
 "lapisworks:no_fulllapixical" = false
@@ -49,12 +51,11 @@ _pattern_regex = { "!Raw" = '(?P<is_per_world>register|registerPerWorld)\("(?P<n
 _per_world_value = "registerPerWorld"
 
 [[extra.hexcasting.pattern_stubs]]
-path = "{$_common.package}/init/Patterns.java"
+path = "{$_project.src}/main/java/com/luxof/lapisworks/init/Patterns.java"
 regex = "{^_pattern_regex}"
-per_world_value = "{^_per_world_value}"
 
-# platforms
+# source paths
 
-[_common]
+[_project]
 src = "../src"
 package = "{src}/main/java/com/luxof/lapisworks"

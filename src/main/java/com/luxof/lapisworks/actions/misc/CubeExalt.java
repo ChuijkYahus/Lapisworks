@@ -13,8 +13,6 @@ import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 
-import com.luxof.lapisworks.MishapThrowerJava;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +26,8 @@ public class CubeExalt implements Action {
     @Override
     public OperationResult operate(CastingEnvironment ctx, CastingImage img, SpellContinuation cont) {
         List<Iota> stack = new ArrayList<Iota>(img.getStack());
-        if (stack.size() < getArgc()) {
-            MishapThrowerJava.throwMishap(new MishapNotEnoughArgs(3, stack.size()));
-        }
+        if (stack.size() < getArgc()) throw new MishapNotEnoughArgs(3, stack.size());
+
         int lastIdx = stack.size() - 1;
         SpellList intrs = OperatorUtils.getList(stack, lastIdx - 3, getArgc());
         Vec3d pointA = OperatorUtils.getVec3(stack, lastIdx - 2, getArgc());

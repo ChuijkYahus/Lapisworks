@@ -1,54 +1,31 @@
 package com.luxof.lapisworks.actions.misc;
 
-import at.petrak.hexcasting.api.casting.OperatorUtils;
-import at.petrak.hexcasting.api.casting.castables.ConstMediaAction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
-import at.petrak.hexcasting.api.casting.eval.OperationResult;
-import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
-import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.BooleanIota;
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 
-import com.luxof.lapisworks.MishapThrowerJava;
+import com.luxof.lapisworks.nocarpaltunnel.ConstMediaActionNCT;
+import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
 
 import java.util.List;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 
-public class EqualBlock implements ConstMediaAction {
-    public BlockPos confirmInAmbit(BlockPos pos, CastingEnvironment ctx) {
-        try { ctx.assertPosInRange(pos); }
-        catch (Mishap e) { MishapThrowerJava.throwMishap(e); }
-        return pos;
-    }
+public class EqualBlock extends ConstMediaActionNCT {
+    public int argc = 2;
+    public long mediaCost = 0L;
 
     @Override
-    public List<Iota> execute(List<? extends Iota> args, CastingEnvironment ctx) {
-        BlockState a = ctx.getWorld().getBlockState(confirmInAmbit(OperatorUtils.getBlockPos(args, 0, getArgc()), ctx));
-        BlockState b = ctx.getWorld().getBlockState(confirmInAmbit(OperatorUtils.getBlockPos(args, 1, getArgc()), ctx));
+    public List<? extends Iota> execute(HexIotaStack stack, CastingEnvironment ctx) {
+        BlockState a = ctx.getWorld().getBlockState(stack.getBlockPosInRange(0));
+        BlockState b = ctx.getWorld().getBlockState(stack.getBlockPosInRange(1));
         // i have no fucking clue how an identity check ever returns true for these
         return List.of(new BooleanIota(a == b));
     }
 
-    @Override
-    public CostMediaActionResult executeWithOpCount(List<? extends Iota> arg0, CastingEnvironment arg1) {
-        return ConstMediaAction.DefaultImpls.executeWithOpCount(this, arg0, arg1);
-    }
-
-    @Override
-    public int getArgc() {
-        return 2;
-    }
-
-    @Override
-    public long getMediaCost() {
-        return 0;
-    }
-
-    @Override
-    public OperationResult operate(CastingEnvironment arg0, CastingImage arg1, SpellContinuation arg2) {
-        return ConstMediaAction.DefaultImpls.operate(this, arg0, arg1, arg2);
+    public BlockPos confirmInAmbit(BlockPos pos, CastingEnvironment ctx) {
+        ctx.assertPosInRange(pos);
+        return pos;
     }
 }

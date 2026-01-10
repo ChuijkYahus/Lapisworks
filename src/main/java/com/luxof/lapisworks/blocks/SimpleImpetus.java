@@ -2,8 +2,6 @@ package com.luxof.lapisworks.blocks;
 
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 
-import org.jetbrains.annotations.Nullable;
-
 import com.luxof.lapisworks.blocks.entities.SimpleImpetusEntity;
 
 import net.minecraft.block.BlockState;
@@ -15,6 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import org.jetbrains.annotations.Nullable;
 
 public class SimpleImpetus extends BlockAbstractImpetus {
     public SimpleImpetus() {

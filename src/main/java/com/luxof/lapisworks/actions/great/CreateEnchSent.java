@@ -13,18 +13,16 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation;
 import at.petrak.hexcasting.api.casting.mishaps.MishapUnenlightened;
 import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.common.lib.HexAttributes;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 
 import static com.luxof.lapisworks.LapisworksIDs.SEND_SENT;
 
 import java.util.List;
-import java.util.Optional;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -38,21 +36,16 @@ public class CreateEnchSent implements SpellAction {
 
     @Override
     public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
-        if (!ctx.isEnlightened()) {
-            MishapThrowerJava.throwMishap(new MishapUnenlightened());
-        }
-        Optional<LivingEntity> casterOp = Optional.of(ctx.getCastingEntity());
-        if (casterOp.isEmpty()) {
-            MishapThrowerJava.throwMishap(new MishapBadCaster());
-        } else if (!(casterOp.get() instanceof PlayerEntity)) {
-            MishapThrowerJava.throwMishap(new MishapBadCaster());
-        }
-        PlayerEntity caster = (PlayerEntity)casterOp.get();
+        if (!(ctx.getCastingEntity() instanceof ServerPlayerEntity caster))
+            throw new MishapBadCaster();
+        else if (!ctx.isEnlightened())
+            throw new MishapUnenlightened();
 
         Vec3d pos = OperatorUtils.getVec3(args, 0, getArgc());
-        if (caster.getPos().distanceTo(pos) > 32.0) {
+        double casterAmbit = caster.getAttributeValue(HexAttributes.AMBIT_RADIUS);
+        if (caster.getPos().squaredDistanceTo(pos) > casterAmbit*casterAmbit) {
             // you will NOT fuck with this to do better sent walk!
-            MishapThrowerJava.throwMishap(new MishapBadLocation(pos, "too_far"));
+            throw new MishapBadLocation(pos, "too_far");
         }
         double ambit = OperatorUtils.getDoubleBetween(args, 1, 1.0, 64.0, getArgc());
 

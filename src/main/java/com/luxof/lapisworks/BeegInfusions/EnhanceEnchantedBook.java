@@ -4,7 +4,6 @@ import at.petrak.hexcasting.api.casting.OperatorUtils;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.init.Mutables.BeegInfusion;
 import com.luxof.lapisworks.init.Mutables.Mutables;
@@ -57,17 +56,16 @@ public class EnhanceEnchantedBook extends BeegInfusion {
         // this seems a bit problematic for any other enchanted book handlers..
         // open an issue or something if you don't want this first mishap here vvv
         if (EnchantmentHelper.get(stack).values().size() != 1) {
-            MishapThrowerJava.throwMishap(new MishapBadHandItem(
+            throw new MishapBadHandItem(
                 stack,
                 ENCHBOOK_WITH_ONE_ENCH,
                 ENCHBOOK_WITH_NOTONE_ENCH,
                 hand
-            ));
-        } else if (infusing < requiredAmel) {
-            MishapThrowerJava.throwMishap(new MishapNotEnoughItems(AMEL, infusing, requiredAmel));
-        } else if (availableAmel < requiredAmel) {
-            MishapThrowerJava.throwMishap(new MishapNotEnoughItems(AMEL, availableAmel, requiredAmel));
-        }
+            );
+        } else if (infusing < requiredAmel)
+            throw new MishapNotEnoughItems(AMEL, infusing, requiredAmel);
+        else if (availableAmel < requiredAmel)
+            throw new MishapNotEnoughItems(AMEL, availableAmel, requiredAmel);
     }
 
     @Override

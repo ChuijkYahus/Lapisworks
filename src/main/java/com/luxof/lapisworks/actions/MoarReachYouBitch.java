@@ -15,7 +15,6 @@ import com.google.common.collect.ImmutableMultimap;
 
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.init.Mutables.Mutables;
@@ -52,7 +51,6 @@ public class MoarReachYouBitch implements SpellAction {
         attackReachIncrease,
         Operation.ADDITION
     );
-    @SuppressWarnings("null")
     private final ImmutableMultimap<EntityAttribute, EntityAttributeModifier> modifiers = ImmutableMultimap.of(
         ReachEntityAttributes.REACH, REACH_MODIFIER,
         ReachEntityAttributes.ATTACK_RANGE, ATTACK_REACH_MODIFIER
@@ -73,13 +71,8 @@ public class MoarReachYouBitch implements SpellAction {
 
         VAULT vault = ((GetVAULT)ctx).grabVAULT();
         int availableAmel = vault.fetch(Mutables::isAmel, Flags.PRESET_Stacks_InvItem_UpToHotbar);
-        if (availableAmel < (expendShit ? amelCost : 0)) {
-            MishapThrowerJava.throwMishap(new MishapNotEnoughItems(
-                AMEL,
-                availableAmel,
-                amelCost
-            ));
-        }
+        if (availableAmel < (expendShit ? amelCost : 0))
+            throw new MishapNotEnoughItems(AMEL, availableAmel, amelCost);
 
         return new SpellAction.Result(
             new Spell(entity, vault),
@@ -101,7 +94,6 @@ public class MoarReachYouBitch implements SpellAction {
             this.vault = vault;
         }
 
-		@SuppressWarnings("null")
         @Override
 		public void cast(CastingEnvironment ctx) {
             AttributeContainer attrs = entity.getAttributes();

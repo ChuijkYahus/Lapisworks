@@ -13,7 +13,6 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.init.Mutables.BeegInfusion;
@@ -88,7 +87,7 @@ public class ImbueAmel implements SpellAction {
                 args,
                 vault
             );
-            if (beegInfusionRecipes.isEmpty()) MishapThrowerJava.throwMishap(needImbueable);
+            if (beegInfusionRecipes.isEmpty()) throw needImbueable;
 
             BeegInfusion selected = beegInfusionRecipes.values().iterator().next();
             selected.mishapIfNeeded();
@@ -117,18 +116,15 @@ public class ImbueAmel implements SpellAction {
         int fullInfuseCost = recipe.getFullAmelsCost() - getInfusedAmel(items);
         int infuseAmount = Math.min(wantToInfuseAmount, fullInfuseCost);
 
-        if (availableAmel < infuseAmount) {
-            MishapThrowerJava.throwMishap(new MishapNotEnoughItems(AMEL, availableAmel, infuseAmount));
-        }
+        if (availableAmel < infuseAmount)
+            throw new MishapNotEnoughItems(AMEL, availableAmel, infuseAmount);
 
         ItemStack newStack = null;
-        if (infuseAmount == fullInfuseCost) { newStack = new ItemStack(fullAmel); }
-        else if (partAmel == null) {
-            MishapThrowerJava.throwMishap(
-                new MishapNotEnoughItems(AMEL, infuseAmount, fullInfuseCost)
-            );
-            return null; // VSCode likes complaining about null
-        } else {
+        if (infuseAmount == fullInfuseCost)
+            newStack = new ItemStack(fullAmel);
+        else if (partAmel == null)
+            throw new MishapNotEnoughItems(AMEL, infuseAmount, fullInfuseCost);
+        else {
             if (hasInfusedAmel(items)) newStack = items;
             else newStack = new ItemStack(partAmel);
             setInfusedAmel(newStack, getInfusedAmel(newStack) + infuseAmount);

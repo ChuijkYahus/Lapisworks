@@ -1,18 +1,14 @@
 package com.luxof.lapisworks.client;
 
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.common.lib.HexItems;
 
 import com.luxof.lapisworks.Lapisworks;
-import com.luxof.lapisworks.blocks.bers.EnchBrewerRenderer;
-import com.luxof.lapisworks.blocks.entities.MediaCondenserEntity;
-import com.luxof.lapisworks.blocks.entities.MindEntity;
-import com.luxof.lapisworks.client.screens.EnchBrewerScreen;
-import com.luxof.lapisworks.init.LapisParticles;
-import com.luxof.lapisworks.init.ModBlocks;
-import com.luxof.lapisworks.init.ModItems;
-import com.luxof.lapisworks.init.ModScreens;
+import com.luxof.lapisworks.blocks.bers.*;
+import com.luxof.lapisworks.blocks.entities.*;
+import com.luxof.lapisworks.init.*;
 import com.luxof.lapisworks.interop.hextended.items.AmelOrb;
 import com.luxof.lapisworks.mixinsupport.BlockDowser;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
@@ -34,13 +30,13 @@ import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE2;
 import static com.luxof.lapisworks.init.ModItems.IRON_SWORD;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 
+import java.util.List;
+
 import com.mojang.datafixers.util.Pair;
 
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 
 import dev.emi.trinkets.api.client.TrinketRendererRegistry;
-
-import java.util.Optional;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -53,7 +49,6 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -114,6 +109,18 @@ public class LapisworksClient implements ClientModInitializer {
         }
     }
 
+    private String inlineify(HexPattern pattern) {
+        return "HexPattern["
+                    + pattern.getStartDir().toString()
+                    + ", "
+                    + pattern.anglesSignature() +
+                "]";
+    }
+    private String inlineify(List<HexPattern> patterns) {
+        String ret = "";
+        for (HexPattern pattern : patterns) { ret += inlineify(pattern); }
+        return ret;
+    }
     @Override
     public void onInitializeClient() {
         // the eternal fucking grammar battle with this simple Markiplier ass log will drive me insane
@@ -123,8 +130,7 @@ public class LapisworksClient implements ClientModInitializer {
         LOGGER.info("Does NONE of that sound fun? Well, that's because it isn't. So let's get started, shall we?");
 
         LapisParticles.clientTicklesPaw();
-
-        HandledScreens.register(ModScreens.ENCH_BREWER_SCREEN_HANDLER, EnchBrewerScreen::new);
+        ModScreens.registerOnClient();
 
         initInterop();
 
@@ -136,17 +142,21 @@ public class LapisworksClient implements ClientModInitializer {
             ModBlocks.ENCH_BREWER_ENTITY_TYPE,
             EnchBrewerRenderer::new
         );
+        BlockEntityRendererRegistry.register(
+            ModBlocks.CHALK_ENTITY_TYPE,
+            ChalkRenderer::new
+        );
+        BlockEntityRendererRegistry.register(
+            ModBlocks.CHALK_WITH_PATTERN_ENTITY_TYPE,
+            ChalkWithPatternRenderer::new
+        );
 
-        // we all thank hexxy for adding simple addDisplayer() instead of requiring mixin in unison
+        // we all thank hexxy for adding a simple addDisplayer() instead of requiring mixin in unison
         ScryingLensOverlayRegistry.addDisplayer(
             ModBlocks.MIND_BLOCK,
             (lines, state, pos, observer, world, direction) -> {
-                Optional<MindEntity> blockEntityOpt = world.getBlockEntity(
-                    pos,
-                    ModBlocks.MIND_ENTITY_TYPE
-                );
-                if (blockEntityOpt.isEmpty()) return;
-                MindEntity blockEntity = blockEntityOpt.get();
+                MindEntity blockEntity = (MindEntity)world.getBlockEntity(pos);
+
                 lines.add(
                     new Pair<ItemStack, Text>(
                         new ItemStack(ModItems.MIND),
@@ -163,32 +173,29 @@ public class LapisworksClient implements ClientModInitializer {
                 );
             }
         );
-        /*ScryingLensOverlayRegistry.addDisplayer(
+        ScryingLensOverlayRegistry.addDisplayer(
             ModBlocks.SIMPLE_IMPETUS,
             (lines, state, pos, observer, world, direction) -> {
-                Optional<BlockEntity> opt = world.getBlockEntity(
-                    pos,
-                    ModBlocks.SIMPLE_IMPETUS_ENTITY_TYPE
-                );
-                if (opt.isEmpty()) return;
-                SimpleImpetusEntity bE = (SimpleImpetusEntity)opt.get();
+                SimpleImpetusEntity bE = (SimpleImpetusEntity)world.getBlockEntity(pos);
+                HexPattern tunedPattern = bE.getTunedPattern();
+
                 lines.add(
                     new Pair<ItemStack, Text>(
                         new ItemStack(ModItems.SIMPLE_IMPETUS),
-
+                        tunedPattern != null ? Text.translatable(
+                                "render.lapisworks.scryinglens.simp.listening",
+                                inlineify(tunedPattern)
+                            ) :
+                            Text.translatable("render.lapisworks.scryinglens.simp.not_listening")
                     )
-                )
+                );
             }
-        );*/
+        );
         ScryingLensOverlayRegistry.addDisplayer(
             ModBlocks.MEDIA_CONDENSER,
             (lines, state, pos, observer, world, direction) -> {
-                Optional<MediaCondenserEntity> blockEntityOpt = world.getBlockEntity(
-                    pos,
-                    ModBlocks.MEDIA_CONDENSER_ENTITY_TYPE
-                );
-                if (blockEntityOpt.isEmpty()) return;
-                MediaCondenserEntity blockEntity = blockEntityOpt.get();
+                MediaCondenserEntity blockEntity = (MediaCondenserEntity)world.getBlockEntity(pos);
+
                 lines.add(
                     new Pair<ItemStack, Text>(
                         new ItemStack(HexItems.AMETHYST_DUST),
@@ -202,12 +209,26 @@ public class LapisworksClient implements ClientModInitializer {
                 );
             }
         );
+        ScryingLensOverlayRegistry.addDisplayer(
+            ModBlocks.CHALK_WITH_PATTERN,
+            (lines, state, pos, observer, world, direction) -> {
+                ChalkWithPatternEntity chalk = (ChalkWithPatternEntity)world.getBlockEntity(pos);
+
+                lines.add(
+                    new Pair<ItemStack, Text>(
+                        new ItemStack(ModItems.CHALK),
+                        chalk.pats.size() > 0 ? Text.literal(inlineify(chalk.pats)) :
+                        Text.translatable("render.lapisworks.scryinglens.chalk.no_patterns")
+                    )
+                );
+            }
+        );
 
         WorldRenderEvents.AFTER_TRANSLUCENT.register((ctx) -> {
             overlayWorld(ctx.matrixStack(), ctx.tickDelta());
         });
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MIND_BLOCK, RenderLayer.getTranslucent());
-        //BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.CHALK_BLOCK, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TUNEABLE_AMETHYST, RenderLayer.getCutout());
 
         KeyEvents.staticInit();
         ClientTickEvents.END_CLIENT_TICK.register(KeyEvents::endClientTick);

@@ -16,7 +16,6 @@ import com.luxof.lapisworks.mindinfusions.UnflayVillager;
 import com.luxof.lapisworks.recipes.ImbuementRec;
 import com.luxof.lapisworks.recipes.SMindInfusionRec;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.LapisworksIDs.AMEL_TAG;
 import static com.luxof.lapisworks.LapisworksIDs.EMPTY_IMP_INTO_SIMP;
 import static com.luxof.lapisworks.LapisworksIDs.ENCHSENT_ADVANCEMENT;
@@ -133,9 +132,6 @@ public class Mutables {
             // yes, this allows you to override datapacked recipes with code.
             // this is ideal.
             filter(bp, ctx, iotaStack, vault).forEach(ret::put);
-
-            LOGGER.info("Hm. What recipes are we getting?");
-            ret.keySet().forEach(key -> LOGGER.info(key.toString()));
 
             return ret;
         }

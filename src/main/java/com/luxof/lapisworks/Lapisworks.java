@@ -47,11 +47,11 @@ import java.util.function.Function;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
@@ -65,9 +65,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.Util;
 
 import org.jetbrains.annotations.Nullable;
-
 import org.joml.Random;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -397,7 +395,7 @@ public class Lapisworks implements ModInitializer {
 	public static int getInfusedAmel(ItemStack stack) {
 		return NBTHelper.getInt(stack, INFUSED_AMEL, 0);
 	}
-	
+
 	public static void setInfusedAmel(ItemStack stack, int count) {
 		NBTHelper.putInt(stack, INFUSED_AMEL, count);
 	}
@@ -542,5 +540,25 @@ public class Lapisworks implements ModInitializer {
 			if (stack.getItemStack().isOf(item)) return true;
 		}
 		return false;
+	}
+
+	public static NbtCompound serializeBlockPos(BlockPos pos) {
+		NbtCompound nbt = new NbtCompound();
+		nbt.putInt("x", pos.getX());
+		nbt.putInt("y", pos.getY());
+		nbt.putInt("z", pos.getZ());
+		return nbt;
+	}
+	/** deserializes a blockpos that was serialized by <code>serializeBlockPos</code>. */
+	public static BlockPos deserializeBlockPos(NbtCompound nbt) {
+		return new BlockPos(
+			nbt.getInt("x"),
+			nbt.getInt("y"),
+			nbt.getInt("z")
+		);
+	}
+	/** deserializes a blockpos that was serialized by <code>serializeBlockPos</code>. */
+	public static BlockPos deserializeBlockPos(NbtElement nbt) {
+		return deserializeBlockPos((NbtCompound)nbt);
 	}
 }

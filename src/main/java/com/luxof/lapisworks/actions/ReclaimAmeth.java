@@ -1,7 +1,5 @@
 package com.luxof.lapisworks.actions;
 
-import java.util.List;
-
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.RenderedSpell;
 import at.petrak.hexcasting.api.casting.castables.SpellAction;
@@ -13,15 +11,17 @@ import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
+
+import com.luxof.lapisworks.init.Mutables.Mutables;
+
+import java.util.List;
+
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
-
-import com.luxof.lapisworks.MishapThrowerJava;
-import com.luxof.lapisworks.init.Mutables.Mutables;
 
 public class ReclaimAmeth implements SpellAction {
     public int getArgc() {
@@ -31,10 +31,9 @@ public class ReclaimAmeth implements SpellAction {
     @Override
     public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
         HeldItemInfo heldStackInfo = ctx.getHeldItemToOperateOn(Mutables::isAmel);
-        if (heldStackInfo == null) {
-            MishapThrowerJava.throwMishap(MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "amel"));
-            return null; // VSCode likes complaining about null
-        }
+        if (heldStackInfo == null)
+            throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "amel");
+
         int count = heldStackInfo.stack().getCount();
 
         return new SpellAction.Result(

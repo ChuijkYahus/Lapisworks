@@ -5,8 +5,6 @@ import com.luxof.lapisworks.init.Mutables.SMindInfusion;
 import com.luxof.lapisworks.inv.SMindInfusionSetupInv;
 import com.luxof.lapisworks.mishaps.MishapNotEnoughItems;
 
-import static com.luxof.lapisworks.MishapThrowerJava.throwMishap;
-
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -49,11 +47,8 @@ public class SMindInfusionRec implements Recipe<SMindInfusionSetupInv> {
                     cost::test,
                     Flags.PRESET_Stacks_InvItem_UpToHotbar
                 );
-                if (fulfilled < cost.getCount()) {
-                    throwMishap(
-                        new MishapNotEnoughItems(cost.getName(), fulfilled, cost.getCount())
-                    );
-                }
+                if (fulfilled < cost.getCount())
+                    throw new MishapNotEnoughItems(cost.getName(), fulfilled, cost.getCount());
             }
         }
         @Override

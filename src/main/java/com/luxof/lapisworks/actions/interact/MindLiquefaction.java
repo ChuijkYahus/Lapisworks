@@ -1,79 +1,55 @@
 package com.luxof.lapisworks.actions.interact;
 
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
-import at.petrak.hexcasting.api.casting.OperatorUtils;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
-import at.petrak.hexcasting.api.casting.RenderedSpell;
 import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
-import at.petrak.hexcasting.api.casting.eval.OperationResult;
-import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
-import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
-import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
-import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
-import com.luxof.lapisworks.MishapThrowerJava;
-import com.luxof.lapisworks.blocks.Mind;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
 import com.luxof.lapisworks.init.ModBlocks;
+import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
+import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 
 import static com.luxof.lapisworks.LapisworksIDs.MIND_BLOCK;
+import static com.luxof.lapisworks.MishapThrowerJava.throwIfEmpty;
+import static com.luxof.lapisworks.MishapThrowerJava.throwIfNull;
 
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 
 /** you could make like 10 / (6.666.. * 60) = 0.025 dust per second per mind from this
  * so hexal wisp eating isn't overran */
-public class MindLiquefaction implements SpellAction {
-    private static boolean isMediaHolder(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) { return false; }
-        ADMediaHolder mediaHolder = IXplatAbstractions.INSTANCE.findMediaHolder(stack);
-        return mediaHolder == null || !mediaHolder.canRecharge();
-    }
-
-    public int getArgc() {
-        return 1;
-    }
+public class MindLiquefaction extends SpellActionNCT {
+    public int argc = 1;
 
     @Override
-    public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
-        BlockPos mindPos = OperatorUtils.getBlockPos(args, 0, getArgc());
-        try { ctx.assertPosInRange(mindPos); }
-        catch (Mishap mishap) { MishapThrowerJava.throwMishap(mishap); }
-        MishapBadBlock needMind = new MishapBadBlock(mindPos, MIND_BLOCK);
-        if (!(ctx.getWorld().getBlockState(mindPos).getBlock() instanceof Mind)) {
-            MishapThrowerJava.throwMishap(needMind);
-        }
+    public Result execute(HexIotaStack stack, CastingEnvironment ctx) {
+        BlockPos mindPos = stack.getBlockPos(0);
+        ctx.assertPosInRange(mindPos);
 
-        MindEntity blockEntity = MishapThrowerJava.throwIfEmpty(
+        MindEntity blockEntity = throwIfEmpty(
             ctx.getWorld().getBlockEntity(mindPos, ModBlocks.MIND_ENTITY_TYPE),
-            needMind
+            new MishapBadBlock(mindPos, MIND_BLOCK)
         );
-
-        Mishap needRechargeable = MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "rechargeable");
-        HeldItemInfo heldStackInfo = ctx.getHeldItemToOperateOn(MindLiquefaction::isMediaHolder);
-        if (heldStackInfo == null) {
-            MishapThrowerJava.throwMishap(needRechargeable);
-            return null; // VSCode likes complaining about null
-        }
-
+        ItemStack heldStack = throwIfNull(
+            ctx.getHeldItemToOperateOn(MindLiquefaction::isMediaHolder),
+            MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "rechargeable")
+        ).stack();
 
         return new SpellAction.Result(
-            new Spell(blockEntity, heldStackInfo.component1()),
+            new Spell(blockEntity, heldStack),
             0L,
             List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 2, 15)),
             1
         );
     }
 
-    public class Spell implements RenderedSpell {
+    public class Spell implements RenderedSpellNCT {
         public final MindEntity blockEntity;
         public final ItemStack heldStack;
 
@@ -88,37 +64,20 @@ public class MindLiquefaction implements SpellAction {
             media.insertMedia(
                 Math.min(
                     media.insertMedia(-1, true),
-                    this.blockEntity.getMaxMediaGainFromAbsorption() * ((long)blockEntity.mindCompletion / 100L)
+                    this.blockEntity.getMaxMediaGainFromAbsorption() * (
+                        (long)blockEntity.mindCompletion / 100L
+                    )
                 ),
                 false
             );
             this.blockEntity.mindCompletion = 0;
             this.blockEntity.markDirty();
 		}
-
-        @Override
-        public CastingImage cast(CastingEnvironment arg0, CastingImage arg1) {
-            return RenderedSpell.DefaultImpls.cast(this, arg0, arg1);
-        }
     }
 
-    @Override
-    public boolean awardsCastingStat(CastingEnvironment ctx) {
-        return SpellAction.DefaultImpls.awardsCastingStat(this, ctx);
-    }
-
-    @Override
-    public Result executeWithUserdata(List<? extends Iota> args, CastingEnvironment env, NbtCompound userData) {
-        return SpellAction.DefaultImpls.executeWithUserdata(this, args, env, userData);
-    }
-
-    @Override
-    public boolean hasCastingSound(CastingEnvironment ctx) {
-        return SpellAction.DefaultImpls.hasCastingSound(this, ctx);
-    }
-
-    @Override
-    public OperationResult operate(CastingEnvironment arg0, CastingImage arg1, SpellContinuation arg2) {
-        return SpellAction.DefaultImpls.operate(this, arg0, arg1, arg2);
+    private static boolean isMediaHolder(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) { return false; }
+        ADMediaHolder mediaHolder = IXplatAbstractions.INSTANCE.findMediaHolder(stack);
+        return mediaHolder == null || !mediaHolder.canRecharge();
     }
 }

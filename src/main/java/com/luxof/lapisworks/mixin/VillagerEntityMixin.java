@@ -4,13 +4,14 @@ import com.luxof.lapisworks.mixinsupport.ArtMindInterface;
 
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
 
+import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.nbt.NbtCompound;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import net.minecraft.entity.passive.VillagerEntity;
 
 @Mixin(VillagerEntity.class)
 public class VillagerEntityMixin implements ArtMindInterface {
@@ -26,6 +27,18 @@ public class VillagerEntityMixin implements ArtMindInterface {
     @Unique @Override public void setDontUseAgainTicks(int ticks) { this.dontUseAgainTicks = ticks; }
     @Unique @Override public void incDontUseAgainTicks(int ticks) { this.dontUseAgainTicks += ticks; }
     @Unique @Override public int getDontUseAgainTicks() { return this.dontUseAgainTicks; }
+
+	@Inject(at = @At("TAIL"), method = "readCustomDataFromNbt")
+	public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
+        setUsedMindPercentage(nbt.getFloat("LAPISWORKS_MIND_USED"));
+        setMindBeingUsedTicks(nbt.getInt("LAPISWORKS_MIND_HEAL_COOLDOWN"));
+    }
+
+    @Inject(at = @At("TAIL"), method = "writeCustomDataToNbt")
+	public void writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
+        nbt.putFloat("LAPISWORKS_MIND_USED", getUsedMindPercentage());
+        nbt.putInt("LAPISWORKS_MIND_HEAL_COOLDOWN", getMindBeingUsedTicks());
+    }
 
     @Inject(at = @At("HEAD"), method = "tick")
     public void tick(CallbackInfo ci) {

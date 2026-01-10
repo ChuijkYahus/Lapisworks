@@ -9,14 +9,15 @@ import at.petrak.hexcasting.api.casting.eval.OperationResult;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.blocks.entities.SimpleImpetusEntity;
 import com.luxof.lapisworks.init.ModBlocks;
 
 import static com.luxof.lapisworks.LapisworksIDs.SIMP_IMP_BLOCK;
+import static com.luxof.lapisworks.MishapThrowerJava.throwIfEmpty;
 
 import java.util.List;
 
@@ -34,13 +35,13 @@ public class TeachSImp implements SpellAction {
     @Override
     public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
         BlockPos pos = OperatorUtils.getBlockPos(args, 0, getArgc());
-        SimpleImpetusEntity blockEntity = MishapThrowerJava.throwIfEmpty(
+        SimpleImpetusEntity blockEntity = throwIfEmpty(
             ctx.getWorld().getBlockEntity(pos, ModBlocks.SIMPLE_IMPETUS_ENTITY_TYPE),
             new MishapBadBlock(pos, SIMP_IMP_BLOCK)
         );
 
         return new SpellAction.Result(
-            new Spell(blockEntity, OperatorUtils.getPattern(args, 1, getArgc()).anglesSignature()),
+            new Spell(blockEntity, OperatorUtils.getPattern(args, 1, getArgc())),
             MediaConstants.DUST_UNIT * 2,
             List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 2, 15)),
             1
@@ -49,17 +50,16 @@ public class TeachSImp implements SpellAction {
 
     public class Spell implements RenderedSpell {
         public final SimpleImpetusEntity blockEntity;
-        public final String angSig;
+        public final HexPattern pattern;
 
-        public Spell(SimpleImpetusEntity blockEntity, String angSig) {
+        public Spell(SimpleImpetusEntity blockEntity, HexPattern pattern) {
             this.blockEntity = blockEntity;
-            this.angSig = angSig;
+            this.pattern = pattern;
         }
 
 		@Override
 		public void cast(CastingEnvironment ctx) {
-            this.blockEntity.tune(angSig, true);
-            this.blockEntity.markDirty();
+            this.blockEntity.tune(pattern, true);
 		}
 
         @Override

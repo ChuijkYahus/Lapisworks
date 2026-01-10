@@ -2,23 +2,25 @@ package com.luxof.lapisworks;
 
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.msgs.MsgClearSpiralPatternsS2C;
 import at.petrak.hexcasting.common.msgs.MsgOpenSpellGuiS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
+import com.luxof.lapisworks.blocks.entities.ChalkWithPatternEntity;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
-import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 
 import static com.luxof.lapisworks.Lapisworks.pickUsingSeed;
 import static com.luxof.lapisworks.Lapisworks.pickConfigFlags;
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.nullConfigFlags;
 import static com.luxof.lapisworks.LapisworksIDs.GEODE_DOWSER_REQUEST;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_PWSHAPE_PATS;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_SENT;
+import static com.luxof.lapisworks.LapisworksIDs.SET_PATTERNS_ON_CHALK;
 import static com.luxof.lapisworks.init.ModItems.GEODE_DOWSER;
 import static com.luxof.lapisworks.init.ThemConfigFlags.turnChosenIntoNbt;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,14 +34,15 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 public class LapisworksServer {
@@ -69,31 +72,6 @@ public class LapisworksServer {
         // hell naw i'm not dealing with the two extra args to writeMap() (i dunno wtf those are)
         patsBuf.writeNbt(turnChosenIntoNbt());
         ServerPlayNetworking.send(player, SEND_PWSHAPE_PATS, patsBuf);
-    }
-
-    public static void juiceUpAttr(ServerPlayerEntity plr, EntityAttribute attr) {
-        try {
-            plr.getAttributes().getCustomInstance(attr).setBaseValue(
-                plr.getAttributeBaseValue(attr) + ((LapisworksInterface)plr).getAmountOfAttrJuicedUpByAmel(attr)
-            );
-        } catch (Exception e) {
-            LOGGER.error("We had an error in the juiceUpAttr part of the code. USUALLY this shouldn't happen, but it probably isn't a problem if it does.");
-            e.printStackTrace();
-        }
-    }
-
-    public static void onJoinLoadJuicedAttrs(
-        ServerPlayNetworkHandler handler,
-        PacketSender sender,
-        MinecraftServer server
-    ) {
-        // somehow this works to fix the bug.
-        // i'm guessing somewhere between PlayerEntity#readNbt() and the player loading into the world,
-        // PlayerEntity.attributes is reset to the defaults (but then why doesn't health reset to default??)
-        ServerPlayerEntity player = handler.getPlayer();
-        juiceUpAttr(player, EntityAttributes.GENERIC_ATTACK_DAMAGE);
-        //juiceUpAttr(player, EntityAttributes.GENERIC_MAX_HEALTH);
-        juiceUpAttr(player, EntityAttributes.GENERIC_MOVEMENT_SPEED);
     }
 
     public static void handleCastingGridPacket(
@@ -154,11 +132,40 @@ public class LapisworksServer {
                 dowseResultTaker.accept(player, buf);
             }
         );
+        ServerPlayNetworking.registerGlobalReceiver(
+            SET_PATTERNS_ON_CHALK,
+            (server, player, handler, buf, responseSender) -> {
+                BlockPos position = buf.readBlockPos();
+
+                int sentPatterns = buf.readInt();
+                List<HexPattern> newPatterns = new ArrayList<>();
+                for (int i = 0; i < sentPatterns; i++) {
+                    newPatterns.add(HexPattern.fromNBT(buf.readNbt()));
+                }
+
+                ServerWorld sw = (ServerWorld)player.getWorld();
+
+                server.execute(() -> {
+
+                    ChalkWithPatternEntity chalk = (ChalkWithPatternEntity)sw.getBlockEntity(position);
+
+                    chalk.pats = newPatterns;
+
+                    chalk.markDirty();
+                    sw.updateListeners(
+                        position,
+                        chalk.getCachedState(),
+                        chalk.getCachedState(),
+                        Block.NOTIFY_LISTENERS
+                    );
+
+                });
+            }
+        );
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             onJoinEnchSentStuff(handler, sender, server);
             onJoinPWShapeStuff(handler, sender, server);
-            onJoinLoadJuicedAttrs(handler, sender, server);
         });
         ServerLifecycleEvents.SERVER_STARTED.register((server) -> {
             pickConfigFlags(pickUsingSeed(server.getOverworld().getSeed()));

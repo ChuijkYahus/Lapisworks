@@ -1,18 +1,19 @@
 package com.luxof.lapisworks.mishaps;
 
-import static com.luxof.lapisworks.LapisworksIDs.NOT_EQUIPPED;
-
-import java.util.List;
-
-import org.jetbrains.annotations.NotNull;
-
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+
+import static com.luxof.lapisworks.LapisworksIDs.NOT_EQUIPPED;
+
+import java.util.List;
+
 import net.minecraft.item.Item;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
+
+import org.jetbrains.annotations.NotNull;
 
 public class MishapNotWearingTrinket extends Mishap {
     private final Item trinket;
