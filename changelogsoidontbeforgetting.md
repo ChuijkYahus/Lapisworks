@@ -254,6 +254,10 @@ Locked in rah
   - i think it should be some kind of orb with a :3 face on it?
   - summon the pet via wearing a necklace for a minute
     - make it exclusive with the focus necklace :>
+- Indigan Lapidary
+  - alternative name: Noetic Lapidary
+  - costs one amethyst shard in media, and at least two lapis in item form in your other hand
+  - converts the two lapis into one amethyst (overflow of 1 lapis is consumed)
 - Mind Control of entities in the game  
   (reality check: gang, how lost are we in the sauce?)
   - you have to un-flay with a Simple Mind first
@@ -292,6 +296,7 @@ Locked in rah
   (as i intended them to have when i first made them)
 - Gold-Diamond Casting Ring has been deleted in favour of the Amel variant
 - Mishap messages n shit
+- Pattern name changes (particularly in the necklace RW patterns)
 - You can't read an Ancient Tome before you have gotten Lapisworks Research now
 ## Fixes:
 - Amel Jar throwing the Amel in your other hand into the void if you attempted to withdraw
@@ -301,10 +306,12 @@ Locked in rah
 - Enchanted Slipways having a tendency to move 0.01f more in +XYZ than -XYZ (lmao)
 - Enchantments not carrying across dimensions (:broken_heart:)
 - Enchantment Purification's order of arguments being flipped
-- Finally fixed that Cradle bug with items for fucking real, holy fucking shit
-  (still jumpscares me. WHY)
-- Logspam
+- Finally fixed that Cradle bug with items for fucking real, holy fucking shit  
+  WHY DOES IT STILL JUMPSCARE ME SOMETIMES
+- Logspam begone!
 - Sieve Thoughts not working on a spell circle
+- You may no longer convert Lapis (+ your life force) into Amethyst Shards
+    - There's a spell for that now
 ## Interop:
 - Hierophantics
   - Max experience fishermen villagers can be flayed into you  

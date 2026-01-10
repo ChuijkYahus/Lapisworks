@@ -135,10 +135,14 @@ public class Patterns {
         register("get_condenser_mdia", "wddwqwddweqeee", HexDir.NORTH_WEST, new GetCondenserMedia());
         register("get_linkable_links", "qaqdaweqaqewaqwawaw", HexDir.NORTH_EAST, new GetLinkableLinks());
 
+        // Rituals
+        register("get_amethyst_tuning", "edewwqdqawwwaqewddwaqqwdqqwqqwqq", HexDir.NORTH_WEST, new GetAmethystTuning());
+        register("tune_amethyst", "ewwwwqdqwawwwwwwawqeadwwdwdwwdaawwqqwwewqwqqwqwwwddwqwe", HexDir.SOUTH_EAST, new TuneAmethyst());
+
+        // One-time
         register("stop_be_me", "adaqqqwqqq", HexDir.EAST, new DisableCaster());
         register("be_me", "qqqqqwqqq", HexDir.EAST, new EnableCaster());
-        register("are_u_me", "aqqqwqqqd", HexDir.EAST, new IsCasterDisabled());
-        register("tune_amethyst", "wewdwewedewaqwedwqa", HexDir.SOUTH_EAST, new TuneAmethyst());
+        register("get_ritual_tuning", "wawqwawawweaqaaweaqaaweqqqqqa", HexDir.EAST, new GetRitualTuning());
         register("tune_ritual", "wdwewdwdwwqdeddwqdeddwwqeeeeewdqdqdqdqdqde", HexDir.NORTH_WEST, new TuneRitual());
 
         // hol up, let him cook

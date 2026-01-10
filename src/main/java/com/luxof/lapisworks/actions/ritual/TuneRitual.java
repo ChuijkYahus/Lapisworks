@@ -1,5 +1,6 @@
 package com.luxof.lapisworks.actions.ritual;
 
+import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.iota.Iota;
@@ -22,7 +23,7 @@ public class TuneRitual extends SpellActionNCT {
         return new Result(
             new Spell(iota),
             charged(1),
-            List.of(),
+            List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 3, 20)),
             1
         );
     }

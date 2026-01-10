@@ -15,7 +15,7 @@
             "anchor": "lapisworks:stop_be_me",
             "input": "",
             "output": "",
-            "text": "pages.lapisworks.imbuement.rituals.onetime.stop_be_me.text"
+            "text": "pages.lapisworks.imbuement.rituals.onetime.stop_be_me.summary"
         },
         {
             "type": "hexcasting:pattern",
@@ -23,15 +23,23 @@
             "anchor": "lapisworks:be_me",
             "input": "",
             "output": "",
-            "text": "pages.lapisworks.imbuement.rituals.onetime.be_me.text"
+            "text": "pages.lapisworks.imbuement.rituals.onetime.be_me.summary"
         },
         {
             "type": "hexcasting:pattern",
-            "op_id": "lapisworks:are_u_me",
-            "anchor": "lapisworks:are_u_me",
+            "op_id": "lapisworks:get_ritual_tuning",
+            "anchor": "lapisworks:get_ritual_tuning",
             "input": "",
-            "output": "bool",
-            "text": "pages.lapisworks.imbuement.rituals.onetime.are_u_me.text"
+            "output": "any",
+            "text": "pages.lapisworks.imbuement.rituals.onetime.get_ritual_tuning.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:tune_ritual",
+            "anchor": "lapisworks:tune_ritual",
+            "input": "any",
+            "output": "",
+            "text": "pages.lapisworks.imbuement.rituals.onetime.tune_ritual.summary"
         }
     ]
 }

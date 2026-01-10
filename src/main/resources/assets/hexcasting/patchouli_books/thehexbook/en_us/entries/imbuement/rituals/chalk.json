@@ -13,6 +13,31 @@
             "type": "patchouli:crafting",
             "recipe": "lapisworks:base/chalk",
             "text": "pages.lapisworks.imbuement.rituals.chalk.recipe.text"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.rituals.chalk.tuning"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "lapisworks:base/tuneable_amethyst",
+            "text": "pages.lapisworks.imbuement.rituals.chalk.tuneable.recipe.text"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:tune_amethyst",
+            "anchor": "lapisworks:tune_amethyst",
+            "input": "vec, any",
+            "output": "",
+            "text": "pages.lapisworks.imbuement.rituals.chalk.tune_amethyst.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:get_amethyst_tuning",
+            "anchor": "lapisworks:get_amethyst_tuning",
+            "input": "vec",
+            "output": "any",
+            "text": "pages.lapisworks.imbuement.rituals.chalk.get_amethyst_tuning.summary"
         }
     ]
 }
