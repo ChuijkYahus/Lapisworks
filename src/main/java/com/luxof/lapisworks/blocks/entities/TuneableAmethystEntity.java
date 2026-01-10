@@ -32,11 +32,16 @@ public class TuneableAmethystEntity extends BlockEntity implements LinkableMedia
     public long media = 0L;
     @Nullable private Iota tunedFrequency = null;
 
-    public final double ambitCap = 8;
-    public final long mediaCap = (long)(MediaConstants.DUST_UNIT * ambitCap*ambitCap);
+    public final double minAmbit = 2.0;
+    public final double ambitCap = 16;
+    private final double ambitCapSqr = ambitCap*ambitCap;
+    private final double minAmbitSqr = minAmbit*minAmbit;
 
-    public double getAmbit() { return Math.sqrt(media); }
-    public double getAmbitSqr() { return media; }
+    public final long mediaCap = (long)(MediaConstants.DUST_UNIT * ambitCapSqr);
+
+    public double getMediaInDust() { return (double)media / (double)MediaConstants.DUST_UNIT; }
+    public double getAmbit() { return Math.max(minAmbit, Math.sqrt(getMediaInDust())); }
+    public double getAmbitSqr() { return Math.min(minAmbitSqr, getMediaInDust()); }
 
     /** to clear, you can also pass in a NullIota.
      * <p>Server-only method. Throws if on client. */

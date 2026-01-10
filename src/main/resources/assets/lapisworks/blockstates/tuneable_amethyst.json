@@ -1,100 +1,82 @@
 {
     "variants": {
         "attached=down,stage=0": {
-            "model": "lapisworks:block/tuneable_amethyst/stage1",
-            "uvlock": true
+            "model": "lapisworks:block/tuneable_amethyst/stage1"
         },
         "attached=down,stage=1": {
-            "model": "lapisworks:block/tuneable_amethyst/stage2",
-            "uvlock": true
+            "model": "lapisworks:block/tuneable_amethyst/stage2"
         },
         "attached=down,stage=2": {
-            "model": "lapisworks:block/tuneable_amethyst/stage3",
-            "uvlock": true
+            "model": "lapisworks:block/tuneable_amethyst/stage3"
         },
         "attached=up,stage=0": {
             "model": "lapisworks:block/tuneable_amethyst/stage1",
-            "uvlock": true,
             "x": 180
         },
         "attached=up,stage=1": {
             "model": "lapisworks:block/tuneable_amethyst/stage2",
-            "uvlock": true,
             "x": 180
         },
         "attached=up,stage=2": {
             "model": "lapisworks:block/tuneable_amethyst/stage3",
-            "uvlock": true,
             "x": 180
         },
         "attached=north,stage=0": {
             "model": "lapisworks:block/tuneable_amethyst/stage1",
-            "uvlock": true,
-            "x": 90
+            "x": 90,
+            "y": 180
         },
         "attached=north,stage=1": {
             "model": "lapisworks:block/tuneable_amethyst/stage2",
-            "uvlock": true,
-            "x": 90
+            "x": 90,
+            "y": 180
         },
         "attached=north,stage=2": {
             "model": "lapisworks:block/tuneable_amethyst/stage3",
-            "uvlock": true,
-            "x": 90
+            "x": 90,
+            "y": 180
         },
         "attached=west,stage=0": {
             "model": "lapisworks:block/tuneable_amethyst/stage1",
-            "uvlock": true,
             "x": 90,
-            "y": 270
+            "y": 90
         },
         "attached=west,stage=1": {
             "model": "lapisworks:block/tuneable_amethyst/stage2",
-            "uvlock": true,
             "x": 90,
-            "y": 270
+            "y": 90
         },
         "attached=west,stage=2": {
             "model": "lapisworks:block/tuneable_amethyst/stage3",
-            "uvlock": true,
             "x": 90,
-            "y": 270
+            "y": 90
         },
         "attached=south,stage=0": {
             "model": "lapisworks:block/tuneable_amethyst/stage1",
-            "uvlock": true,
-            "x": 90,
-            "y": 180
+            "x": 90
         },
         "attached=south,stage=1": {
             "model": "lapisworks:block/tuneable_amethyst/stage2",
-            "uvlock": true,
-            "x": 90,
-            "y": 180
+            "x": 90
         },
         "attached=south,stage=2": {
             "model": "lapisworks:block/tuneable_amethyst/stage3",
-            "uvlock": true,
-            "x": 90,
-            "y": 180
+            "x": 90
         },
         "attached=east,stage=0": {
             "model": "lapisworks:block/tuneable_amethyst/stage1",
-            "uvlock": true,
             "x": 90,
-            "y": 90
+            "y": 270
         },
         "attached=east,stage=1": {
             "model": "lapisworks:block/tuneable_amethyst/stage2",
-            "uvlock": true,
             "x": 90,
-            "y": 90
+            "y": 270
         },
         "attached=east,stage=2": {
             "model": "lapisworks:block/tuneable_amethyst/stage3",
-            "uvlock": true,
             "x": 90,
-            "y": 90
+            "y": 270
         }
     }
 }

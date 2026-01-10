@@ -9,11 +9,12 @@ import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.LapisworksIDs.LAPISMAGICSHITGROUPTEXT;
 import static com.luxof.lapisworks.LapisworksIDs.LAPIS_MAGIC_SHIT_GROUP;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -71,101 +72,74 @@ public class ModItems {
     public static final BlockItem MEDIA_CONDENSER = new BlockItem(ModBlocks.MEDIA_CONDENSER, unstackable);
     public static final BlockItem UNCRAFTED_CONDENSER = new BlockItem(ModBlocks.UNCRAFTED_CONDENSER, fullStack);
     public static final BlockItem CHALK = new ChalkItem();
+    public static final BlockItem TUNEABLE_AMETHYST = new BlockItem(ModBlocks.TUNEABLE_AMETHYST, fullStack);
 
-    private static List<String> itemNames = new ArrayList<>(List.of(
-        "amel",
-        "amel2",
-        "amel3",
-        "amel4",
-        "staves/amel_staff",
-        "staves/incomplete/generic",
-        "staves/incomplete/acacia",
-        "staves/incomplete/bamboo",
-        "staves/incomplete/birch",
-        "staves/incomplete/cherry",
-        "staves/incomplete/crimson",
-        "staves/incomplete/dark_oak",
-        "staves/incomplete/edified",
-        "staves/incomplete/jungle",
-        "staves/incomplete/mangrove",
-        "staves/incomplete/mindsplice",
-        "staves/incomplete/oak",
-        "staves/incomplete/spruce",
-        "staves/incomplete/warped",
-        "staves/amel_ring",
-        "staves/amel_ring2",
-        "amel_constructs/diamond_sword",
-        "amel_constructs/iron_sword",
-        "amel_constructs/gold_sword",
-        "wizard_diaries",
-        "mind",
-        "amel_constructs/live_jukebox",
-        "amel_constructs/jumpslate/am1",
-        "amel_constructs/jumpslate/am2",
-        "amel_constructs/jumpslate/ameth",
-        "amel_constructs/jumpslate/lapis",
-        "amel_constructs/jumpslate/rebound_1",
-        "amel_constructs/jumpslate/rebound_2",
-        "amel_jar",
-        "energy_container",
-        "amel_constructs/geode_dowser",
-        "amel_constructs/simple_impetus",
-        "amel_constructs/focus_necklace/1",
-        "amel_constructs/focus_necklace/2",
-        "amel_constructs/focus_necklace/1_worn",
-        "amel_constructs/focus_necklace/2_worn",
-        "amel_constructs/enchbrewer",
-        "media_condenser_unit",
-        "uncrafted_condenser",
-        "chalk"
-    ));
-    private static List<Item> items = new ArrayList<>(List.of(
-        AMEL_ITEM,
-        AMEL2_ITEM,
-        AMEL3_ITEM,
-        AMEL4_ITEM,
-        AMEL_STAFF,
-        PARTAMEL_STAFF,
-        PARTAMEL_ACACIA_STAFF,
-        PARTAMEL_BAMBOO_STAFF,
-        PARTAMEL_BIRCH_STAFF,
-        PARTAMEL_CHERRY_STAFF,
-        PARTAMEL_CRIMSON_STAFF,
-        PARTAMEL_DARK_OAK_STAFF,
-        PARTAMEL_EDIFIED_STAFF,
-        PARTAMEL_JUNGLE_STAFF,
-        PARTAMEL_MANGROVE_STAFF,
-        PARTAMEL_MINDSPLICE_STAFF,
-        PARTAMEL_OAK_STAFF,
-        PARTAMEL_SPRUCE_STAFF,
-        PARTAMEL_WARPED_STAFF,
-        AMEL_RING,
-        AMEL_RING2,
-        DIAMOND_SWORD,
-        IRON_SWORD,
-        GOLD_SWORD,
-        WIZARD_DIARIES,
-        MIND,
-        LIVE_JUKEBOX,
-        JUMP_SLATE_AM1,
-        JUMP_SLATE_AM2,
-        JUMP_SLATE_AMETH,
-        JUMP_SLATE_LAPIS,
-        REBOUND_SLATE_1,
-        REBOUND_SLATE_2,
-        AMEL_JAR,
-        ENERGY_CONTAINER,
-        GEODE_DOWSER,
-        SIMPLE_IMPETUS,
-        FOCUS_NECKLACE,
-        FOCUS_NECKLACE2,
-        FOCUS_NECKLACE_WORN,
-        FOCUS_NECKLACE2_WORN,
-        ENCH_BREWER,
-        MEDIA_CONDENSER,
-        UNCRAFTED_CONDENSER,
-        CHALK
-    ));
+    private static <ANY extends Object> Map<String, Item> mapOf(@SuppressWarnings("unchecked") ANY... stuff) {
+        // no err check required, this method is used once
+        Map<String, Item> map = new HashMap<>();
+
+        boolean item = false;
+        String id = "";
+        for (ANY thing : stuff) {
+            if (!item) {
+                id = (String)thing;
+                item = true;
+            } else {
+                map.put(id, (Item)thing);
+                item = false;
+            }
+        }
+
+        return map;
+    }
+    private static Map<String, Item> ITEMS = mapOf(
+        "amel", AMEL_ITEM,
+        "amel2", AMEL2_ITEM,
+        "amel3", AMEL3_ITEM,
+        "amel4", AMEL4_ITEM,
+        "staves/amel_staff", AMEL_STAFF,
+        "staves/incomplete/generic", PARTAMEL_STAFF,
+        "staves/incomplete/acacia", PARTAMEL_ACACIA_STAFF,
+        "staves/incomplete/bamboo", PARTAMEL_BAMBOO_STAFF,
+        "staves/incomplete/birch", PARTAMEL_BIRCH_STAFF,
+        "staves/incomplete/cherry", PARTAMEL_CHERRY_STAFF,
+        "staves/incomplete/crimson", PARTAMEL_CRIMSON_STAFF,
+        "staves/incomplete/dark_oak", PARTAMEL_DARK_OAK_STAFF,
+        "staves/incomplete/edified", PARTAMEL_EDIFIED_STAFF,
+        "staves/incomplete/jungle", PARTAMEL_JUNGLE_STAFF,
+        "staves/incomplete/mangrove", PARTAMEL_MANGROVE_STAFF,
+        "staves/incomplete/mindsplice", PARTAMEL_MINDSPLICE_STAFF,
+        "staves/incomplete/oak", PARTAMEL_OAK_STAFF,
+        "staves/incomplete/spruce", PARTAMEL_SPRUCE_STAFF,
+        "staves/incomplete/warped", PARTAMEL_WARPED_STAFF,
+        "staves/amel_ring", AMEL_RING,
+        "staves/amel_ring2", AMEL_RING2,
+        "amel_constructs/diamond_sword", DIAMOND_SWORD,
+        "amel_constructs/iron_sword", IRON_SWORD,
+        "amel_constructs/gold_sword", GOLD_SWORD,
+        "wizard_diaries", WIZARD_DIARIES,
+        "mind", MIND,
+        "amel_constructs/live_jukebox", LIVE_JUKEBOX,
+        "amel_constructs/jumpslate/am1", JUMP_SLATE_AM1,
+        "amel_constructs/jumpslate/am2", JUMP_SLATE_AM2,
+        "amel_constructs/jumpslate/ameth", JUMP_SLATE_AMETH,
+        "amel_constructs/jumpslate/lapis", JUMP_SLATE_LAPIS,
+        "amel_constructs/jumpslate/rebound_1", REBOUND_SLATE_1,
+        "amel_constructs/jumpslate/rebound_2", REBOUND_SLATE_2,
+        "amel_jar", AMEL_JAR,
+        "energy_container", ENERGY_CONTAINER,
+        "amel_constructs/geode_dowser", GEODE_DOWSER,
+        "amel_constructs/simple_impetus", SIMPLE_IMPETUS,
+        "amel_constructs/focus_necklace/1", FOCUS_NECKLACE,
+        "amel_constructs/focus_necklace/2", FOCUS_NECKLACE2,
+        "amel_constructs/focus_necklace/1_worn", FOCUS_NECKLACE_WORN,
+        "amel_constructs/focus_necklace/2_worn", FOCUS_NECKLACE2_WORN,
+        "amel_constructs/enchbrewer", ENCH_BREWER,
+        "media_condenser_unit", MEDIA_CONDENSER,
+        "uncrafted_condenser", UNCRAFTED_CONDENSER,
+        "chalk", CHALK,
+        "tuneable_amethyst", TUNEABLE_AMETHYST
+    );
 
     public static ItemGroup LapisMagicShitGroup;
 
@@ -174,11 +148,7 @@ public class ModItems {
             .icon(() -> new ItemStack(AMEL_ITEM))
             .displayName(LAPISMAGICSHITGROUPTEXT)
             .entries((context, entries) -> {
-                items.forEach(
-                    (Item item) -> {
-                        entries.add(item);
-                    }
-                );
+                ITEMS.values().forEach(entries::add);
             })
         .build();
         Registry.register(
@@ -186,8 +156,8 @@ public class ModItems {
             LAPIS_MAGIC_SHIT_GROUP,
             LapisMagicShitGroup
         );
-        for (int i = 0; i < items.size(); i++) {
-            register(itemNames.get(i), items.get(i));
+        for (var entry : ITEMS.entrySet()) {
+            register(entry.getKey(), entry.getValue());
         }
     }
 
@@ -195,9 +165,8 @@ public class ModItems {
         Registry.register(Registries.ITEM, id(name), item);
     }
 
-    public static <T extends Item> T registerItem(String name, T item) {
-        itemNames.add(name);
-        items.add(item);
+    public static <ITEM extends Item> ITEM registerItem(String name, ITEM item) {
+        ITEMS.put(name, item);
         return item;
     }
 }
