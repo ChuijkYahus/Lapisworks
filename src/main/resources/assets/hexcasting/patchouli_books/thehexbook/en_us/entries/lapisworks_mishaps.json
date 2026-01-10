@@ -23,6 +23,21 @@
             "type": "patchouli:text",
             "title": "pages.lapisworks.lapisworks_mishaps.badspechand.title",
             "text": "pages.lapisworks.lapisworks_mishaps.badspechand.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "title": "pages.lapisworks.lapisworks_mishaps.notrinket.title",
+            "text": "pages.lapisworks.lapisworks_mishaps.notrinket.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "title": "pages.lapisworks.lapisworks_mishaps.badtrinket.title",
+            "text": "pages.lapisworks.lapisworks_mishaps.badtrinket.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "title": "pages.lapisworks.lapisworks_mishaps.outsideofritual.title",
+            "text": "pages.lapisworks.lapisworks_mishaps.outsideofritual.summary"
         }
     ]
 }
