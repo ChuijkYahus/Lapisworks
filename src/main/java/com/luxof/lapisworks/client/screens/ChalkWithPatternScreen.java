@@ -3,6 +3,7 @@ package com.luxof.lapisworks.client.screens;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 
+import static com.luxof.lapisworks.Lapisworks.closeEnough;
 import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.LapisworksIDs.SET_PATTERNS_ON_CHALK;
 
@@ -50,7 +51,7 @@ public class ChalkWithPatternScreen extends HandledScreen<ChalkWithPatternScreen
     // how far does the mouse need to be for the line snap to the grid?
     private final long distanceBeforeSnapToGridSqr = 20;
     // how far can the mouse be from it's most recent dot before the line stops snapping to the grid?
-    private final long distanceFromRecentPointBeforeStopSnappingSqr = 3600;
+    private final long distanceFromRecentPointBeforeStopSnappingSqr = 3000;
     public final int patternLimit = 5;
     private int x;
     private int y;
@@ -97,21 +98,29 @@ public class ChalkWithPatternScreen extends HandledScreen<ChalkWithPatternScreen
         float thickness,
         int r, int g, int b, int a
     ) {
-        float dx = x2 - x1;
-        float dy = y2 - y1;
-        float len = (float)Math.sqrt(dx * dx + dy * dy);
-        if (len == 0f) return;
-        dx /= len;
-        dy /= len;
+        float halfThickness = thickness * 0.5f;
+        x1 = x1-halfThickness+1f;
+        x2 = x2-halfThickness+1f;
+        y1 = y1-halfThickness+1f;
+        y2 = y2-halfThickness+1f;
+        boolean goingHorizontal = closeEnough(y2, y1, 0.0001f);
+        boolean goingDown = y2 > y1;
+        float offX1 = 0f;
+        float offX2 = 0f;
 
-        float px = -dy * thickness * 0.5f;
-        float py = dx * thickness * 0.5f;
+        if (x2 > x1) {
+            offX1 = goingHorizontal ? halfThickness : goingDown ? thickness : 0f;
+            offX2 = goingHorizontal ? halfThickness : goingDown ? 0f : thickness;
+        } else if (x2 < x1) {
+            offX1 = goingHorizontal ? halfThickness : goingDown ? 0f : thickness;
+            offX2 = goingHorizontal ? halfThickness : goingDown ? thickness : 0;
+        }
 
         float z = 0f;
-        buffer.vertex(posMat, x1 + px, y1 + py, z).color(r, g, b, a).next();
-        buffer.vertex(posMat, x1 - px, y1 - py, z).color(r, g, b, a).next();
-        buffer.vertex(posMat, x2 - px, y2 - py, z).color(r, g, b, a).next();
-        buffer.vertex(posMat, x2 + px, y2 + py, z).color(r, g, b, a).next();
+        buffer.vertex(posMat, x1+offX1, y1, z).color(r, g, b, a).next();
+        buffer.vertex(posMat, x1+offX2, y1+thickness, z).color(r, g, b, a).next();
+        buffer.vertex(posMat, x2+offX2, y2+thickness, z).color(r, g, b, a).next();
+        buffer.vertex(posMat, x2+offX1, y2, z).color(r, g, b, a).next();
     }
 
     private boolean pointIsOccupied(Vector2i point) {
