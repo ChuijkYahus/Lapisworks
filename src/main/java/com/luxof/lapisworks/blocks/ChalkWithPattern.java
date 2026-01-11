@@ -207,8 +207,8 @@ public class ChalkWithPattern extends BlockWithEntity implements ChalkBlockInter
             chalk.renderLeftBracket = !isChalkWP(world, pos.offset(front.getOpposite()), attachedTo);
             chalk.renderRightBracket = !isChalkWP(world, pos.offset(front), attachedTo);
         } else {
-            chalk.renderLeftBracket = !isChalkWP(world, pos.offset(left.getOpposite()), attachedTo);
-            chalk.renderRightBracket = !isChalkWP(world, pos.offset(left), attachedTo);
+            chalk.renderLeftBracket = !isChalkWP(world, pos.offset(left), attachedTo);
+            chalk.renderRightBracket = !isChalkWP(world, pos.offset(left.getOpposite()), attachedTo);
         }
     }
 
