@@ -45,7 +45,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     public void tick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
 
         ServerWorld thisWorld = getWorld();
-        PersistentStateRituals state = PersistentStateRituals.getState(thisWorld);
+        PersistentStateRituals state = getState();
         ArrayList<OneTimeRitualExecutionState> rituals = state.getRituals(thisWorld);
 
         for (int i = rituals.size() - 1; i >= 0; i--) {
@@ -68,19 +68,22 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
 
     }
 
-    @Unique ServerWorld getWorld() { return (ServerWorld)(Object)this; }
+    @Unique private ServerWorld getWorld() { return (ServerWorld)(Object)this; }
+    @Unique private PersistentStateRituals getState() {
+        return PersistentStateRituals.getState(getWorld());
+    }
 
     @Unique @Override
     public ArrayList<OneTimeRitualExecutionState> getRituals() {
         ServerWorld thisWorld = getWorld();
-        return PersistentStateRituals.getState(thisWorld).getRituals(thisWorld);
+        return getState().getRituals(thisWorld);
     }
 
     @Unique @Override
     public void addRitual(OneTimeRitualExecutionState ritual) {
         ServerWorld thisWorld = getWorld();
 
-        PersistentStateRituals state = PersistentStateRituals.getState(thisWorld);
+        PersistentStateRituals state = getState();
         state.getRituals(thisWorld).add(ritual);
         state.markDirty();
     }
@@ -88,21 +91,23 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     @Unique @Override
     public HashMap<Iota, ArrayList<BlockPos>> getTuneables() {
         ServerWorld thisWorld = getWorld();
-        return PersistentStateRituals.getState(thisWorld).getTuneables(thisWorld);
+        return getState().getTuneables(thisWorld);
     }
 
     @Unique @Override
     public ArrayList<BlockPos> getTuneables(Iota key) {
         ServerWorld thisWorld = getWorld();
-        return PersistentStateRituals.getState(thisWorld).getTuneables(thisWorld, key);
+        return getState().getTuneables(thisWorld, key);
     }
 
     @Unique @Override
     public void addTuneable(Iota key, BlockPos positionOfTuneable) {
         ServerWorld thisWorld = getWorld();
+        PersistentStateRituals state = getState();
 
-        var tuneables = PersistentStateRituals.getState(thisWorld).getTuneables(thisWorld, key);
+        var tuneables = state.getTuneables(thisWorld, key);
         tuneables.add(positionOfTuneable);
+        state.markDirty();
     }
 
     @Unique @Override
@@ -113,5 +118,6 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     @Unique @Override
     public void removeTuneable(Iota previousKey, BlockPos positionOfTuneable) {
         getTuneables(previousKey).remove(positionOfTuneable);
+        getState().markDirty();
     }
 }

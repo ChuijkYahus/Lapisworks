@@ -297,6 +297,7 @@ Locked in rah
 - Gold-Diamond Casting Ring has been deleted in favour of the Amel variant
 - Mishap messages n shit
 - Pattern name changes (particularly in the necklace RW patterns)
+- Wizard lore is a lil diff now
 - You can't read an Ancient Tome before you have gotten Lapisworks Research now
 ## Fixes:
 - Amel Jar throwing the Amel in your other hand into the void if you attempted to withdraw
@@ -519,4 +520,6 @@ make the addon more hexxy
   (paraphrased from Lani)  
 
 per world pattern shapes picking between a few handmade ones is boring..  
-add some randomness!
+add some randomness!  
+
+jumpslate across space and time

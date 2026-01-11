@@ -20,6 +20,7 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
 import org.jetbrains.annotations.Nullable;
@@ -31,6 +32,7 @@ public class TuneableAmethystEntity extends BlockEntity implements LinkableMedia
 
     public long media = 0L;
     @Nullable private Iota tunedFrequency = null;
+    @Nullable private NbtCompound tunedNbt = null;
 
     public final double minAmbit = 2.0;
     public final double ambitCap = 16;
@@ -57,11 +59,18 @@ public class TuneableAmethystEntity extends BlockEntity implements LinkableMedia
         }
 
         tunedFrequency = frequency instanceof NullIota ? null : frequency;
+        tunedNbt = frequency instanceof NullIota ? null : IotaType.serialize(frequency);
         if (tunedFrequency != null)
             ritualsUtil.addTuneable(tunedFrequency, pos);
         save();
     }
     public Iota getTunedFrequency() { return tunedFrequency; }
+
+    /** Used usually on client where there is no way to deserialize an iota. */
+    @Nullable
+    public Text getTunedFrequencyDisplay() {
+        return tunedNbt != null ? IotaType.getDisplay(tunedNbt) : null;
+    }
 
     @SuppressWarnings("deprecation")
     public void updateState() {
@@ -83,16 +92,22 @@ public class TuneableAmethystEntity extends BlockEntity implements LinkableMedia
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         nbt.putLong("media", media);
-        if (tunedFrequency != null)
-            nbt.put("frequency", IotaType.serialize(tunedFrequency));
+        if (tunedFrequency != null) {
+            tunedNbt = IotaType.serialize(tunedFrequency);
+            nbt.put("frequency", tunedNbt);
+        } else if (tunedNbt != null)
+            nbt.put("frequency", tunedNbt);
     }
 
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
         media = nbt.getLong("media");
-        if (nbt.contains("frequency") && world instanceof ServerWorld sw)
-            tunedFrequency = IotaType.deserialize(nbt, sw);
+        if (nbt.contains("frequency")) {
+            tunedNbt = nbt.getCompound("frequency");
+            if (world instanceof ServerWorld sw)
+                tunedFrequency = IotaType.deserialize(nbt, sw);
+        }
     }
 
     @Override @Nullable public Packet<ClientPlayPacketListener> toUpdatePacket() {

@@ -1,7 +1,5 @@
 package com.luxof.lapisworks.client;
 
-import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.misc.MediaConstants;
@@ -260,16 +258,16 @@ public class LapisworksClient implements ClientModInitializer {
                         )
                     )
                 );
-                Iota iota = tuneable.getTunedFrequency();
+                Text iota = tuneable.getTunedFrequencyDisplay();
                 lines.add(
                     new Pair<ItemStack, Text>(
                         new ItemStack(ModItems.TUNEABLE_AMETHYST),
                         Text.translatable(
                             "render.lapisworks.scryinglens.tuneable_amethyst.tuned"
                         ).append(
-                            iota == null ? Text.translatable(
+                            iota != null ? iota : Text.translatable(
                                 "render.lapisworks.scryinglens.tuneable_amethyst.nothing"
-                            ) : iota.display()
+                            )
                         )
                     )
                 );
