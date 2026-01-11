@@ -20,8 +20,6 @@ import com.luxof.lapisworks.actions.scry.*;
 import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.init.ThemConfigFlags.registerPWShapePattern;
 
-import java.util.List;
-
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -137,6 +135,7 @@ public class Patterns {
 
         // Rituals
         register("get_amethyst_tuning", "edewwqdqawwwaqewddwaqqwdqqwqqwqq", HexDir.NORTH_WEST, new GetAmethystTuning());
+        // Am I cruel?
         register("tune_amethyst", "ewwwwqdqwawwwwwwawqeadwwdwdwwdaawwqqwwewqwqqwqwwwddwqwe", HexDir.SOUTH_EAST, new TuneAmethyst());
 
         // One-time
@@ -155,17 +154,7 @@ public class Patterns {
         register("create_enchsent3", "aqaeawdwwwdwqwdwwwdweqaawddeweaqa", HexDir.NORTH_WEST, createEnchSent);
         register("create_enchsent4", "wdwwwdwqwdwwwdweqaawdde", HexDir.NORTH_WEST, createEnchSent);
         register("create_enchsent5", "wdwwwdwqwdwwwdwweeeee", HexDir.NORTH_WEST, createEnchSent);
-        registerPWShapePattern(
-            "lapisworks:create_enchsent",
-            List.of(
-                "aqaeawdwwwdwqwdwwwdweqqaqwedeewqded",
-                "aqaeawdwwwdwqwdwwwdwewweaqa",
-                "wdwewdwwwdwwwdwqwdwwwdw",
-                "aqaeawdwwwdwqwdwwwdweqaawddeweaqa",
-                "wdwwwdwqwdwwwdweqaawdde",
-                "wdwwwdwqwdwwwdwweeeee"
-            )
-        );
+        registerPWShapePattern("lapisworks:create_enchsent");
         register("banish_my_enchsent", "wdwewdwdwqwawwwawewawwwaw", HexDir.NORTH_EAST, new BanishMySent());
         register("banish_other_enchsent", "eeeeedwqwawwwawewawwwaw", HexDir.NORTH_EAST, new BanishOtherSent());
         
@@ -174,16 +163,7 @@ public class Patterns {
         register("flay_artmind2", "ewewedwqwqqwqwqaeqeqaqeqeqa", HexDir.SOUTH_EAST, new FlayArtMind());
         register("flay_artmind3", "ewewedwqwaqaeweeeweaqdedaeade", HexDir.SOUTH_EAST, new FlayArtMind());
         register("flay_artmind4", "ewewedwqwaqeqwqadqwqwqdaqeqwqwq", HexDir.SOUTH_EAST, new FlayArtMind());
-        registerPWShapePattern(
-            "lapisworks:flay_artmind",
-            List.of(
-                "ewewedwqwqqwqwqaeqe",
-                "ewewedwqwaqaedqdeaqdewewe",
-                "ewewedwqwqqwqwqaeqeqaqeqeqa",
-                "ewewedwqwaqaeweeeweaqdedaeade",
-                "ewewedwqwaqeqwqadqwqwqdaqeqwqwq"
-            )
-        );
+        registerPWShapePattern("lapisworks:flay_artmind");
 
         register("hastenature0", "awawwwdwdww", HexDir.NORTH_EAST, new Hastenature());
         register("hastenature1", "qwdedwqqwdedweawawwwdwdww", HexDir.WEST, new Hastenature());
@@ -191,17 +171,15 @@ public class Patterns {
         register("hastenature3", "awwdedwwawwdedweawawwwdwdww", HexDir.NORTH_WEST, new Hastenature());
         register("hastenature4", "aaqawawweddedwdww", HexDir.NORTH_WEST, new Hastenature());
         register("hastenature5", "aeaeaeaeaeadawawwwdwdww", HexDir.NORTH_WEST, new Hastenature());
-        registerPWShapePattern(
-            "lapisworks:hastenature",
-            List.of(
-                "awawwwdwdww",
-                "qwdedwqqwdedweawawwwdwdww",
-                "wawqwaweawawwwdwdww",
-                "awwdedwwawwdedweawawwwdwdww",
-                "aaqawawweddedwdww",
-                "aeaeaeaeaeadawawwwdwdww"
-            )
-        );
+        registerPWShapePattern("lapisworks:hastenature");
+
+        register("quenched_indigo0", "qqqadwawdaqqwqawaawaa", HexDir.SOUTH_EAST, new QuenchedIndigo());
+        register("quenched_indigo1", "wqaqwadaqqwwqqadwa", HexDir.SOUTH_WEST, new QuenchedIndigo());
+        register("quenched_indigo2", "deadawdwadaedqdeaeewddwaddqeaedewwwww", HexDir.NORTH_WEST, new QuenchedIndigo());
+        register("quenched_indigo3", "deeedeqdawdwadeeqdqedwwwqedqdedawwqwwqwwqwwqwwqww", HexDir.NORTH_WEST, new QuenchedIndigo());
+        register("quenched_indigo4", "qawwqeaeqwwaqqqaqeqdaadqwedeeawdwa", HexDir.NORTH_WEST, new QuenchedIndigo());
+        register("quenched_indigo5", "qawwqwwqwwaqaedewwwawweqaqdawdwa", HexDir.NORTH_WEST, new QuenchedIndigo());
+        registerPWShapePattern("lapisworks:quenched_indigo");
     }
 
     private static ActionRegistryEntry register(

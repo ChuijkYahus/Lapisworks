@@ -24,6 +24,7 @@ import static com.luxof.lapisworks.LapisworksIDs.FLAY_ARTMIND_ADVANCEMENT;
 import static com.luxof.lapisworks.LapisworksIDs.HASTENATURE_ADVANCEMENT;
 import static com.luxof.lapisworks.LapisworksIDs.MAKE_GENERIC_PARTAMEL;
 import static com.luxof.lapisworks.LapisworksIDs.POTION_TAG;
+import static com.luxof.lapisworks.LapisworksIDs.QUENCHED_INDIGO_ADVANCEMENT;
 import static com.luxof.lapisworks.LapisworksIDs.UNFLAY_FLAYED_VILLAGER;
 
 import java.util.List;
@@ -172,6 +173,7 @@ public class Mutables {
         wizardDiariesGainableAdvancements.add(ENCHSENT_ADVANCEMENT);
         wizardDiariesGainableAdvancements.add(FLAY_ARTMIND_ADVANCEMENT);
         wizardDiariesGainableAdvancements.add(HASTENATURE_ADVANCEMENT);
+        wizardDiariesGainableAdvancements.add(QUENCHED_INDIGO_ADVANCEMENT);
 
         SMindInfusions.put(EMPTY_IMP_INTO_SIMP, new MakeSimpleImpetus());
         SMindInfusions.put(UNFLAY_FLAYED_VILLAGER, new UnflayVillager());

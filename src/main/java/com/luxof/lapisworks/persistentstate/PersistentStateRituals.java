@@ -135,8 +135,6 @@ public class PersistentStateRituals extends PersistentState {
         return state;
     }
 
-    /** the reason this takes a world is so that rituals in the nether aren't ticked for
-     * the overworld. */
     public static PersistentStateRituals getState(ServerWorld world) {
         PersistentStateManager psm = world.getPersistentStateManager();
 

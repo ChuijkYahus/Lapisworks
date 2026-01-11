@@ -116,13 +116,13 @@ dependencies {
 	modCompileOnly "maven.modrinth:hextended-staves:${hextended_version}-fabric,1.20.1"
 	modLocalRuntime "maven.modrinth:hextended-staves:${hextended_version}-fabric,1.20.1"
 	// Lexical
-	// test 2.0.0
-	modCompileOnly files("${rootProject.rootDir}\\libs\\hexical-2.0.0-e0d7ef9.jar")
-	modLocalRuntime files("${rootProject.rootDir}\\libs\\hexical-2.0.0-e0d7ef9.jar")
 	modCompileOnly files("${rootProject.rootDir}\\libs\\hexpose-1.0.0.jar")
 	modLocalRuntime files("${rootProject.rootDir}\\libs\\hexpose-1.0.0.jar")
 	modCompileOnly "dev.kosmx.player-anim:player-animation-lib-fabric:${player_animator_version}"
 	modLocalRuntime "dev.kosmx.player-anim:player-animation-lib-fabric:${player_animator_version}"
+	// test 2.0.0
+	modCompileOnly files("${rootProject.rootDir}\\libs\\hexical-2.0.0-e0d7ef9.jar")
+	modLocalRuntime files("${rootProject.rootDir}\\libs\\hexical-2.0.0-e0d7ef9.jar")
 	// test 1.5.0
 	//modLocalRuntime "maven.modrinth:hexical:1.5.0-fabric,1.20.1"
 	// Lapse
