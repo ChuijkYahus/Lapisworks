@@ -3,7 +3,6 @@ package com.luxof.lapisworks.actions.great;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
-import at.petrak.hexcasting.api.casting.mishaps.MishapUnenlightened;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import java.util.List;
@@ -20,10 +19,10 @@ import net.minecraft.util.math.BlockPos;
 // and Hastenature is a name that kicks ass you have to admit
 public class Hastenature extends SpellActionNCT {
     public int argc = 2;
+    public boolean requiresEnlightenment = true;
 
     @Override
     public Result execute(HexIotaStack stack, CastingEnvironment ctx) {
-        if (!ctx.isEnlightened()) { throw new MishapUnenlightened(); }
         BlockPos pos = stack.getBlockPos(0);
         int times = stack.getPositiveInt(1);
 
