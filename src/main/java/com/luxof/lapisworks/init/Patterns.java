@@ -142,7 +142,7 @@ public class Patterns {
         register("stop_be_me", "adaqqqwqqq", HexDir.EAST, new DisableCaster());
         register("be_me", "qqqqqwqqq", HexDir.EAST, new EnableCaster());
         register("get_ritual_tuning", "wawqwawawweaqaaweaqaaweqqqqqa", HexDir.EAST, new GetRitualTuning());
-        register("tune_ritual", "wdwewdwdwwqdeddwqdeddwwqeeeeewdqdqdqdqdqde", HexDir.NORTH_WEST, new TuneRitual());
+        register("tune_ritual", "wdwewdwdwwqdeddwqdeddwqeeeeewdqdqdqdqdqde", HexDir.NORTH_WEST, new TuneRitual());
 
         // hol up, let him cook
         // i said LET HIM COOK
