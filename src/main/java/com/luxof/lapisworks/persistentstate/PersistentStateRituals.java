@@ -6,6 +6,8 @@ import com.luxof.lapisworks.chalk.OneTimeRitualExecutionState;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 
+import static com.luxof.lapisworks.Lapisworks.LOGGER;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +23,22 @@ import net.minecraft.util.math.BlockPos;
 
 public class PersistentStateRituals extends PersistentState {
     public HashMap<String, ArrayList<OneTimeRitualExecutionState>> rituals = new HashMap<>();
-    public HashMap<String, HashMap<Iota, ArrayList<BlockPos>>> tuneables = new HashMap<>();
+    public HashMap<String, HashMap<IotaKey, ArrayList<BlockPos>>> tuneables = new HashMap<>();
+
+    public static final record IotaKey(Iota iota) {
+        @Override
+        public int hashCode() {
+            return iota.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other == null) return false;
+            if (!(other instanceof IotaKey otherIotaKey)) return false;
+
+            return Iota.tolerates(iota, otherIotaKey.iota);
+        }
+    }
 
     public ArrayList<OneTimeRitualExecutionState> getRituals(ServerWorld world) {
         String key = world.getRegistryKey().getValue().toString();
@@ -31,7 +48,7 @@ public class PersistentStateRituals extends PersistentState {
     }
 
 
-    public HashMap<Iota, ArrayList<BlockPos>> getTuneables(ServerWorld world) {
+    public HashMap<IotaKey, ArrayList<BlockPos>> getTuneables(ServerWorld world) {
         String key = world.getRegistryKey().getValue().toString();
 
         if (!tuneables.containsKey(key)) tuneables.put(key, new HashMap<>());
@@ -39,8 +56,9 @@ public class PersistentStateRituals extends PersistentState {
     }
 
 
-    public ArrayList<BlockPos> getTuneables(ServerWorld world, Iota key) {
+    public ArrayList<BlockPos> getTuneables(ServerWorld world, Iota iota) {
         var map = getTuneables(world);
+        IotaKey key = new IotaKey(iota);
 
         if (!map.containsKey(key)) map.put(key, new ArrayList<>());
         return map.get(key);
@@ -72,7 +90,7 @@ public class PersistentStateRituals extends PersistentState {
                 nbtListOf(
                     tuneables.get(world).entrySet().stream().map(
                         entry -> {
-                            NbtCompound iota = IotaType.serialize(entry.getKey());
+                            NbtCompound iota = IotaType.serialize(entry.getKey().iota);
                             NbtList poses = nbtListOf(
                                 entry.getValue().stream().map(Lapisworks::serializeBlockPos).toList()
                             );
@@ -110,6 +128,7 @@ public class PersistentStateRituals extends PersistentState {
         }
 
         // HashMap<String, HashMap<Iota, ArrayList<BlockPos>>>
+        LOGGER.info("LAPISWORKS PERSISTENT STATE ---------------------------------------------");
         NbtCompound tuneablesNbt = nbt.getCompound("tuneables");
         for (String worldKey : tuneablesNbt.getKeys()) {
             state.tuneables.put(
@@ -118,10 +137,10 @@ public class PersistentStateRituals extends PersistentState {
                     tuneablesNbt.getList(worldKey, NbtElement.COMPOUND_TYPE).stream()
                     .collect(
                         Collectors.toMap(
-                            entry -> IotaType.deserialize(
+                            entry -> new IotaKey(IotaType.deserialize(
                                 ((NbtCompound)entry).getCompound("iota"),
                                 world
-                            ),
+                            )),
                             entry -> new ArrayList<>(
                                 ((NbtCompound)entry).getList("poses", NbtElement.COMPOUND_TYPE)
                                 .stream().map(Lapisworks::deserializeBlockPos).toList()
@@ -130,7 +149,10 @@ public class PersistentStateRituals extends PersistentState {
                     )
                 )
             );
+            LOGGER.info("Tuneables." + worldKey + ": " + String.valueOf(state.tuneables.get(worldKey).size()));
         }
+        LOGGER.info("Tuneables: " + String.valueOf(state.tuneables.size()));
+        LOGGER.info("LAPISWORKS PERSISTENT STATE ---------------------------------------------");
 
         return state;
     }

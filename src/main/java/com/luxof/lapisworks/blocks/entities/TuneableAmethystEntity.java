@@ -43,7 +43,7 @@ public class TuneableAmethystEntity extends BlockEntity implements LinkableMedia
 
     public double getMediaInDust() { return (double)media / (double)MediaConstants.DUST_UNIT; }
     public double getAmbit() { return Math.max(minAmbit, Math.sqrt(getMediaInDust())); }
-    public double getAmbitSqr() { return Math.min(minAmbitSqr, getMediaInDust()); }
+    public double getAmbitSqr() { return Math.max(minAmbitSqr, getMediaInDust()); }
 
     /** to clear, you can also pass in a NullIota.
      * <p>Server-only method. Throws if on client. */

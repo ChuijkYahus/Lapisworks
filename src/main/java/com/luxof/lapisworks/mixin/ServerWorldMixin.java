@@ -6,6 +6,7 @@ import com.luxof.lapisworks.chalk.OneTimeRitualExecutionState;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.mixinsupport.RitualsUtil;
 import com.luxof.lapisworks.persistentstate.PersistentStateRituals;
+import com.luxof.lapisworks.persistentstate.PersistentStateRituals.IotaKey;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,6 +59,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
 
             for (int i = poses.size() - 1; i >= 0; i--) {
 
+                // doesn't this chunkload?
                 if (!thisWorld.getBlockState(poses.get(i)).isOf(ModBlocks.TUNEABLE_AMETHYST)) {
                     poses.remove(i);
                     state.markDirty();
@@ -89,7 +91,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     }
 
     @Unique @Override
-    public HashMap<Iota, ArrayList<BlockPos>> getTuneables() {
+    public HashMap<IotaKey, ArrayList<BlockPos>> getTuneables() {
         ServerWorld thisWorld = getWorld();
         return getState().getTuneables(thisWorld);
     }
