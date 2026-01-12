@@ -16,6 +16,15 @@
         },
         {
             "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.rituals.chalk.stamp.pre"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "lapisworks:base/stamp",
+            "text": "pages.lapisworks.imbuement.rituals.chalk.stamp.recipe_text"
+        },
+        {
+            "type": "patchouli:text",
             "text": "pages.lapisworks.imbuement.rituals.chalk.tuning"
         },
         {
@@ -38,6 +47,11 @@
             "input": "vec",
             "output": "any",
             "text": "pages.lapisworks.imbuement.rituals.chalk.get_amethyst_tuning.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "advancement": "lapisworks:enlightened",
+            "text": "pages.lapisworks.imbuement.rituals.chalk.tuning.foundit"
         }
     ]
 }

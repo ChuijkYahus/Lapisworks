@@ -1,0 +1,12 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    { "item": "hexcasting:charged_amethyst" },
+    { "item": "hexcasting:slate" },
+    { "item": "hexcasting:amethyst_dust" }
+  ],
+  "result": {
+    "item": "lapisworks:amethyst_stamp",
+    "count": 1
+  }
+}

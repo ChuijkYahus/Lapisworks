@@ -294,6 +294,7 @@ Locked in rah
 - Enchanted Sentinels actually use your base ambit instead of a flat 32 blocks around you
 - Enchanted Slipways got changed to have nearly precisely 2x slipway wisp spawn rate  
   (as i intended them to have when i first made them)
+- Fall Damage Resistance, you may now have 60 blocks of fall damage reduction with 3 levels
 - Gold-Diamond Casting Ring has been deleted in favour of the Amel variant
 - Mishap messages n shit
 - Pattern name changes (particularly in the necklace RW patterns)
@@ -302,17 +303,18 @@ Locked in rah
 ## Fixes:
 - Amel Jar throwing the Amel in your other hand into the void if you attempted to withdraw
   with a full stack already there
+- Ancient Tomes giving you the advancement anyway despite showing the message if you dont have lapis yet
 - "Bug in the mod" mishaps
 - Damage and movement speed enhancements stacking on world join (you need to kys ingame to reset tho)
 - Enchanted Slipways having a tendency to move 0.01f more in +XYZ than -XYZ (lmao)
 - Enchantments not carrying across dimensions (:broken_heart:)
 - Enchantment Purification's order of arguments being flipped
 - Finally fixed that Cradle bug with items for fucking real, holy fucking shit  
-  WHY DOES IT STILL JUMPSCARE ME SOMETIMES
+  IT STILL JUMPSCARES ME WHAT THE FUCK
 - Logspam begone!
 - Sieve Thoughts not working on a spell circle
-- You may no longer convert Lapis (+ your life force) into Amethyst Shards
-    - There's a spell for that now
+- You may no longer convert Lapis (+ your life force) into Amethyst Shards  
+  There's a spell for that now
 ## Interop:
 - Hierophantics
   - Max experience fishermen villagers can be flayed into you  
@@ -522,4 +524,7 @@ make the addon more hexxy
 per world pattern shapes picking between a few handmade ones is boring..  
 add some randomness!  
 
-jumpslate across space and time
+jumpslate across space and time  
+
+vv only if no one else is interested  
+MASSIVE wizard towers! give you ambit + cost reduction + grid size (grid size toggleable)  
