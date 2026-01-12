@@ -49,7 +49,7 @@ public class ChalkWithPatternScreen extends HandledScreen<ChalkWithPatternScreen
     );
     private List<Vector2i> grid;
     // how far does the mouse need to be for the line snap to the grid?
-    private final long distanceBeforeSnapToGridSqr = 20;
+    private final long distanceBeforeSnapToGridSqr = 50;
     // how far can the mouse be from it's most recent dot before the line stops snapping to the grid?
     private final long distanceFromRecentPointBeforeStopSnappingSqr = 3000;
     public final int patternLimit = 5;
@@ -244,11 +244,20 @@ public class ChalkWithPatternScreen extends HandledScreen<ChalkWithPatternScreen
         if (
             distance <= distanceBeforeSnapToGridSqr &&
             lastEngaged.distanceSquared(mouseX, mouseY)
-                <= distanceFromRecentPointBeforeStopSnappingSqr &&
-            !lineIsOccupied(lastEngaged, point) &&
-            !lastEngaged.equals(point)
-        )
-            currentlyEngaged.add(point);
+                <= distanceFromRecentPointBeforeStopSnappingSqr
+        ) {
+            if (
+                currentlyEngaged.size() > 1 &&
+                currentlyEngaged.get(currentlyEngaged.size() - 2).equals(point)
+            )
+                currentlyEngaged.remove(currentlyEngaged.size() - 1);
+
+            else if (
+                !lineIsOccupied(lastEngaged, point) &&
+                !lastEngaged.equals(point)
+            )
+                currentlyEngaged.add(point);
+        }
 
 
         return true;

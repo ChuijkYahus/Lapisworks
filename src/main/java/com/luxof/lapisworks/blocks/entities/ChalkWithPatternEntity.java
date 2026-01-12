@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -45,6 +45,7 @@ public class ChalkWithPatternEntity extends BlockEntity implements ExtendedScree
     }
     public static final int MAXIMUM_PATTERNS = 5;
 
+    public Direction renderPatternsInDir = Direction.NORTH;
     public Direction attachedTo = Direction.DOWN;
     /** is it attached to north-south instead of east-west? */
     public boolean rotated = false;
@@ -55,6 +56,7 @@ public class ChalkWithPatternEntity extends BlockEntity implements ExtendedScree
 
     @Override
     public void readNbt(NbtCompound nbt) {
+        renderPatternsInDir = Direction.byName(nbt.getString("renderPatternsInDir"));
         attachedTo = Direction.byName(nbt.getString("attachedTo"));
         rotated = nbt.getBoolean("rotated");
         powered = nbt.getBoolean("powered");
@@ -76,6 +78,8 @@ public class ChalkWithPatternEntity extends BlockEntity implements ExtendedScree
     }
     @Override
     public void writeNbt(NbtCompound nbt) {
+        if (renderPatternsInDir == null) renderPatternsInDir = Direction.NORTH;
+        nbt.putString("renderPatternsInDir", renderPatternsInDir.toString());
         nbt.putString("attachedTo", attachedTo.toString());
         nbt.putBoolean("rotated", rotated);
         nbt.putBoolean("powered", powered);
@@ -99,6 +103,8 @@ public class ChalkWithPatternEntity extends BlockEntity implements ExtendedScree
 
     @Override
     public ScreenHandler createMenu(int arg0, PlayerInventory arg1, PlayerEntity arg2) {
+        renderPatternsInDir = arg2.getHorizontalFacing();
+        save();
         return new ChalkWithPatternScreenHandler(arg0, pos);
     }
     @Override
@@ -113,7 +119,7 @@ public class ChalkWithPatternEntity extends BlockEntity implements ExtendedScree
     public void save() {
         markDirty();
         BlockState state = world.getBlockState(pos);
-        world.updateListeners(pos, state, state, 0);
+        world.updateListeners(pos, state, state, Block.NOTIFY_LISTENERS);
     }
 
 
