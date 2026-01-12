@@ -2,8 +2,8 @@
 	"format_version": "1.9.0",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "lapisworks:item/stamp",
-		"particle": "lapisworks:item/stamp"
+		"1": "lapisworks:item/amethyst_stamp",
+		"particle": "lapisworks:item/amethyst_stamp"
 	},
 	"elements": [
 		{
