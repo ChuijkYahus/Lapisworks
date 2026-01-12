@@ -98,9 +98,10 @@ public class ChalkWithPatternRenderer implements BlockEntityRenderer<ChalkWithPa
             matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(90));
         matrices.multiply(
             switch (chalk.renderPatternsInDir) {
-                case WEST -> RotationAxis.POSITIVE_Y.rotationDegrees(90);
+                // i love me some quirky quirks
+                case WEST -> RotationAxis.POSITIVE_Y.rotationDegrees(90 + (chalk.attachedTo == Direction.UP ? 180 : 0));
                 case SOUTH -> RotationAxis.POSITIVE_Y.rotationDegrees(180);
-                case EAST -> RotationAxis.POSITIVE_Y.rotationDegrees(270);
+                case EAST -> RotationAxis.POSITIVE_Y.rotationDegrees(270 - (chalk.attachedTo == Direction.UP ? 180 : 0));
                 default -> RotationAxis.POSITIVE_Z.rotationDegrees(0);
             }
         );
