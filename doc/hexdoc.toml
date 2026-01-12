@@ -38,6 +38,7 @@ show_landing_text = false
 "lapisworks:amel_constructs/iron_sword" = { texture = "lapisworks:textures/item/amel_isword_noanim.png" }
 "lapisworks:amel_constructs/gold_sword" = { texture = "lapisworks:textures/item/amel_gsword_noanim.png" }
 "lapisworks:energy_container" = { texture = "lapisworks:textures/item/energy_container.png" }
+"lapisworks:amethyst_stamp" = { texture = "lapisworks:textures/item/amethyst_stamp" }
 # wtf?? whatever, at least it's never shown in the book.
 "lapisworks:amel_constructs/focus_necklace/1_worn" = { texture = "lapisworks:textures/item/focus_necklace_worn.png" }
 "lapisworks:amel_constructs/focus_necklace/2_worn" = { texture = "lapisworks:textures/item/focus_necklace2_worn.png" }
