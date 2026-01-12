@@ -252,7 +252,7 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	public int computeFallDamage(float fallDistance, float damageMultiplier, Operation<Integer> og) {
 		return og.call(
 			Math.max(
-				fallDistance - 10 * this.getEnchant(AllEnchantments.fallDmgRes),
+				fallDistance - 20 * this.getEnchant(AllEnchantments.fallDmgRes),
 				0
 			),
 			damageMultiplier
