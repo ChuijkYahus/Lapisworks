@@ -162,6 +162,7 @@ public class ChalkWithPatternScreen extends HandledScreen<ChalkWithPatternScreen
         this.y = (this.height - this.backgroundHeight) / 2;
         this.grid = gridSetup.stream().map(vec -> new Vector2i(x + vec.x, y + vec.y)).toList();
 
+
         drawBackground(context, delta, mouseX, mouseY);
 
 
@@ -213,6 +214,16 @@ public class ChalkWithPatternScreen extends HandledScreen<ChalkWithPatternScreen
     @Override
     public boolean mouseClicked(double mX, double mY, int button) {
         if (button != 0 || patterns.size() >= patternLimit) return false;
+
+        // O(1) trust (exception triggered rarely)
+        // this "temporary solution" will last forever vro :broken_heart:
+        for (int i = patterns.size() - 1; i >= 0; i--) {
+            try {
+                patterns.get(i).get(1);
+            } catch (IndexOutOfBoundsException e) {
+                patterns.remove(i);
+            }
+        }
 
         int mouseX = (int)Math.round(mX);
         int mouseY = (int)Math.round(mY);
