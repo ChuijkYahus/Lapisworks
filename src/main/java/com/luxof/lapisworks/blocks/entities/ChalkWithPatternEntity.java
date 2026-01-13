@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -78,7 +79,6 @@ public class ChalkWithPatternEntity extends BlockEntity implements ExtendedScree
     }
     @Override
     public void writeNbt(NbtCompound nbt) {
-        if (renderPatternsInDir == null) renderPatternsInDir = Direction.NORTH;
         nbt.putString("renderPatternsInDir", renderPatternsInDir.toString());
         nbt.putString("attachedTo", attachedTo.toString());
         nbt.putBoolean("rotated", rotated);
