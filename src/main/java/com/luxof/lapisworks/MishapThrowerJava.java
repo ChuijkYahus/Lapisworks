@@ -31,8 +31,10 @@ import java.util.Optional;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
@@ -134,15 +136,13 @@ public class MishapThrowerJava {
                 Text.translatable("mishaps.lapisworks.descs.entityorblockposiota")
             );
     }
-    public static <ANY extends Object> ANY assertIsThisBlock(
-        CastingEnvironment ctx,
+    public static void assertIsThisBlock(
+        ServerWorld world,
         BlockPos pos,
-        Class<ANY> thisBlock,
-        Text blockName
+        Block thisBlock
     ) {
-        BlockEntity bE = ctx.getWorld().getBlockEntity(pos);
-        if (bE != null && thisBlock.isInstance(bE)) return thisBlock.cast(bE);
-        throw new MishapBadBlock(pos, blockName);
+        if (!world.getBlockState(pos).isOf(thisBlock))
+            throw new MishapBadBlock(pos, thisBlock.getName());
     }
     public static CircleExecutionState assertInSpellCircle(CastingEnvironment ctx) {
         if (ctx instanceof CircleCastEnv circleCtx) return circleCtx.circleState();

@@ -1,0 +1,6 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "lapisworks:block/tuneable_amethyst/stage1"
+    }
+}

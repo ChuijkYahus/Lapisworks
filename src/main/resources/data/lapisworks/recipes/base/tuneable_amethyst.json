@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " C ",
+        "CAC",
+        " S "
+    ],
+    "key": {
+        "S": {
+            "item": "minecraft:amethyst_shard"
+        },
+        "C": {
+            "item": "hexcasting:charged_amethyst"
+        },
+        "A": {
+            "tag": "lapisworks:amel"
+        }
+    },
+    "result": {
+        "item": "lapisworks:tuneable_amethyst"
+    }
+}

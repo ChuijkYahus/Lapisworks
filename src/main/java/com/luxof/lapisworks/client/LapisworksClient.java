@@ -17,6 +17,7 @@ import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.clamp;
 import static com.luxof.lapisworks.Lapisworks.nullConfigFlags;
 import static com.luxof.lapisworks.Lapisworks.prettifyFloat;
+import static com.luxof.lapisworks.Lapisworks.prettifyDouble;
 import static com.luxof.lapisworks.LapisworksIDs.AMEL_ORB_IS_FILLED;
 import static com.luxof.lapisworks.LapisworksIDs.BLOCKING_MPP;
 import static com.luxof.lapisworks.LapisworksIDs.DOWSE_RESULT;
@@ -121,6 +122,25 @@ public class LapisworksClient implements ClientModInitializer {
         for (HexPattern pattern : patterns) { ret += inlineify(pattern); }
         return ret;
     }
+    private Pair<ItemStack, Text> displayMedia(long amount) {
+        return new Pair<>(
+            new ItemStack(HexItems.AMETHYST_DUST),
+            Text.literal(String.valueOf((double)amount / (double)MediaConstants.DUST_UNIT))
+        );
+    }
+    private Pair<ItemStack, Text> displayMediaWithCap(long amount, long cap) {
+        return new Pair<>(
+            new ItemStack(HexItems.AMETHYST_DUST),
+            Text.translatable(
+
+                "render.lapisworks.scryinglens.dust_with_cap",
+                String.valueOf((double)amount / (double)cap * 100.0),
+                (double)amount / (double)MediaConstants.DUST_UNIT,
+                (double)cap / (double)MediaConstants.DUST_UNIT
+
+            ).formatted(Formatting.LIGHT_PURPLE)
+        );
+    }
     @Override
     public void onInitializeClient() {
         // the eternal fucking grammar battle with this simple Markiplier ass log will drive me insane
@@ -180,6 +200,9 @@ public class LapisworksClient implements ClientModInitializer {
                 HexPattern tunedPattern = bE.getTunedPattern();
 
                 lines.add(
+                    displayMedia(bE.getMedia())
+                );
+                lines.add(
                     new Pair<ItemStack, Text>(
                         new ItemStack(ModItems.SIMPLE_IMPETUS),
                         tunedPattern != null ? Text.translatable(
@@ -197,15 +220,7 @@ public class LapisworksClient implements ClientModInitializer {
                 MediaCondenserEntity blockEntity = (MediaCondenserEntity)world.getBlockEntity(pos);
 
                 lines.add(
-                    new Pair<ItemStack, Text>(
-                        new ItemStack(HexItems.AMETHYST_DUST),
-                        Text.translatable(
-                            "render.lapisworks.scryinglens.mediacondenser",
-                            prettifyFloat((float)blockEntity.media / (float)blockEntity.mediaCap * 100f),
-                            (double)blockEntity.media / (double)MediaConstants.DUST_UNIT,
-                            (double)blockEntity.mediaCap / (double)MediaConstants.DUST_UNIT
-                        ).formatted(Formatting.LIGHT_PURPLE)
-                    )
+                    displayMediaWithCap(blockEntity.media, blockEntity.mediaCap)
                 );
             }
         );
@@ -219,6 +234,41 @@ public class LapisworksClient implements ClientModInitializer {
                         new ItemStack(ModItems.CHALK),
                         chalk.pats.size() > 0 ? Text.literal(inlineify(chalk.pats)) :
                         Text.translatable("render.lapisworks.scryinglens.chalk.no_patterns")
+                    )
+                );
+            }
+        );
+        ScryingLensOverlayRegistry.addDisplayer(
+            ModBlocks.TUNEABLE_AMETHYST,
+            (lines, state, pos, observer, world, direction) -> {
+                TuneableAmethystEntity tuneable = (TuneableAmethystEntity)world.getBlockEntity(pos);
+
+                lines.add(
+                    displayMediaWithCap(tuneable.media, tuneable.mediaCap)
+                );
+                lines.add(
+                    new Pair<>(
+                        new ItemStack(HexItems.AMETHYST_DUST),
+                        Text.translatable(
+                            "render.lapisworks.scryinglens.tuneable_amethyst.ambit",
+                            prettifyDouble(tuneable.getAmbit()),
+                            tuneable.ambitCap,
+                            tuneable.minAmbit,
+                            prettifyDouble(Math.sqrt(tuneable.getMediaInDust()))
+                        )
+                    )
+                );
+                Text iota = tuneable.getTunedFrequencyDisplay();
+                lines.add(
+                    new Pair<ItemStack, Text>(
+                        new ItemStack(ModItems.TUNEABLE_AMETHYST),
+                        Text.translatable(
+                            "render.lapisworks.scryinglens.tuneable_amethyst.tuned"
+                        ).append(
+                            iota != null ? iota : Text.translatable(
+                                "render.lapisworks.scryinglens.tuneable_amethyst.nothing"
+                            )
+                        )
                     )
                 );
             }

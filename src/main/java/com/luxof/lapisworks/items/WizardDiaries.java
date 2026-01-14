@@ -32,6 +32,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+import vazkii.patchouli.client.base.ClientAdvancements;
 
 public class WizardDiaries extends Item {
     public WizardDiaries(Settings settings) { super(settings); }
@@ -53,8 +54,9 @@ public class WizardDiaries extends Item {
         ItemStack handStack = user.getStackInHand(hand);
 
         if (!(user instanceof ServerPlayerEntity suser)) {
-            handStack.decrement(1);
-            return TypedActionResult.success(handStack);
+            if (ClientAdvancements.hasDone(id("got_lapis").toString()))
+                handStack.decrement(1);
+            return TypedActionResult.success(handStack, true);
         }
 
         ServerAdvancementLoader advLoader = suser.getServer().getAdvancementLoader();
@@ -63,7 +65,10 @@ public class WizardDiaries extends Item {
             advLoader.get(id("got_lapis"))
         ).isDone();
 
-        if (!BRO_HAS_GOT_LAPIS) suser.sendMessage(DIARY_UNREADABLE);
+        if (!BRO_HAS_GOT_LAPIS) {
+            suser.sendMessage(DIARY_UNREADABLE);
+            return TypedActionResult.success(handStack);
+        }
 
         List<Identifier> shuffled = new ArrayList<Identifier>(Mutables.wizardDiariesGainableAdvancements);
         Advancement chosenAdvancement = null;
@@ -79,10 +84,8 @@ public class WizardDiaries extends Item {
         }
 
         if (chosenAdvancement == null) {
-            if (BRO_HAS_GOT_LAPIS) {
-                suser.sendMessage(GOT_ALL_DIARIES, true);
-                suser.addExperience(100);
-            }
+            suser.sendMessage(GOT_ALL_DIARIES, true);
+            suser.addExperience(100);
         } else {
             suser.getAdvancementTracker().grantCriterion(chosenAdvancement, "grant");
         }

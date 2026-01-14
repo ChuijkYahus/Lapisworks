@@ -92,8 +92,20 @@ public class ChalkWithPatternRenderer implements BlockEntityRenderer<ChalkWithPa
             return;
         }
 
-        // 14x14 (pattern space) / 16x16 (whole chalk) = 0.875
-        //matrices.scale(0.875f, 0.875f, 0.875f);
+        matrices.translate(0.5f, 0.5f, 0.5f);
+        // cancel this rotation to not mess with any processing ahead
+        if (chalk.rotated)
+            matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(90));
+        matrices.multiply(
+            switch (chalk.renderPatternsInDir) {
+                // i love me some quirky quirks
+                case WEST -> RotationAxis.POSITIVE_Y.rotationDegrees(90 + (chalk.attachedTo == Direction.UP ? 180 : 0));
+                case SOUTH -> RotationAxis.POSITIVE_Y.rotationDegrees(180);
+                case EAST -> RotationAxis.POSITIVE_Y.rotationDegrees(270 - (chalk.attachedTo == Direction.UP ? 180 : 0));
+                default -> RotationAxis.POSITIVE_Z.rotationDegrees(0);
+            }
+        );
+        matrices.translate(-0.5f, -0.5f, -0.5f);
         // by default patterns render on the south side
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
         long tick = chalk.getWorld().getTime();

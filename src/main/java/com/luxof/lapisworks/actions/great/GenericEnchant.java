@@ -3,7 +3,6 @@ package com.luxof.lapisworks.actions.great;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
-import at.petrak.hexcasting.api.casting.mishaps.MishapUnenlightened;
 
 import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.VAULT.VAULT;
@@ -26,6 +25,7 @@ import net.minecraft.text.Text;
 /** responsibility of mixin to make enchantment do something falls on the user of this.
  * Also take this' enchantmentIdx if you want the index you need to give to LapisworksInterface's stuff. */
 public class GenericEnchant extends SpellActionNCT {
+    public boolean requiresEnlightenment = true;
     public final int enchantmentIdx;
     public final int maxLevel;
     public final int requiredAmel;
@@ -61,7 +61,6 @@ public class GenericEnchant extends SpellActionNCT {
 
     @Override
     public SpellAction.Result execute(HexIotaStack stack, CastingEnvironment ctx) {
-        if (!ctx.isEnlightened()) throw new MishapUnenlightened();
         LivingEntity entity = stack.getLivingEntityButNotArmorStand(0);
 
         if (((LapisworksInterface)entity).getEnchant(this.enchantmentIdx) >= this.maxLevel) {

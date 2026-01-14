@@ -48,6 +48,17 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
         isCasterDisabled = false;
     }
 
+    /** bypasses disabled casters and shiet. */
+    @Nullable
+    public ServerPlayerEntity getCasterAbsolute(ServerWorld world) {
+        if (!isCasterDisabled)
+            return getCaster(world);
+        else if (world.getEntity(casterWhileCasterIsDisabled) instanceof ServerPlayerEntity sp)
+            return sp;
+        else
+            return null;
+    }
+
     @Override
     public boolean isVecInAmbit(Vec3d vec, ServerWorld world) {
         return isVecInAmbitOfPlayer(vec, world, 0.5)
@@ -82,7 +93,7 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
 
     @Override
     public void printMessage(Text message, ServerWorld world) {
-        ServerPlayerEntity caster = getCaster(world);
+        ServerPlayerEntity caster = getCasterAbsolute(world);
         if (caster == null) return;
         caster.sendMessage(message);
     }

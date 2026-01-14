@@ -11,8 +11,47 @@
         },
         {
             "type": "patchouli:crafting",
-            "recipe": "lapisworks:base/energy_container",
+            "recipe": "lapisworks:base/chalk",
             "text": "pages.lapisworks.imbuement.rituals.chalk.recipe.text"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.rituals.chalk.stamp.pre"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "lapisworks:base/stamp",
+            "text": "pages.lapisworks.imbuement.rituals.chalk.stamp.recipe_text"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.rituals.chalk.tuning"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "lapisworks:base/tuneable_amethyst",
+            "text": "pages.lapisworks.imbuement.rituals.chalk.tuneable.recipe.text"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:tune_amethyst",
+            "anchor": "lapisworks:tune_amethyst",
+            "input": "vec, any",
+            "output": "",
+            "text": "pages.lapisworks.imbuement.rituals.chalk.tune_amethyst.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:get_amethyst_tuning",
+            "anchor": "lapisworks:get_amethyst_tuning",
+            "input": "vec",
+            "output": "any",
+            "text": "pages.lapisworks.imbuement.rituals.chalk.get_amethyst_tuning.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "advancement": "lapisworks:enlightened",
+            "text": "pages.lapisworks.imbuement.rituals.chalk.tuning.foundit"
         }
     ]
 }

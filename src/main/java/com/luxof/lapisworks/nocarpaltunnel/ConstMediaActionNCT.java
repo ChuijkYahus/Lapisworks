@@ -14,6 +14,8 @@ import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import java.util.List;
 
 public abstract class ConstMediaActionNCT extends NCTBase implements ConstMediaAction {
+    protected boolean requiresEnlightenment = false;
+
     public List<? extends Iota> execute(HexIotaStack stack, CastingEnvironment ctx) {
         throw new IllegalStateException("call executeWithOpCount instead.");
     }
@@ -29,15 +31,19 @@ public abstract class ConstMediaActionNCT extends NCTBase implements ConstMediaA
 
     @Override
     public List<Iota> execute(List<? extends Iota> arg0, CastingEnvironment arg1) {
+        this.ctx = arg1;
         this.world = arg1.getWorld();
         this.vault = ((GetVAULT)arg1).grabVAULT();
+        _assertIsEnlightenedIfRequiresEnlightenment();
         return execute(new HexIotaStack(arg0, getArgc(), arg1), arg1).stream().map(it -> (Iota)it).toList();
     }
 
     @Override
     public CostMediaActionResult executeWithOpCount(List<? extends Iota> arg0, CastingEnvironment arg1) {
+        this.ctx = arg1;
         this.world = arg1.getWorld();
         this.vault = ((GetVAULT)arg1).grabVAULT();
+        _assertIsEnlightenedIfRequiresEnlightenment();
         return executeWithOpCount(new HexIotaStack(arg0, getArgc(), arg1), arg1);
     }
 
@@ -76,5 +82,19 @@ public abstract class ConstMediaActionNCT extends NCTBase implements ConstMediaA
             LOGGER.error("your mediaCost field must be a long.", e);
         }
         return 0;
+    }
+
+    @Override
+    public boolean getRequiresEnlightenment() {
+        try {
+            return this.getClass().getField("requiresEnlightenment").getBoolean(this);
+        } catch (IllegalArgumentException e) {
+            LOGGER.info("your requiresEnlightenment field must be a boolean.", e);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace(); // Never happens
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace(); // Never happens
+        }
+        return false;
     }
 }

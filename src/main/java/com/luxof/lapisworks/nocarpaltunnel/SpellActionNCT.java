@@ -17,12 +17,13 @@ import java.util.List;
 import net.minecraft.nbt.NbtCompound;
 
 public class SpellActionNCT extends NCTBase implements SpellAction {
+    public boolean requiresEnlightenment = false;
 
-    public Result execute(HexIotaStack stack, CastingEnvironment ctx) {
+    public SpellAction.Result execute(HexIotaStack stack, CastingEnvironment ctx) {
         throw new IllegalStateException("call executeWithUserdata instead.");
     }
 
-    public Result executeWithUserdata(HexIotaStack stack, CastingEnvironment ctx, NbtCompound userData) {
+    public SpellAction.Result executeWithUserdata(HexIotaStack stack, CastingEnvironment ctx, NbtCompound userData) {
         return SpellAction.DefaultImpls.executeWithUserdata(this, stack.stack, ctx, userData);
     }
 
@@ -40,16 +41,20 @@ public class SpellActionNCT extends NCTBase implements SpellAction {
 
 
     @Override
-    public Result execute(List<? extends Iota> stack, CastingEnvironment ctx) {
+    public SpellAction.Result execute(List<? extends Iota> stack, CastingEnvironment ctx) {
+        this.ctx = ctx;
         this.world = ctx.getWorld();
         this.vault = ((GetVAULT)ctx).grabVAULT();
+        _assertIsEnlightenedIfRequiresEnlightenment();
         return execute(new HexIotaStack(stack, getArgc(), ctx), ctx);
     }
 
     @Override
-    public Result executeWithUserdata(List<? extends Iota> arg0, CastingEnvironment arg1, NbtCompound arg2) {
+    public SpellAction.Result executeWithUserdata(List<? extends Iota> arg0, CastingEnvironment arg1, NbtCompound arg2) {
+        this.ctx = arg1;
         this.world = arg1.getWorld();
         this.vault = ((GetVAULT)arg1).grabVAULT();
+        _assertIsEnlightenedIfRequiresEnlightenment();
         return executeWithUserdata(new HexIotaStack(arg0, getArgc(), arg1), arg1, arg2);
     }
 
@@ -83,5 +88,19 @@ public class SpellActionNCT extends NCTBase implements SpellAction {
             LOGGER.error("your argc field must be an int.", e);
         }
         return 0;
+    }
+
+    @Override
+    public boolean getRequiresEnlightenment() {
+        try {
+            return this.getClass().getField("requiresEnlightenment").getBoolean(this);
+        } catch (IllegalArgumentException e) {
+            LOGGER.info("your requiresEnlightenment field must be a boolean.", e);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace(); // Never happens
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace(); // Never happens
+        }
+        return false;
     }
 }
