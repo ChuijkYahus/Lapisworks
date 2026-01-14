@@ -180,6 +180,10 @@ public class Patterns {
         register("quenched_indigo4", "qawwqeaeqwwaqqqaqeqdaadqwedeeawdwa", HexDir.NORTH_WEST, new QuenchedIndigo());
         register("quenched_indigo5", "qawwqwwqwwaqaedewwwawweqaqdawdwa", HexDir.NORTH_WEST, new QuenchedIndigo());
         registerPWShapePattern("lapisworks:quenched_indigo");
+
+        register("robbie_exalt0", "qaeaqaweaqa", HexDir.NORTH_WEST, new EstrogenExalt());
+        register("robbie_exalt1", "qaeaqaweaqa", HexDir.NORTH_EAST, new EstrogenExalt());
+        registerPWShapePattern("lapisworks:robbie_exalt");
     }
 
     private static ActionRegistryEntry register(

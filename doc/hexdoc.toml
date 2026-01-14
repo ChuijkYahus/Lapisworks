@@ -45,6 +45,8 @@ show_landing_text = false
 
 [flags]
 "lapisworks:no_fulllapixical" = false
+"lapisworks:robbie_exalt0" = false
+"lapisworks:robbie_exalt1" = false
 
 [extra.hexcasting]
 # thank you hierophantics lmao
