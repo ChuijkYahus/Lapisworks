@@ -77,8 +77,7 @@ public abstract class RitualExecutionState {
         return null;
     }
     @Nullable public FrozenPigment getPigment() { return pigment; }
-    @Nullable
-    public FrozenPigment setPigment(@Nullable FrozenPigment pigment) {
+    @Nullable public FrozenPigment setPigment(@Nullable FrozenPigment pigment) {
         FrozenPigment old = this.pigment;
         this.pigment = pigment;
         return old;
@@ -202,8 +201,9 @@ public abstract class RitualExecutionState {
     }
 
 
-    public abstract long extractMedia(long cost, boolean simulate);
+    public abstract long extractMedia(long cost, boolean simulate, ServerWorld world);
     public abstract void printMessage(Text message, ServerWorld world);
+    public abstract void printMishap(Text mishapMessage, ServerWorld world);
     /** Returns whether to continue. */
     public abstract boolean tick(ServerWorld world);
 }

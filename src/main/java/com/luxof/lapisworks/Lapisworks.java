@@ -9,17 +9,8 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexItems;
 
-import com.luxof.lapisworks.init.ModItems;
-import com.luxof.lapisworks.init.ModPOIs;
-import com.luxof.lapisworks.init.ModRecipes;
-import com.luxof.lapisworks.init.ModScreens;
-import com.luxof.lapisworks.init.Patterns;
 import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
-import com.luxof.lapisworks.init.LapisParticles;
-import com.luxof.lapisworks.init.LapisworksLoot;
-import com.luxof.lapisworks.init.ModBlocks;
-import com.luxof.lapisworks.init.ModEntities;
-import com.luxof.lapisworks.init.ThemConfigFlags;
+import com.luxof.lapisworks.init.*;
 import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 import com.luxof.lapisworks.mixinsupport.GetStacks;
@@ -52,6 +43,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
@@ -561,4 +553,9 @@ public class Lapisworks implements ModInitializer {
 	public static BlockPos deserializeBlockPos(NbtElement nbt) {
 		return deserializeBlockPos((NbtCompound)nbt);
 	}
+    public static NbtList nbtListOf(List<? extends NbtElement> list) {
+        NbtList nbtList = new NbtList();
+        nbtList.addAll(list);
+        return nbtList;
+    }
 }

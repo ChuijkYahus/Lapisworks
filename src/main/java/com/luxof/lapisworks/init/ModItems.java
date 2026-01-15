@@ -74,6 +74,7 @@ public class ModItems {
     public static final BlockItem CHALK = new ChalkItem();
     public static final BlockItem TUNEABLE_AMETHYST = new BlockItem(ModBlocks.TUNEABLE_AMETHYST, fullStack);
     public static final Item STAMP = new Stamp();
+    public static final BlockItem RITUS = new BlockItem(ModBlocks.RITUS, fullStack);
 
     private static <ANY extends Object> Map<String, Item> mapOf(@SuppressWarnings("unchecked") ANY... stuff) {
         // no err check required, this method is used once
@@ -140,7 +141,8 @@ public class ModItems {
         "uncrafted_condenser", UNCRAFTED_CONDENSER,
         "chalk", CHALK,
         "tuneable_amethyst", TUNEABLE_AMETHYST,
-        "amethyst_stamp", STAMP
+        "amethyst_stamp", STAMP,
+        "ritus", RITUS
     );
 
     public static ItemGroup LapisMagicShitGroup;

@@ -6,11 +6,9 @@ import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.luxof.lapisworks.blocks.TuneableAmethyst;
-import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
+import com.luxof.lapisworks.blocks.stuff.UnlinkableMediaBlock;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.mixinsupport.RitualsUtil;
-
-import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -25,7 +23,7 @@ import net.minecraft.util.math.BlockPos;
 
 import org.jetbrains.annotations.Nullable;
 
-public class TuneableAmethystEntity extends BlockEntity implements LinkableMediaBlock {
+public class TuneableAmethystEntity extends BlockEntity implements UnlinkableMediaBlock {
     public TuneableAmethystEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.TUNEABLE_AMETHYST_ENTITY_TYPE, pos, state);
     }
@@ -107,6 +105,9 @@ public class TuneableAmethystEntity extends BlockEntity implements LinkableMedia
             tunedNbt = nbt.getCompound("frequency");
             if (world instanceof ServerWorld sw)
                 tunedFrequency = IotaType.deserialize(nbt, sw);
+        } else {
+            tunedFrequency = null;
+            tunedNbt = null;
         }
     }
 
@@ -114,38 +115,8 @@ public class TuneableAmethystEntity extends BlockEntity implements LinkableMedia
         return BlockEntityUpdateS2CPacket.create(this); }
     @Override public NbtCompound toInitialChunkDataNbt() { return createNbt(); }
 
-    @Override public int getMaxNumberOfLinks() { return 0; }
-    @Override public void addLink(BlockPos pos) {}
-    @Override public void removeLink(BlockPos pos) {}
-    @Override public boolean isLinkedTo(BlockPos pos) { return false; }
-    @Override public Set<BlockPos> getLinks() { return Set.of(); }
-    @Override public int getNumberOfLinks() { return 0; }
     @Override public BlockPos getThisPos() { return this.getPos(); }
     @Override public long getMediaHere() { return media; }
-    @Override
-    public long depositMedia(long amount, boolean simulate) {
-        long prevMedia = media;
-
-        long nowMedia = Math.min(media + amount, mediaCap);
-        if (!simulate) {
-            media = nowMedia;
-            updateState();
-            save();
-        }
-
-        return nowMedia - prevMedia;
-    }
-    @Override
-    public long withdrawMedia(long amount, boolean simulate) {
-        long prevMedia = media;
-
-        long nowMedia = Math.max(media - amount, 0);
-        if (!simulate) {
-            media = nowMedia;
-            updateState();
-            save();
-        }
-
-        return prevMedia - nowMedia;
-    }
+    @Override public void setMedia(long media) { this.media = media; updateState(); save(); }
+    @Override public long getMaxMedia() { return mediaCap; }
 }

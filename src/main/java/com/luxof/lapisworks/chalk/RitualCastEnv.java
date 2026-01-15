@@ -55,7 +55,7 @@ public class RitualCastEnv extends CastingEnvironment {
 
     @Override
     protected long extractMediaEnvironment(long cost, boolean simulate) {
-        return ritual.extractMedia(cost, simulate);
+        return ritual.extractMedia(cost, simulate, getWorld());
     }
 
     @Override
@@ -113,6 +113,10 @@ public class RitualCastEnv extends CastingEnvironment {
     @Override
     public void printMessage(Text message) {
         ritual.printMessage(message, getWorld());
+    }
+
+    public void printMishap(Text mishapMessage) {
+        ritual.printMishap(mishapMessage, getWorld());
     }
 
     protected void printMishapMessage(OperatorSideEffect.DoMishap mishap) {

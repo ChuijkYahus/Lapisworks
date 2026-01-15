@@ -74,6 +74,8 @@ public class SimpleImpetusEntity extends BlockEntityAbstractImpetus {
 
         if (nbt.contains(TAG_TUNED_PAT))
             pattern = HexPattern.fromNBT(nbt.getCompound(TAG_TUNED_PAT));
+        else
+            pattern = null;
         if (nbt.contains(TAG_PLAYER))
             plr = nbt.getUuid(TAG_PLAYER);
         else

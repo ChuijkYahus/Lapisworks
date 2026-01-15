@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " A ",
+        "SCS",
+        "AGA"
+    ],
+    "key": {
+        "A": {
+            "tag": "lapisworks:amel"
+        },
+        "C": {
+            "item": "hexcasting:charged_amethyst"
+        },
+        "G": {
+            "item": "minecraft:gold_ingot"
+        },
+        "S": {
+            "item": "hexcasting:slate"
+        }
+    },
+    "result": {
+        "item": "lapisworks:staves/amel_ring"
+    }
+}

@@ -12,6 +12,7 @@ import net.minecraft.util.math.Direction;
 
 import org.jetbrains.annotations.Nullable;
 
+/** implemented by Block Entities to participate in Amethyst Rituals. */
 public interface RitualComponent {
     default List<BlockPos> getPossibleNextBlocksGeneric(
         ServerWorld world,
