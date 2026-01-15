@@ -168,19 +168,13 @@
             "text": "pages.lapisworks.lapisworks_misc.robbie_exalt.summary"
         },
         {
-            "type": "hexcasting:lapisworks/pwshape",
+            "type": "hexcasting:pattern",
             "flag": "mod:hexdoc:web_only",
             "op_id": "lapisworks:robbie_exalt",
             "anchor": "lapisworks:robbie_exalt",
             "input": "[any], int, any",
-            "output": "",
-            "text": "pages.lapisworks.lapisworks_misc.robbie_exalt.summary",
-            "origins": [
-                {"q": 0, "r": 0},
-                {"q": 0, "r": 0}
-            ],
-            "allowed": [0],
-            "show_stroke_order": true
+            "output": "[any]",
+            "text": "pages.lapisworks.lapisworks_misc.robbie_exalt.summary"
         }
     ]
 }

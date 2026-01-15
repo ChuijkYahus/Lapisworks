@@ -181,8 +181,9 @@ public class Patterns {
         register("quenched_indigo5", "qawwqwwqwwaqaedewwwawweqaqdawdwa", HexDir.NORTH_WEST, new QuenchedIndigo());
         registerPWShapePattern("lapisworks:quenched_indigo");
 
-        register("robbie_exalt0", "qaeaqaweaqa", HexDir.NORTH_WEST, new EstrogenExalt());
-        register("robbie_exalt1", "qaeaqaweaqa", HexDir.NORTH_EAST, new EstrogenExalt());
+        registerButSneaky("robbie_exalt0", "qaeaqaweaqa", HexDir.NORTH_WEST, new EstrogenExalt());
+        registerButSneaky("robbie_exalt1", "qaeaqaweaqa", HexDir.NORTH_WEST, new EstrogenExalt());
+        registerOnlyForHexdoc("robbie_exalt", "qaeaqaweaqa", HexDir.NORTH_WEST, new EstrogenExalt());
         registerPWShapePattern("lapisworks:robbie_exalt");
     }
 
@@ -193,5 +194,19 @@ public class Patterns {
         Action action
     ) {
         return Registry.register(HexActions.REGISTRY, id(name), new ActionRegistryEntry(HexPattern.fromAngles(signature, startDir), action));
+    }
+    private static void registerOnlyForHexdoc(
+        String name,
+        String signature,
+        HexDir startDir,
+        Action action
+    ) {}
+    private static ActionRegistryEntry registerButSneaky(
+        String name,
+        String signature,
+        HexDir startDir,
+        Action action
+    ) {
+        return register(name, signature, startDir, action);
     }
 }

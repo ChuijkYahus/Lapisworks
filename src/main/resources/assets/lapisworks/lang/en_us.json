@@ -130,8 +130,8 @@
     "render.lapisworks.scryinglens.simp.listening": "Listening for pattern: %s",
     "render.lapisworks.scryinglens.simp.not_listening": "Not listening for any patterns.",
     "render.lapisworks.scryinglens.chalk.no_patterns": "No pattern present.",
-    "render.lapisworks.scryinglens.tuneable_amethyst.tuned": "Tuned to: ",
-    "render.lapisworks.scryinglens.tuneable_amethyst.nothing": "nothing.",
+    "render.lapisworks.scryinglens.tuneable.tuned": "Tuned to: ",
+    "render.lapisworks.scryinglens.tuneable.nothing": "nothing.",
     "render.lapisworks.scryinglens.tuneable_amethyst.ambit": "Ambit provided: %d/%d (Minimum %d, %d from contained media)",
 
 
@@ -292,6 +292,7 @@
     "hexcasting.action.book.lapisworks:quenched_indigo": "Indigan Lapidary",
     "hexcasting.action.lapisworks:robbie_exalt0": "Estrogen Exaltation",
     "hexcasting.action.lapisworks:robbie_exalt1": "Prosthetist's Exaltation",
+    "hexcasting.action.lapisworks:robbie_exalt": "Robbie's Exaltation",
     "hexcasting.action.book.lapisworks:robbie_exalt0": "Estrogen Exaltation",
     "hexcasting.action.book.lapisworks:robbie_exalt1": "Prosthetist's Exaltation",
     "hexcasting.action.book.lapisworks:robbie_exalt": "Robbie's Exaltation",
