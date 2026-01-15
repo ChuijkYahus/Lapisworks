@@ -17,7 +17,7 @@ public class EstrogenExalt extends ConstMediaActionNCT {
     public List<? extends Iota> execute(HexIotaStack stack, CastingEnvironment ctx) {
         List<Iota> list = stack.getJUSTAList(0);
 
-        list.add(stack.getInt(1), stack.get(2));
+        list.add(stack.getPositiveIntUnder(1, list.size()), stack.get(2));
 
         return List.of(new ListIota(list));
     }

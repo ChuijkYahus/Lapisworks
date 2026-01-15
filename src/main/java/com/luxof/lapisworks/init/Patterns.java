@@ -181,7 +181,7 @@ public class Patterns {
         register("quenched_indigo5", "qawwqwwqwwaqaedewwwawweqaqdawdwa", HexDir.NORTH_WEST, new QuenchedIndigo());
         registerPWShapePattern("lapisworks:quenched_indigo");
 
-        // dirty hack
+        // dirty hacks (there's gotta be a better way right)
         registerButSneaky("robbie_exalt0", "qaeaqaweaqa", HexDir.NORTH_WEST, new EstrogenExalt());
         registerButSneaky("robbie_exalt1", "qaeaqaweaqa", HexDir.NORTH_WEST, new EstrogenExalt());
         // archon of meaningless but with w and ww at the end respectively
