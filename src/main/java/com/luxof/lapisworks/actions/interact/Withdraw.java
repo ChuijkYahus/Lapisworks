@@ -46,6 +46,7 @@ public class Withdraw extends SpellActionNCT {
                 Text.translatable("mishaps.lapisworks.descs.phial")
             )
         ).stack();
+        ItemMediaBattery phial = (ItemMediaBattery)phialStack.getItem();
 
         Pair<Long, Set<BlockPos>> interactSimResult = fullLinkableMediaBlocksInteraction(
             ctx.getWorld(),
@@ -56,7 +57,7 @@ public class Withdraw extends SpellActionNCT {
         );
         long realAmount = Math.min(
             interactSimResult.getLeft(),
-            ((ItemMediaBattery)phialStack.getItem()).getMaxMedia(phialStack)
+            phial.getMaxMedia(phialStack) - phial.getMedia(phialStack)
         );
 
         List<ParticleSpray> particles = new ArrayList<>(List.of(
