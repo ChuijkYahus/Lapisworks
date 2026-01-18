@@ -9,6 +9,8 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.luxof.lapisworks.chalk.OneTimeRitualExecutionState;
 import com.luxof.lapisworks.mixinsupport.RitualsUtil;
 
+import static com.luxof.lapisworks.Lapisworks.getFacingWithRespectToDown;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -18,7 +20,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public interface ChalkBlockInterface {
@@ -28,7 +29,8 @@ public interface ChalkBlockInterface {
         BlockPos pos,
         PlayerEntity player,
         Hand hand,
-        BlockHitResult hit
+        BlockHitResult hit,
+        Direction attachedTo
     ) {
         ItemStack stack = player.getStackInHand(hand);
         if (
@@ -38,10 +40,9 @@ public interface ChalkBlockInterface {
         ) return ActionResult.PASS;
         else if (world.isClient) return ActionResult.SUCCESS;
 
-        Vec3d playerFacing = player.getRotationVector();
         ((RitualsUtil)world).addRitual(new OneTimeRitualExecutionState(
             pos,
-            Direction.getFacing(playerFacing.x, playerFacing.y, playerFacing.z),
+            getFacingWithRespectToDown(player.getRotationVector(), attachedTo),
             new CastingImage(),
             player.getUuid(),
             HexAPI.instance().getColorizer(player),

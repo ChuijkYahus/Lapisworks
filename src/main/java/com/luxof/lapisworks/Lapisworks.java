@@ -34,6 +34,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -558,4 +559,25 @@ public class Lapisworks implements ModInitializer {
         nbtList.addAll(list);
         return nbtList;
     }
+
+	@SafeVarargs
+	public static <ANY extends Object> boolean either(
+		Predicate<ANY> predicate, ANY... options
+	) {
+		for (ANY option : options) {
+			if (predicate.test(option)) return true;
+		}
+		return false;
+	}
+
+	public static Direction getFacingWithRespectToDown(
+		Vec3d looking,
+		Direction whereDownGoes
+	) {
+		return Direction.getFacing(
+			whereDownGoes == Direction.EAST || whereDownGoes == Direction.WEST ? 0.0 : looking.x,
+			whereDownGoes == Direction.UP || whereDownGoes == Direction.DOWN ? 0.0 : looking.y,
+			whereDownGoes == Direction.NORTH || whereDownGoes == Direction.SOUTH ? 0.0 : looking.z
+		);
+	}
 }

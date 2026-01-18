@@ -307,6 +307,7 @@ Locked in rah
 - Ancient Tomes giving you the advancement anyway despite showing the message if you dont have lapis yet
 - "Bug in the mod" mishaps
 - Damage and movement speed enhancements stacking on world join (you need to kys ingame to reset tho)
+- Deposit and Withdraw actually take doubles now, not just integers
 - Enchanted Slipways having a tendency to move 0.01f more in +XYZ than -XYZ (lmao)
 - Enchantments not carrying across dimensions (:broken_heart:)
 - Enchantment Purification's order of arguments being flipped
@@ -314,9 +315,12 @@ Locked in rah
   IT STILL JUMPSCARES ME WHAT THE FUCK
 - Handed Prison didn't drop blocks wtf
 - Logspam begone!
+- Shit should actually tell you when you don't have Fabric now
 - Sieve Thoughts not working on a spell circle
-- You may no longer convert Lapis (+ your life force) into Amethyst Shards  
-  There's a spell for that now
+- Withdraw bug
+- You may no longer convert Lapis (+ your life force) into Amethyst Shards
+  - It now pulls from your inventory
+  - Also there's a spell for that now
 ## Interop:
 - Hierophantics
   - Max experience fishermen villagers can be flayed into you  
@@ -366,6 +370,7 @@ Locked in rah
   - the Media Jar and the Cradle are targets for Deposit Media, Withdraw Media and
     Condensed Media Prfn.
 # 1.5.9
+### Free me
 - Heal your mind after breaking it. (Jacked O' Lantern finale)
 - Alchemy/potion-brewing overhaul (I'm deadass)  
   herb stuff that leads to discovering Alchemy?  
@@ -388,6 +393,7 @@ Locked in rah
   - It's literally a Hex Casting IDE.  
 - Enchantweave? (formerly part of Hexic interop)
 # 1.6.0
+### And Alexander wept, for there were no more worlds to conquer.
 - You can have four arms now (procrastination slain)
   - Your third and fourth arms can auto-cast 20x a second  
     Both must be devoted to auto-cast, but one can hold something (e.g. Focus, Amel-tuned Orb, etc.)
@@ -403,6 +409,7 @@ Locked in rah
   - make a vessel
   - flay entities into it to get their AI
   - customize it's body and mind
+- If not already done, EVERY PLAUSIBLE LAPISWORKS THING from "hm"
 
 # 1.7.0
 LAPISWORKS IS ON BOTH FORGE AND FABRIC NOW.
@@ -438,6 +445,7 @@ addons that may have interesting interop ideas waiting to be had but idk yet:
   - uhhh???
   - instant adult-ification spell, i guess?
   - like the counterpart to Hastenature, i mean
+  - but Nurture exists tho...
 - scryglass
   - add the ability to unfocus your mouse
   - add buttons
@@ -450,7 +458,8 @@ addons that may have interesting interop ideas waiting to be had but idk yet:
 much bigger phials  
 ~~ability to extend pattern and stack limit by expending media~~ gave that to hexthings  
   nvm hexthings threw it right back to me (infeasible for it)  
-  0.01 dust per iota per pattern (meaning it stays that extended for that many patterns)
+  0.01 dust per iota per pattern (meaning it stays that extended for that many patterns)  
+  nvm oneironaut has it
 computers lmao
 - slab that you can use Craft Artifact on
 - you can send iotas to computers with a spell (which costs more the longer the distance)
@@ -527,6 +536,17 @@ per world pattern shapes picking between a few handmade ones is boring..
 add some randomness!  
 
 jumpslate across space and time  
+-# i don't even do drugs. what does this mean, past me?  
 
 vv only if no one else is interested  
 MASSIVE wizard towers! give you ambit + cost reduction + grid size (grid size toggleable)  
+
+trinket that casts upon dropped  
+right click to prime  
+
+trinket that stops GTP item spillage and makes it half as cheap  
+- "enderman's monocle"
+- rub some amethyst dust on an eye of ender, then put it in an amel-iron-diamond case  
+
+a trinket that shows a config screen for hexes it's primed to work for! it'll show
+pre-configured-for-hex iotas and let you select their values, with a default value already present

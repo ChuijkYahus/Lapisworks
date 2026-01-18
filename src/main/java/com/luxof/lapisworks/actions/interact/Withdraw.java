@@ -35,7 +35,7 @@ public class Withdraw extends SpellActionNCT {
     @Override
     public Result execute(HexIotaStack hexStack, CastingEnvironment ctx) {
         BlockPos pos = hexStack.getBlockPosInRange(0);
-        long amount = hexStack.getPositiveInt(1) * MediaConstants.DUST_UNIT;
+        long amount = (long)(hexStack.getPositiveDouble(1) * MediaConstants.DUST_UNIT);
 
         assertLinkableThere(pos, ctx);
 
