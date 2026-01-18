@@ -1,7 +1,5 @@
 package com.luxof.lapisworks.init;
 
-import at.petrak.hexcasting.common.lib.HexBlocks;
-
 import com.google.common.collect.ImmutableSet;
 
 import com.luxof.lapisworks.blocks.*;
@@ -10,17 +8,11 @@ import com.luxof.lapisworks.blocks.entities.*;
 import static com.luxof.lapisworks.Lapisworks.id;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.block.AbstractBlock.Settings;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.entity.BlockEntityType.BlockEntityFactory;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
 
 public class ModBlocks {
     public static ConjuredColorable CONJURED_COLORABLE = new ConjuredColorable();
@@ -34,67 +26,41 @@ public class ModBlocks {
     public static ReboundSlate REBOUND_SLATE_2 = new ReboundSlate();
     public static SimpleImpetus SIMPLE_IMPETUS = new SimpleImpetus();
     public static EnchBrewer ENCH_BREWER = new EnchBrewer();
+    public static UncraftedCondenser UNCRAFTED_CONDENSER = new UncraftedCondenser();
     public static MediaCondenser MEDIA_CONDENSER = new MediaCondenser();
     public static Chalk CHALK = new Chalk();
     public static ChalkWithPattern CHALK_WITH_PATTERN = new ChalkWithPattern();
     public static TuneableAmethyst TUNEABLE_AMETHYST = new TuneableAmethyst();
+    public static Ritus RITUS = new Ritus(true);
 
-    public static Block UNCRAFTED_CONDENSER = new Block(Settings.copy(HexBlocks.SLATE_BLOCK)) {
-        public static final VoxelShape SHAPE = VoxelShapes.union(
-            Block.createCuboidShape(1, 0, 0, 15, 14, 16),
-            Block.createCuboidShape(0, 0, 1, 16, 14, 15),
-            Block.createCuboidShape(6, 14, 6, 10, 16, 10)
-        );
-        @Override
-        public BlockRenderType getRenderType(BlockState state) {
-            return BlockRenderType.MODEL;
-        }
-        @Override
-        public VoxelShape getOutlineShape(BlockState pState, BlockView pLevel, BlockPos pPos, ShapeContext pContext) {
-            return SHAPE;
-        }
-    };
-    //public static ChalkBlock CHALK_BLOCK = new ChalkBlock();
-    public static BlockEntityType<MindEntity> MIND_ENTITY_TYPE = new BlockEntityType<>(
-        MindEntity::new,
-        ImmutableSet.of(MIND_BLOCK),
-        null
-    );
-    public static BlockEntityType<LiveJukeboxEntity> LIVE_JUKEBOX_ENTITY_TYPE = new BlockEntityType<>(
-        LiveJukeboxEntity::new,
-        ImmutableSet.of(LIVE_JUKEBOX_BLOCK),
-        null
-    );
-    public static BlockEntityType<SimpleImpetusEntity> SIMPLE_IMPETUS_ENTITY_TYPE = new BlockEntityType<>(
-        SimpleImpetusEntity::new,
-        ImmutableSet.of(SIMPLE_IMPETUS),
-        null
-    );
-    public static BlockEntityType<EnchBrewerEntity> ENCH_BREWER_ENTITY_TYPE = new BlockEntityType<>(
-        EnchBrewerEntity::new,
-        ImmutableSet.of(ENCH_BREWER),
-        null
-    );
-    public static BlockEntityType<MediaCondenserEntity> MEDIA_CONDENSER_ENTITY_TYPE = new BlockEntityType<>(
-        MediaCondenserEntity::new,
-        ImmutableSet.of(MEDIA_CONDENSER),
-        null
-    );
-    public static BlockEntityType<ChalkEntity> CHALK_ENTITY_TYPE = new BlockEntityType<>(
-        ChalkEntity::new,
-        ImmutableSet.of(CHALK),
-        null
-    );
-    public static BlockEntityType<ChalkWithPatternEntity> CHALK_WITH_PATTERN_ENTITY_TYPE = new BlockEntityType<>(
-        ChalkWithPatternEntity::new,
-        ImmutableSet.of(CHALK_WITH_PATTERN),
-        null
-    );
-    public static BlockEntityType<TuneableAmethystEntity> TUNEABLE_AMETHYST_ENTITY_TYPE = new BlockEntityType<>(
-        TuneableAmethystEntity::new,
-        ImmutableSet.of(TUNEABLE_AMETHYST),
-        null
-    );
+
+    public static BlockEntityType<MindEntity> MIND_ENTITY_TYPE =
+        meow(MindEntity::new, MIND_BLOCK);
+    
+    public static BlockEntityType<LiveJukeboxEntity> LIVE_JUKEBOX_ENTITY_TYPE =
+        meow(LiveJukeboxEntity::new, LIVE_JUKEBOX_BLOCK);
+    
+    public static BlockEntityType<SimpleImpetusEntity> SIMPLE_IMPETUS_ENTITY_TYPE =
+        meow(SimpleImpetusEntity::new, SIMPLE_IMPETUS);
+    
+    public static BlockEntityType<EnchBrewerEntity> ENCH_BREWER_ENTITY_TYPE =
+        meow(EnchBrewerEntity::new, ENCH_BREWER);
+    
+    public static BlockEntityType<MediaCondenserEntity> MEDIA_CONDENSER_ENTITY_TYPE =
+        meow(MediaCondenserEntity::new, MEDIA_CONDENSER);
+    
+    public static BlockEntityType<ChalkEntity> CHALK_ENTITY_TYPE =
+        meow(ChalkEntity::new, CHALK);
+    
+    public static BlockEntityType<ChalkWithPatternEntity> CHALK_WITH_PATTERN_ENTITY_TYPE =
+        meow(ChalkWithPatternEntity::new, CHALK_WITH_PATTERN);
+    
+    public static BlockEntityType<TuneableAmethystEntity> TUNEABLE_AMETHYST_ENTITY_TYPE =
+        meow(TuneableAmethystEntity::new, TUNEABLE_AMETHYST);
+
+    public static BlockEntityType<RitusEntity> RITUS_ENTITY_TYPE =
+        meow(RitusEntity::new, RITUS);
+
 
     public static void wearASkirt() {
         pickACropTop("conjureable", CONJURED_COLORABLE);
@@ -113,6 +79,7 @@ public class ModBlocks {
         pickACropTop("chalk", CHALK);
         pickACropTop("chalk_with_pattern", CHALK_WITH_PATTERN);
         pickACropTop("tuneable_amethyst", TUNEABLE_AMETHYST);
+        pickACropTop("ritus", RITUS);
         dontForgetStockings("mind_entity_type", MIND_ENTITY_TYPE);
         dontForgetStockings("live_jukebox_entity_type", LIVE_JUKEBOX_ENTITY_TYPE);
         dontForgetStockings("amel_constructs/simple_impetus", SIMPLE_IMPETUS_ENTITY_TYPE);
@@ -121,6 +88,7 @@ public class ModBlocks {
         dontForgetStockings("chalk", CHALK_ENTITY_TYPE);
         dontForgetStockings("chalk_with_pattern", CHALK_WITH_PATTERN_ENTITY_TYPE);
         dontForgetStockings("tuneable_amethyst", TUNEABLE_AMETHYST_ENTITY_TYPE);
+        dontForgetStockings("ritus", RITUS_ENTITY_TYPE);
     }
 
     public static void pickACropTop(String name, Block block) {
@@ -129,5 +97,16 @@ public class ModBlocks {
 
     public static <T extends BlockEntityType<?>> void dontForgetStockings(String name, T blockEntityType) {
         Registry.register(Registries.BLOCK_ENTITY_TYPE, id(name), blockEntityType);
+    }
+
+    public static <BE extends BlockEntity> BlockEntityType<BE> meow(
+        BlockEntityFactory<BE> constructor,
+        Block block
+    ) {
+        return new BlockEntityType<BE>(
+            constructor,
+            ImmutableSet.of(block),
+            null
+        );
     }
 }

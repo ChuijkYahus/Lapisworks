@@ -141,6 +141,18 @@ public class LapisworksClient implements ClientModInitializer {
             ).formatted(Formatting.LIGHT_PURPLE)
         );
     }
+    private Pair<ItemStack, Text> displayTunedFrequency(Text iota) {
+        return new Pair<ItemStack, Text>(
+            new ItemStack(ModItems.TUNEABLE_AMETHYST),
+            Text.translatable(
+                "render.lapisworks.scryinglens.tuneable.tuned"
+            ).append(
+                iota != null ? iota : Text.translatable(
+                    "render.lapisworks.scryinglens.tuneable.nothing"
+                )
+            )
+        );
+    }
     @Override
     public void onInitializeClient() {
         // the eternal fucking grammar battle with this simple Markiplier ass log will drive me insane
@@ -259,18 +271,29 @@ public class LapisworksClient implements ClientModInitializer {
                     )
                 );
                 Text iota = tuneable.getTunedFrequencyDisplay();
+                lines.add(displayTunedFrequency(iota));
+            }
+        );
+        ScryingLensOverlayRegistry.addDisplayer(
+            ModBlocks.RITUS,
+            (lines, state, pos, observer, world, direction) -> {
+                RitusEntity ritus = (RitusEntity)world.getBlockEntity(pos);
+
                 lines.add(
-                    new Pair<ItemStack, Text>(
-                        new ItemStack(ModItems.TUNEABLE_AMETHYST),
-                        Text.translatable(
-                            "render.lapisworks.scryinglens.tuneable_amethyst.tuned"
-                        ).append(
-                            iota != null ? iota : Text.translatable(
-                                "render.lapisworks.scryinglens.tuneable_amethyst.nothing"
-                            )
-                        )
-                    )
+                    displayMedia(ritus.media)
                 );
+
+                var display = ritus.getDisplay();
+                if (display != null) {
+                    lines.add(
+                        new Pair<ItemStack, Text>(
+                            display.getLeft(),
+                            display.getRight()
+                        )
+                    );
+                }
+
+                lines.add(displayTunedFrequency(ritus.getTunedFrequencyDisplay()));
             }
         );
 

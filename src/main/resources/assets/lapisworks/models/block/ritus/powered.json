@@ -1,0 +1,23 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"textures": {
+		"0": "lapisworks:block/ritus",
+		"particle": "lapisworks:block/ritus"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [8, 0, 8, 8], "texture": "#0"},
+				"east": {"uv": [8, 0, 8, 8], "texture": "#0"},
+				"south": {"uv": [8, 0, 8, 8], "texture": "#0"},
+				"west": {"uv": [8, 0, 8, 8], "texture": "#0"},
+				"up": {"uv": [8, 8, 8, 16], "texture": "#0"},
+				"down": {"uv": [8, 7, 1, 8], "texture": "#0"}
+			}
+		}
+	]
+}

@@ -1,16 +1,15 @@
 package com.luxof.lapisworks.persistentstate;
 
-import com.luxof.lapisworks.Lapisworks;
-import com.luxof.lapisworks.chalk.OneTimeRitualExecutionState;
-
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import com.luxof.lapisworks.Lapisworks;
+import com.luxof.lapisworks.chalk.OneTimeRitualExecutionState;
+
+import static com.luxof.lapisworks.Lapisworks.nbtListOf;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import net.minecraft.nbt.NbtCompound;
@@ -65,11 +64,6 @@ public class PersistentStateRituals extends PersistentState {
     }
 
 
-    private NbtList nbtListOf(List<? extends NbtElement> list) {
-        NbtList nbtList = new NbtList();
-        nbtList.addAll(list);
-        return nbtList;
-    }
     @Override
     public NbtCompound writeNbt(NbtCompound nbt) {
 
@@ -128,7 +122,6 @@ public class PersistentStateRituals extends PersistentState {
         }
 
         // HashMap<String, HashMap<Iota, ArrayList<BlockPos>>>
-        LOGGER.info("LAPISWORKS PERSISTENT STATE ---------------------------------------------");
         NbtCompound tuneablesNbt = nbt.getCompound("tuneables");
         for (String worldKey : tuneablesNbt.getKeys()) {
             state.tuneables.put(
@@ -149,10 +142,7 @@ public class PersistentStateRituals extends PersistentState {
                     )
                 )
             );
-            LOGGER.info("Tuneables." + worldKey + ": " + String.valueOf(state.tuneables.get(worldKey).size()));
         }
-        LOGGER.info("Tuneables: " + String.valueOf(state.tuneables.size()));
-        LOGGER.info("LAPISWORKS PERSISTENT STATE ---------------------------------------------");
 
         return state;
     }

@@ -3,7 +3,7 @@ package com.luxof.lapisworks.interop.hexical.blocks;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 
-import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
+import com.luxof.lapisworks.blocks.stuff.UnlinkableMediaBlock;
 import com.luxof.lapisworks.interop.hexical.Lapixical;
 import com.luxof.lapisworks.mixinsupport.ItemEntityMinterface;
 
@@ -26,7 +26,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class CradleEntity extends BlockEntity implements Inventory, LinkableMediaBlock {
+import org.jetbrains.annotations.Nullable;
+
+public class CradleEntity extends BlockEntity implements Inventory, UnlinkableMediaBlock {
     private ItemStack heldStack = ItemStack.EMPTY.copy();
     public ItemEntity heldEntity = null;
     private UUID persistentUUID = UUID.randomUUID();
@@ -189,24 +191,28 @@ public class CradleEntity extends BlockEntity implements Inventory, LinkableMedi
     @Override public int getNumberOfLinks() { return 0; }
     @Override public int getMaxNumberOfLinks() { return 0; }
     @Override public BlockPos getThisPos() { return this.pos; }
-
-    @Override
-    public long depositMedia(long amount, boolean simulate) {
-        if (!(heldStack.getItem() instanceof ItemMediaBattery phial)) return 0;
-        phial.insertMedia(heldEntity.getStack(), amount, simulate);
-        return phial.insertMedia(heldStack, amount, simulate);
+    @Override public void setMedia(long media) {
+        if (getPhial() == null) return;
+        phial.setMedia(heldStack, media);
     }
-
-    @Override
-    public long withdrawMedia(long amount, boolean simulate) {
-        if (!(heldStack.getItem() instanceof ItemMediaBattery phial)) return 0;
-        phial.withdrawMedia(heldEntity.getStack(), amount, simulate);
-        return phial.withdrawMedia(heldStack, amount, simulate);
-    }
-
     @Override
     public long getMediaHere() {
-        if (!(heldStack.getItem() instanceof ItemMediaBattery phial)) return 0;
+        if (getPhial() == null) return 0;
         return phial.getMedia(heldStack);
     }
+    @Override
+    public long getMaxMedia() {
+        if (getPhial() == null) return 0L;
+        return phial.getMaxMedia(heldStack);
+    }
+
+
+    // DRY and less lines respectively
+    @Nullable
+    private ItemMediaBattery getPhial() {
+        if (!(heldStack.getItem() instanceof ItemMediaBattery phial)) return null;
+        this.phial = phial;
+        return phial;
+    }
+    private ItemMediaBattery phial;
 }

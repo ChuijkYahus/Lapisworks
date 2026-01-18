@@ -180,6 +180,15 @@ public class Patterns {
         register("quenched_indigo4", "qawwqeaeqwwaqqqaqeqdaadqwedeeawdwa", HexDir.NORTH_WEST, new QuenchedIndigo());
         register("quenched_indigo5", "qawwqwwqwwaqaedewwwawweqaqdawdwa", HexDir.NORTH_WEST, new QuenchedIndigo());
         registerPWShapePattern("lapisworks:quenched_indigo");
+
+        // dirty hacks (there's gotta be a better way right)
+        registerButSneaky("robbie_exalt0", "qaeaqaweaqa", HexDir.NORTH_WEST, new EstrogenExalt());
+        registerButSneaky("robbie_exalt1", "qaeaqaweaqa", HexDir.NORTH_WEST, new EstrogenExalt());
+        // archon of meaningless but with w and ww at the end respectively
+        registerOnlyForHexdoc("robbie_exalt0", "eedqaqddadwddwaeaeadaeqaddwedwqdadedaqqwwqqewwwaeaedqqwwwqwawaedwqqdwwaqweeeqeeewawdwqew", HexDir.NORTH_WEST);
+        registerOnlyForHexdoc("robbie_exalt1", "eedqaqddadwddwaeaeadaeqaddwedwqdadedaqqwwqqewwwaeaedqqwwwqwawaedwqqdwwaqweeeqeeewawdwqeww", HexDir.NORTH_WEST);
+        registerOnlyForHexdoc("robbie_exalt", "qaeaqaweaqa", HexDir.NORTH_WEST);
+        registerPWShapePattern("lapisworks:robbie_exalt");
     }
 
     private static ActionRegistryEntry register(
@@ -189,5 +198,18 @@ public class Patterns {
         Action action
     ) {
         return Registry.register(HexActions.REGISTRY, id(name), new ActionRegistryEntry(HexPattern.fromAngles(signature, startDir), action));
+    }
+    private static void registerOnlyForHexdoc(
+        String name,
+        String signature,
+        HexDir startDir
+    ) {}
+    private static ActionRegistryEntry registerButSneaky(
+        String name,
+        String signature,
+        HexDir startDir,
+        Action action
+    ) {
+        return register(name, signature, startDir, action);
     }
 }

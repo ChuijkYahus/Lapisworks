@@ -288,6 +288,7 @@ Locked in rah
 - Scrying lens overlays
 - Simple Mind Infusions now have (kind of basic) datapacking support.
 ## Changes:
+- 3D models of some blocks (and maybe an item or two?) look a little better
 - Book reformatting and extra documentation and shit
   - e.g. Villager un-flaying is actually documented now
 - Deposit Media and Withdraw Media work conveniently now
@@ -311,6 +312,7 @@ Locked in rah
 - Enchantment Purification's order of arguments being flipped
 - Finally fixed that Cradle bug with items for fucking real, holy fucking shit  
   IT STILL JUMPSCARES ME WHAT THE FUCK
+- Handed Prison didn't drop blocks wtf
 - Logspam begone!
 - Sieve Thoughts not working on a spell circle
 - You may no longer convert Lapis (+ your life force) into Amethyst Shards  

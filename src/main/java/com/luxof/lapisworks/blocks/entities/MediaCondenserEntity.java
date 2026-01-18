@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -102,32 +101,6 @@ public class MediaCondenserEntity extends BlockEntity implements LinkableMediaBl
     @Override public int getNumberOfLinks() { return linkedCondensers.size(); }
     @Override public BlockPos getThisPos() { return this.getPos(); }
     @Override public long getMediaHere() { return media; }
-    @Override
-    public long depositMedia(long amount, boolean simulate) {
-        long prevMedia = media;
-
-        long nowMedia = Math.min(media + amount, mediaCap);
-        if (!simulate) {
-            media = nowMedia;
-            updateState();
-            this.markDirty();
-            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
-        }
-
-        return nowMedia - prevMedia;
-    }
-    @Override
-    public long withdrawMedia(long amount, boolean simulate) {
-        long prevMedia = media;
-
-        long nowMedia = Math.max(media - amount, 0);
-        if (!simulate) {
-            media = nowMedia;
-            updateState();
-            this.markDirty();
-            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
-        }
-
-        return prevMedia - nowMedia;
-    }
+    @Override public void setMedia(long media) { this.media = media; updateState(); markDirty(); }
+    @Override public long getMaxMedia() { return mediaCap; }
 }

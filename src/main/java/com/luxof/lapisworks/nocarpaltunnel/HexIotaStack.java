@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs;
 
 import com.mojang.datafixers.util.Either;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -72,5 +73,17 @@ public class HexIotaStack {
         Vec3d ret = getVec3(idx);
         ctx.assertVecInRange(ret);
         return ret;
+    }
+    public ArrayList<Iota> getJUSTAList(int idx) {
+        // is handrolling your own List really necessary bro
+        SpellList list = getList(idx);
+
+        ArrayList<Iota> theFuckingList = new ArrayList<>();
+
+        for (int i = 0; i < list.size(); i++) {
+            theFuckingList.add(list.getAt(i));
+        }
+
+        return theFuckingList;
     }
 }

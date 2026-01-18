@@ -73,6 +73,7 @@ ANGLES = "wedsaq"
 def overlay_patterns(
     op_id: ResourceLocation,
     patterns: list[tuple[PatternInfo, HexCoord]],
+    is_per_world: bool = True
 ) -> PatternInfo:
     # construct a graph G overlaying all patterns
 
@@ -141,7 +142,7 @@ def overlay_patterns(
     return PatternInfo(
         startdir=startdir,
         signature=signature,
-        is_per_world=True,
+        is_per_world=is_per_world,
         id=op_id,
     )
 

@@ -84,7 +84,7 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
     }
 
     @Override
-    public long extractMedia(long cost, boolean simulate) {
+    public long extractMedia(long cost, boolean simulate, ServerWorld world) {
         long take = Math.min(cost, media);
         cost -= take;
         if (!simulate) media -= take;
@@ -99,15 +99,19 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
     }
 
     @Override
+    public void printMishap(Text mishapMessage, ServerWorld world) {
+        printMessage(mishapMessage, world);
+    }
+
+    @Override
     public boolean tick(ServerWorld world) {
         RitualCastEnv env = new RitualCastEnv(world, this);
 
-        if (!(world.getBlockEntity(currentPos) instanceof RitualComponent)) {
+        if (!(world.getBlockEntity(currentPos) instanceof RitualComponent ritualComponent)) {
             // explosions, Break Block, damn near anything could cause this.
             return false;
         }
         
-        RitualComponent ritualComponent = (RitualComponent)world.getBlockEntity(currentPos);
         Pair<BlockPos, CastingImage> result = ritualComponent.execute(env);
         world.setBlockState(currentPos.offset(forward.getOpposite()), Blocks.AIR.getDefaultState());
 
