@@ -5,7 +5,10 @@ import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+
+import static com.luxof.lapisworks.Lapisworks.LOGGER;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +58,7 @@ public class RitualCastEnv extends CastingEnvironment {
 
     @Override
     protected long extractMediaEnvironment(long cost, boolean simulate) {
-        return ritual.extractMedia(cost, simulate, getWorld());
+        return cost - ritual.extractMedia(cost, simulate, getWorld());
     }
 
     @Override

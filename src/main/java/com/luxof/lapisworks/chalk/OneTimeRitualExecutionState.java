@@ -86,9 +86,8 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
     @Override
     public long extractMedia(long cost, boolean simulate, ServerWorld world) {
         long take = Math.min(cost, media);
-        cost -= take;
         if (!simulate) media -= take;
-        return cost;
+        return take;
     }
 
     @Override

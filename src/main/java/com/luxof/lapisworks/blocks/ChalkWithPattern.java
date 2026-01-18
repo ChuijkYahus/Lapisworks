@@ -61,7 +61,15 @@ public class ChalkWithPattern extends BlockWithEntity implements ChalkBlockInter
         BlockHitResult hit
     ) {
         if (!player.getStackInHand(hand).isOf(ModItems.CHALK))
-            return ChalkBlockInterface.super.onUse(state, world, pos, player, hand, hit);
+            return ChalkBlockInterface.super.onUse(
+                state,
+                world,
+                pos,
+                player,
+                hand,
+                hit,
+                ((ChalkWithPatternEntity)world.getBlockEntity(pos)).attachedTo
+            );
 
         if (world.isClient) return ActionResult.SUCCESS;
         NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
@@ -146,6 +154,9 @@ public class ChalkWithPattern extends BlockWithEntity implements ChalkBlockInter
             world.breakBlock(pos, false);
             return;
         }
+
+        if (!chalk.renderLeftBracket || !chalk.renderRightBracket)
+            return;
 
         Direction leftOrRight = findLeftVector(chalk.attachedTo);
 

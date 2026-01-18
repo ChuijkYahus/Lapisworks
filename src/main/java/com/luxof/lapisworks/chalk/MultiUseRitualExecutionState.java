@@ -2,13 +2,16 @@ package com.luxof.lapisworks.chalk;
 
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 
 import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.blocks.entities.RitusEntity;
 
+import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.nbtListOf;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,7 +42,7 @@ public class MultiUseRitualExecutionState extends RitualExecutionState {
     ) {
         super(currentPos, forward, currentImage, caster, pigment);
         this.startingPos = startingPos;
-        this.visitedPositions = visitedPositions;
+        this.visitedPositions = new ArrayList<>(visitedPositions);
     }
 
     @Override
@@ -108,6 +111,11 @@ public class MultiUseRitualExecutionState extends RitualExecutionState {
         Pair<BlockPos, CastingImage> result = ritualComponent.execute(env);
         unpowerTrailing(world, 5);
 
+        if (result == null || result.getLeft() == null) {
+            unpowerTrailing(world, 0);
+            return false;
+        }
+
         forward = Direction.fromVector(
             result.getLeft().getX() - currentPos.getX(),
             result.getLeft().getY() - currentPos.getY(),
@@ -120,9 +128,10 @@ public class MultiUseRitualExecutionState extends RitualExecutionState {
     }
 
     private void unpowerTrailing(ServerWorld world, int trailLength) {
+        if (visitedPositions.size() <= trailLength) return;
         for (
-            int i = visitedPositions.size() - 1;
-            i >= visitedPositions.size() - trailLength && i >= 0;
+            int i = visitedPositions.size() - 1 - trailLength;
+            i >= 0;
             i--
         ) {
             BlockPos pos = visitedPositions.remove(i);

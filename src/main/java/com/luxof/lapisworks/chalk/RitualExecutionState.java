@@ -201,6 +201,7 @@ public abstract class RitualExecutionState {
     }
 
 
+    /** returns the amount extracted. */
     public abstract long extractMedia(long cost, boolean simulate, ServerWorld world);
     public abstract void printMessage(Text message, ServerWorld world);
     public abstract void printMishap(Text mishapMessage, ServerWorld world);
