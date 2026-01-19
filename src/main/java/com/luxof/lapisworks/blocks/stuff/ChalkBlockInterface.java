@@ -11,6 +11,8 @@ import com.luxof.lapisworks.mixinsupport.RitualsUtil;
 
 import static com.luxof.lapisworks.Lapisworks.getFacingWithRespectToDown;
 
+import java.util.List;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -49,7 +51,8 @@ public interface ChalkBlockInterface {
             IXplatAbstractions.INSTANCE.findMediaHolder(stack).withdrawMedia(
                 -1,
                 player.isCreative()
-            )
+            ),
+            List.of()
         ));
 
         return ActionResult.SUCCESS;

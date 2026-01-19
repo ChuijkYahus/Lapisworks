@@ -9,6 +9,8 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexItems;
 
+import com.google.gson.JsonPrimitive;
+
 import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
 import com.luxof.lapisworks.init.*;
 import com.luxof.lapisworks.init.Mutables.Mutables;
@@ -39,6 +41,7 @@ import java.util.function.Predicate;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -58,7 +61,9 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.Util;
 
 import org.jetbrains.annotations.Nullable;
+
 import org.joml.Random;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,6 +131,7 @@ public class Lapisworks implements ModInitializer {
 			com.luxof.lapisworks.interop.hexal.Lapisal.beCool();
 		}
 
+		LapisConfig.renewCurrentConfig();
 		ThemConfigFlags.declareEm();
 		ModEntities.doSomethingFun();
 		Patterns.init();
@@ -159,6 +165,10 @@ public class Lapisworks implements ModInitializer {
 
 	public static Identifier id(String string) {
 		return new Identifier(MOD_ID, string);
+	}
+
+	public static JsonPrimitive primitive(Number number) {
+		return new JsonPrimitive(number);
 	}
 
 	public static boolean trinketEquipped(LivingEntity entity, Item item) {

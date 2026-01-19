@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 
+import com.luxof.lapisworks.LapisConfig;
 import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.blocks.entities.RitusEntity;
 
@@ -45,9 +46,14 @@ public class MultiUseRitualExecutionState extends RitualExecutionState {
         this.visitedPositions = new ArrayList<>(visitedPositions);
     }
 
+    private double retrieveTuneableAmbitMul() {
+        return LapisConfig.getCurrentConfig()
+            .getMultiUseRitualSettings()
+            .tuneable_amethyst_ambit_multiplier();
+    }
     @Override
     public boolean isVecInAmbit(Vec3d vec, ServerWorld world) {
-        return isVecInAmbitOfTuneableAmethyst(vec, world, 1.0);
+        return isVecInAmbitOfTuneableAmethyst(vec, world, retrieveTuneableAmbitMul());
     }
 
     @Override

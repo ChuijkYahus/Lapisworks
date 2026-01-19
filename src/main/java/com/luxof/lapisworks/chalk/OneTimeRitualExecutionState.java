@@ -3,12 +3,20 @@ package com.luxof.lapisworks.chalk;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 
-import static com.luxof.lapisworks.Lapisworks.getPigmentFromDye;
+import com.luxof.lapisworks.LapisConfig;
+import com.luxof.lapisworks.Lapisworks;
+import com.luxof.lapisworks.LapisConfig.OneTimeRitualSettings;
 
+import static com.luxof.lapisworks.Lapisworks.getPigmentFromDye;
+import static com.luxof.lapisworks.Lapisworks.nbtListOf;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -21,9 +29,20 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 public class OneTimeRitualExecutionState extends RitualExecutionState {
+    private OneTimeRitualSettings getSettings() {
+        return LapisConfig.getCurrentConfig().getOneTimeRitualSettings();
+    }
+    private double getPlayerAmbitMult() {
+        return getSettings().player_ambit_multiplier();
+    }
+    private double getTuneableAmbitMult() {
+        return getSettings().tuneable_amethyst_ambit_multiplier();
+    }
+
     public long media;
     public UUID casterWhileCasterIsDisabled = null;
     public boolean isCasterDisabled = false;
+    public List<BlockPos> visitedPositions;
 
     public OneTimeRitualExecutionState(
         BlockPos currentPos,
@@ -31,10 +50,12 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
         CastingImage currentImage,
         @Nullable UUID caster,
         @Nullable FrozenPigment pigment,
-        long startingMedia
+        long startingMedia,
+        List<BlockPos> visitedPositions
     ) {
         super(currentPos, forward, currentImage, caster, pigment);
         this.media = startingMedia;
+        this.visitedPositions = new ArrayList<>(visitedPositions);
     }
 
     public void disableCaster() {
@@ -64,14 +85,22 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
 
     @Override
     public boolean isVecInAmbit(Vec3d vec, ServerWorld world) {
-        return isVecInAmbitOfPlayer(vec, world, 0.5)
-            || isVecInAmbitOfTuneableAmethyst(vec, world, 1);
+        return isVecInAmbitOfPlayer(vec, world, getPlayerAmbitMult())
+            || isVecInAmbitOfTuneableAmethyst(vec, world, getTuneableAmbitMult());
     }
 
     @Override
     public void save(NbtCompound nbt) {
         super.saveBase(nbt);
         nbt.putLong("media", media);
+        nbt.put(
+            "visitedPositions",
+            nbtListOf(
+                visitedPositions.stream()
+                    .map(Lapisworks::serializeBlockPos)
+                    .toList()
+            )
+        );
     }
 
     public static OneTimeRitualExecutionState load(NbtCompound nbt, ServerWorld world) {
@@ -82,7 +111,11 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
             base.currentImage(),
             base.caster(),
             base.pigment(),
-            nbt.getLong("media")
+            nbt.getLong("media"),
+            nbt.getList("visitedPositions", NbtElement.COMPOUND_TYPE)
+                .stream()
+                .map(e -> Lapisworks.deserializeBlockPos((NbtCompound)e))
+                .toList()
         );
     }
 
@@ -118,9 +151,10 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
             // explosions, Break Block, damn near anything could cause this.
             return false;
         }
-        
+
+        visitedPositions.add(currentPos);
         Pair<BlockPos, CastingImage> result = ritualComponent.execute(env);
-        world.setBlockState(currentPos.offset(forward.getOpposite()), Blocks.AIR.getDefaultState());
+        unpowerTrailing(world, 1);
 
         if (result == null || result.getLeft() == null) {
             world.setBlockState(currentPos, Blocks.AIR.getDefaultState());
@@ -139,5 +173,21 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
         currentImage = result.getRight();
 
         return true;
+    }
+
+    private void unpowerTrailing(ServerWorld world, int trailLength) {
+        if (visitedPositions.size() <= trailLength) return;
+        for (
+            int i = visitedPositions.size() - 1 - trailLength;
+            i >= 0;
+            i--
+        ) {
+            BlockPos pos = visitedPositions.remove(i);
+
+            if (!(world.getBlockEntity(pos) instanceof RitualComponent))
+                continue;
+
+            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+        }
     }
 }
