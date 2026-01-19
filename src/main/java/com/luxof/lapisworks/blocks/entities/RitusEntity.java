@@ -101,11 +101,10 @@ public class RitusEntity extends BlockEntity implements AttachedBE, RitualCompon
 
     @Nullable
     public Pair<ItemStack, Text> getDisplay() {
-        if (displayItem != null && displayMessage != null) {
+        if (displayItem != null && displayMessage != null)
             return new Pair<>(displayItem, displayMessage);
-        } else {
+        else
             return null;
-        }
     }
 
     public void postDisplay(ItemStack item, Text message) {
@@ -123,7 +122,7 @@ public class RitusEntity extends BlockEntity implements AttachedBE, RitualCompon
     }
 
     public void clearDisplay() {
-        postDisplay(null, null);
+        this.postDisplay(null, null);
     }
 
     public void save() {
@@ -211,6 +210,8 @@ public class RitusEntity extends BlockEntity implements AttachedBE, RitualCompon
     public Direction getAttachedTo() {
         return world.getBlockState(pos).get(Ritus.ATTACHED);
     }
+    @Override
+    public Direction getParticleSprayDir() { return getAttachedTo().getOpposite(); }
 
     @Override
     public List<BlockPos> getPossibleNextBlocks(ServerWorld world, @Nullable Direction forward) {

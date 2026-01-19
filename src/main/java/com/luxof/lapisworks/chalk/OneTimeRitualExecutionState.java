@@ -3,6 +3,8 @@ package com.luxof.lapisworks.chalk;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 
+import static com.luxof.lapisworks.Lapisworks.getPigmentFromDye;
+
 import java.util.UUID;
 
 import net.minecraft.block.Blocks;
@@ -10,6 +12,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -103,6 +106,11 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
     }
 
     @Override
+    public Vec3d getMishapSprayPos() {
+        return Vec3d.ofCenter(currentPos);
+    }
+
+    @Override
     public boolean tick(ServerWorld world) {
         RitualCastEnv env = new RitualCastEnv(world, this);
 
@@ -118,6 +126,9 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
             world.setBlockState(currentPos, Blocks.AIR.getDefaultState());
             return false;
         }
+
+        FrozenPigment particleP = pigment == null ? getPigmentFromDye(DyeColor.PINK) : pigment;
+        sprayParticlesOutOf(world, currentPos, ritualComponent, particleP);
 
         forward = Direction.fromVector(
             result.getLeft().getX() - currentPos.getX(),

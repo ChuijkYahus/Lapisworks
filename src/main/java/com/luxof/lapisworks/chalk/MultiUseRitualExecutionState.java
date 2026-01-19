@@ -2,13 +2,12 @@ package com.luxof.lapisworks.chalk;
 
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 
 import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.blocks.entities.RitusEntity;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.getPigmentFromDye;
 import static com.luxof.lapisworks.Lapisworks.nbtListOf;
 
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -97,6 +97,11 @@ public class MultiUseRitualExecutionState extends RitualExecutionState {
     }
 
     @Override
+    public Vec3d getMishapSprayPos() {
+        return Vec3d.ofCenter(currentPos);
+    }
+
+    @Override
     public boolean tick(ServerWorld world) {
         RitusEntity ritus = (RitusEntity)world.getBlockEntity(startingPos);
         tunedFrequency = ritus.getTunedFrequency(world);
@@ -112,8 +117,17 @@ public class MultiUseRitualExecutionState extends RitualExecutionState {
         unpowerTrailing(world, 5);
 
         if (result == null || result.getLeft() == null) {
+
+            sprayParticlesOutOf(
+                world,
+                startingPos,
+                (RitualComponent)world.getBlockEntity(startingPos),
+                getPigmentFromDye(DyeColor.RED)
+            );
+
             unpowerTrailing(world, 0);
             return false;
+
         }
 
         forward = Direction.fromVector(

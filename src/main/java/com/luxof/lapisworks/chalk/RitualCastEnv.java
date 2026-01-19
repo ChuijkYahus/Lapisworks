@@ -5,10 +5,7 @@ import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
-import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
-
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +50,7 @@ public class RitualCastEnv extends CastingEnvironment {
 
     @Override
     public Vec3d mishapSprayPos() {
-        return Vec3d.ofCenter(ritual.currentPos);
+        return ritual.getMishapSprayPos();
     }
 
     @Override
@@ -124,7 +121,7 @@ public class RitualCastEnv extends CastingEnvironment {
 
     protected void printMishapMessage(OperatorSideEffect.DoMishap mishap) {
         Text message = mishap.getMishap().errorMessageWithName(this, mishap.getErrorCtx());
-        if (message != null) printMessage(message);
+        if (message != null) printMishap(message);
     }
 
     @Override

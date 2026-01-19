@@ -243,47 +243,11 @@ Locked in rah
   - Takes 1 amethyst dust per brew
 - Erebus' Gambit
 - Hadamard's Distillation
-- Hex familiar that lets you interact with the Media Condensing Network at a range.
-  - floating entity. like Terraria's flying piggy bank? or maybe just a wisp?
-  - bind it to one linkable and it'll do all it's business with that one linkable
-    - this linkable is it's entrypoint into any network, basically
-    - can't make it auto-search for the nearest one because it needs to be not OP
-  - you may now pull from that by rmb on the pet with a phial (attempts to fill whole phial)
-  - you may also push to that by shift+rmb on the pet with a phial (attempts to drain whole phial)
-  - costs about 2 amel per 32 blocks of distance (so free within 32 blocks)
-  - i think it should be some kind of orb with a :3 face on it?
-  - summon the pet via wearing a necklace for a minute
-    - make it exclusive with the focus necklace :>
 - Indigan Lapidary
   - alternative name: Noetic Lapidary
   - costs one amethyst shard in media, and at least two lapis in item form in your other hand
   - converts the two lapis into one amethyst (overflow of 1 lapis is consumed)
-- Mind Control of entities in the game  
-  (reality check: gang, how lost are we in the sauce?)
-  - you have to un-flay with a Simple Mind first
-  - you gain a "controllable" iota from the un-flaying.
-    - in-lore, this is a set of mappings for what brain points do what, what makes the entity
-      tick basically and also IO points for stuff (to store info for example)
-    - in the event that you lose this iota, there is a pattern to get it from an entity
-      that was un-flayed by you. this costs about a shard of amethyst
-  - controllable movement
-  - Deposit Media can be used to recharge a controllable
-  - media limit of 64 dust
-  - cannot overcast
-  - credits to Sheppo from the Hex Casting discord server for these
-    - they can be pets
-    - VERY small ambit, at most 3 blocks and usually just 1 (by default too)
-    - can have pre-set conditions to cast a hex, e.g. on hurt (so kind of like Hierophantics!)
-      - not Sheppo: can only have one condition (in-lore: too much space occupied by condition and hex)
 - Mintiest and Kitkat's Gambits (`for i in range(n):`)
-- Rote Brewery
-  - Infuse a Simple Mind into a Brewing Stand
-  - Can remember up to 5 potion recipes
-  - Each write is permanent, stops brewing anything but remembered potions when at the limit
-  - When a potion from memory is selected, takes items automatically.
-  - ALWAYS takes 2 steps worth of time.
-    Manual brewing (or teaching it) is a pain as each step takes twice as long.
-    Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.
 - Scrying patterns for blocks added by the mod.
 - Scrying lens overlays
 - Simple Mind Infusions now have (kind of basic) datapacking support.
@@ -549,4 +513,42 @@ trinket that stops GTP item spillage and makes it half as cheap
 - rub some amethyst dust on an eye of ender, then put it in an amel-iron-diamond case  
 
 a trinket that shows a config screen for hexes it's primed to work for! it'll show
-pre-configured-for-hex iotas and let you select their values, with a default value already present
+pre-configured-for-hex iotas and let you select their values, with a default value already present  
+
+TODO:  
+- Hex familiar that lets you interact with the Media Condensing Network at a range.
+  - floating entity. like Terraria's flying piggy bank? or maybe just a wisp?
+  - bind it to one linkable and it'll do all it's business with that one linkable
+    - this linkable is it's entrypoint into any network, basically
+    - can't make it auto-search for the nearest one because it needs to be not OP
+  - you may now pull from that by rmb on the pet with a phial (attempts to fill whole phial)
+  - you may also push to that by shift+rmb on the pet with a phial (attempts to drain whole phial)
+  - costs about 2 amel per 32 blocks of distance (so free within 32 blocks)
+  - i think it should be some kind of orb with a :3 face on it?
+  - summon the pet via wearing a necklace for a minute
+    - make it exclusive with the focus necklace :>
+- Mind Control of entities in the game  
+  (reality check: gang, how lost are we in the sauce?)
+  - you have to un-flay with a Simple Mind first
+  - you gain a "controllable" iota from the un-flaying.
+    - in-lore, this is a set of mappings for what brain points do what, what makes the entity
+      tick basically and also IO points for stuff (to store info for example)
+    - in the event that you lose this iota, there is a pattern to get it from an entity
+      that was un-flayed by you. this costs about a shard of amethyst
+  - controllable movement
+  - Deposit Media can be used to recharge a controllable
+  - media limit of 64 dust
+  - cannot overcast
+  - credits to Sheppo from the Hex Casting discord server for these
+    - they can be pets
+    - VERY small ambit, at most 3 blocks and usually just 1 (by default too)
+    - can have pre-set conditions to cast a hex, e.g. on hurt (so kind of like Hierophantics!)
+      - not Sheppo: can only have one condition (in-lore: too much space occupied by condition and hex)
+- Rote Brewery
+  - Infuse a Simple Mind into a Brewing Stand
+  - Can remember up to 5 potion recipes
+  - Each write is permanent, stops brewing anything but remembered potions when at the limit
+  - When a potion from memory is selected, takes items automatically.
+  - ALWAYS takes 2 steps worth of time.
+    Manual brewing (or teaching it) is a pain as each step takes twice as long.
+    Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.  
