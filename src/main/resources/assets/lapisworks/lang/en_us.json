@@ -49,21 +49,17 @@
     "item.lapisworks.staves.incomplete.obsidian_wand": "Infused Obsidian Wand",
     "item.lapisworks.staves.incomplete.warped": "Infused Warped Staff",
     "item.lapisworks.staves.incomplete.warped_wand": "Infused Warped Wand",
-
     "item.lapisworks.staves.amel_ring": "Ring of Amethyst Lazuli",
     "item.lapisworks.staves.amel_ring2": "Ring of Amethyst Lazuli",
     "item.lapisworks.amel_jar": "Amel Jar",
     "item.lapisworks.amel_constructs.focus_necklace.1": "Focus Necklace",
     "item.lapisworks.amel_constructs.focus_necklace.2": "Amulet of Holding",
-
     "item.lapisworks.energy_container": "Enchantment Energy Container",
     "item.lapisworks.amel_constructs.amel_orb": "Amel-tuned Orb",
     "item.lapisworks.amel_constructs.geode_dowser": "Geode Dowser",
-
     "item.lapisworks.amel_constructs.diamond_sword": "Amel-Infused Diamond Sword",
     "item.lapisworks.amel_constructs.iron_sword": "Amel-Infused Iron Sword",
     "item.lapisworks.amel_constructs.gold_sword": "Amel-Infused Golden Sword",
-
     "item.lapisworks.amethyst_stamp": "Amethyst Stamp",
 
 
@@ -99,6 +95,7 @@
     "block.lapisworks.chalk": "Amethyst Chalk",
     "block.lapisworks.chalk_with_pattern": "Amethyst Chalk",
     "block.lapisworks.tuneable_amethyst": "Tuneable Amethyst",
+    "block.lapisworks.ritus": "Ritus",
 
     "advancements.lapisworks.gotlapis.name": "Lapisworks Research",
     "advancements.lapisworks.gotlapis.description": "A deep blue, precious mineral. Just as they wrote..",
