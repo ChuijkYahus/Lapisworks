@@ -356,6 +356,10 @@ public class Lapisworks implements ModInitializer {
 			&& closeEnough(a.y, b.y, epsilon)
 			&& closeEnough(a.z, b.z, epsilon);
 	}
+	/** epsilon is 0.0000001. */
+	public static boolean closeEnough(double a, double b) {
+		return closeEnough(a, b, 0.0000001);
+	}
 
     /** returns null if hand isn't MAIN_HAND or OFF_HAND or inaccessible (i'll add more eventually..!!) */
     @Nullable
@@ -427,34 +431,102 @@ public class Lapisworks implements ModInitializer {
 	 * and a boolean which states if the raycast was interrupted suddenly instead of completing.
 	 * <p>to skip a pos in the final list, return <code>null</code> for the pos.
 	 * If you send a valid pos instead, it will be added to the final list.
-	 * <p>to terminate the line, simply return <code>false</code> for the boolean.
-	 * <p>P.S. this prioritizes accuracy and as such increments from start to end in steps of 0.1.
-	 * of course, all the positions passed to the function are unique, however you may not want to
-	 * use this if you value performance. */
+	 * <p>to terminate the line, simply return <code>false</code> for the boolean. */
+	// Amanatides-Woo is a silly name
 	public static Pair<List<BlockPos>, Boolean> castRay(
-		BlockPos startPos,
-		BlockPos endPos,
+		Vec3d start,
+		Vec3d end,
 		Function<BlockPos, Pair<BlockPos, Boolean>> atEachStep
 	) {
-		Vec3d start = startPos.toCenterPos();
-		Vec3d end = endPos.toCenterPos();
+		BlockPos ray = BlockPos.ofFloored(start);
+		BlockPos endPos = BlockPos.ofFloored(end);
+
+		Vec3d diff = end.subtract(start);
+
+		Vec3i step = new Vec3i(
+			(int)Math.signum(diff.x),
+			(int)Math.signum(diff.y),
+			(int)Math.signum(diff.z)
+		);
+		Vec3d dir = diff.normalize();
+		Vec3d delta = new Vec3d(
+			1.0 / Math.abs(dir.x),
+			1.0 / Math.abs(dir.y),
+			1.0 / Math.abs(dir.z)
+		);
+
+
+		BlockPos nextBoundary = new BlockPos(
+			step.getX() < 0 ? 0 : step.getX(),
+			step.getY() < 0 ? 0 : step.getY(),
+			step.getZ() < 0 ? 0 : step.getZ()
+		);
+		// because Vec3d fields are final... :(
+		double tMaxX = dir.x == 0 ?
+			Double.POSITIVE_INFINITY : (ray.getX() + nextBoundary.getX() - start.x) / dir.x;
+		double tMaxY = dir.y == 0 ?
+			Double.POSITIVE_INFINITY : (ray.getY() + nextBoundary.getY() - start.y) / dir.y;
+		double tMaxZ = dir.z == 0 ?
+			Double.POSITIVE_INFINITY : (ray.getZ() + nextBoundary.getZ() - start.z) / dir.z;
+
+
 		List<BlockPos> positions = new ArrayList<>();
 
-		BlockPos prev = null;
-		Vec3d curr = start;
-		double step = 0.1;
-		Vec3d dir = end.subtract(start).normalize().multiply(step);
+		while (!ray.equals(endPos)) {
 
-		while (curr.squaredDistanceTo(end) > step*step) {
-			BlockPos currPos = BlockPos.ofFloored(curr);
-			if (currPos != prev) {
-				Pair<BlockPos, Boolean> ret = atEachStep.apply(currPos);
-				if (!ret.getRight()) return new Pair<>(positions, true);
-				if (ret.getLeft() != null) positions.add(ret.getLeft());
+			var result = atEachStep.apply(ray);
+			if (result.getLeft() != null)
+				positions.add(result.getLeft());
+			if (!result.getRight())
+				return new Pair<>(positions, true);
+
+			LOGGER.info("----------------------------------------------------------------");
+			LOGGER.info("dir: " + dir.toString());
+			LOGGER.info("tMax: " + String.valueOf(tMaxX) + ", " + String.valueOf(tMaxY) + ", " + String.valueOf(tMaxZ));
+			LOGGER.info("ray: " + ray.toShortString());
+
+			// fucking diagonals! hate these motherfuckers!
+			if (closeEnough(tMaxX, tMaxY)) {
+				ray = ray.add(step.getX(), step.getY(), 0);
+				tMaxX += delta.x;
+				tMaxY += delta.y;
+
+				if (closeEnough(tMaxX, tMaxZ)) {
+					ray = ray.add(0, 0, step.getZ());
+					tMaxZ += delta.z;
+				}
+
+			} else if (closeEnough(tMaxX, tMaxZ)) {
+				ray = ray.add(step.getX(), 0, step.getZ());
+				tMaxX += delta.x;
+				tMaxZ += delta.z;
+
+			} else if (closeEnough(tMaxY, tMaxZ)) {
+				ray = ray.add(0, step.getY(), step.getZ());
+				tMaxY += delta.y;
+				tMaxZ += delta.z;
+
+			} else {
+				if (tMaxX < tMaxY) {
+					if (tMaxX < tMaxZ) {
+						ray = ray.add(step.getX(), 0, 0);
+						tMaxX += delta.x;
+					} else {
+						ray = ray.add(0, 0, step.getZ());
+						tMaxZ += delta.z;
+					}
+				} else {
+					if (tMaxY < tMaxZ) {
+						ray = ray.add(0, step.getY(), 0);
+						tMaxY += delta.y;
+					} else {
+						ray = ray.add(0, 0, step.getZ());
+						tMaxZ += delta.z;
+					}
+				}
 			}
-			prev = currPos;
-			curr.add(dir);
 		}
+
 		return new Pair<>(positions, false);
 	}
 
