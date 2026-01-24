@@ -14,7 +14,7 @@ import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import java.util.List;
 
 public abstract class ConstMediaActionNCT extends NCTBase implements ConstMediaAction {
-    protected boolean requiresEnlightenment = false;
+    public boolean requiresEnlightenment = false;
 
     public List<? extends Iota> execute(HexIotaStack stack, CastingEnvironment ctx) {
         throw new IllegalStateException("call executeWithOpCount instead.");
