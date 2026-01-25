@@ -47,7 +47,7 @@ public class ChalkItem extends BlockItem {
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         World world = context.getWorld();
-        BlockPos chalkPos = BlockPos.ofFloored(context.getHitPos());
+        BlockPos chalkPos = context.getBlockPos();
         ItemStack chalkStack = context.getStack();
         BlockState chalkState = world.getBlockState(chalkPos);
 
@@ -67,16 +67,6 @@ public class ChalkItem extends BlockItem {
         }
 
         return super.useOnBlock(context);
-
-        // BlockItems by default decrement the item stack on successful use.
-        /*chalkStack.increment(1);
-
-        ActionResult succ = super.useOnBlock(context);
-
-        if (isFail(succ)) chalkStack.decrement(1);
-        else chalkStack.damage(1, context.getPlayer(), any -> {});
-
-        return succ;*/
     }
 
     @Override

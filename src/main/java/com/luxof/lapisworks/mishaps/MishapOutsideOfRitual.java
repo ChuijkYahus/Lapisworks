@@ -8,7 +8,6 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import java.util.List;
 
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -40,7 +39,7 @@ public class MishapOutsideOfRitual extends Mishap {
         return Text.translatable("mishaps.lapisworks.ritual.cast_outside_one_time_ritual");
     }
 
-    private void dropAll(Entity entity, List<ItemStack> stacks) {
+    private void dropAll(LivingEntity entity, List<ItemStack> stacks) {
         for (ItemStack _stack : stacks) {
             ItemStack stack = _stack.copyAndEmpty();
             World world = entity.getWorld();
@@ -49,7 +48,7 @@ public class MishapOutsideOfRitual extends Mishap {
             float f = world.random.nextFloat() * 0.5F;
             float g = world.random.nextFloat() * 6.2831855F;
 
-            world.spawnEntity(new ItemEntity(
+            ItemEntity itemEntity = new ItemEntity(
                 world,
                 entity.getX(),
                 // mojang try not to have random numbers challenge
@@ -58,8 +57,10 @@ public class MishapOutsideOfRitual extends Mishap {
                 stack,
                 -MathHelper.sin(g) * f,
                 0.20000000298023224,
-                MathHelper.cos(g) * f
-            ));
+                MathHelper.cos(g) * g
+            );
+            itemEntity.setToDefaultPickupDelay();
+            world.spawnEntity(itemEntity);
         }
     }
     private boolean DoesntHaveBindingCurse(ItemStack stack) {

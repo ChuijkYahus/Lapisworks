@@ -217,7 +217,7 @@ public class JumpSlate extends BlockCircleComponent implements Waterloggable {
                 case NORTH -> AABB_NORTH_WALL;
                 case EAST -> AABB_EAST_WALL;
                 case SOUTH -> AABB_SOUTH_WALL;
-                // NORTH; up and down don't happen (but we need branches for them)
+                // NORTH; up and down don't happen (but i need branches for them)
                 default -> AABB_WEST_WALL;
             };
         };

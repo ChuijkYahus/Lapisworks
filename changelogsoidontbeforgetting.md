@@ -281,11 +281,51 @@ Locked in rah
 - Logspam begone!
 - Shit should actually tell you when you don't have Fabric now
 - Sieve Thoughts not working on a spell circle
+- Visible Distillation and Empty Distillation should be a lot more optimized now (not that you'll notice it lmao)
 - Withdraw bug
 - You may no longer convert Lapis (+ your life force) into Amethyst Shards
   - It now pulls from your inventory
   - Also there's a spell for that now
 ## Interop:
+- Hierophantics
+  - Max experience fishermen villagers can be flayed into you  
+    costs 32 amel and 10 charged amethyst  
+    they only have the on_my_reference_found trigger, triggers when your reference is found in a stack of an offender within "range"  
+      stack starts with a "guess" vector pointing from you to the enemy  
+    has a "vigilance" attribute which can range from 0-3  
+      0: no notification  
+      1: chat notification  
+      2: chat + audio notification  
+      3: chat + on-screen + audio notification  
+    they also have a "range" attribute (0-256)  
+      the higher, the more inaccurate the guess (err_margin=range/4)  
+      e.g. range=64 means guess can be 16 blocks from the offender  
+      or range=256 means guess can be 64 blocks from the offender  
+      err range is constant across all guesses  
+        so if offender is 64 blocks away but your range is 256, err can be 0-64  
+      however, if the offender is in your ambit the guess is always 100% precise  
+  - Less than max experience fishermen can also be flayed into you  
+    costs 16 amel and 5 charged amethyst  
+    they are almost equivalent to the other mind  
+    err=range/8 by default, none when offender is within ambit  
+    range can only be 0-96  
+    starts casting with the exact position of the offender on the stack  
+    has a 1/err chance of detecting the offender  
+  - "Jack" villager type  
+    - villagers turn into "Jacks" when unflayed
+    "Jacks" start with 2-3 levels of exp on every profession  
+    - (but no trades until they pick one of those professions)
+    - they're called "Jacks" because they're jacks of all trades
+  - FUCKING UNICORNS
+	  - IMBUE A SIMPLE MIND INTO A HORSE AND USE 64 AMEL
+    - After being made, a Unicorn develops an affinity for you (and so is bound to you).
+    - You can only have one Unicorn bound to you (any attempts to make more fail).
+    - Unicorns are uncommonly seen, however they do appear around the player from time to time.  
+      They VERY rarely spawn during the night.
+    - Unicorns have a zone of influence around themselves with a radius of 32 blocks.
+    - No hostile mobs can spawn in the presence of a unicorn, and any that spawn outside it's zone  
+      of influence refuse to enter said zone of influence.
+    - No patterns can execute within the zone of influence of a Unicorn, mishapping instead.  
 - EMI
   - You can now see Imbue Amel, Mold Amel and (most) Simple Mind Infusion recipes in EMI
   - You can also see BeegInfusion recipes in EMI
@@ -346,6 +386,8 @@ hexcasting media display interop
 iotic blocks interop  
 
 addons that may have interesting interop ideas waiting to be had but idk yet:  
+- hexical
+  - give conjured color the ability to take mage block effects
 - hexcassettes? (`for i in range(n): enqueue(spell, tick_delay)`-like pattern?)
 - Hexpose interop
   - spell to remove a status effect from the entity that has it
@@ -449,8 +491,10 @@ JIT compilation
   - if there is an unsupported pattern, fail JIT
   - if this succeeds, the code just executes a bunch of effects now with the stack like a map
   - optimize stuff
-    - Explode, Fireball, Wither Nadir, Clean Effects -> Explode, Fireball, incur some media cost
-    - Raycast mantra raycast block stack manip raycast architect -> raycast to block + face  
+    - Explode, Fireball, give effect, take away effect -> explode, fireball, incur cost
+    - Raycast mantra raycast block stack manip raycast architect =
+        (many) -> (many, block (from archer) + face (from architect)) =
+        raycast to block + face
 
 make the addon more hexxy
 - "mechanics should fit into Hex Casting like legos, combinable with other stuff and robust"  
@@ -509,45 +553,18 @@ TODO:
   - Can remember up to 5 potion recipes
   - Each write is permanent, stops brewing anything but remembered potions when at the limit
   - When a potion from memory is selected, takes items automatically.
-  - ALWAYS takes 2 steps worth of time.
-    Manual brewing (or teaching it) is a pain as each step takes twice as long.
-    Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.
-- Hierophantics
-  - Max experience fishermen villagers can be flayed into you  
-    costs 32 amel and 10 charged amethyst  
-    they only have the on_my_reference_found trigger, triggers when your reference is found in a stack of an offender within "range"  
-      stack starts with a "guess" vector pointing from you to the enemy  
-    has a "vigilance" attribute which can range from 0-3  
-      0: no notification  
-      1: chat notification  
-      2: chat + audio notification  
-      3: chat + on-screen + audio notification  
-    they also have a "range" attribute (0-256)  
-      the higher, the more inaccurate the guess (err_margin=range/4)  
-      e.g. range=64 means guess can be 16 blocks from the offender  
-      or range=256 means guess can be 64 blocks from the offender  
-      err range is constant across all guesses  
-        so if offender is 64 blocks away but your range is 256, err can be 0-64  
-      however, if the offender is in your ambit the guess is always 100% precise  
-  - Less than max experience fishermen can also be flayed into you  
-    costs 16 amel and 10 charged amethyst  
-    they are almost equivalent to the other mind  
-    err=range/8 by default, none when offender is within ambit  
-    range can only be 0-96  
-    starts casting with an entity reference to the offender on the stack  
-    has a 1/err chance of not detecting the offender  
-  - "Jack" villager type  
-    - villagers turn into "Jacks" when unflayed
-    "Jacks" are jacks of all trades, and start with 2-3 levels of exp on every possible profession  
-    - (but no trades until they pick one of those professions)
-    - they're called "Jacks" because they're jacks of all trades
-  - FUCKING UNICORNS
-	  - IMBUE A SIMPLE MIND INTO A HORSE AND USE 128 AMEL
-    - After being made, a Unicorn develops an affinity for you (and so is bound to you).
-    - You can only have one Unicorn bound to you (any attempts to make more fail).
-    - Unicorns are uncommonly seen, however they do appear around the player from time to time.  
-      They VERY rarely spawn during the night.
-    - Unicorns have a zone of influence around themselves with a radius of 32 blocks.
-    - No hostile mobs can spawn in the presence of a unicorn, and any that spawn outside it's zone  
-      of influence refuse to enter said zone of influence.
-    - No patterns can execute within the zone of influence of a Unicorn, mishapping instead.  
+  - Brewing a recipe it doesn't know is a pain as each step takes twice as long.
+  - Brewing a recipe it DOES know has normal speed, but reduced ingredient cost.
+    - cost reduction = 20% chance not to consume the ingredient being used  
+
+potions!
+  - potions of shine and dim
+    - enable and disable the enchanted texture effect via pouring over an item
+    - "pouring" is a shapeless crafting recipe with the item and the potion
+  - chorus fruit potion
+    - causes teleportation all over the place?
+  - ender pearl potion
+    - teleports you to where you consumed it after the effect runs out
+    - milk bypasses teleportation
+    - you can just. keep. adding redstone to make it longer
+    - gives you Chaos when it teleports you, paralyzing you for a few seconds (like Terraria)  

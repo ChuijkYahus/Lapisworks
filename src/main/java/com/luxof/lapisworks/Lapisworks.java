@@ -234,6 +234,7 @@ public class Lapisworks implements ModInitializer {
 		else { return null; }
 	}
 
+	public static int clamp(int num, int min, int max) { return Math.min(Math.max(num, min), max); }
 	public static double clamp(double num, double min, double max) { return Math.min(Math.max(num, min), max); }
 	public static float clamp(float num, float min, float max) { return Math.min(Math.max(num, min), max); }
 

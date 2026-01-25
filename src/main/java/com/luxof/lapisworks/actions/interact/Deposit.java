@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.google.common.collect.ImmutableSet;
+
 import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
 import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 

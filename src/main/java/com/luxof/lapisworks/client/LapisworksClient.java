@@ -7,6 +7,7 @@ import at.petrak.hexcasting.common.lib.HexItems;
 
 import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.blocks.bers.*;
+import com.luxof.lapisworks.blocks.bigchalk.BigChalkCenterRenderer;
 import com.luxof.lapisworks.blocks.entities.*;
 import com.luxof.lapisworks.init.*;
 import com.luxof.lapisworks.interop.hextended.items.AmelOrb;
@@ -180,6 +181,10 @@ public class LapisworksClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(
             ModBlocks.CHALK_WITH_PATTERN_ENTITY_TYPE,
             ChalkWithPatternRenderer::new
+        );
+        BlockEntityRendererRegistry.register(
+            ModBlocks.BIG_CHALK_CENTER_ENTITY_TYPE,
+            BigChalkCenterRenderer::new
         );
 
         // we all thank hexxy for adding a simple addDisplayer() instead of requiring mixin in unison
