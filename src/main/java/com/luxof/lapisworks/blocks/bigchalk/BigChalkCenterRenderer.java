@@ -1,7 +1,12 @@
 package com.luxof.lapisworks.blocks.bigchalk;
 
+import static com.luxof.lapisworks.Lapisworks.getReverseRotationForHorizontal;
+import static com.luxof.lapisworks.Lapisworks.getRotationForHorizontal;
 import static com.luxof.lapisworks.Lapisworks.id;
+import static com.luxof.lapisworks.LapisworksIDs.POWERED_PATTERN_COLORS;
+import static com.luxof.lapisworks.LapisworksIDs.UNPOWERED_PATTERN_COLORS;
 
+import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -13,6 +18,8 @@ import net.minecraft.util.math.RotationAxis;
 
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+
+import at.petrak.hexcasting.client.render.WorldlyPatternRenderHelpers;
 
 public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCenterEntity> {
     private static final float y = 0.001f;
@@ -44,6 +51,7 @@ public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCente
     @Override
     public void render(BigChalkCenterEntity chalk, float tickDelta, MatrixStack matrices,
             VertexConsumerProvider vertexConsumers, int light, int overlay) {
+        int useLight = chalk.powered ? LightmapTextureManager.pack(15, 15) : light;
 
         matrices.push();
         matrices.translate(0.5f, 0.5f, 0.5f);
@@ -65,15 +73,7 @@ public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCente
             matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(90));
 
 
-        matrices.multiply(
-            switch (chalk.facing) {
-                case WEST -> RotationAxis.POSITIVE_Y.rotationDegrees(90 + (chalk.attachedTo == Direction.UP ? 180 : 0));
-                case SOUTH -> RotationAxis.POSITIVE_Y.rotationDegrees(180);
-                case EAST -> RotationAxis.POSITIVE_Y.rotationDegrees(270 - (chalk.attachedTo == Direction.UP ? 180 : 0));
-                default -> RotationAxis.POSITIVE_Z.rotationDegrees(0);
-            }
-        );
-
+        matrices.multiply(getRotationForHorizontal(chalk.facing, attachedTo));
         matrices.translate(-0.5f, -0.5f, -0.5f);
 
         Matrix4f posMat = matrices.peek().getPositionMatrix();
@@ -83,11 +83,35 @@ public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCente
         for (int i = 0; i < 6; i++) {
             if (i == 5) i += chalk.textVariant;
             float[] uv = getUVOfSprite(i);
-            vc.vertex(posMat, -1f, y, -1f).color(255, 255, 255, 255).texture(uv[0], uv[1]).overlay(overlay).light(light).normal(normMat, 0f, 1f, 0f).next();
-            vc.vertex(posMat, -1f, y, 2f).color(255, 255, 255, 255).texture(uv[0], uv[3]).overlay(overlay).light(light).normal(normMat, 0f, 1f, 0f).next();
-            vc.vertex(posMat, 2f, y, 2f).color(255, 255, 255, 255).texture(uv[2], uv[3]).overlay(overlay).light(light).normal(normMat, 0f, 1f, 0f).next();
-            vc.vertex(posMat, 2f, y, -1f).color(255, 255, 255, 255).texture(uv[2], uv[1]).overlay(overlay).light(light).normal(normMat, 0f, 1f, 0f).next();
+            vc.vertex(posMat, -1f, y, -1f).color(255, 255, 255, 255).texture(uv[0], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+            vc.vertex(posMat, -1f, y, 2f).color(255, 255, 255, 255).texture(uv[0], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+            vc.vertex(posMat, 2f, y, 2f).color(255, 255, 255, 255).texture(uv[2], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+            vc.vertex(posMat, 2f, y, -1f).color(255, 255, 255, 255).texture(uv[2], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
         }
+
+        if (chalk.getPattern() == null) {
+            matrices.pop();
+            return;
+        }
+
+        matrices.translate(0.5f, 0.5f, 0.5f);
+        matrices.multiply(getReverseRotationForHorizontal(chalk.facing, attachedTo));
+        matrices.multiply(getRotationForHorizontal(chalk.patternFacing, attachedTo));
+        matrices.translate(-0.5f, 0.5f, 0.5f);
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
+
+        WorldlyPatternRenderHelpers.renderPattern(
+            chalk.getPattern(),
+            WorldlyPatternRenderHelpers.WORLDLY_SETTINGS,
+            chalk.powered ? POWERED_PATTERN_COLORS : UNPOWERED_PATTERN_COLORS,
+            (double)chalk.getPos().hashCode(),
+            matrices,
+            vertexConsumers,
+            null,
+            -y,
+            useLight,
+            1
+        );
 
         matrices.pop();
     }

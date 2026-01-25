@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 
 import com.luxof.lapisworks.blocks.stuff.AttachedBE;
+import com.luxof.lapisworks.blocks.stuff.StampableBE;
 import com.luxof.lapisworks.chalk.RitualCastEnv;
 import com.luxof.lapisworks.chalk.RitualComponent;
 import com.luxof.lapisworks.chalk.RitualExecutionState;
@@ -40,7 +41,7 @@ import net.minecraft.util.math.Direction;
 
 import org.jetbrains.annotations.Nullable;
 
-public class ChalkWithPatternEntity extends BlockEntity implements ExtendedScreenHandlerFactory, AttachedBE, RitualComponent {
+public class ChalkWithPatternEntity extends BlockEntity implements ExtendedScreenHandlerFactory, AttachedBE, RitualComponent, StampableBE {
     public ChalkWithPatternEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.CHALK_WITH_PATTERN_ENTITY_TYPE, pos, state);
     }
@@ -164,5 +165,12 @@ public class ChalkWithPatternEntity extends BlockEntity implements ExtendedScree
     public boolean executionCanFlowTo(ServerWorld world, BlockPos pos) {
         if (!(world.getBlockEntity(pos) instanceof AttachedBE chalk)) return true;
         return attachedTo == chalk.getAttachedTo();
+    }
+
+    @Override
+    public void stamp(HexPattern pattern, Direction horizontalPlayerFacing) {
+        this.pats = new ArrayList<>(List.of(pattern));
+        this.renderPatternsInDir = horizontalPlayerFacing;
+        save();
     }
 }

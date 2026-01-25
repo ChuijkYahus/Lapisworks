@@ -10,6 +10,7 @@ import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 
 import com.luxof.lapisworks.blocks.entities.ChalkWithPatternEntity;
+import com.luxof.lapisworks.blocks.stuff.StampableBE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,16 +43,13 @@ public class Stamp extends Item implements IotaHolderItem {
         BlockPos pos = ctx.getBlockPos();
         ItemStack stack = ctx.getStack();
 
-        if (!(world.getBlockEntity(pos) instanceof ChalkWithPatternEntity chalk))
+        if (!(world.getBlockEntity(pos) instanceof StampableBE stampable))
             return ActionResult.FAIL;
         if (!NBTHelper.contains(stack, TAG_PATTERN))
             return ActionResult.FAIL;
 
         HexPattern pattern = HexPattern.fromNBT(NBTHelper.getCompound(stack, TAG_PATTERN));
-
-        chalk.pats = new ArrayList<>(List.of(pattern));
-        chalk.renderPatternsInDir = ctx.getHorizontalPlayerFacing();
-        chalk.save();
+        stampable.stamp(pattern, ctx.getHorizontalPlayerFacing());
 
         return ActionResult.SUCCESS;
     }

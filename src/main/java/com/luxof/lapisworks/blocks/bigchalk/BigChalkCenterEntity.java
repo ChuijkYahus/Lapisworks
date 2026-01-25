@@ -2,8 +2,11 @@ package com.luxof.lapisworks.blocks.bigchalk;
 
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 
+import com.luxof.lapisworks.blocks.stuff.StampableBE;
 import com.luxof.lapisworks.init.ModBlocks;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -15,7 +18,7 @@ import net.minecraft.util.math.Direction;
 
 import org.jetbrains.annotations.Nullable;
 
-public class BigChalkCenterEntity extends BlockEntity {
+public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
     public final Direction facing;
     public final Direction attachedTo;
     public BigChalkCenterEntity(BlockPos pos, BlockState state) {
@@ -36,12 +39,18 @@ public class BigChalkCenterEntity extends BlockEntity {
 
     /** decides what text is displayed on the chalk. */
     public int textVariant;
+
     @Nullable
     private HexPattern pattern = null;
+    /** ChalkWithPatternEntity.renderPatternsInDir equivalent */
+    public Direction patternFacing = Direction.NORTH;
+    public boolean powered = false;
     @Nullable
     public HexPattern getPattern() { return pattern; }
-    public void setPattern(HexPattern newP) {
-        pattern = newP;
+    @Override
+    public void stamp(HexPattern pattern, Direction horizontalPlayerFacing) {
+        this.pattern = pattern;
+        patternFacing = horizontalPlayerFacing;
         save();
     }
 
@@ -56,15 +65,19 @@ public class BigChalkCenterEntity extends BlockEntity {
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
 
-        if (nbt.contains("pattern")) pattern = HexPattern.fromNBT(nbt.getCompound("pattern"));
         textVariant = nbt.getInt("textVariant");
+        if (nbt.contains("pattern")) pattern = HexPattern.fromNBT(nbt.getCompound("pattern"));
+        patternFacing = Direction.byName(nbt.getString("patternFacing"));
+        powered = nbt.getBoolean("powered");
     }
     @Override
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
 
-        if (pattern != null) nbt.put("pattern", pattern.serializeToNBT());
         nbt.putInt("textVariant", textVariant);
+        if (pattern != null) nbt.put("pattern", pattern.serializeToNBT());
+        nbt.putString("patternFacing", patternFacing.toString());
+        nbt.putBoolean("powered", powered);
     }
 
     @Override @Nullable
