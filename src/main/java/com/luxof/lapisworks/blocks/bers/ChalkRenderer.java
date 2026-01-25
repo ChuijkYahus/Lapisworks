@@ -3,6 +3,7 @@ package com.luxof.lapisworks.blocks.bers;
 import com.luxof.lapisworks.blocks.entities.ChalkEntity;
 
 import static com.luxof.lapisworks.Lapisworks.id;
+import static com.luxof.lapisworks.Lapisworks.rotateToBeAttachedTo;
 
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.RenderLayer;
@@ -11,8 +12,6 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.RotationAxis;
 
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -83,22 +82,7 @@ public class ChalkRenderer implements BlockEntityRenderer<ChalkEntity> {
         int useLight = chalk.powered ? POWERED_LIGHT : light;
         matrices.push();
         matrices.translate(0.5f, 0.5f, 0.5f);
-
-        if (chalk.attachedTo == Direction.UP)
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
-
-        else if (chalk.attachedTo == Direction.NORTH)
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
-
-        else if (chalk.attachedTo == Direction.SOUTH)
-            matrices.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(90));
-
-        else if (chalk.attachedTo == Direction.EAST)
-            matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(90));
-
-        else if (chalk.attachedTo == Direction.WEST)
-            matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(90));
-
+        matrices.multiply(rotateToBeAttachedTo(chalk.attachedTo));
         matrices.translate(-0.5f, -0.5f, -0.5f);
 
         float[] topLeft = {0f, y, 0f};

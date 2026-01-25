@@ -4,7 +4,6 @@ import static com.luxof.lapisworks.Lapisworks.id;
 
 import java.util.UUID;
 
-import at.petrak.hexcasting.client.render.PatternColors;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
@@ -69,10 +68,6 @@ public class LapisworksIDs {
     public static final Text DIARIES_TOOLTIP_2 = t("tooltips.lapisworks.wizard_diaries.2");
     public static final Text DIARIES_TOOLTIP_3 = t("tooltips.lapisworks.wizard_diaries.3");
     public static final Text DIARIES_TOOLTIP_4 = t("tooltips.lapisworks.wizard_diaries.4");
-
-    // rendering
-    public static final PatternColors UNPOWERED_PATTERN_COLORS = new PatternColors(0xFF_533888, 0xFF_6E4EA9);
-    public static final PatternColors POWERED_PATTERN_COLORS = new PatternColors(0xFF_8B69CA, 0xFF_CD9EF0);
 
     // item n blocks n shi text
     public static final Text AMEL = t("hexcasting.mishap.bad_item.amel");

@@ -25,6 +25,7 @@ import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
@@ -160,8 +161,6 @@ public class Lapisworks implements ModInitializer {
 			//)
 			LOGGER.info("You have an addon that has interop with Lapisworks loaded?! Oh NOO, it's overstimulated, it's gonna throw up a bunch of content! Look what you've done!");
 		} else LOGGER.info("Feed it redstone.");
-
-		;
 	}
 
 	public static Identifier id(String string) {
@@ -482,11 +481,6 @@ public class Lapisworks implements ModInitializer {
 			if (!result.getRight())
 				return new Pair<>(positions, true);
 
-			LOGGER.info("----------------------------------------------------------------");
-			LOGGER.info("dir: " + dir.toString());
-			LOGGER.info("tMax: " + String.valueOf(tMaxX) + ", " + String.valueOf(tMaxY) + ", " + String.valueOf(tMaxZ));
-			LOGGER.info("ray: " + ray.toShortString());
-
 			// fucking diagonals! hate these motherfuckers!
 			if (closeEnough(tMaxX, tMaxY)) {
 				ray = ray.add(step.getX(), step.getY(), 0);
@@ -686,14 +680,53 @@ public class Lapisworks implements ModInitializer {
 		Direction down
 	) {
 		return switch (horizontal) {
-			case NORTH ->
-				RotationAxis.POSITIVE_Y.rotationDegrees(180);
 			case WEST ->
-				RotationAxis.POSITIVE_Y.rotationDegrees(270 - (down == Direction.UP ? 180 : 0));
+				RotationAxis.NEGATIVE_Y.rotationDegrees(90 + (down == Direction.UP ? 180 : 0));
+			case SOUTH ->
+				RotationAxis.NEGATIVE_Y.rotationDegrees(180);
 			case EAST ->
-				RotationAxis.POSITIVE_Y.rotationDegrees(90 + (down == Direction.UP ? 180 : 0));
+				RotationAxis.NEGATIVE_Y.rotationDegrees(270 - (down == Direction.UP ? 180 : 0));
 			default ->
 				RotationAxis.POSITIVE_Z.rotationDegrees(0);
 		};
+	}
+	public static Quaternionf rotateToBeAttachedTo(
+		Direction attachedTo
+	) {
+		return switch (attachedTo) {
+			case UP -> RotationAxis.POSITIVE_X.rotationDegrees(180);
+			case NORTH -> RotationAxis.POSITIVE_X.rotationDegrees(90);
+			case SOUTH -> RotationAxis.NEGATIVE_X.rotationDegrees(90);
+			case EAST -> RotationAxis.POSITIVE_Z.rotationDegrees(90);
+			case WEST -> RotationAxis.NEGATIVE_Z.rotationDegrees(90);
+			case DOWN -> RotationAxis.POSITIVE_X.rotationDegrees(0);
+		};
+	}
+	
+	public static List<BlockPos> get3x3(
+		BlockPos pos,
+		Direction axis,
+		boolean includeCenter
+	) {
+		Direction forward = axis == Direction.NORTH || axis == Direction.SOUTH ?
+            Direction.UP : Direction.NORTH;
+        Direction backward = forward.getOpposite();
+
+        Vec3i _leftVec = forward.getVector().crossProduct(axis.getVector());
+        Direction left = Direction.getFacing(_leftVec.getX(), _leftVec.getY(), _leftVec.getZ());
+        Direction right = left.getOpposite();
+
+		List<BlockPos> ret = new ArrayList<>(List.of(
+			pos.offset(forward),
+			pos.offset(forward).offset(left),
+			pos.offset(forward).offset(right),
+			pos.offset(left),
+			pos.offset(right),
+			pos.offset(backward),
+			pos.offset(backward).offset(left),
+			pos.offset(backward).offset(right)
+		));
+		if (includeCenter) ret.add(4, pos);
+		return ret;
 	}
 }
