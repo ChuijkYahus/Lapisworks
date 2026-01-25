@@ -26,6 +26,9 @@ public class Flags {
         Flags.EQ_TRINKETS, Flags.HANDS, Flags.HOTBAR,
         Flags.EQ_TRINKETS_INVITEM, Flags.HANDS_INVITEM, Flags.HOTBAR_INVITEM
     );
+    public static final Flags PRESET_Equipped_Trinkets = Flags.build(
+        Flags.EQ_TRINKETS, Flags.EQ_TRINKETS_INVITEM
+    );
 
 
     private Flags(List<Integer> flags) { this.flags = flags; };
