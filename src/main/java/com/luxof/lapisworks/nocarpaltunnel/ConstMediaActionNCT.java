@@ -89,7 +89,7 @@ public abstract class ConstMediaActionNCT extends NCTBase implements ConstMediaA
         try {
             return this.getClass().getField("requiresEnlightenment").getBoolean(this);
         } catch (IllegalArgumentException e) {
-            LOGGER.info("your requiresEnlightenment field must be a boolean.", e);
+            LOGGER.error("your requiresEnlightenment field must be a boolean.", e);
         } catch (IllegalAccessException e) {
             e.printStackTrace(); // Never happens
         } catch (NoSuchFieldException e) {
