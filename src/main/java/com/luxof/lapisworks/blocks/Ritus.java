@@ -6,10 +6,13 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
+import com.luxof.lapisworks.VAULT.Flags;
+import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.blocks.entities.RitusEntity;
 import com.luxof.lapisworks.chalk.MultiUseRitualExecutionState;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.mixinsupport.GetVAULT;
 
 import static com.luxof.lapisworks.Lapisworks.getFacingWithRespectToDown;
 
@@ -27,6 +30,7 @@ import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -103,6 +107,7 @@ public class Ritus extends BlockWithEntity {
         else { return null; }
     }
 
+    @SuppressWarnings("null")
     @Override
     public ActionResult onUse(
         BlockState state,
@@ -112,12 +117,32 @@ public class Ritus extends BlockWithEntity {
         Hand hand,
         BlockHitResult hit
     ) {
+        VAULT vault = null;
+        if (player instanceof ServerPlayerEntity sp) {
+            vault = ((GetVAULT)sp).grabVAULT();
+        }
         RitusEntity ritus = (RitusEntity)world.getBlockEntity(pos);
         ItemStack stack = player.getStackInHand(hand);
         ADIotaHolder iotaHolder = IXplatAbstractions.INSTANCE.findDataHolder(stack);
 
-        if (Mutables.isAmel(stack)) {
+        if (iotaHolder != null) {
 
+            if (!(world instanceof ServerWorld sw)) return ActionResult.SUCCESS;
+
+            Iota iota = iotaHolder.readIota(sw);
+            ritus.setTunedFrequency(iota);
+            ritus.save();
+
+            return ActionResult.SUCCESS;
+
+        } else if (
+            Mutables.isAmel(stack) ||
+            stack.isEmpty() &&
+            vault != null &&
+            vault.drain(Mutables::isAmel, 1, true, Flags.PRESET_Equipped_Trinkets) > 0
+        ) {
+
+            ritus.clearDisplay();
             if (!(world instanceof ServerWorld sw)) return ActionResult.SUCCESS;
             Vec3d look = player.getRotationVector();
 
@@ -131,20 +156,19 @@ public class Ritus extends BlockWithEntity {
                     pos,
                     List.of()
             ))) {
-                if (!player.isCreative()) stack.decrement(1);
-            } else {
+                if (!player.isCreative())
+                    if (Mutables.isAmel(stack))
+                        stack.decrement(1);
+                    else
+                        // don't worry about it
+                        vault.drain(
+                            Mutables::isAmel,
+                            1,
+                            true,
+                            Flags.PRESET_Equipped_Trinkets
+                        );
+            } else
                 return ActionResult.FAIL;
-            }
-
-        } else if (iotaHolder != null) {
-
-            if (!(world instanceof ServerWorld sw)) return ActionResult.SUCCESS;
-
-            Iota iota = iotaHolder.readIota(sw);
-            ritus.setTunedFrequency(iota);
-            ritus.save();
-
-            return ActionResult.SUCCESS;
 
         } else if (stack.isEmpty()) {
 
