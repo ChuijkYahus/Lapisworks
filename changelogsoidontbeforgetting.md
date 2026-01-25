@@ -279,6 +279,7 @@ Locked in rah
   IT STILL JUMPSCARES ME WHAT THE FUCK
 - Handed Prison didn't drop blocks wtf
 - Logspam begone!
+- Rifts (Enchanted Slipways) should not change rotations since birth now
 - Shit should actually tell you when you don't have Fabric now
 - Sieve Thoughts not working on a spell circle
 - Visible Distillation and Empty Distillation should be a lot more optimized now (not that you'll notice it lmao)

@@ -2,16 +2,19 @@ package com.luxof.lapisworks.blocks.bigchalk;
 
 import com.luxof.lapisworks.init.ModBlocks;
 
-import java.util.List;
+import static com.luxof.lapisworks.Lapisworks.get3x3;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -63,6 +66,27 @@ public class BigChalkPart extends Block {
     }
 
     @Override
+    public ActionResult onUse(
+        BlockState state,
+        World world,
+        BlockPos pos,
+        PlayerEntity player,
+        Hand hand,
+        BlockHitResult hit
+    ) {
+        // always delegate onUse to the center of the multiblock
+        Direction attached = state.get(ATTACHED);
+
+        for (BlockPos otherPos : get3x3(pos, attached, false)) {
+            if (!(world.getBlockEntity(otherPos) instanceof BigChalkCenterEntity))
+                continue;
+            return world.getBlockState(otherPos).onUse(world, player, hand, hit);
+        }
+
+        return ActionResult.PASS;
+    }
+
+    @Override
     public void neighborUpdate(
         BlockState state,
         World world,
@@ -93,26 +117,7 @@ public class BigChalkPart extends Block {
         if (state.getBlock() == newState.getBlock()) return;
         Direction attached = state.get(ATTACHED);
 
-        Direction forward = attached == Direction.NORTH || attached == Direction.SOUTH ?
-            Direction.UP : Direction.NORTH;
-        Direction backward = forward.getOpposite();
-
-        Vec3i _leftVec = forward.getVector().crossProduct(attached.getVector());
-        Direction left = Direction.getFacing(_leftVec.getX(), _leftVec.getY(), _leftVec.getZ());
-        Direction right = left.getOpposite();
-
-        for (
-            BlockPos otherPos : List.of(
-                pos.offset(forward),
-                pos.offset(forward).offset(left),
-                pos.offset(forward).offset(right),
-                pos.offset(left),
-                pos.offset(right),
-                pos.offset(backward),
-                pos.offset(backward).offset(left),
-                pos.offset(backward).offset(right)
-            )
-        ) {
+        for (BlockPos otherPos : get3x3(pos, attached, false)) {
             if (
                 isCenter() && world.getBlockState(otherPos).getBlock() instanceof BigChalkPart ||
                 !isCenter() && world.getBlockState(otherPos).getBlock() instanceof BigChalkCenter

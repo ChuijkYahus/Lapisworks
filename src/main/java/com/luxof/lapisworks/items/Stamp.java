@@ -9,11 +9,8 @@ import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 
-import com.luxof.lapisworks.blocks.entities.ChalkWithPatternEntity;
 import com.luxof.lapisworks.blocks.stuff.StampableBE;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;

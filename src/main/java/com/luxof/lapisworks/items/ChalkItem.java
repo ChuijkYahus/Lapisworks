@@ -55,11 +55,19 @@ public class ChalkItem extends BlockItem {
 
             Direction attachedTo = ((ChalkEntity)world.getBlockEntity(chalkPos)).attachedTo;
 
-            world.setBlockState(chalkPos, blockWithPattern.getDefaultState());
             chalkStack.damage(1, context.getPlayer(), whatever -> {});
+            world.setBlockState(chalkPos, blockWithPattern.getDefaultState());
+            BlockState stateNow = world.getBlockState(chalkPos);
 
             ((ChalkWithPatternEntity)world.getBlockEntity(chalkPos)).attachedTo = attachedTo;
             blockWithPattern.onPlaced(world, chalkPos, chalkState, context.getPlayer(), chalkStack);
+            world.updateListeners(
+                context.getBlockPos(),
+                stateNow,
+                stateNow,
+                Block.NOTIFY_ALL
+            );
+            doChalkUpdatesDude(world, chalkPos);
             playPlaceSound(world, chalkPos);
 
             return ActionResult.success(world.isClient);

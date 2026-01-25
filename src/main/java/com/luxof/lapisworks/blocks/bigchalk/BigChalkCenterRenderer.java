@@ -1,10 +1,11 @@
 package com.luxof.lapisworks.blocks.bigchalk;
 
-import static com.luxof.lapisworks.Lapisworks.getReverseRotationForHorizontal;
+import at.petrak.hexcasting.client.render.PatternColors;
+import at.petrak.hexcasting.client.render.WorldlyPatternRenderHelpers;
+
 import static com.luxof.lapisworks.Lapisworks.getRotationForHorizontal;
 import static com.luxof.lapisworks.Lapisworks.id;
-import static com.luxof.lapisworks.LapisworksIDs.POWERED_PATTERN_COLORS;
-import static com.luxof.lapisworks.LapisworksIDs.UNPOWERED_PATTERN_COLORS;
+import static com.luxof.lapisworks.Lapisworks.rotateToBeAttachedTo;
 
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.RenderLayer;
@@ -13,13 +14,10 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
-
-import at.petrak.hexcasting.client.render.WorldlyPatternRenderHelpers;
 
 public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCenterEntity> {
     private static final float y = 0.001f;
@@ -27,8 +25,14 @@ public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCente
     private static final RenderLayer TEXTURE_main = RenderLayer.getEntityCutoutNoCull(
         id("textures/block/chalk_big.png")
     );
+    private static final RenderLayer TEXTURE_alt = RenderLayer.getEntityCutoutNoCull(
+        id("textures/block/chalk_big_alt.png")
+    );
     private static final float[] TEXTURE_main_size = {960f, 384f};
     private static final float[] TEXTURE_main_sprite_size = {192f, 192f};
+
+    public static final PatternColors UNPOWERED_PATTERN_COLORS = new PatternColors(0xFF_FCFAD2, 0xFF_8B69CA);
+    public static final PatternColors POWERED_PATTERN_COLORS = new PatternColors(0xFF_FCFAD2, 0xFF_CD9EF0);
 
     /** provides both start and end in 4 items. */
     private static float[] getUVOfSprite(int spriteIdx) {
@@ -55,31 +59,14 @@ public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCente
 
         matrices.push();
         matrices.translate(0.5f, 0.5f, 0.5f);
-
-        Direction attachedTo = chalk.attachedTo;
-        if (attachedTo == Direction.UP)
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
-
-        else if (attachedTo == Direction.NORTH)
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
-
-        else if (attachedTo == Direction.SOUTH)
-            matrices.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(90));
-
-        else if (attachedTo == Direction.EAST)
-            matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(90));
-
-        else if (attachedTo == Direction.WEST)
-            matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(90));
-
-
-        matrices.multiply(getRotationForHorizontal(chalk.facing, attachedTo));
+        matrices.multiply(rotateToBeAttachedTo(chalk.attachedTo));
+        matrices.multiply(getRotationForHorizontal(chalk.facing, chalk.attachedTo));
         matrices.translate(-0.5f, -0.5f, -0.5f);
 
         Matrix4f posMat = matrices.peek().getPositionMatrix();
         Matrix3f normMat = matrices.peek().getNormalMatrix();
 
-        VertexConsumer vc = vertexConsumers.getBuffer(TEXTURE_main);
+        VertexConsumer vc = vertexConsumers.getBuffer(chalk.altTexture ? TEXTURE_alt : TEXTURE_main);
         for (int i = 0; i < 6; i++) {
             if (i == 5) i += chalk.textVariant;
             float[] uv = getUVOfSprite(i);
@@ -94,10 +81,14 @@ public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCente
             return;
         }
 
+        // ??? why doesn't this work
+        //matrices.translate(0.5f, 0.5f, 0.5f);
+        //matrices.multiply(getReverseRotationForHorizontal(chalk.facing, chalk.attachedTo));
+        //matrices.multiply(getRotationForHorizontal(chalk.patternFacing, chalk.attachedTo));
+        //matrices.translate(-0.5f, 0.5f, 0.5f);
         matrices.translate(0.5f, 0.5f, 0.5f);
-        matrices.multiply(getReverseRotationForHorizontal(chalk.facing, attachedTo));
-        matrices.multiply(getRotationForHorizontal(chalk.patternFacing, attachedTo));
-        matrices.translate(-0.5f, 0.5f, 0.5f);
+        matrices.scale(0.8f, 1f, 0.8f);
+        matrices.translate(-0.5f, -0.5f, -0.5f);
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
 
         WorldlyPatternRenderHelpers.renderPattern(

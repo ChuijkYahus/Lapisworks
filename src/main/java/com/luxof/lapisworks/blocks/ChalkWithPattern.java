@@ -177,6 +177,8 @@ public class ChalkWithPattern extends BlockWithEntity implements ChalkBlockInter
     // "left and front, according to WHAT?" i hear you ask.
     // whatever makes render gud.
     // use a compass. north is front, almost always.
+    // ^ that comment is so fucked and untrue
+    // was i on cracked
     private Direction findLeftVector(Direction down) {
         return switch (down) {
             case UP -> WEST;
