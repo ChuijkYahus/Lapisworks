@@ -33,17 +33,17 @@ public abstract class VAULT {
         boolean handleItemStacks,
         boolean handleInvItems
     ) {
-        if (stack.getItem() instanceof InventoryItem invItem)
+        if (handleInvItems && stack.getItem() instanceof InventoryItem invItem)
             return invItem.drain(stack, pred, amount, sim);
 
-        if (pred.test(stack)) {
+        if (handleItemStacks && pred.test(stack)) {
             int taken = Math.min(stack.getCount(), amount);
             if (!sim) {
                 stack.decrement(taken);
             }
             return taken;
         }
-        
+
         return 0;
     }
     private int handleGive(
@@ -73,52 +73,69 @@ public abstract class VAULT {
     /** Returns the amount that couldn't be drained. */
     public int drain(Predicate<ItemStack> itemPred, int amount, boolean sim, Flags flags) {
         int left = amount;
-        for (ItemStack stack : getTrinkets()) {
-            left -= handleDrain(
-                stack,
-                itemPred,
-                amount,
-                sim,
-                flags.has(Flags.EQ_TRINKETS),
-                flags.has(Flags.EQ_TRINKETS_INVITEM)
-            );
-            if (left == 0) return amount;
+
+        boolean canEqTrinkets = flags.has(Flags.EQ_TRINKETS);
+        boolean canEqTrinketsInvItems = flags.has(Flags.EQ_TRINKETS_INVITEM);
+        if (canEqTrinkets || canEqTrinketsInvItems) {
+            for (ItemStack stack : getTrinkets()) {
+                left -= handleDrain(
+                    stack,
+                    itemPred,
+                    amount,
+                    sim,
+                    canEqTrinkets,
+                    canEqTrinketsInvItems
+                );
+                if (left == 0) return amount;
+            }
         }
 
-        for (ItemStack stack : getHands()) {
-            left -= handleDrain(
-                stack,
-                itemPred,
-                amount,
-                sim,
-                flags.has(Flags.HANDS),
-                flags.has(Flags.HANDS_INVITEM)
-            );
-            if (left == 0) return amount;
+        boolean canHands = flags.has(Flags.HANDS);
+        boolean canHandsInvItems = flags.has(Flags.HANDS_INVITEM);
+        if (canHands || canHandsInvItems) {
+            for (ItemStack stack : getHands()) {
+                left -= handleDrain(
+                    stack,
+                    itemPred,
+                    amount,
+                    sim,
+                    canHands,
+                    canHandsInvItems
+                );
+                if (left == 0) return amount;
+            }
         }
 
-        for (ItemStack stack : getHotbar()) {
-            left -= handleDrain(
-                stack,
-                itemPred,
-                amount,
-                sim,
-                flags.has(Flags.HOTBAR),
-                flags.has(Flags.HOTBAR_INVITEM)
-            );
-            if (left == 0) return amount;
+        boolean canHotbar = flags.has(Flags.HOTBAR);
+        boolean canHotbarInvItems = flags.has(Flags.HOTBAR_INVITEM);
+        if (canHotbar || canHotbarInvItems) {
+            for (ItemStack stack : getHotbar()) {
+                left -= handleDrain(
+                    stack,
+                    itemPred,
+                    amount,
+                    sim,
+                    canHotbar,
+                    canHotbarInvItems
+                );
+                if (left == 0) return amount;
+            }
         }
 
-        for (ItemStack stack : getInventory()) {
-            left -= handleDrain(
-                stack,
-                itemPred,
-                amount,
-                sim,
-                flags.has(Flags.HOTBAR),
-                flags.has(Flags.HOTBAR_INVITEM)
-            );
-            if (left == 0) return amount;
+        boolean canInventory = flags.has(Flags.INVENTORY);
+        boolean canInventoryInvItems = flags.has(Flags.INVENTORY_INVITEM);
+        if (canInventory || canInventoryInvItems) {
+            for (ItemStack stack : getInventory()) {
+                left -= handleDrain(
+                    stack,
+                    itemPred,
+                    amount,
+                    sim,
+                    canInventory,
+                    canInventoryInvItems
+                );
+                if (left == 0) return amount;
+            }
         }
 
         return amount - left;
@@ -132,52 +149,69 @@ public abstract class VAULT {
     /** Returns the amount that couldn't be given. */
     public int give(Predicate<ItemStack> itemPred, int amount, boolean sim, Flags flags) {
         int left = amount;
-        for (ItemStack stack : getTrinkets()) {
-            left -= handleGive(
-                stack,
-                itemPred,
-                amount,
-                sim,
-                flags.has(Flags.EQ_TRINKETS),
-                flags.has(Flags.EQ_TRINKETS_INVITEM)
-            );
-            if (left == 0) return amount;
+
+        boolean canEqTrinkets = flags.has(Flags.EQ_TRINKETS);
+        boolean canEqTrinketsInvItems = flags.has(Flags.EQ_TRINKETS_INVITEM);
+        if (canEqTrinkets || canEqTrinketsInvItems) {
+            for (ItemStack stack : getTrinkets()) {
+                left -= handleGive(
+                    stack,
+                    itemPred,
+                    amount,
+                    sim,
+                    flags.has(Flags.EQ_TRINKETS),
+                    flags.has(Flags.EQ_TRINKETS_INVITEM)
+                );
+                if (left == 0) return amount;
+            }
         }
 
-        for (ItemStack stack : getHands()) {
-            left -= handleGive(
-                stack,
-                itemPred,
-                amount,
-                sim,
-                flags.has(Flags.HANDS),
-                flags.has(Flags.HANDS_INVITEM)
-            );
-            if (left == 0) return amount;
+        boolean canHands = flags.has(Flags.HANDS);
+        boolean canHandsInvItems = flags.has(Flags.HANDS_INVITEM);
+        if (canHands || canHandsInvItems) {
+            for (ItemStack stack : getHands()) {
+                left -= handleGive(
+                    stack,
+                    itemPred,
+                    amount,
+                    sim,
+                    canHands,
+                    canHandsInvItems
+                );
+                if (left == 0) return amount;
+            }
         }
 
-        for (ItemStack stack : getHotbar()) {
-            left -= handleGive(
-                stack,
-                itemPred,
-                amount,
-                sim,
-                flags.has(Flags.HOTBAR),
-                flags.has(Flags.HOTBAR_INVITEM)
-            );
-            if (left == 0) return amount;
+        boolean canHotbar = flags.has(Flags.HOTBAR);
+        boolean canHotbarInvItems = flags.has(Flags.HOTBAR_INVITEM);
+        if (canHotbar || canHotbarInvItems) {
+            for (ItemStack stack : getHotbar()) {
+                left -= handleGive(
+                    stack,
+                    itemPred,
+                    amount,
+                    sim,
+                    canHotbar,
+                    canHotbarInvItems
+                );
+                if (left == 0) return amount;
+            }
         }
 
-        for (ItemStack stack : getInventory()) {
-            left -= handleGive(
-                stack,
-                itemPred,
-                amount,
-                sim,
-                flags.has(Flags.HOTBAR),
-                flags.has(Flags.HOTBAR_INVITEM)
-            );
-            if (left == 0) return amount;
+        boolean canInventory = flags.has(Flags.INVENTORY);
+        boolean canInventoryInvItems = flags.has(Flags.INVENTORY_INVITEM);
+        if (canInventory || canInventoryInvItems) {
+            for (ItemStack stack : getInventory()) {
+                left -= handleGive(
+                    stack,
+                    itemPred,
+                    amount,
+                    sim,
+                    canInventory,
+                    canInventoryInvItems
+                );
+                if (left == 0) return amount;
+            }
         }
 
         return amount - left;
