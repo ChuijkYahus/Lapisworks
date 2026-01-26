@@ -269,6 +269,7 @@ Locked in rah
 - Amel Jar throwing the Amel in your other hand into the void if you attempted to withdraw
   with a full stack already there
 - Ancient Tomes giving you the advancement anyway despite showing the message if you dont have lapis yet
+- Attributes no longer compound when you log
 - "Bug in the mod" mishaps
 - Damage and movement speed enhancements stacking on world join (you need to kys ingame to reset tho)
 - Deposit and Withdraw actually take doubles now, not just integers

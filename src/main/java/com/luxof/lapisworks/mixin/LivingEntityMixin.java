@@ -16,6 +16,7 @@ import com.luxof.lapisworks.actions.MoarReachYouBitch;
 import com.luxof.lapisworks.mixinsupport.DamageSupportInterface;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 
+import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.LapisworksIDs.REACH_ENHANCEMENT_UUID;
 
 import java.util.ArrayList;
@@ -83,13 +84,22 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 
 	@Unique @Override
 	public void setAmountOfAttrJuicedUpByAmel(EntityAttribute attribute, double value) {
+		setAmountOfAttrJuicedUpByAmel(attribute, value, false);
+	}
+	@Unique
+	public void setAmountOfAttrJuicedUpByAmel(
+		EntityAttribute attribute,
+		double value,
+		boolean readingNbt
+	) {
 
 		EntityAttributeInstance juicedAttrInst = this.juicedUpVals.getCustomInstance(attribute);
 		EntityAttributeInstance attrInst = attributes.getCustomInstance(attribute);
 
-		if (attrInst == null) return;
-
-		attrInst.setBaseValue(attrInst.getBaseValue() - juicedAttrInst.getBaseValue() + value);
+		if (attrInst != null && !readingNbt) {
+			LOGGER.info("attrInst was not null!");
+			attrInst.setBaseValue(attrInst.getBaseValue() - juicedAttrInst.getBaseValue() + value);
+		}
 		juicedAttrInst.setBaseValue(value);
 
 	}
@@ -107,17 +117,24 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	public AttributeContainer getLapisworksAttributes() { return this.juicedUpVals; }
 	@Unique @Override
 	public void setLapisworksAttributes(AttributeContainer attributes) {
+		setLapisworksAttributes(attributes, false);
+	}
+	@Unique
+	public void setLapisworksAttributes(AttributeContainer attributes, boolean readingNbt) {
 		setAmountOfAttrJuicedUpByAmel(
 			EntityAttributes.GENERIC_ATTACK_DAMAGE,
-			attributes.getBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)
+			attributes.getBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),
+			readingNbt
 		);
 		setAmountOfAttrJuicedUpByAmel(
 			EntityAttributes.GENERIC_MAX_HEALTH,
-			attributes.getBaseValue(EntityAttributes.GENERIC_MAX_HEALTH)
+			attributes.getBaseValue(EntityAttributes.GENERIC_MAX_HEALTH),
+			readingNbt
 		);
 		setAmountOfAttrJuicedUpByAmel(
 			EntityAttributes.GENERIC_MOVEMENT_SPEED,
-			attributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)
+			attributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED),
+			readingNbt
 		);
 	}
 
@@ -170,7 +187,7 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 		for (int i = 0; i < this.enchantments.size(); i++) { this.enchantments.set(i, 0); }
 	}
 
-	// may be changed in the future, i think??
+	// may be changed in the future, idk.
 	@Unique @Override
 	public void copyCrossDeath(ServerPlayerEntity oldplr) {}
 
@@ -186,13 +203,15 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
 		if (attributes != null && this.getWorld() != null && !this.getWorld().isClient) {
 
-			setLapisworksAttributes(new AttributeContainer(
-				DefaultAttributeContainer.builder()
-				.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, nbt.getDouble("LAPISWORKS_JUICED_FISTS"))
-				.add(EntityAttributes.GENERIC_MAX_HEALTH, nbt.getDouble("LAPISWORKS_JUICED_SKIN"))
-				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, nbt.getDouble("LAPISWORKS_JUICED_FEET"))
-				.build()
-			));
+			setLapisworksAttributes(
+				new AttributeContainer(DefaultAttributeContainer.builder()
+					.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, nbt.getDouble("LAPISWORKS_JUICED_FISTS"))
+					.add(EntityAttributes.GENERIC_MAX_HEALTH, nbt.getDouble("LAPISWORKS_JUICED_SKIN"))
+					.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, nbt.getDouble("LAPISWORKS_JUICED_FEET"))
+					.build()),
+				true
+			);
+
 			attributes.addTemporaryModifiers(
 				nbt.getBoolean("LAPISWORKS_JUICED_REACH") ?
 					ImmutableMultimap.of(
