@@ -276,13 +276,13 @@ Locked in rah
 - Enchanted Slipways having a tendency to move 0.01f more in +XYZ than -XYZ (lmao)
 - Enchantments not carrying across dimensions (:broken_heart:)
 - Enchantment Purification's order of arguments being flipped
-- Finally fixed that Cradle bug with items for fucking real, holy fucking shit  
-  IT STILL JUMPSCARES ME WHAT THE FUCK
+- Finally fixed that Cradle bug with items for fucking real, holy fucking shit I think
 - Handed Prison didn't drop blocks wtf
 - Logspam begone!
 - Rifts (Enchanted Slipways) should not change rotations since birth now
 - Shit should actually tell you when you don't have Fabric now
 - Sieve Thoughts not working on a spell circle
+- Sieve Thoughts not working sometimes I think
 - Visible Distillation and Empty Distillation should be a lot more optimized now (not that you'll notice it lmao)
 - Withdraw bug
 - You may no longer convert Lapis (+ your life force) into Amethyst Shards

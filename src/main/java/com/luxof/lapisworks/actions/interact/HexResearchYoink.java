@@ -6,14 +6,12 @@ import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
-import at.petrak.hexcasting.api.casting.math.EulerPathFinder;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
-import at.petrak.hexcasting.api.mod.HexTags;
-import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.items.storage.ItemScroll;
+import at.petrak.hexcasting.server.ScrungledPatternsSave;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
 import com.luxof.lapisworks.blocks.entities.MindEntity;
@@ -104,21 +102,25 @@ public class HexResearchYoink extends SpellActionNCT {
     }
 
     @Nullable
-    public HexPattern getPerWorldPatternByShape(HexPattern pattern, CastingEnvironment ctx) {
+    public HexPattern getPerWorldPatternByShape(HexPattern pat, CastingEnvironment ctx) {
+        ScrungledPatternsSave perWorldPatterns = ScrungledPatternsSave.open(
+            ctx.getWorld().getServer().getOverworld()
+        );
         Registry<ActionRegistryEntry> registry = IXplatAbstractions.INSTANCE.getActionRegistry();
 
         for (RegistryKey<ActionRegistryEntry> key : registry.getKeys()) {
-            ActionRegistryEntry action = registry.get(key);
 
-            if (!HexUtils.isOfTag(registry, key, HexTags.Actions.PER_WORLD_PATTERN)) continue;
+            var actualStrokeOrderAndPWEntry = perWorldPatterns.lookupReverse(key);
+            if (actualStrokeOrderAndPWEntry == null) continue;
 
-            HexPattern scrungled = EulerPathFinder.findAltDrawing(
-                action.prototype(),
-                ctx.getWorld().getSeed()
+            HexPattern actualStrokeOrderPat = HexPattern.fromAngles(
+                actualStrokeOrderAndPWEntry.getFirst(),
+                actualStrokeOrderAndPWEntry.getSecond().canonicalStartDir()
             );
+            if (!matchShape(pat, actualStrokeOrderPat)) continue;
 
-            if (scrungled.anglesSignature().equals(pattern.anglesSignature())) { return scrungled; }
-            else if (matchShape(scrungled, pattern)) { return scrungled; }
+            return actualStrokeOrderPat;
+
         };
         return null;
     }
