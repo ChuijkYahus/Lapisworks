@@ -65,6 +65,7 @@ public class BigChalkPart extends Block {
         };
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public ActionResult onUse(
         BlockState state,
@@ -78,9 +79,9 @@ public class BigChalkPart extends Block {
         Direction attached = state.get(ATTACHED);
 
         for (BlockPos otherPos : get3x3(pos, attached, false)) {
-            if (!(world.getBlockEntity(otherPos) instanceof BigChalkCenterEntity))
-                continue;
-            return world.getBlockState(otherPos).onUse(world, player, hand, hit);
+            BlockState otherState = world.getBlockState(otherPos);
+            if (!otherState.isOf(ModBlocks.BIG_CHALK_CENTER)) continue;
+            return otherState.getBlock().onUse(otherState, world, otherPos, player, hand, hit);
         }
 
         return ActionResult.PASS;
