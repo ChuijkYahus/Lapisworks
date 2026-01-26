@@ -136,6 +136,7 @@ public class Ritus extends BlockWithEntity {
             return ActionResult.SUCCESS;
 
         } else if (
+            player.isCreative() ||
             Mutables.isAmel(stack) ||
             stack.isEmpty() &&
             vault != null &&
@@ -146,6 +147,7 @@ public class Ritus extends BlockWithEntity {
             if (!(world instanceof ServerWorld sw)) return ActionResult.SUCCESS;
             Vec3d look = player.getRotationVector();
 
+            // fuck you. (unbraces your curly-brace-indented programming language)
             if (ritus.addRitual(new MultiUseRitualExecutionState(
                     pos,
                     getFacingWithRespectToDown(look, ritus.getAttachedTo()),
@@ -155,7 +157,7 @@ public class Ritus extends BlockWithEntity {
                     ritus.getTunedFrequency(sw),
                     pos,
                     List.of()
-            ))) {
+            )))
                 if (!player.isCreative())
                     if (Mutables.isAmel(stack))
                         stack.decrement(1);
@@ -164,10 +166,10 @@ public class Ritus extends BlockWithEntity {
                         vault.drain(
                             Mutables::isAmel,
                             1,
-                            true,
+                            false,
                             Flags.PRESET_Equipped_Trinkets
                         );
-            } else
+            else
                 return ActionResult.FAIL;
 
         } else if (stack.isEmpty()) {
