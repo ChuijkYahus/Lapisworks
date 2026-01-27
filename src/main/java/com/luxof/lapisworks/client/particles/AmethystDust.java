@@ -8,30 +8,28 @@ import net.minecraft.client.particle.SpriteProvider;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.DefaultParticleType;
 
-// i have 4 days
-public class FloatingEnchant extends SpriteBillboardParticle {
-    protected FloatingEnchant(
+public class AmethystDust extends SpriteBillboardParticle {
+    protected AmethystDust(
         ClientWorld clientWorld,
         double x, double y, double z,
         double vX, double vY, double vZ
     ) {
-        // i don't know what the fuck kind of black fucking magic i was snorting
-        // while multiplying the velocities
-        super(clientWorld, x, y, z, vX * 0.05, Math.abs(vY * 0.05), vZ * 0.05);
-        this.scale *= 0.6f;
-        this.gravityStrength = -0.15F;
-        this.velocityX *= 0.1f;
-        this.velocityY *= 0.2f;
-        this.velocityZ *= 0.1f;
-        this.maxAge = 5 + this.random.nextInt(10);
+        super(clientWorld, x, y, z, 0.0, 0.0, 0.0);
+        this.scale *= 3f;
+        this.gravityStrength = 0f;
+        this.velocityMultiplier = 0.9f;
+        this.velocityX = vX * 0.5f;
+        this.velocityY = vY * 0.5f;
+        this.velocityZ = vZ * 0.5f;
+        this.maxAge = 15 + this.random.nextInt(20);
     }
 
     @Override
     public ParticleTextureSheet getType() { return ParticleTextureSheet.PARTICLE_SHEET_TRANSLUCENT; }
 
-    public static class FloatingEnchantFactory implements ParticleFactory<DefaultParticleType> {
+    public static class AmethystDustFactory implements ParticleFactory<DefaultParticleType> {
         private final SpriteProvider spriteProvider;
-        public FloatingEnchantFactory(SpriteProvider spriteProvider) {
+        public AmethystDustFactory(SpriteProvider spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
@@ -42,7 +40,7 @@ public class FloatingEnchant extends SpriteBillboardParticle {
             double x, double y, double z,
             double vX, double vY, double vZ
         ) {
-            FloatingEnchant particle = new FloatingEnchant(world, x, y, z, vX, vY, vZ);
+            AmethystDust particle = new AmethystDust(world, x, y, z, vX, vY, vZ);
             particle.setSprite(this.spriteProvider.getSprite(world.random));
             return particle;
         }

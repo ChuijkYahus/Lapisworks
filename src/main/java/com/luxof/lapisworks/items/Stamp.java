@@ -20,6 +20,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -47,6 +49,14 @@ public class Stamp extends Item implements IotaHolderItem {
 
         HexPattern pattern = HexPattern.fromNBT(NBTHelper.getCompound(stack, TAG_PATTERN));
         stampable.stamp(pattern, ctx.getHorizontalPlayerFacing());
+        world.playSoundAtBlockCenter(
+            pos,
+            SoundEvents.BLOCK_STONE_PLACE,
+            SoundCategory.BLOCKS,
+            1f,
+            3f,
+            false
+        );
 
         return ActionResult.SUCCESS;
     }

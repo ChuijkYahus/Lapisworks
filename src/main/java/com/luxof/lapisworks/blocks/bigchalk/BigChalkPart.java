@@ -1,13 +1,23 @@
 package com.luxof.lapisworks.blocks.bigchalk;
 
+import com.luxof.lapisworks.init.LapisParticles;
 import com.luxof.lapisworks.init.ModBlocks;
 
 import static com.luxof.lapisworks.Lapisworks.get3x3;
+import static com.luxof.lapisworks.LapisworksIDs.GIB_DUST;
+
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.ActionResult;
@@ -101,8 +111,11 @@ public class BigChalkPart extends Block {
             fromPos.getY() - pos.getY(),
             fromPos.getZ() - pos.getZ()
         );
-        if (comingFrom == state.get(ATTACHED))
-            world.breakBlock(pos, false);
+        Direction attached = state.get(ATTACHED);
+        if (comingFrom == attached) {
+            spawnDust(world, pos, comingFrom);
+            world.removeBlock(pos, false);
+        }
     }
 
     protected boolean isCenter() { return false; }
@@ -115,17 +128,92 @@ public class BigChalkPart extends Block {
         BlockState newState,
         boolean moved
     ) {
-        if (state.getBlock() == newState.getBlock()) return;
+        // WHY DOES THIS FUCKING METHOD NEVER RUN ON THE CLIENT
+        // IT FUCKING SHOULD
+        // BUT IT NEVER FUCKING DOES
+        // WHAT IS THE POINT OF GIVING ME A WORLD INSTEAD OF A SERVERWORLD
+        // IS IT TO GIVE ME PARANOIA
+        // BECAUSE IT SURE FUCKING HAS
+        // HOLY FUCKING SHIT
+        if (state.isOf(newState.getBlock())) return;
+
         Direction attached = state.get(ATTACHED);
 
         for (BlockPos otherPos : get3x3(pos, attached, false)) {
+            BlockState otherState = world.getBlockState(otherPos);
             if (
-                isCenter() && world.getBlockState(otherPos).getBlock() instanceof BigChalkPart ||
-                !isCenter() && world.getBlockState(otherPos).getBlock() instanceof BigChalkCenter
-            )
-                world.breakBlock(otherPos, false);
+                isCenter() && otherState.isOf(ModBlocks.BIG_CHALK_PART) ||
+                !isCenter() && otherState.isOf(ModBlocks.BIG_CHALK_CENTER)
+            ) {
+                if (world instanceof ServerWorld sw)
+                    spawnDustServer(sw, otherPos, attached);
+                world.removeBlock(otherPos, false);
+            }
         }
-
+        if (isCenter()) {
+            world.playSound(null, pos, SoundEvents.BLOCK_SAND_BREAK, SoundCategory.BLOCKS);
+        }
         super.onStateReplaced(state, world, pos, newState, moved);
+    }
+
+    @Override
+    protected void spawnBreakParticles(
+        World world,
+        PlayerEntity player,
+        BlockPos pos,
+        BlockState state
+    ) {
+        spawnDust(world, pos, state.get(ATTACHED));
+    }
+
+    public void spawnDustServer(
+        ServerWorld sw,
+        BlockPos pos,
+        Direction attachedTo
+    ) {
+        for (ServerPlayerEntity sp : sw.getPlayers()) {
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeBlockPos(pos);
+            buf.writeString(attachedTo.toString());
+
+            ServerPlayNetworking.send(sp, GIB_DUST, buf);
+        }
+    }
+    public static void spawnDust(
+        World world,
+        BlockPos pos,
+        Direction attachedTo
+    ) {
+        for (int i = 0; i < 15; i++) {
+            spawnDustParticle(world, pos, attachedTo);
+        }
+    }
+    private static void spawnDustParticle(
+        World world,
+        BlockPos pos,
+        Direction attachedTo
+    ) {
+        // i'll smoke a million litres of 'caine b4 i explain this gl
+        boolean posX = attachedTo == Direction.WEST;
+        boolean xAxis = posX || attachedTo == Direction.EAST;
+
+        boolean posY = attachedTo == Direction.DOWN;
+        boolean yAxis = posY || attachedTo == Direction.UP;
+
+        boolean posZ = attachedTo == Direction.NORTH;
+        boolean zAxis = posZ || attachedTo == Direction.SOUTH;
+
+        double x = (double)pos.getX() + 0.5 +
+            (xAxis ? posX ? -0.2 : -0.8 : world.random.nextDouble() * 1.25 - 0.75);
+        double y = (double)pos.getY() + 0.5 +
+            (yAxis ? posY ? -0.2 : -0.8 : world.random.nextDouble() * 1.25 - 0.75);
+        double z = (double)pos.getZ() + 0.5 +
+            (zAxis ? posZ ? -0.2 : -0.8 : world.random.nextDouble() * 1.25 - 0.75);
+
+        double vX = xAxis ? 0.0 : world.random.nextDouble() * 0.2 - 0.1;
+        double vY = yAxis ? 0.0 : world.random.nextDouble() * 0.2 - 0.1;
+        double vZ = zAxis ? 0.0 : world.random.nextDouble() * 0.2 - 0.1;
+
+        world.addParticle(LapisParticles.AMETHYST_DUST, x, y, z, vX, vY, vZ);
     }
 }

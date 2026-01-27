@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -157,7 +156,7 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
         unpowerTrailing(world, 1);
 
         if (result == null || result.getLeft() == null) {
-            world.setBlockState(currentPos, Blocks.AIR.getDefaultState());
+            world.removeBlock(currentPos, false);
             return false;
         }
 
@@ -187,7 +186,7 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
             if (!(world.getBlockEntity(pos) instanceof RitualComponent))
                 continue;
 
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+            world.removeBlock(pos, false);
         }
     }
 }

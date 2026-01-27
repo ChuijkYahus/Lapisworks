@@ -15,8 +15,6 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
@@ -141,20 +139,6 @@ public class Chalk extends BlockWithEntity implements ChalkBlockInterface {
             hand,
             hit,
             ((ChalkEntity)world.getBlockEntity(pos)).attachedTo
-        );
-    }
-
-    @Override
-    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        super.onBreak(world, pos, state, player);
-
-        world.playSoundAtBlockCenter(
-            pos,
-            SoundEvents.BLOCK_SAND_BREAK,
-            SoundCategory.BLOCKS,
-            1f,
-            1f,
-            false
         );
     }
 }

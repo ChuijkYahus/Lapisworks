@@ -2,12 +2,16 @@ package com.luxof.lapisworks.blocks.bigchalk;
 
 import com.luxof.lapisworks.init.ModItems;
 
+import static com.luxof.lapisworks.Lapisworks.get3x3;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.ActionResult;
@@ -60,7 +64,13 @@ public class BigChalkCenter extends BigChalkPart implements BlockEntityProvider 
         BigChalkCenterEntity bE = (BigChalkCenterEntity)world.getBlockEntity(pos);
         bE.altTexture = !bE.altTexture;
         bE.save();
-        
+
+        Direction down = bE.attachedTo;
+        for (BlockPos aPos : get3x3(pos, down, true)) {
+            spawnDust(world, aPos, down);
+        }
+        world.playSound(null, pos, SoundEvents.BLOCK_SAND_PLACE, SoundCategory.BLOCKS);
+
         return ActionResult.SUCCESS;
     }
 }

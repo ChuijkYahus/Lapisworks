@@ -206,7 +206,9 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
       with Oneironaut
     - Simple Minds, when infused into the air, produce a wandering wisp
 # 1.5.8
-Locked in rah
+I'm delaying this update to the next level.  
+Only the devs who can keep up with me...   
+...Will get to see their 2000 emerald paycheck.
 ## Additions:
 - Amethyst/Chalk Rituals (pre-enlightenment)  
   - same-plane-only (no wall-to-floor or wall-to-ceiling etc.)
@@ -215,17 +217,17 @@ Locked in rah
     - tune them with Tune Media (costs amel)
     - rituals with the same frequency have ambit around that chunk of amethyst now
     - by default has 1 block of ambit, that being the tuned amethyst itself. this is the lower limit
-      - Deposit Media to make the ambit larger (upper limit of 32 blocks maybe?)
+      - Deposit Media to make the ambit larger
       - Withdraw Media to make the ambit smaller
       - radius of ambit = sqrt(deposited media)
+      - maximum ambit = 16 blocks
   - draw a BIG ASS fucking pattern on the ground
     - 9 blocks of chalk-with-pattern on the ground make a multiblock
-    - media discount (20%?)
-    - uses your staff stack and casts as you with your ambit
-    - burns up after use
+    - 50% media discount
+    - rmb with a staff and it casts as you with your ambit
+    - rmb with amel in the offhand and it burns up after use (does not consume the amel)
   - one-time rituals
     - right click with media item to absorb all of it into the ritual
-      - alternatively Deposit Media
     - ritual burns chalk as it goes
     - ritual uses half your ambit (including gsent and enchsent)
     - hotswap tuned frequency and whether or not it casts as the starter
@@ -278,7 +280,9 @@ Locked in rah
 - Enchantment Purification's order of arguments being flipped
 - Finally fixed that Cradle bug with items for fucking real, holy fucking shit I think
 - Handed Prison didn't drop blocks wtf
+- Live Jukebox top texture good again
 - Logspam begone!
+- Raycasting (Empty or Visible Dstl) would sometimes freeze your server
 - Rifts (Enchanted Slipways) should not change rotations since birth now
 - Shit should actually tell you when you don't have Fabric now
 - Sieve Thoughts not working on a spell circle
@@ -358,6 +362,10 @@ Locked in rah
 - Enchanted Scroll
   - It's literally a Hex Casting IDE.  
 - Enchantweave? (formerly part of Hexic interop)
+- Reroll enchantment selection in the table!
+  - costs 1 charged am + 1 per previous cast
+  - reset the additional cost by manually enchanting with an enchantment table
+- Start one-time rituals with Deposit Media
 # 1.6.0
 ### And Alexander wept, for there were no more worlds to conquer.
 - You can have four arms now (procrastination slain)

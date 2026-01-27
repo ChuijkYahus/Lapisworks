@@ -39,7 +39,7 @@ public class ChalkItem extends BlockItem {
             SoundEvents.BLOCK_STONE_PLACE,
             SoundCategory.BLOCKS,
             1f,
-            5f,
+            7f,
             false
         );
     }
