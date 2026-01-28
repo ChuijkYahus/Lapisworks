@@ -204,15 +204,15 @@ public class BigChalkPart extends Block {
         boolean zAxis = posZ || attachedTo == Direction.SOUTH;
 
         double x = (double)pos.getX() + 0.5 +
-            (xAxis ? posX ? -0.2 : -0.8 : world.random.nextDouble() * 1.25 - 0.75);
+            (xAxis ? posX ? -0.2 : -0.8 : Math.random() * 1.25 - 0.75);
         double y = (double)pos.getY() + 0.5 +
-            (yAxis ? posY ? -0.2 : -0.8 : world.random.nextDouble() * 1.25 - 0.75);
+            (yAxis ? posY ? -0.2 : -0.8 : Math.random() * 1.25 - 0.75);
         double z = (double)pos.getZ() + 0.5 +
-            (zAxis ? posZ ? -0.2 : -0.8 : world.random.nextDouble() * 1.25 - 0.75);
+            (zAxis ? posZ ? -0.2 : -0.8 : Math.random() * 1.25 - 0.75);
 
-        double vX = xAxis ? 0.0 : world.random.nextDouble() * 0.2 - 0.1;
-        double vY = yAxis ? 0.0 : world.random.nextDouble() * 0.2 - 0.1;
-        double vZ = zAxis ? 0.0 : world.random.nextDouble() * 0.2 - 0.1;
+        double vX = xAxis ? 0.0 : Math.random() * 0.2 - 0.1;
+        double vY = yAxis ? 0.0 : Math.random() * 0.2 - 0.1;
+        double vZ = zAxis ? 0.0 : Math.random() * 0.2 - 0.1;
 
         world.addParticle(LapisParticles.AMETHYST_DUST, x, y, z, vX, vY, vZ);
     }
