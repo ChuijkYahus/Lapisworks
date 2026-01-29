@@ -3,6 +3,8 @@ package com.luxof.lapisworks.blocks.bigchalk;
 import at.petrak.hexcasting.client.render.PatternColors;
 import at.petrak.hexcasting.client.render.WorldlyPatternRenderHelpers;
 
+import com.luxof.lapisworks.blocks.bigchalk.BigChalkCenterEntity.RenderData;
+
 import static com.luxof.lapisworks.Lapisworks.getRotationForHorizontal;
 import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.Lapisworks.rotateToBeAttachedTo;
@@ -55,7 +57,7 @@ public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCente
     @Override
     public void render(BigChalkCenterEntity chalk, float tickDelta, MatrixStack matrices,
             VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        int useLight = chalk.powered ? LightmapTextureManager.pack(15, 15) : light;
+        int useLight = chalk.isPowered() ? LightmapTextureManager.pack(15, 15) : light;
 
         matrices.push();
         matrices.translate(0.5f, 0.5f, 0.5f);
@@ -63,18 +65,78 @@ public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCente
         matrices.multiply(getRotationForHorizontal(chalk.facing, chalk.attachedTo));
         matrices.translate(-0.5f, -0.5f, -0.5f);
 
+        RenderData renderData = chalk.renderData;
         Matrix4f posMat = matrices.peek().getPositionMatrix();
         Matrix3f normMat = matrices.peek().getNormalMatrix();
 
         VertexConsumer vc = vertexConsumers.getBuffer(chalk.altTexture ? TEXTURE_alt : TEXTURE_main);
-        for (int i = 0; i < 6; i++) {
-            if (i == 5) i += chalk.textVariant;
-            float[] uv = getUVOfSprite(i);
-            vc.vertex(posMat, -1f, y, -1f).color(255, 255, 255, 255).texture(uv[0], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
-            vc.vertex(posMat, -1f, y, 2f).color(255, 255, 255, 255).texture(uv[0], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
-            vc.vertex(posMat, 2f, y, 2f).color(255, 255, 255, 255).texture(uv[2], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
-            vc.vertex(posMat, 2f, y, -1f).color(255, 255, 255, 255).texture(uv[2], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
-        }
+
+        var fullT = renderData.translate(tickDelta);
+        var halfT = fullT.mul(0.5f);
+        var quarTer = fullT.mul(0.25f); // ba dum tss
+
+        float[] uv;
+
+        // main bg circle
+        uv = getUVOfSprite(0);
+        vc.vertex(posMat, -1f, y, -1f).color(255, 255, 255, 255).texture(uv[0], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, -1f, y, 2f).color(255, 255, 255, 255).texture(uv[0], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, 2f, y, 2f).color(255, 255, 255, 255).texture(uv[2], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, 2f, y, -1f).color(255, 255, 255, 255).texture(uv[2], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+
+        matrices.translate(halfT.x, halfT.y, halfT.z);
+        matrices.translate(0.5f, 0.5f, 0.5f);
+        matrices.multiply(renderData.rotate(tickDelta));
+        matrices.translate(-0.5f, -0.5f, -0.5f);
+
+        // 4 pronged arrows (connected together by circle in alt texture)
+        // AKA inner circle AKA spiky circle AKA inner spiky circle
+        uv = getUVOfSprite(1);
+        vc.vertex(posMat, -1f, y*2, -1f).color(255, 255, 255, 255).texture(uv[0], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, -1f, y*2, 2f).color(255, 255, 255, 255).texture(uv[0], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, 2f, y*2, 2f).color(255, 255, 255, 255).texture(uv[2], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, 2f, y*2, -1f).color(255, 255, 255, 255).texture(uv[2], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+
+        matrices.translate(halfT.x, halfT.y, halfT.z);
+        matrices.translate(0.5f, 0.5f, 0.5f);
+        matrices.multiply(renderData.rotateInverse(tickDelta));
+        matrices.multiply(renderData.rotateInverse(tickDelta));
+        matrices.translate(-0.5f, -0.5f, -0.5f);
+
+        // 4-point star
+        uv = getUVOfSprite(2);
+        vc.vertex(posMat, -1f, y*3, -1f).color(255, 255, 255, 255).texture(uv[0], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, -1f, y*3, 2f).color(255, 255, 255, 255).texture(uv[0], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, 2f, y*3, 2f).color(255, 255, 255, 255).texture(uv[2], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, 2f, y*3, -1f).color(255, 255, 255, 255).texture(uv[2], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+
+        // text
+        // it's rendered here despite being the (5+n)th sprite because it follows
+        // 4-point star's rot, and the hexagon and 6-point star do not obstruct it
+        uv = getUVOfSprite(5 + chalk.textVariant);
+        vc.vertex(posMat, -1f, y*4, -1f).color(255, 255, 255, 255).texture(uv[0], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, -1f, y*4, 2f).color(255, 255, 255, 255).texture(uv[0], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, 2f, y*4, 2f).color(255, 255, 255, 255).texture(uv[2], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, 2f, y*4, -1f).color(255, 255, 255, 255).texture(uv[2], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+
+        matrices.translate(halfT.x, halfT.y, halfT.z);
+        matrices.translate(0.5f, 0.5f, 0.5f);
+        matrices.multiply(renderData.rotate(tickDelta));
+        matrices.translate(-0.5f, -0.5f, -0.5f);
+
+        // hexagon
+        uv = getUVOfSprite(3);
+        vc.vertex(posMat, -1f, y*5, -1f).color(255, 255, 255, 255).texture(uv[0], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, -1f, y*5, 2f).color(255, 255, 255, 255).texture(uv[0], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, 2f, y*5, 2f).color(255, 255, 255, 255).texture(uv[2], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, 2f, y*5, -1f).color(255, 255, 255, 255).texture(uv[2], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+
+        // 6-point star
+        uv = getUVOfSprite(4);
+        vc.vertex(posMat, -1f, y*6, -1f).color(255, 255, 255, 255).texture(uv[0], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, -1f, y*6, 2f).color(255, 255, 255, 255).texture(uv[0], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, 2f, y*6, 2f).color(255, 255, 255, 255).texture(uv[2], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
+        vc.vertex(posMat, 2f, y*6, -1f).color(255, 255, 255, 255).texture(uv[2], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
 
         if (chalk.getPattern() == null) {
             matrices.pop();
@@ -86,6 +148,7 @@ public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCente
         //matrices.multiply(getReverseRotationForHorizontal(chalk.facing, chalk.attachedTo));
         //matrices.multiply(getRotationForHorizontal(chalk.patternFacing, chalk.attachedTo));
         //matrices.translate(-0.5f, 0.5f, 0.5f);
+        matrices.translate(quarTer.x, quarTer.y, quarTer.z);
         matrices.translate(0.5f, 0.5f, 0.5f);
         matrices.scale(0.8f, 1f, 0.8f);
         matrices.translate(-0.5f, -0.5f, -0.5f);
@@ -94,12 +157,12 @@ public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCente
         WorldlyPatternRenderHelpers.renderPattern(
             chalk.getPattern(),
             WorldlyPatternRenderHelpers.WORLDLY_SETTINGS,
-            chalk.powered ? POWERED_PATTERN_COLORS : UNPOWERED_PATTERN_COLORS,
+            chalk.isPowered() ? POWERED_PATTERN_COLORS : UNPOWERED_PATTERN_COLORS,
             (double)chalk.getPos().hashCode(),
             matrices,
             vertexConsumers,
             null,
-            -y,
+            -(y*7),
             useLight,
             1
         );

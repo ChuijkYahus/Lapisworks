@@ -1,6 +1,11 @@
 package com.luxof.lapisworks.blocks.bigchalk;
 
+import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.ModItems;
+import com.luxof.lapisworks.items.Stamp;
+
+import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 
 import static com.luxof.lapisworks.Lapisworks.get3x3;
 
@@ -8,6 +13,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
@@ -20,6 +27,8 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+
+import org.jetbrains.annotations.Nullable;
 
 public class BigChalkCenter extends BigChalkPart implements BlockEntityProvider {
     public BigChalkCenter() {
@@ -50,18 +59,24 @@ public class BigChalkCenter extends BigChalkPart implements BlockEntityProvider 
     }
 
     @Override
-    public ActionResult onUse(
-        BlockState state,
+    @Nullable
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
         World world,
-        BlockPos pos,
-        PlayerEntity player,
-        Hand hand,
-        BlockHitResult hit
+        BlockState state,
+        BlockEntityType<T> type
     ) {
-        ItemStack stack = player.getStackInHand(hand);
-        if (!stack.isOf(ModItems.CHALK)) return ActionResult.PASS;
+        if (type == ModBlocks.BIG_CHALK_CENTER_ENTITY_TYPE)
+            return (a, b, stateNow, bE) -> ((BigChalkCenterEntity)bE).tick(stateNow);
+        else
+            return null;
+    }
 
+    private ActionResult onUseWithChalk(
+        World world,
+        BlockPos pos
+    ) {
         BigChalkCenterEntity bE = (BigChalkCenterEntity)world.getBlockEntity(pos);
+        if (bE.isPowered()) return ActionResult.PASS;
         bE.altTexture = !bE.altTexture;
         bE.save();
 
@@ -72,5 +87,46 @@ public class BigChalkCenter extends BigChalkPart implements BlockEntityProvider 
         world.playSound(null, pos, SoundEvents.BLOCK_SAND_PLACE, SoundCategory.BLOCKS);
 
         return ActionResult.SUCCESS;
+    }
+    private ActionResult onUseWithNothing(
+        World world,
+        BlockPos pos
+    ) {
+        BigChalkCenterEntity bE = (BigChalkCenterEntity)world.getBlockEntity(pos);
+        bE.power(true);
+        return ActionResult.SUCCESS;
+    }
+    private ActionResult onUseWithStamp(
+        World world,
+        BlockPos pos,
+        ItemStack stampStack,
+        PlayerEntity player
+    ) {
+        BigChalkCenterEntity bE = (BigChalkCenterEntity)world.getBlockEntity(pos);
+        if (bE.isPowered()) return ActionResult.FAIL;
+        bE.stamp(
+            HexPattern.fromNBT(NBTHelper.getCompound(stampStack, Stamp.TAG_PATTERN)),
+            player.getHorizontalFacing()
+        );
+        return ActionResult.SUCCESS;
+    }
+    @Override
+    public ActionResult onUse(
+        BlockState state,
+        World world,
+        BlockPos pos,
+        PlayerEntity player,
+        Hand hand,
+        BlockHitResult hit
+    ) {
+        ItemStack stack = player.getStackInHand(hand);
+        if (stack.isOf(ModItems.CHALK))
+            return onUseWithChalk(world, pos);
+        else if (stack.isEmpty())
+            return onUseWithNothing(world, pos);
+        else if (stack.isOf(ModItems.STAMP))
+            return onUseWithStamp(world, pos, stack, player);
+        else
+            return ActionResult.PASS;
     }
 }

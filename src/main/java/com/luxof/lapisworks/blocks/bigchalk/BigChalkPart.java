@@ -4,6 +4,7 @@ import com.luxof.lapisworks.init.LapisParticles;
 import com.luxof.lapisworks.init.ModBlocks;
 
 import static com.luxof.lapisworks.Lapisworks.get3x3;
+import static com.luxof.lapisworks.LapisworksIDs.CANT_PLACE_CHALK_ON_TAG;
 import static com.luxof.lapisworks.LapisworksIDs.GIB_DUST;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -112,7 +113,12 @@ public class BigChalkPart extends Block {
             fromPos.getZ() - pos.getZ()
         );
         Direction attached = state.get(ATTACHED);
-        if (comingFrom == attached) {
+        BlockState fromState = world.getBlockState(fromPos);
+        if (
+            comingFrom == attached &&
+            (!fromState.isSideSolidFullSquare(world, fromPos, attached.getOpposite()) ||
+            !fromState.isIn(CANT_PLACE_CHALK_ON_TAG))
+        ) {
             spawnDust(world, pos, comingFrom);
             world.removeBlock(pos, false);
         }

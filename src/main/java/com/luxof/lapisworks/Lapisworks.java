@@ -729,4 +729,8 @@ public class Lapisworks implements ModInitializer {
 		if (includeCenter) ret.add(4, pos);
 		return ret;
 	}
+
+	public static boolean sameAxis(Direction a, Direction b) {
+		return a == b || a == b.getOpposite();
+	}
 }

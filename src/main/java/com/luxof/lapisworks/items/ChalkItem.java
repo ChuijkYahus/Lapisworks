@@ -1,5 +1,7 @@
 package com.luxof.lapisworks.items;
 
+import static com.luxof.lapisworks.LapisworksIDs.CANT_PLACE_CHALK_ON_TAG;
+
 import com.luxof.lapisworks.blocks.entities.ChalkEntity;
 import com.luxof.lapisworks.blocks.entities.ChalkWithPatternEntity;
 import com.luxof.lapisworks.init.ModBlocks;
@@ -84,10 +86,11 @@ public class ChalkItem extends BlockItem {
         World world = ctx.getWorld();
         BlockPos pos = ctx.getBlockPos();
         Direction dir = ctx.getSide();
+        BlockState worryAboutState = world.getBlockState(pos.offset(dir.getOpposite()));
 
         return og
-            && world.getBlockState(pos.offset(dir.getOpposite()))
-                .isSideSolidFullSquare(world, pos, dir);
+            && worryAboutState.isSideSolidFullSquare(world, pos, dir)
+            && !worryAboutState.isIn(CANT_PLACE_CHALK_ON_TAG);
     }
 
     @SuppressWarnings("deprecation")

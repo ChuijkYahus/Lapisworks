@@ -139,7 +139,7 @@ public class ChalkWithPattern extends BlockWithEntity implements ChalkBlockInter
                         .getDefaultState()
                         .with(BigChalkPart.ATTACHED, down)
             );
-            ((BigChalkPart)world.getBlockState(pos).getBlock()).spawnDust(world, pos, down);
+            BigChalkPart.spawnDust(world, pos, down);
         }
         world.playSound(null, center, SoundEvents.BLOCK_SAND_PLACE, SoundCategory.BLOCKS);
 

@@ -32,9 +32,11 @@ public class LapisworksIDs {
     public static final Identifier LAPIS_MAGIC_SHIT_GROUP = id("lapismagicshitgroup");
     public static final Identifier AMEL_TAG_ID = id("amel");
     public static final Identifier POTION_TAG_ID = id("potions");
+    public static final Identifier CANT_PLACE_CHALK_ON_TAG_ID = id("cant_place_chalk_on");
     // the tags themselves
     public static final TagKey<Item> AMEL_TAG = TagKey.of(RegistryKeys.ITEM, AMEL_TAG_ID);
     public static final TagKey<Item> POTION_TAG = TagKey.of(RegistryKeys.ITEM, POTION_TAG_ID);
+    public static final TagKey<Block> CANT_PLACE_CHALK_ON_TAG = TagKey.of(RegistryKeys.BLOCK, CANT_PLACE_CHALK_ON_TAG_ID);
 
     // block tags
     public static final Identifier CHALK_CONNECTABLE_TAG_ID = id("chalk_connectable");

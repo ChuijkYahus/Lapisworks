@@ -341,6 +341,7 @@ Only the devs who can keep up with me...
     Condensed Media Prfn.
 # 1.5.9
 ### Free me
+- Amethyst Piano
 - Heal your mind after breaking it. (Jacked O' Lantern finale)
 - Alchemy/potion-brewing overhaul (I'm deadass)  
   herb stuff that leads to discovering Alchemy?  
@@ -578,3 +579,11 @@ potions!
     - milk bypasses teleportation
     - you can just. keep. adding redstone to make it longer
     - gives you Chaos when it teleports you, paralyzing you for a few seconds (like Terraria)  
+
+so you know about the Ultra Instinct beam effect when Goku first achieves it right  
+do that but for the chalk multiblock  
+invert the color of the world inside the beam  
+make it spin  
+make it rectangular like a beacon's  
+make it play a cool ass sound effect  
+all that jazz  
