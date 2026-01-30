@@ -1,8 +1,12 @@
 package com.luxof.lapisworks.blocks.bigchalk;
 
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
+import at.petrak.hexcasting.fabric.cc.CCStaffcastImage;
+import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 
 import com.luxof.lapisworks.blocks.stuff.StampableBE;
 import com.luxof.lapisworks.init.ModBlocks;
@@ -11,6 +15,7 @@ import static com.luxof.lapisworks.Lapisworks.getPigmentFromDye;
 import static com.luxof.lapisworks.Lapisworks.sameAxis;
 
 import java.util.List;
+import java.util.UUID;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -21,10 +26,13 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.DyeColor;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -61,10 +69,11 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
     public int textVariant;
     public boolean altTexture = false;
 
-    @Nullable
-    private HexPattern pattern = null;
-    @Nullable
-    public HexPattern getPattern() { return pattern; }
+    @Nullable protected UUID playerWhoTouchedMe = null;
+    protected Hand handThatTouchedMe = Hand.MAIN_HAND;
+
+    @Nullable private HexPattern pattern = null;
+    @Nullable public HexPattern getPattern() { return pattern; }
     @Override
     public void stamp(HexPattern pattern, Direction horizontalPlayerFacing) {
         this.pattern = pattern;
@@ -88,6 +97,24 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
             powered = false;
             return;
         }
+
+        if (ticksElapsed == 100) {
+            ServerPlayerEntity player = (ServerPlayerEntity)world.getPlayerByUuid(
+                playerWhoTouchedMe
+            );
+            if (player == null) return;
+
+            CCStaffcastImage ccStaffcastImg = HexCardinalComponents.STAFFCAST_IMAGE.get(player);
+            CastingVM vm = ccStaffcastImg.getVM(handThatTouchedMe);
+
+            vm.queueExecuteAndWrapIota(
+                new PatternIota(pattern),
+                (ServerWorld)world
+            );
+
+            HexCardinalComponents.STAFFCAST_IMAGE.sync(player);
+        }
+
         ticksElapsed++;
     }
     public void clientTick(BlockState state) {
@@ -149,6 +176,8 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
 
         power(nbt.getBoolean("powered"), false);
         worldLoading = false;
+        playerWhoTouchedMe = nbt.getUuid("playerWhoTouchedMe");
+        handThatTouchedMe = Hand.valueOf(nbt.getString("handThatTouchedMe"));
     }
     @Override
     public void writeNbt(NbtCompound nbt) {
@@ -159,6 +188,8 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
         if (pattern != null) nbt.put("pattern", pattern.serializeToNBT());
         nbt.putBoolean("powered", powered);
         nbt.putInt("ticksElapsed", ticksElapsed);
+        nbt.putUuid("playerWhoTouchedMe", playerWhoTouchedMe);
+        nbt.putString("handThatTouchedMe", handThatTouchedMe.toString());
     }
 
     @Override @Nullable

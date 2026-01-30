@@ -117,7 +117,7 @@ public class BigChalkPart extends Block {
         if (
             comingFrom == attached &&
             (!fromState.isSideSolidFullSquare(world, fromPos, attached.getOpposite()) ||
-            !fromState.isIn(CANT_PLACE_CHALK_ON_TAG))
+            fromState.isIn(CANT_PLACE_CHALK_ON_TAG))
         ) {
             spawnDust(world, pos, comingFrom);
             world.removeBlock(pos, false);

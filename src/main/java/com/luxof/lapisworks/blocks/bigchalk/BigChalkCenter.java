@@ -90,10 +90,15 @@ public class BigChalkCenter extends BigChalkPart implements BlockEntityProvider 
     }
     private ActionResult onUseWithNothing(
         World world,
-        BlockPos pos
+        BlockPos pos,
+        PlayerEntity player,
+        Hand hand
     ) {
         BigChalkCenterEntity bE = (BigChalkCenterEntity)world.getBlockEntity(pos);
+        if (bE.isPowered()) return ActionResult.PASS;
         bE.power(true);
+        bE.playerWhoTouchedMe = player.getUuid();
+        bE.handThatTouchedMe = hand;
         return ActionResult.SUCCESS;
     }
     private ActionResult onUseWithStamp(
@@ -123,7 +128,7 @@ public class BigChalkCenter extends BigChalkPart implements BlockEntityProvider 
         if (stack.isOf(ModItems.CHALK))
             return onUseWithChalk(world, pos);
         else if (stack.isEmpty())
-            return onUseWithNothing(world, pos);
+            return onUseWithNothing(world, pos, player, hand);
         else if (stack.isOf(ModItems.STAMP))
             return onUseWithStamp(world, pos, stack, player);
         else
