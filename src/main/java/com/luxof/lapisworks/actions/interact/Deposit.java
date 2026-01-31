@@ -66,7 +66,8 @@ public class Deposit extends SpellActionNCT {
             this.amount = amount;
         }
 
-		@Override
+		@SuppressWarnings("null")
+        @Override
 		public void cast(CastingEnvironment ctx) {
             interactWithLinkableMediaBlocks(
                 ctx.getWorld(),

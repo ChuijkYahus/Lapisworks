@@ -8,8 +8,10 @@ import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import at.petrak.hexcasting.fabric.cc.CCStaffcastImage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 
+import com.luxof.lapisworks.LapisConfig;
 import com.luxof.lapisworks.blocks.stuff.StampableBE;
 import com.luxof.lapisworks.init.ModBlocks;
+import com.luxof.lapisworks.mixinsupport.Markable;
 
 import static com.luxof.lapisworks.Lapisworks.getPigmentFromDye;
 import static com.luxof.lapisworks.Lapisworks.sameAxis;
@@ -44,6 +46,10 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 
 public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
+    private static boolean skipAnimation() {
+        return !LapisConfig.getCurrentConfig().getGrandRitualSettings().do_animation();
+    }
+
     public final Direction facing;
     public final Direction attachedTo;
     public BigChalkCenterEntity(BlockPos pos, BlockState state) {
@@ -71,6 +77,7 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
 
     @Nullable protected UUID playerWhoTouchedMe = null;
     protected Hand handThatTouchedMe = Hand.MAIN_HAND;
+    protected boolean disappearAfterCasting = false;
 
     @Nullable private HexPattern pattern = null;
     @Nullable public HexPattern getPattern() { return pattern; }
@@ -84,38 +91,58 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
     public boolean isPowered() { return powered; }
     public void power(boolean on) { power(on, true); }
     public void power(boolean on, boolean shouldSave) {
+        if (skipAnimation() && on) {
+            if (world.isClient)
+                castPatternClient();
+            else
+                castPatternServer();
+            return;
+        }
+
         if (!this.powered && on) ticksElapsed = 0;
         this.powered = on;
         if (shouldSave) save();
     }
 
+    @Environment(EnvType.SERVER)
+    private void castPatternServer() {
+        ServerPlayerEntity player = (ServerPlayerEntity)world.getPlayerByUuid(
+            playerWhoTouchedMe
+        );
+        if (player == null) return;
+
+        CCStaffcastImage ccStaffcastImg = HexCardinalComponents.STAFFCAST_IMAGE.get(player);
+        CastingVM vm = ccStaffcastImg.getVM(handThatTouchedMe);
+
+        vm.queueExecuteAndWrapIota(
+            // muahahahahaha
+            ((Markable)new PatternIota(pattern)).mark(),
+            (ServerWorld)world
+        );
+
+        ccStaffcastImg.setImage(vm.getImage());
+        HexCardinalComponents.STAFFCAST_IMAGE.sync(player);
+    }
     public void serverTick(BlockState state) {
         if (!powered) {
             ticksElapsed = 0;
             return;
         } else if (ticksElapsed > animationLength) {
+            if (disappearAfterCasting)
+                world.breakBlock(pos, false);
             powered = false;
             return;
         }
 
-        if (ticksElapsed == 100) {
-            ServerPlayerEntity player = (ServerPlayerEntity)world.getPlayerByUuid(
-                playerWhoTouchedMe
-            );
-            if (player == null) return;
-
-            CCStaffcastImage ccStaffcastImg = HexCardinalComponents.STAFFCAST_IMAGE.get(player);
-            CastingVM vm = ccStaffcastImg.getVM(handThatTouchedMe);
-
-            vm.queueExecuteAndWrapIota(
-                new PatternIota(pattern),
-                (ServerWorld)world
-            );
-
-            HexCardinalComponents.STAFFCAST_IMAGE.sync(player);
-        }
+        if (ticksElapsed == 100 && pattern != null)
+            castPatternServer();
 
         ticksElapsed++;
+    }
+    @Environment(EnvType.CLIENT)
+    private void castPatternClient() {
+        spewParticles(true, DyeColor.MAGENTA);
+        makeDaSound(HexSounds.CAST_HERMES, 3f, 0.7f);
     }
     public void clientTick(BlockState state) {
         if (!powered) {
@@ -137,10 +164,8 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
             spewParticles(false, ticksElapsed >= 100 ? DyeColor.MAGENTA : DyeColor.PINK);
             makeDaSound(SoundEvents.BLOCK_AMETHYST_CLUSTER_BREAK, 1f, 0.8f);
         }
-        if (ticksElapsed == 100) {
-            spewParticles(true, DyeColor.MAGENTA);
-            makeDaSound(HexSounds.CAST_HERMES, 3f, 0.7f);
-        }
+        if (ticksElapsed == 100)
+            castPatternClient();
 
         ticksElapsed++;
     }
@@ -176,8 +201,10 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
 
         power(nbt.getBoolean("powered"), false);
         worldLoading = false;
-        playerWhoTouchedMe = nbt.getUuid("playerWhoTouchedMe");
+        if (nbt.contains("playerWhoTouchedMe"))
+            playerWhoTouchedMe = nbt.getUuid("playerWhoTouchedMe");
         handThatTouchedMe = Hand.valueOf(nbt.getString("handThatTouchedMe"));
+        disappearAfterCasting = nbt.getBoolean("disappearAfterCasting");
     }
     @Override
     public void writeNbt(NbtCompound nbt) {
@@ -188,8 +215,10 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
         if (pattern != null) nbt.put("pattern", pattern.serializeToNBT());
         nbt.putBoolean("powered", powered);
         nbt.putInt("ticksElapsed", ticksElapsed);
-        nbt.putUuid("playerWhoTouchedMe", playerWhoTouchedMe);
+        if (playerWhoTouchedMe != null)
+            nbt.putUuid("playerWhoTouchedMe", playerWhoTouchedMe);
         nbt.putString("handThatTouchedMe", handThatTouchedMe.toString());
+        nbt.putBoolean("disappearAfterCasting", disappearAfterCasting);
     }
 
     @Override @Nullable

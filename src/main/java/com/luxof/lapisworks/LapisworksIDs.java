@@ -1,5 +1,8 @@
 package com.luxof.lapisworks;
 
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.common.lib.HexRegistries;
+
 import static com.luxof.lapisworks.Lapisworks.id;
 
 import java.util.UUID;
@@ -32,18 +35,27 @@ public class LapisworksIDs {
     public static final Identifier LAPIS_MAGIC_SHIT_GROUP = id("lapismagicshitgroup");
     public static final Identifier AMEL_TAG_ID = id("amel");
     public static final Identifier POTION_TAG_ID = id("potions");
-    public static final Identifier CANT_PLACE_CHALK_ON_TAG_ID = id("cant_place_chalk_on");
     // the tags themselves
     public static final TagKey<Item> AMEL_TAG = TagKey.of(RegistryKeys.ITEM, AMEL_TAG_ID);
     public static final TagKey<Item> POTION_TAG = TagKey.of(RegistryKeys.ITEM, POTION_TAG_ID);
-    public static final TagKey<Block> CANT_PLACE_CHALK_ON_TAG = TagKey.of(RegistryKeys.BLOCK, CANT_PLACE_CHALK_ON_TAG_ID);
 
     // block tags
+    // ids
     public static final Identifier CHALK_CONNECTABLE_TAG_ID = id("chalk_connectable");
-    public static final TagKey<Block> CHALK_CONNECTABLE_TAG = TagKey.of(
-        RegistryKeys.BLOCK,
-        CHALK_CONNECTABLE_TAG_ID
-    );
+    public static final Identifier CANT_PLACE_CHALK_ON_TAG_ID = id("cant_place_chalk_on");
+    public static final Identifier ONETIMERITUAL_BURN_BLACKLIST_TAG_ID = id("onetimeritual_burn_blacklist");
+    // tags
+    public static final TagKey<Block> CANT_PLACE_CHALK_ON_TAG = TagKey.of(RegistryKeys.BLOCK, CANT_PLACE_CHALK_ON_TAG_ID);
+    public static final TagKey<Block> CHALK_CONNECTABLE_TAG = TagKey.of(RegistryKeys.BLOCK, CHALK_CONNECTABLE_TAG_ID);
+    public static final TagKey<Block> ONETIMERITUAL_BURN_BLACKLIST_TAG = TagKey.of(RegistryKeys.BLOCK, ONETIMERITUAL_BURN_BLACKLIST_TAG_ID);
+
+    // action tags
+    // ids
+    public static final Identifier GRAND_RITUAL_BLACKLIST_TAG_ID = id("grand_ritual_blacklist");
+    public static final Identifier CANNOT_MODIFY_COST_TAG_ID = new Identifier("hexcasting", "cannot_modify_cost"); // futureproof
+    // tags
+    public static final TagKey<ActionRegistryEntry> GRAND_RITUAL_BLACKLIST_TAG = TagKey.of(HexRegistries.ACTION, GRAND_RITUAL_BLACKLIST_TAG_ID);
+    public static final TagKey<ActionRegistryEntry> CANNOT_MODIFY_COST_TAG = TagKey.of(HexRegistries.ACTION, CANNOT_MODIFY_COST_TAG_ID); // futureproof
 
     // advancements
     public static final Identifier ENCHSENT_ADVANCEMENT = id("rediscover_enchsent");

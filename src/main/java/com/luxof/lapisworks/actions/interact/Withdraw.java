@@ -86,6 +86,7 @@ public class Withdraw extends SpellActionNCT {
             this.amount = amount;
         }
 
+		@SuppressWarnings("null")
 		@Override
 		public void cast(CastingEnvironment ctx) {
             long used = ((ItemMediaBattery)phialStack.getItem()).insertMedia(

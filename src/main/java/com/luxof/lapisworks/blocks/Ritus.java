@@ -117,33 +117,29 @@ public class Ritus extends BlockWithEntity {
         Hand hand,
         BlockHitResult hit
     ) {
-        VAULT vault = null;
-        if (player instanceof ServerPlayerEntity sp) {
-            vault = ((GetVAULT)sp).grabVAULT();
-        }
         RitusEntity ritus = (RitusEntity)world.getBlockEntity(pos);
         ItemStack stack = player.getStackInHand(hand);
         ADIotaHolder iotaHolder = IXplatAbstractions.INSTANCE.findDataHolder(stack);
+        ritus.clearDisplay();
+
+        if (!(player instanceof ServerPlayerEntity sp)) return ActionResult.SUCCESS;
+
+        VAULT vault = ((GetVAULT)sp).grabVAULT();
 
         if (iotaHolder != null) {
 
-            if (!(world instanceof ServerWorld sw)) return ActionResult.SUCCESS;
-
-            Iota iota = iotaHolder.readIota(sw);
+            Iota iota = iotaHolder.readIota((ServerWorld)world);
             ritus.setTunedFrequency(iota);
-            ritus.save();
 
             return ActionResult.SUCCESS;
 
         } else if (
             player.isCreative() ||
-            Mutables.isAmel(stack) ||
+            vault.drain(Mutables::isAmel, 1, true, Flags.PRESET_Hands) > 0 ||
             stack.isEmpty() &&
-            vault != null &&
             vault.drain(Mutables::isAmel, 1, true, Flags.PRESET_Equipped_Trinkets) > 0
         ) {
 
-            ritus.clearDisplay();
             if (!(world instanceof ServerWorld sw)) return ActionResult.SUCCESS;
             Vec3d look = player.getRotationVector();
 

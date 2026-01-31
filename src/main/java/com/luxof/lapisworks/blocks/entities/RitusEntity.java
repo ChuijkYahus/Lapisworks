@@ -97,6 +97,7 @@ public class RitusEntity extends BlockEntity implements AttachedBE, RitualCompon
 
     public void setTunedFrequency(Iota iota) {
         tunedFrequency = IotaType.serialize(iota);
+        save();
     }
 
     @Nullable

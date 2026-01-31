@@ -1,9 +1,9 @@
 package com.luxof.lapisworks;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
 
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
@@ -47,22 +47,30 @@ public class LapisConfig {
     protected LapisConfig(JsonObject obj) {
         this.obj = obj;
     }
-    private static final String MultiUse_R = "multiuse_ritual";
     private static final String OneTime_R = "onetime_ritual";
-    private static final String TuneableAmbitMult = "tuneable_amethyst_ambit_multiplier";
+    private static final String MultiUse_R = "multiuse_ritual";
     private static final String PlayerAmbitMult = "player_ambit_multiplier";
+    private static final String TuneableAmbitMult = "tuneable_amethyst_ambit_multiplier";
     private static final String PoweredTrailLength = "trail_of_powered_chalk_length";
+    private static final String Grand_R = "grand_ritual";
+    private static final String DoAnimation = "do_animation";
+    private static final String CostMultiplier = "cost_multiplier";
     private static final String defaultConfig = """
     {
+      "onetime_ritual": {
+        "tuneable_amethyst_ambit_multiplier": 1.0,
+        "player_ambit_multiplier": 0.5,
+        "trail_of_powered_chalk_length": 1
+      },
+
       "multiuse_ritual": {
         "tuneable_amethyst_ambit_multiplier": 1.0,
         "trail_of_powered_chalk_length": 5
       },
 
-      "onetime_ritual": {
-        "tuneable_amethyst_ambit_multiplier": 1.0,
-        "player_ambit_multiplier": 0.5,
-        "trail_of_powered_chalk_length": 1
+      "grand_ritual": {
+        "do_animation": true,
+        "cost_multiplier": 0.5
       }
     }
     """;
@@ -73,9 +81,16 @@ public class LapisConfig {
     private boolean defaultIfInvalid(
         JsonObject obj,
         String key,
-        JsonElement fallBackTo
+        JsonPrimitive fallBackTo
     ) {
-        if (fallBackTo.getAsNumber() instanceof Double) {
+        if (fallBackTo.isBoolean()) {
+            try {
+                obj.get(key).getAsBoolean();
+            } catch (Exception e) {
+                obj.add(key, fallBackTo);
+                return false;
+            }
+        } else if (fallBackTo.getAsNumber() instanceof Double) {
             try {
                 obj.get(key).getAsDouble();
             } catch (Exception e) {
@@ -97,7 +112,7 @@ public class LapisConfig {
     private boolean defaultIfInvalid(
         JsonObject superObj,
         String key,
-        Pair<String, JsonElement>... keyAndDefaultPairs
+        Pair<String, JsonPrimitive>... keyAndDefaultPairs
     ) {
         boolean fileIsPerfect = true;
         try {
@@ -156,8 +171,18 @@ public class LapisConfig {
 
         boolean fileIsPerfect = true;
 
+        var defaultPlayerAmbitMult = primitive(0.5);
         var defaultTuneableAmbitMult = primitive(1.0);
-        var defaultPoweredTrailLength = primitive(5);
+        var defaultPoweredTrailLength = primitive(1);
+        fileIsPerfect = fileIsPerfect && defaultIfInvalid(
+            obj,
+            OneTime_R,
+            new Pair<>(PlayerAmbitMult, defaultPlayerAmbitMult),
+            new Pair<>(TuneableAmbitMult, defaultTuneableAmbitMult),
+            new Pair<>(PoweredTrailLength, defaultPoweredTrailLength)
+        );
+
+        defaultPoweredTrailLength = primitive(5);
 
         fileIsPerfect = fileIsPerfect && defaultIfInvalid(
             obj,
@@ -166,14 +191,14 @@ public class LapisConfig {
             new Pair<>(PoweredTrailLength, defaultPoweredTrailLength)
         );
 
-        var defaultPlayerAmbitMult = primitive(0.5);
-        defaultPoweredTrailLength = primitive(1);
+        var defaultDoAnimation = primitive(true);
+        var defaultCostMultiplier = primitive(0.5);
+
         fileIsPerfect = fileIsPerfect && defaultIfInvalid(
             obj,
-            OneTime_R,
-            new Pair<>(PlayerAmbitMult, defaultPlayerAmbitMult),
-            new Pair<>(TuneableAmbitMult, defaultTuneableAmbitMult),
-            new Pair<>(PoweredTrailLength, defaultPoweredTrailLength)
+            Grand_R,
+            new Pair<>(DoAnimation, defaultDoAnimation),
+            new Pair<>(CostMultiplier, defaultCostMultiplier)
         );
 
         if (!fileIsPerfect) {
@@ -194,6 +219,22 @@ public class LapisConfig {
     }
 
 
+    public static final record OneTimeRitualSettings(
+        double tuneable_amethyst_ambit_multiplier,
+        double player_ambit_multiplier,
+        int powered_trail_length
+    ) {}
+    public OneTimeRitualSettings getOneTimeRitualSettings() {
+        JsonObject settings = obj.getAsJsonObject(OneTime_R);
+
+        return new OneTimeRitualSettings(
+            settings.get(TuneableAmbitMult).getAsDouble(),
+            settings.get(PlayerAmbitMult).getAsDouble(),
+            settings.get(PoweredTrailLength).getAsInt()
+        );
+    }
+
+
     public static final record MultiUseRitualSettings(
         double tuneable_amethyst_ambit_multiplier,
         int powered_trail_length
@@ -208,18 +249,16 @@ public class LapisConfig {
     }
 
 
-    public static final record OneTimeRitualSettings(
-        double tuneable_amethyst_ambit_multiplier,
-        double player_ambit_multiplier,
-        int powered_trail_length
+    public static final record GrandRitualSettings(
+        boolean do_animation,
+        double cost_multiplier
     ) {}
-    public OneTimeRitualSettings getOneTimeRitualSettings() {
-        JsonObject settings = obj.getAsJsonObject(OneTime_R);
+    public GrandRitualSettings getGrandRitualSettings() {
+        JsonObject settings = obj.getAsJsonObject(Grand_R);
 
-        return new OneTimeRitualSettings(
-            settings.get(TuneableAmbitMult).getAsDouble(),
-            settings.get(PlayerAmbitMult).getAsDouble(),
-            settings.get(PoweredTrailLength).getAsInt()
+        return new GrandRitualSettings(
+            settings.get(DoAnimation).getAsBoolean(),
+            settings.get(CostMultiplier).getAsDouble()
         );
     }
 }

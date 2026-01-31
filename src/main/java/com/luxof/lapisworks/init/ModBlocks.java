@@ -108,6 +108,7 @@ public class ModBlocks {
         Registry.register(Registries.BLOCK_ENTITY_TYPE, id(name), blockEntityType);
     }
 
+    @SuppressWarnings("null")
     public static <BE extends BlockEntity> BlockEntityType<BE> meow(
         BlockEntityFactory<BE> constructor,
         Block block

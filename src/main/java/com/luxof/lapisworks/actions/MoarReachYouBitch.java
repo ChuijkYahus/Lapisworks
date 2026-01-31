@@ -51,6 +51,7 @@ public class MoarReachYouBitch implements SpellAction {
         attackReachIncrease,
         Operation.ADDITION
     );
+    @SuppressWarnings("null")
     private final ImmutableMultimap<EntityAttribute, EntityAttributeModifier> modifiers = ImmutableMultimap.of(
         ReachEntityAttributes.REACH, REACH_MODIFIER,
         ReachEntityAttributes.ATTACK_RANGE, ATTACK_REACH_MODIFIER

@@ -28,6 +28,7 @@ public class Lapisal {
             .nonOpaque()
             .luminance(state -> 15)
     );
+    @SuppressWarnings("null")
     public static BlockEntityType<EnchSlipwayEntity> ENCH_SLIPWAY_ENTITY_TYPE = new BlockEntityType<EnchSlipwayEntity>(
         EnchSlipwayEntity::new,
         ImmutableSet.of(ENCH_SLIPWAY),

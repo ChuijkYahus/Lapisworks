@@ -1,13 +1,17 @@
 package com.luxof.lapisworks;
 
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
 import com.google.gson.JsonPrimitive;
 
@@ -17,6 +21,8 @@ import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 import com.luxof.lapisworks.mixinsupport.GetStacks;
 
+import static com.luxof.lapisworks.LapisworksIDs.CANNOT_MODIFY_COST_TAG;
+import static com.luxof.lapisworks.LapisworksIDs.GRAND_RITUAL_BLACKLIST_TAG;
 import static com.luxof.lapisworks.LapisworksIDs.INFUSED_AMEL;
 import static com.luxof.lapisworks.LapisworksIDs.MAINHAND;
 import static com.luxof.lapisworks.LapisworksIDs.OFFHAND;
@@ -49,6 +55,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
@@ -169,6 +176,9 @@ public class Lapisworks implements ModInitializer {
 
 	public static JsonPrimitive primitive(Number number) {
 		return new JsonPrimitive(number);
+	}
+	public static JsonPrimitive primitive(Boolean bool) {
+		return new JsonPrimitive(bool);
 	}
 
 	public static boolean trinketEquipped(LivingEntity entity, Item item) {
@@ -732,5 +742,25 @@ public class Lapisworks implements ModInitializer {
 
 	public static boolean sameAxis(Direction a, Direction b) {
 		return a == b || a == b.getOpposite();
+	}
+
+	@Nullable
+	public static Identifier getIdOf(PatternShapeMatch psm) {
+        if (psm instanceof PatternShapeMatch.Normal nsm)
+            return nsm.key.getValue();
+        else if (psm instanceof PatternShapeMatch.PerWorld pwsm && pwsm.certain)
+            return pwsm.key.getValue();
+        else if (psm instanceof PatternShapeMatch.Special ssm)
+            return ssm.key.getValue();
+        else
+            return null;
+	}
+
+	private static boolean actionInTag(Identifier pattern, TagKey<ActionRegistryEntry> tag) {
+		return HexUtils.isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), pattern, tag);
+	}
+	public static boolean exemptFromMediaConsumptionDecrease(Identifier pattern) {
+		return actionInTag(pattern, CANNOT_MODIFY_COST_TAG)
+			|| actionInTag(pattern, GRAND_RITUAL_BLACKLIST_TAG);
 	}
 }

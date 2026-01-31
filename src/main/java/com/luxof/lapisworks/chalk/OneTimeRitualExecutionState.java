@@ -9,6 +9,7 @@ import com.luxof.lapisworks.LapisConfig.OneTimeRitualSettings;
 
 import static com.luxof.lapisworks.Lapisworks.getPigmentFromDye;
 import static com.luxof.lapisworks.Lapisworks.nbtListOf;
+import static com.luxof.lapisworks.LapisworksIDs.ONETIMERITUAL_BURN_BLACKLIST_TAG;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -183,10 +184,13 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
         ) {
             BlockPos pos = visitedPositions.remove(i);
 
-            if (!(world.getBlockEntity(pos) instanceof RitualComponent))
+            if (!(world.getBlockEntity(pos) instanceof RitualComponent ritualComponent))
                 continue;
 
-            world.removeBlock(pos, false);
+            if (!world.getBlockState(pos).isIn(ONETIMERITUAL_BURN_BLACKLIST_TAG))
+                world.removeBlock(pos, false);
+            else
+                ritualComponent.unpower();
         }
     }
 }

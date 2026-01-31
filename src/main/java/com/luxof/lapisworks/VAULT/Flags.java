@@ -26,8 +26,15 @@ public class Flags {
         Flags.EQ_TRINKETS, Flags.HANDS, Flags.HOTBAR,
         Flags.EQ_TRINKETS_INVITEM, Flags.HANDS_INVITEM, Flags.HOTBAR_INVITEM
     );
+    public static final Flags PRESET_UpToHands = Flags.build(
+        Flags.EQ_TRINKETS, EQ_TRINKETS_INVITEM,
+        Flags.HANDS, Flags.HANDS_INVITEM
+    );
     public static final Flags PRESET_Equipped_Trinkets = Flags.build(
         Flags.EQ_TRINKETS, Flags.EQ_TRINKETS_INVITEM
+    );
+    public static final Flags PRESET_Hands = Flags.build(
+        Flags.HANDS, Flags.HANDS_INVITEM
     );
 
 

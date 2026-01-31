@@ -1,11 +1,13 @@
 package com.luxof.lapisworks.blocks.bigchalk;
 
-import com.luxof.lapisworks.init.ModBlocks;
-import com.luxof.lapisworks.init.ModItems;
-import com.luxof.lapisworks.items.Stamp;
-
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+
+import com.luxof.lapisworks.init.ModBlocks;
+import com.luxof.lapisworks.init.ModItems;
+import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.items.AmelJar;
+import com.luxof.lapisworks.items.Stamp;
 
 import static com.luxof.lapisworks.Lapisworks.get3x3;
 
@@ -88,17 +90,22 @@ public class BigChalkCenter extends BigChalkPart implements BlockEntityProvider 
 
         return ActionResult.SUCCESS;
     }
-    private ActionResult onUseWithNothing(
+    private ActionResult onUseMustCast(
         World world,
         BlockPos pos,
         PlayerEntity player,
-        Hand hand
+        Hand hand,
+        boolean disappear
     ) {
         BigChalkCenterEntity bE = (BigChalkCenterEntity)world.getBlockEntity(pos);
+
         if (bE.isPowered()) return ActionResult.PASS;
+        else if (disappear) bE.disappearAfterCasting = true;
+
         bE.power(true);
         bE.playerWhoTouchedMe = player.getUuid();
         bE.handThatTouchedMe = hand;
+
         return ActionResult.SUCCESS;
     }
     private ActionResult onUseWithStamp(
@@ -128,7 +135,11 @@ public class BigChalkCenter extends BigChalkPart implements BlockEntityProvider 
         if (stack.isOf(ModItems.CHALK))
             return onUseWithChalk(world, pos);
         else if (stack.isEmpty())
-            return onUseWithNothing(world, pos, player, hand);
+            return onUseMustCast(world, pos, player, hand, false);
+        else if (Mutables.isAmel(stack))
+            return onUseMustCast(world, pos, player, hand, true);
+        else if (stack.getItem() instanceof AmelJar jar)
+            return onUseMustCast(world, pos, player, hand, jar.getStored(stack) > 0);
         else if (stack.isOf(ModItems.STAMP))
             return onUseWithStamp(world, pos, stack, player);
         else
