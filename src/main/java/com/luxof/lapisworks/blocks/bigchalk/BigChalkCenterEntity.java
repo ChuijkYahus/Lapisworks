@@ -104,7 +104,7 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
         if (shouldSave) save();
     }
 
-    @Environment(EnvType.SERVER)
+    //@Environment(EnvType.SERVER) // ????? literally fucking crashed on the server thread btw
     private void castPatternServer() {
         ServerPlayerEntity player = (ServerPlayerEntity)world.getPlayerByUuid(
             playerWhoTouchedMe
