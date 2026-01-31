@@ -29,6 +29,17 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class Stamp extends Item implements IotaHolderItem {
+    public static void playStampSound(World world, BlockPos pos) {
+        world.playSoundAtBlockCenter(
+            pos,
+            SoundEvents.BLOCK_STONE_PLACE,
+            SoundCategory.BLOCKS,
+            1f,
+            3f,
+            false
+        );
+    }
+
     public Stamp() {
         super(
             new FabricItemSettings()
@@ -49,14 +60,8 @@ public class Stamp extends Item implements IotaHolderItem {
 
         HexPattern pattern = HexPattern.fromNBT(NBTHelper.getCompound(stack, TAG_PATTERN));
         stampable.stamp(pattern, ctx.getHorizontalPlayerFacing());
-        world.playSoundAtBlockCenter(
-            pos,
-            SoundEvents.BLOCK_STONE_PLACE,
-            SoundCategory.BLOCKS,
-            1f,
-            3f,
-            false
-        );
+
+        playStampSound(world, pos);
 
         return ActionResult.SUCCESS;
     }

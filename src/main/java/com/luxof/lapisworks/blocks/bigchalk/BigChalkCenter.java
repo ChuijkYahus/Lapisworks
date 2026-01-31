@@ -120,6 +120,7 @@ public class BigChalkCenter extends BigChalkPart implements BlockEntityProvider 
             HexPattern.fromNBT(NBTHelper.getCompound(stampStack, Stamp.TAG_PATTERN)),
             player.getHorizontalFacing()
         );
+        Stamp.playStampSound(world, pos);
         return ActionResult.SUCCESS;
     }
     @Override

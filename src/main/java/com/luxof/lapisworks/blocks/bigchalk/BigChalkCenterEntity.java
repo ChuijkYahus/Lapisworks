@@ -68,7 +68,6 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
         textVariant = Math.min((int)Math.floor(3 * Math.random()), 2);
         // how doesn't this err on the server?
         renderData = new RenderData(attachedTo);
-        worldLoading = true;
     }
 
     /** decides what text is displayed on the chalk. */
@@ -183,7 +182,6 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
     }
 
 
-    private boolean worldLoading = false;
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
@@ -194,13 +192,9 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
 
         // i tried really hard to sync this animation
         // good enough!
-        if (world == null || (world.isClient && worldLoading))
-            ticksElapsed = nbt.getInt("ticksElapsed");
-        else
-            ticksElapsed = nbt.getInt("ticksElapsed");
+        ticksElapsed = nbt.getInt("ticksElapsed");
 
         power(nbt.getBoolean("powered"), false);
-        worldLoading = false;
         if (nbt.contains("playerWhoTouchedMe"))
             playerWhoTouchedMe = nbt.getUuid("playerWhoTouchedMe");
         handThatTouchedMe = Hand.valueOf(nbt.getString("handThatTouchedMe"));
@@ -231,8 +225,8 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
         return createNbt();
     }
 
-    private int ticksElapsed = 0;
     private final int animationLength = 140;
+    private int ticksElapsed = animationLength;
 
     @Environment(EnvType.CLIENT)
     private final List<Integer> particleTicks = List.of(
