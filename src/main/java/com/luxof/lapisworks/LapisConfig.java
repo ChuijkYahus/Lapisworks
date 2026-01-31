@@ -122,7 +122,7 @@ public class LapisConfig {
                 fileIsPerfect = fileIsPerfect &&
                     defaultIfInvalid(thisObj, pair.getLeft(), pair.getRight());
             }
-        } catch (ClassCastException e) {
+        } catch (ClassCastException | NullPointerException e) {
             JsonObject thisObj = new JsonObject();
             
             for (var pair : keyAndDefaultPairs) {
