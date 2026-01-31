@@ -1,0 +1,29 @@
+{
+    "name": "pages.lapisworks.mdia_manip.title",
+    "icon": "hexcasting:amethyst_dust",
+    "advancement": "lapisworks:got_lapis",
+    "category": "hexcasting:lapisworks",
+    "sortnum": 6,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.mdia_manip.huh"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:deposit",
+            "anchor": "lapisworks:deposit",
+            "input": "vec, num",
+            "output": "",
+            "text": "pages.lapisworks.mdia_manip.deposit.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:withdraw",
+            "anchor": "lapisworks:withdraw",
+            "input": "vec, num",
+            "output": "",
+            "text": "pages.lapisworks.mdia_manip.withdraw.summary"
+        }
+    ]
+}

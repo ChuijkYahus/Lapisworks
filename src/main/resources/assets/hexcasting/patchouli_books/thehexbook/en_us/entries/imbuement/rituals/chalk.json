@@ -20,6 +20,7 @@
         },
         {
             "type": "patchouli:crafting",
+            "anchor": "lapisworks:stamp_dawg",
             "recipe": "lapisworks:base/stamp",
             "text": "pages.lapisworks.imbuement.rituals.chalk.stamp.recipe_text"
         },
@@ -51,7 +52,7 @@
         {
             "type": "patchouli:text",
             "advancement": "lapisworks:enlightened",
-            "text": "pages.lapisworks.imbuement.rituals.chalk.tuning.foundit"
+            "text": "pages.lapisworks.imbuement.rituals.chalk.tuning.more"
         }
     ]
 }

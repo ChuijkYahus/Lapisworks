@@ -16,20 +16,16 @@
             "text": "pages.lapisworks.imbuement.condenser.recipe.desc"
         },
         {
-            "type": "hexcasting:pattern",
-            "op_id": "lapisworks:deposit",
-            "anchor": "lapisworks:deposit",
-            "input": "vec, num",
-            "output": "",
-            "text": "pages.lapisworks.imbuement.condenser.deposit.summary"
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.condenser.yeahdepositandwithdrawworkhere"
         },
         {
             "type": "hexcasting:pattern",
-            "op_id": "lapisworks:withdraw",
-            "anchor": "lapisworks:withdraw",
-            "input": "vec, num",
-            "output": "",
-            "text": "pages.lapisworks.imbuement.condenser.withdraw.summary"
+            "op_id": "lapisworks:get_condenser_mdia",
+            "anchor": "lapisworks:get_condenser_mdia",
+            "input": "vec",
+            "output": "num",
+            "text": "pages.lapisworks.imbuement.condenser.get_condenser_mdia.summary"
         },
         {
             "type": "patchouli:text",
@@ -55,14 +51,6 @@
         {
             "type": "patchouli:text",
             "text": "pages.lapisworks.imbuement.condenser.btw"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "op_id": "lapisworks:get_condenser_mdia",
-            "anchor": "lapisworks:get_condenser_mdia",
-            "input": "vec",
-            "output": "num",
-            "text": "pages.lapisworks.imbuement.condenser.get_condenser_mdia.summary"
         },
         {
             "type": "hexcasting:pattern",

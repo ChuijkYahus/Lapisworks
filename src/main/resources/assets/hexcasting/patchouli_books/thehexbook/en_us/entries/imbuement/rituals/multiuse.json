@@ -8,6 +8,15 @@
         {
             "type": "patchouli:text",
             "text": "pages.lapisworks.imbuement.rituals.multiuse.howto"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "lapisworks:base/ritus",
+            "text": "pages.lapisworks.imbuement.rituals.multiuse.ritus_recipe.text"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.rituals.multiuse.manual"
         }
     ]
 }

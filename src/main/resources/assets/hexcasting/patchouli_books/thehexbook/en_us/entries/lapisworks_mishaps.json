@@ -3,7 +3,7 @@
     "icon": "minecraft:textures/mob_effect/poison.png",
     "advancement": "lapisworks:got_lapis",
     "category": "hexcasting:lapisworks",
-    "sortnum": 6,
+    "sortnum": 7,
     "pages": [
         {
             "type": "patchouli:text",
