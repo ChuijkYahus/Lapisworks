@@ -1,9 +1,11 @@
 package com.luxof.lapisworks.blocks;
 
 import com.luxof.lapisworks.blocks.entities.ChalkEntity;
+import com.luxof.lapisworks.blocks.entities.ChalkWithPatternEntity;
 import com.luxof.lapisworks.blocks.stuff.ChalkBlockInterface;
 import com.luxof.lapisworks.blocks.stuff.AttachedBE;
 
+import static com.luxof.lapisworks.LapisworksIDs.CANT_PLACE_CHALK_ON_TAG;
 import static com.luxof.lapisworks.LapisworksIDs.CHALK_CONNECTABLE_TAG;
 
 import net.minecraft.block.Block;
@@ -14,8 +16,6 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
@@ -51,36 +51,51 @@ public class Chalk extends BlockWithEntity implements ChalkBlockInterface {
         boolean notify
     ) {
         if (world.isClient) return;
-        updateAttachmentTo(state, world, pos, fromPos);
+        updateAttachmentTo(state, world, pos, fromPos, fromBlock);
     }
 
     public void updateAttachmentTo(
         BlockState state,
         World world,
         BlockPos pos,
-        BlockPos adjBlock
+        BlockPos adjBlockPos,
+        Block adjBlock
     ) {
-        BlockState adjState = world.getBlockState(adjBlock);
+        BlockState adjState = world.getBlockState(adjBlockPos);
         Direction dir = Direction.fromVector(
-            adjBlock.getX() - pos.getX(),
-            adjBlock.getY() - pos.getY(),
-            adjBlock.getZ() - pos.getZ()
+            adjBlockPos.getX() - pos.getX(),
+            adjBlockPos.getY() - pos.getY(),
+            adjBlockPos.getZ() - pos.getZ()
         );
         ChalkEntity chalk = (ChalkEntity)world.getBlockEntity(pos);
 
         if (dir == chalk.attachedTo) {
-            if (!adjState.isSideSolidFullSquare(world, adjBlock, chalk.attachedTo)) 
+            if (
+                !adjState.isOf(adjBlock) ||
+                !adjState.isSideSolidFullSquare(
+                    world, adjBlockPos, chalk.attachedTo.getOpposite()
+                ) ||
+                adjState.isIn(CANT_PLACE_CHALK_ON_TAG)
+            )
                 world.breakBlock(pos, false);
             return;
-        } else if (dir == chalk.attachedTo.getOpposite()) {
+        } else if (dir == chalk.attachedTo.getOpposite())
             return;
-        }
 
+        BlockEntity adjBE = world.getBlockEntity(adjBlockPos);
         boolean succ = chalk.setSideIsChalk(
             dir,
+
+            // "why specifically left bracket?" "your code is horrendous" "wtf is this"
+            // fam...
+            // don't look at me for answers. i don't know either.
             adjState.isIn(CHALK_CONNECTABLE_TAG) ||
-            (world.getBlockEntity(adjBlock) instanceof AttachedBE attachedBE &&
-            attachedBE.getAttachedTo() == chalk.attachedTo)
+
+            (adjBE instanceof AttachedBE attachedBE &&
+            attachedBE.getAttachedTo() == chalk.attachedTo) &&
+
+            (!(adjBE instanceof ChalkWithPatternEntity cwp) ||
+            cwp.renderLeftBracket)
         );
         if (!succ) return;
         chalk.save();
@@ -91,7 +106,9 @@ public class Chalk extends BlockWithEntity implements ChalkBlockInterface {
     ) {
         BlockState state = world.getBlockState(pos);
         for (Direction dir : Direction.values()) {
-            updateAttachmentTo(state, world, pos, pos.offset(dir));
+            BlockPos otherPos = pos.offset(dir);
+            Block otherBlock = world.getBlockState(otherPos).getBlock();
+            updateAttachmentTo(state, world, pos, otherPos, otherBlock);
         }
     }
 
@@ -129,19 +146,15 @@ public class Chalk extends BlockWithEntity implements ChalkBlockInterface {
         PlayerEntity player,
         Hand hand,
         BlockHitResult hit
-    ) { return ChalkBlockInterface.super.onUse(state, world, pos, player, hand, hit); }
-
-    @Override
-    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        super.onBreak(world, pos, state, player);
-
-        world.playSoundAtBlockCenter(
+    ) {
+        return ChalkBlockInterface.super.onUse(
+            state,
+            world,
             pos,
-            SoundEvents.BLOCK_SAND_BREAK,
-            SoundCategory.BLOCKS,
-            1f,
-            1f,
-            false
+            player,
+            hand,
+            hit,
+            ((ChalkEntity)world.getBlockEntity(pos)).attachedTo
         );
     }
 }

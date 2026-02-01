@@ -43,6 +43,7 @@ public class CradleEntity extends BlockEntity implements Inventory, UnlinkableMe
 		bE.configureItemEntity();
     }
 
+    // this bug will haunt me until the day i fucking die
     private void heyGiveAnyFakerEntitiesAVibeCheckForMeRealQuick() {
         if (world.isClient) return;
         Entity entity = ((ServerWorld)world).getEntity(persistentUUID);
@@ -52,15 +53,9 @@ public class CradleEntity extends BlockEntity implements Inventory, UnlinkableMe
         // no clue why.
         // so just do this
         persistentUUID = UUID.randomUUID();
-        // make sure not to kill something that wasn't at fault lol
-        // i know, UUIDs and allat but i'd rather not
-        if (
-            entity instanceof ItemEntity &&
-            ((ItemEntityMinterface)entity).getBlockPosOfCradle() != null
-        ) entity.discard();
+        entity.discard();
     }
     public void updateItemEntity() {
-        if (world.isClient) return;
         if (heldStack.isEmpty()) {
             if (heldEntity == null) return;
             persistentUUID = UUID.randomUUID();
@@ -72,23 +67,26 @@ public class CradleEntity extends BlockEntity implements Inventory, UnlinkableMe
 
         if (heldEntity == null) heyGiveAnyFakerEntitiesAVibeCheckForMeRealQuick();
 
-        ServerWorld sWorld = (ServerWorld)world;
+        boolean itemEntityExists = heldEntity != null && !heldEntity.isRemoved();
+        boolean mismatchingStacksOrNoItemEntity = !itemEntityExists ||
+            !heldEntity.getStack().equals(heldStack);
 
-        boolean noItemEntity = heldEntity == null || heldEntity.isRemoved();
-        boolean mismatchingStacks = noItemEntity ? true : !heldEntity.getStack().equals(heldStack);
-        if (!noItemEntity && mismatchingStacks) {
-            persistentUUID = UUID.randomUUID();
-            heldEntity.discard();
-            heldEntity = null;
-        }
-        if (noItemEntity || mismatchingStacks) {
+        if (mismatchingStacksOrNoItemEntity) {
+            if (itemEntityExists) {
+                persistentUUID = UUID.randomUUID();
+                heldEntity.discard();
+                heldEntity = null;
+            }
+
             Vec3d pos = Vec3d.ofCenter(this.pos);
-            heldEntity = new ItemEntity(sWorld, pos.x, pos.y, pos.z, heldStack);
+            heldEntity = new ItemEntity(world, pos.x, pos.y, pos.z, heldStack);
             heldEntity.setUuid(persistentUUID);
-            configureItemEntity();
             ((ItemEntityMinterface)heldEntity).setBlockPosOfCradle(this.pos);
-            sWorld.spawnEntity(heldEntity);
+            configureItemEntity();
+
+            world.spawnEntity(heldEntity);
         }
+
         this.markDirty();
     }
 

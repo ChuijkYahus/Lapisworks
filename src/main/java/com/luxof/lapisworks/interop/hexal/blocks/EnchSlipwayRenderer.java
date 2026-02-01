@@ -35,6 +35,7 @@ EnchSlipwayRenderer implements BlockEntityRenderer<EnchSlipwayEntity> {
         Random random = entity.getWorld().getRandom();
         if (entity.degrees == null) {
             entity.degrees = random.nextBetween(0, 360);
+            entity.sync();
         }
         
         Camera camera = MinecraftClient.getInstance().gameRenderer.getCamera();

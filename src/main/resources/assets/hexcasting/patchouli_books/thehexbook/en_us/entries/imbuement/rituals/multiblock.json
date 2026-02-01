@@ -1,0 +1,17 @@
+{
+    "name": "pages.lapisworks.imbuement.rituals.multiblock.title",
+    "icon": "lapisworks:textures/entries/whycantihavemycakeandeatittooitsmyfuckingcakewdymicanteatitbutrenderable.png",
+    "advancement": "lapisworks:got_lapis",
+    "category": "hexcasting:lapisworks/imbuement/rituals",
+    "sortnum": 3,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.rituals.multiblock.howtomake"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.rituals.multiblock.manual"
+        }
+    ]
+}

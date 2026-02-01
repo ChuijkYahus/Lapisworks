@@ -4,38 +4,20 @@ import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
+import net.minecraft.util.Identifier;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.getIdOf;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 import static com.luxof.lapisworks.init.ThemConfigFlags.allPerWorldShapePatterns;
 
-import net.minecraft.registry.RegistryKey;
-
-import org.jetbrains.annotations.Nullable;
-
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(value = PatternRegistryManifest.class, remap = false)
 public abstract class PatternRegistryManifestMixin {
-
-    @Unique private static String getIdOf(RegistryKey<?> key) {
-        return key.getValue().toString();
-    }
-    @Nullable
-    @Unique private static String getIdOf(PatternShapeMatch psm) {
-        if (psm instanceof PatternShapeMatch.Normal nsm)
-            return getIdOf(nsm.key);
-        else if (psm instanceof PatternShapeMatch.PerWorld pwsm && pwsm.certain)
-            return getIdOf(pwsm.key);
-        else if (psm instanceof PatternShapeMatch.Special ssm)
-            return getIdOf(ssm.key);
-        else
-            return null;
-    }
 
     @WrapMethod(method = {"matchPattern"})
     private static PatternShapeMatch matchPattern(
@@ -46,7 +28,8 @@ public abstract class PatternRegistryManifestMixin {
     ) {
         PatternShapeMatch shapeMatch = og.call(pat, environment, checkForAlternateStrokeOrders);
 
-        String id = getIdOf(shapeMatch);
+        Identifier _id = getIdOf(shapeMatch);
+        String id = _id == null ? null : _id.toString();
         String sig = pat.anglesSignature();
         if (id == null) return shapeMatch;
 

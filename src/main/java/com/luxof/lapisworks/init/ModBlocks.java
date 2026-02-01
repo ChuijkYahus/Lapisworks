@@ -3,6 +3,7 @@ package com.luxof.lapisworks.init;
 import com.google.common.collect.ImmutableSet;
 
 import com.luxof.lapisworks.blocks.*;
+import com.luxof.lapisworks.blocks.bigchalk.*;
 import com.luxof.lapisworks.blocks.entities.*;
 
 import static com.luxof.lapisworks.Lapisworks.id;
@@ -32,6 +33,8 @@ public class ModBlocks {
     public static ChalkWithPattern CHALK_WITH_PATTERN = new ChalkWithPattern();
     public static TuneableAmethyst TUNEABLE_AMETHYST = new TuneableAmethyst();
     public static Ritus RITUS = new Ritus(true);
+    public static BigChalkPart BIG_CHALK_PART = new BigChalkPart();
+    public static BigChalkCenter BIG_CHALK_CENTER = new BigChalkCenter();
 
 
     public static BlockEntityType<MindEntity> MIND_ENTITY_TYPE =
@@ -60,6 +63,9 @@ public class ModBlocks {
 
     public static BlockEntityType<RitusEntity> RITUS_ENTITY_TYPE =
         meow(RitusEntity::new, RITUS);
+    
+    public static BlockEntityType<BigChalkCenterEntity> BIG_CHALK_CENTER_ENTITY_TYPE =
+        meow(BigChalkCenterEntity::new, BIG_CHALK_CENTER);
 
 
     public static void wearASkirt() {
@@ -80,6 +86,8 @@ public class ModBlocks {
         pickACropTop("chalk_with_pattern", CHALK_WITH_PATTERN);
         pickACropTop("tuneable_amethyst", TUNEABLE_AMETHYST);
         pickACropTop("ritus", RITUS);
+        pickACropTop("big_chalk/part", BIG_CHALK_PART);
+        pickACropTop("big_chalk/center", BIG_CHALK_CENTER);
         dontForgetStockings("mind_entity_type", MIND_ENTITY_TYPE);
         dontForgetStockings("live_jukebox_entity_type", LIVE_JUKEBOX_ENTITY_TYPE);
         dontForgetStockings("amel_constructs/simple_impetus", SIMPLE_IMPETUS_ENTITY_TYPE);
@@ -89,6 +97,7 @@ public class ModBlocks {
         dontForgetStockings("chalk_with_pattern", CHALK_WITH_PATTERN_ENTITY_TYPE);
         dontForgetStockings("tuneable_amethyst", TUNEABLE_AMETHYST_ENTITY_TYPE);
         dontForgetStockings("ritus", RITUS_ENTITY_TYPE);
+        dontForgetStockings("big_chalk_center", BIG_CHALK_CENTER_ENTITY_TYPE);
     }
 
     public static void pickACropTop(String name, Block block) {
@@ -99,6 +108,7 @@ public class ModBlocks {
         Registry.register(Registries.BLOCK_ENTITY_TYPE, id(name), blockEntityType);
     }
 
+    @SuppressWarnings("null")
     public static <BE extends BlockEntity> BlockEntityType<BE> meow(
         BlockEntityFactory<BE> constructor,
         Block block

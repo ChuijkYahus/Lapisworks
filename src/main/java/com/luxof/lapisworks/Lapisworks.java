@@ -1,13 +1,19 @@
 package com.luxof.lapisworks;
 
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
+import com.google.gson.JsonPrimitive;
 
 import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
 import com.luxof.lapisworks.init.*;
@@ -15,6 +21,8 @@ import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 import com.luxof.lapisworks.mixinsupport.GetStacks;
 
+import static com.luxof.lapisworks.LapisworksIDs.CANNOT_MODIFY_COST_TAG;
+import static com.luxof.lapisworks.LapisworksIDs.GRAND_RITUAL_BLACKLIST_TAG;
 import static com.luxof.lapisworks.LapisworksIDs.INFUSED_AMEL;
 import static com.luxof.lapisworks.LapisworksIDs.MAINHAND;
 import static com.luxof.lapisworks.LapisworksIDs.OFFHAND;
@@ -23,6 +31,7 @@ import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
@@ -34,16 +43,19 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
@@ -52,12 +64,15 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.Util;
 
 import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
 import org.joml.Random;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,22 +80,22 @@ import vazkii.patchouli.api.PatchouliAPI;
 
 // why is this project actually big?
 public class Lapisworks implements ModInitializer {
-	private static FrozenPigment BLACK_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.BLACK)), Util.NIL_UUID);
-	private static FrozenPigment BROWN_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.BROWN)), Util.NIL_UUID);
-	private static FrozenPigment BLUE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.BLUE)), Util.NIL_UUID);
-	private static FrozenPigment CYAN_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.CYAN)), Util.NIL_UUID);
-	private static FrozenPigment GRAY_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.GRAY)), Util.NIL_UUID);
-	private static FrozenPigment GREEN_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.GREEN)), Util.NIL_UUID);
-	private static FrozenPigment LIGHT_BLUE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.LIGHT_BLUE)), Util.NIL_UUID);
-	private static FrozenPigment LIGHT_GRAY_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.LIGHT_GRAY)), Util.NIL_UUID);
-	private static FrozenPigment LIME_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.LIME)), Util.NIL_UUID);
-	private static FrozenPigment MAGENTA_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.MAGENTA)), Util.NIL_UUID);
-	private static FrozenPigment ORANGE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.ORANGE)), Util.NIL_UUID);
-	private static FrozenPigment PINK_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.PINK)), Util.NIL_UUID);
-	private static FrozenPigment PURPLE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.PURPLE)), Util.NIL_UUID);
-	private static FrozenPigment RED_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.RED)), Util.NIL_UUID);
-	private static FrozenPigment WHITE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.WHITE)), Util.NIL_UUID);
-	private static FrozenPigment YELLOW_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.YELLOW)), Util.NIL_UUID);
+	private static final FrozenPigment BLACK_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.BLACK)), Util.NIL_UUID);
+	private static final FrozenPigment BROWN_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.BROWN)), Util.NIL_UUID);
+	private static final FrozenPigment BLUE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.BLUE)), Util.NIL_UUID);
+	private static final FrozenPigment CYAN_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.CYAN)), Util.NIL_UUID);
+	private static final FrozenPigment GRAY_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.GRAY)), Util.NIL_UUID);
+	private static final FrozenPigment GREEN_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.GREEN)), Util.NIL_UUID);
+	private static final FrozenPigment LIGHT_BLUE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.LIGHT_BLUE)), Util.NIL_UUID);
+	private static final FrozenPigment LIGHT_GRAY_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.LIGHT_GRAY)), Util.NIL_UUID);
+	private static final FrozenPigment LIME_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.LIME)), Util.NIL_UUID);
+	private static final FrozenPigment MAGENTA_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.MAGENTA)), Util.NIL_UUID);
+	private static final FrozenPigment ORANGE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.ORANGE)), Util.NIL_UUID);
+	private static final FrozenPigment PINK_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.PINK)), Util.NIL_UUID);
+	private static final FrozenPigment PURPLE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.PURPLE)), Util.NIL_UUID);
+	private static final FrozenPigment RED_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.RED)), Util.NIL_UUID);
+	private static final FrozenPigment WHITE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.WHITE)), Util.NIL_UUID);
+	private static final FrozenPigment YELLOW_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.YELLOW)), Util.NIL_UUID);
 
 	public static final String MOD_ID = "lapisworks";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
@@ -125,6 +140,7 @@ public class Lapisworks implements ModInitializer {
 			com.luxof.lapisworks.interop.hexal.Lapisal.beCool();
 		}
 
+		LapisConfig.renewCurrentConfig();
 		ThemConfigFlags.declareEm();
 		ModEntities.doSomethingFun();
 		Patterns.init();
@@ -152,12 +168,17 @@ public class Lapisworks implements ModInitializer {
 			//)
 			LOGGER.info("You have an addon that has interop with Lapisworks loaded?! Oh NOO, it's overstimulated, it's gonna throw up a bunch of content! Look what you've done!");
 		} else LOGGER.info("Feed it redstone.");
-
-		;
 	}
 
 	public static Identifier id(String string) {
 		return new Identifier(MOD_ID, string);
+	}
+
+	public static JsonPrimitive primitive(Number number) {
+		return new JsonPrimitive(number);
+	}
+	public static JsonPrimitive primitive(Boolean bool) {
+		return new JsonPrimitive(bool);
 	}
 
 	public static boolean trinketEquipped(LivingEntity entity, Item item) {
@@ -223,6 +244,7 @@ public class Lapisworks implements ModInitializer {
 		else { return null; }
 	}
 
+	public static int clamp(int num, int min, int max) { return Math.min(Math.max(num, min), max); }
 	public static double clamp(double num, double min, double max) { return Math.min(Math.max(num, min), max); }
 	public static float clamp(float num, float min, float max) { return Math.min(Math.max(num, min), max); }
 
@@ -345,6 +367,10 @@ public class Lapisworks implements ModInitializer {
 			&& closeEnough(a.y, b.y, epsilon)
 			&& closeEnough(a.z, b.z, epsilon);
 	}
+	/** epsilon is 0.0000001. */
+	public static boolean closeEnough(double a, double b) {
+		return closeEnough(a, b, 0.0000001);
+	}
 
     /** returns null if hand isn't MAIN_HAND or OFF_HAND or inaccessible (i'll add more eventually..!!) */
     @Nullable
@@ -416,34 +442,97 @@ public class Lapisworks implements ModInitializer {
 	 * and a boolean which states if the raycast was interrupted suddenly instead of completing.
 	 * <p>to skip a pos in the final list, return <code>null</code> for the pos.
 	 * If you send a valid pos instead, it will be added to the final list.
-	 * <p>to terminate the line, simply return <code>false</code> for the boolean.
-	 * <p>P.S. this prioritizes accuracy and as such increments from start to end in steps of 0.1.
-	 * of course, all the positions passed to the function are unique, however you may not want to
-	 * use this if you value performance. */
+	 * <p>to terminate the line, simply return <code>false</code> for the boolean. */
+	// Amanatides-Woo is a silly name
 	public static Pair<List<BlockPos>, Boolean> castRay(
-		BlockPos startPos,
-		BlockPos endPos,
+		Vec3d start,
+		Vec3d end,
 		Function<BlockPos, Pair<BlockPos, Boolean>> atEachStep
 	) {
-		Vec3d start = startPos.toCenterPos();
-		Vec3d end = endPos.toCenterPos();
+		BlockPos ray = BlockPos.ofFloored(start);
+		BlockPos endPos = BlockPos.ofFloored(end);
+
+		Vec3d diff = end.subtract(start);
+
+		Vec3i step = new Vec3i(
+			(int)Math.signum(diff.x),
+			(int)Math.signum(diff.y),
+			(int)Math.signum(diff.z)
+		);
+		Vec3d dir = diff.normalize();
+		Vec3d delta = new Vec3d(
+			1.0 / Math.abs(dir.x),
+			1.0 / Math.abs(dir.y),
+			1.0 / Math.abs(dir.z)
+		);
+
+
+		BlockPos nextBoundary = new BlockPos(
+			step.getX() < 0 ? 0 : step.getX(),
+			step.getY() < 0 ? 0 : step.getY(),
+			step.getZ() < 0 ? 0 : step.getZ()
+		);
+		// because Vec3d fields are final... :(
+		double tMaxX = dir.x == 0 ?
+			Double.POSITIVE_INFINITY : (ray.getX() + nextBoundary.getX() - start.x) / dir.x;
+		double tMaxY = dir.y == 0 ?
+			Double.POSITIVE_INFINITY : (ray.getY() + nextBoundary.getY() - start.y) / dir.y;
+		double tMaxZ = dir.z == 0 ?
+			Double.POSITIVE_INFINITY : (ray.getZ() + nextBoundary.getZ() - start.z) / dir.z;
+
+
 		List<BlockPos> positions = new ArrayList<>();
 
-		BlockPos prev = null;
-		Vec3d curr = start;
-		double step = 0.1;
-		Vec3d dir = end.subtract(start).normalize().multiply(step);
+		while (!ray.equals(endPos)) {
 
-		while (curr.squaredDistanceTo(end) > step*step) {
-			BlockPos currPos = BlockPos.ofFloored(curr);
-			if (currPos != prev) {
-				Pair<BlockPos, Boolean> ret = atEachStep.apply(currPos);
-				if (!ret.getRight()) return new Pair<>(positions, true);
-				if (ret.getLeft() != null) positions.add(ret.getLeft());
+			var result = atEachStep.apply(ray);
+			if (result.getLeft() != null)
+				positions.add(result.getLeft());
+			if (!result.getRight())
+				return new Pair<>(positions, true);
+
+			// fucking diagonals! hate these motherfuckers!
+			if (closeEnough(tMaxX, tMaxY)) {
+				ray = ray.add(step.getX(), step.getY(), 0);
+				tMaxX += delta.x;
+				tMaxY += delta.y;
+
+				if (closeEnough(tMaxX, tMaxZ)) {
+					ray = ray.add(0, 0, step.getZ());
+					tMaxZ += delta.z;
+				}
+
+			} else if (closeEnough(tMaxX, tMaxZ)) {
+				ray = ray.add(step.getX(), 0, step.getZ());
+				tMaxX += delta.x;
+				tMaxZ += delta.z;
+
+			} else if (closeEnough(tMaxY, tMaxZ)) {
+				ray = ray.add(0, step.getY(), step.getZ());
+				tMaxY += delta.y;
+				tMaxZ += delta.z;
+
+			} else {
+				if (tMaxX < tMaxY) {
+					if (tMaxX < tMaxZ) {
+						ray = ray.add(step.getX(), 0, 0);
+						tMaxX += delta.x;
+					} else {
+						ray = ray.add(0, 0, step.getZ());
+						tMaxZ += delta.z;
+					}
+				} else {
+					if (tMaxY < tMaxZ) {
+						ray = ray.add(0, step.getY(), 0);
+						tMaxY += delta.y;
+					} else {
+						ray = ray.add(0, 0, step.getZ());
+						tMaxZ += delta.z;
+					}
+				}
 			}
-			prev = currPos;
-			curr.add(dir);
 		}
+
 		return new Pair<>(positions, false);
 	}
 
@@ -558,4 +647,120 @@ public class Lapisworks implements ModInitializer {
         nbtList.addAll(list);
         return nbtList;
     }
+
+	@SafeVarargs
+	public static <ANY extends Object> boolean either(
+		Predicate<ANY> predicate, ANY... options
+	) {
+		for (ANY option : options) {
+			if (predicate.test(option)) return true;
+		}
+		return false;
+	}
+
+	public static Direction getFacingWithRespectToDown(
+		Vec3d looking,
+		Direction whereDownGoes
+	) {
+		return Direction.getFacing(
+			whereDownGoes == Direction.EAST || whereDownGoes == Direction.WEST ? 0.0 : looking.x,
+			whereDownGoes == Direction.UP || whereDownGoes == Direction.DOWN ? 0.0 : looking.y,
+			whereDownGoes == Direction.NORTH || whereDownGoes == Direction.SOUTH ? 0.0 : looking.z
+		);
+	}
+
+	public static Quaternionf getRotationForHorizontal(
+		Direction horizontal,
+		Direction down
+	) {
+		return switch (horizontal) {
+            // i love me some quirky quirks
+			case WEST ->
+				RotationAxis.POSITIVE_Y.rotationDegrees(90 + (down == Direction.UP ? 180 : 0));
+			case SOUTH ->
+				RotationAxis.POSITIVE_Y.rotationDegrees(180);
+			case EAST ->
+				RotationAxis.POSITIVE_Y.rotationDegrees(270 - (down == Direction.UP ? 180 : 0));
+			default ->
+				RotationAxis.POSITIVE_Z.rotationDegrees(0);
+		};
+	}
+	public static Quaternionf getReverseRotationForHorizontal(
+		Direction horizontal,
+		Direction down
+	) {
+		return switch (horizontal) {
+			case WEST ->
+				RotationAxis.NEGATIVE_Y.rotationDegrees(90 + (down == Direction.UP ? 180 : 0));
+			case SOUTH ->
+				RotationAxis.NEGATIVE_Y.rotationDegrees(180);
+			case EAST ->
+				RotationAxis.NEGATIVE_Y.rotationDegrees(270 - (down == Direction.UP ? 180 : 0));
+			default ->
+				RotationAxis.POSITIVE_Z.rotationDegrees(0);
+		};
+	}
+	public static Quaternionf rotateToBeAttachedTo(
+		Direction attachedTo
+	) {
+		return switch (attachedTo) {
+			case UP -> RotationAxis.POSITIVE_X.rotationDegrees(180);
+			case NORTH -> RotationAxis.POSITIVE_X.rotationDegrees(90);
+			case SOUTH -> RotationAxis.NEGATIVE_X.rotationDegrees(90);
+			case EAST -> RotationAxis.POSITIVE_Z.rotationDegrees(90);
+			case WEST -> RotationAxis.NEGATIVE_Z.rotationDegrees(90);
+			case DOWN -> RotationAxis.POSITIVE_X.rotationDegrees(0);
+		};
+	}
+	
+	public static List<BlockPos> get3x3(
+		BlockPos pos,
+		Direction axis,
+		boolean includeCenter
+	) {
+		Direction forward = axis == Direction.NORTH || axis == Direction.SOUTH ?
+            Direction.UP : Direction.NORTH;
+        Direction backward = forward.getOpposite();
+
+        Vec3i _leftVec = forward.getVector().crossProduct(axis.getVector());
+        Direction left = Direction.getFacing(_leftVec.getX(), _leftVec.getY(), _leftVec.getZ());
+        Direction right = left.getOpposite();
+
+		List<BlockPos> ret = new ArrayList<>(List.of(
+			pos.offset(forward),
+			pos.offset(forward).offset(left),
+			pos.offset(forward).offset(right),
+			pos.offset(left),
+			pos.offset(right),
+			pos.offset(backward),
+			pos.offset(backward).offset(left),
+			pos.offset(backward).offset(right)
+		));
+		if (includeCenter) ret.add(4, pos);
+		return ret;
+	}
+
+	public static boolean sameAxis(Direction a, Direction b) {
+		return a == b || a == b.getOpposite();
+	}
+
+	@Nullable
+	public static Identifier getIdOf(PatternShapeMatch psm) {
+        if (psm instanceof PatternShapeMatch.Normal nsm)
+            return nsm.key.getValue();
+        else if (psm instanceof PatternShapeMatch.PerWorld pwsm && pwsm.certain)
+            return pwsm.key.getValue();
+        else if (psm instanceof PatternShapeMatch.Special ssm)
+            return ssm.key.getValue();
+        else
+            return null;
+	}
+
+	private static boolean actionInTag(Identifier pattern, TagKey<ActionRegistryEntry> tag) {
+		return HexUtils.isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), pattern, tag);
+	}
+	public static boolean exemptFromMediaConsumptionDecrease(Identifier pattern) {
+		return actionInTag(pattern, CANNOT_MODIFY_COST_TAG)
+			|| actionInTag(pattern, GRAND_RITUAL_BLACKLIST_TAG);
+	}
 }

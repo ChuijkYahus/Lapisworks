@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.google.common.collect.ImmutableSet;
+
 import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
 import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 
@@ -28,7 +29,7 @@ public class Deposit extends SpellActionNCT {
     @Override
     public Result execute(HexIotaStack stack, CastingEnvironment ctx) {
         BlockPos pos = stack.getBlockPosInRange(0);
-        long amount = stack.getPositiveInt(1) * MediaConstants.DUST_UNIT;
+        long amount = (long)(stack.getPositiveDouble(1) * MediaConstants.DUST_UNIT);
 
         assertLinkableThere(pos, ctx);
 
@@ -65,7 +66,8 @@ public class Deposit extends SpellActionNCT {
             this.amount = amount;
         }
 
-		@Override
+		@SuppressWarnings("null")
+        @Override
 		public void cast(CastingEnvironment ctx) {
             interactWithLinkableMediaBlocks(
                 ctx.getWorld(),

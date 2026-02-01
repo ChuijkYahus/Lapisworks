@@ -206,7 +206,9 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
       with Oneironaut
     - Simple Minds, when infused into the air, produce a wandering wisp
 # 1.5.8
-Locked in rah
+I'm delaying this update to the next level.  
+Only the devs who can keep up with me...   
+...Will get to see their 2000 emerald paycheck.
 ## Additions:
 - Amethyst/Chalk Rituals (pre-enlightenment)  
   - same-plane-only (no wall-to-floor or wall-to-ceiling etc.)
@@ -215,22 +217,22 @@ Locked in rah
     - tune them with Tune Media (costs amel)
     - rituals with the same frequency have ambit around that chunk of amethyst now
     - by default has 1 block of ambit, that being the tuned amethyst itself. this is the lower limit
-      - Deposit Media to make the ambit larger (upper limit of 32 blocks maybe?)
+      - Deposit Media to make the ambit larger
       - Withdraw Media to make the ambit smaller
       - radius of ambit = sqrt(deposited media)
+      - maximum ambit = 16 blocks
   - draw a BIG ASS fucking pattern on the ground
     - 9 blocks of chalk-with-pattern on the ground make a multiblock
-    - media discount (20%?)
-    - uses your staff stack and casts as you with your ambit
-    - burns up after use
+    - 50% media discount
+    - rmb with a staff and it casts as you with your ambit
+    - rmb with amel in the offhand and it burns up after use (does not consume the amel)
   - one-time rituals
     - right click with media item to absorb all of it into the ritual
-      - alternatively Deposit Media
     - ritual burns chalk as it goes
     - ritual uses half your ambit (including gsent and enchsent)
     - hotswap tuned frequency and whether or not it casts as the starter
     - casting as the starter determines if it uses your ambit
-  - permanent rituals
+  - multi-use rituals
     - right click the start block
     - ritual does not burn chalk as it goes
     - rituals uses 1/8th of your ambit (including gsent and enchsent)
@@ -243,47 +245,11 @@ Locked in rah
   - Takes 1 amethyst dust per brew
 - Erebus' Gambit
 - Hadamard's Distillation
-- Hex familiar that lets you interact with the Media Condensing Network at a range.
-  - floating entity. like Terraria's flying piggy bank? or maybe just a wisp?
-  - bind it to one linkable and it'll do all it's business with that one linkable
-    - this linkable is it's entrypoint into any network, basically
-    - can't make it auto-search for the nearest one because it needs to be not OP
-  - you may now pull from that by rmb on the pet with a phial (attempts to fill whole phial)
-  - you may also push to that by shift+rmb on the pet with a phial (attempts to drain whole phial)
-  - costs about 2 amel per 32 blocks of distance (so free within 32 blocks)
-  - i think it should be some kind of orb with a :3 face on it?
-  - summon the pet via wearing a necklace for a minute
-    - make it exclusive with the focus necklace :>
 - Indigan Lapidary
   - alternative name: Noetic Lapidary
   - costs one amethyst shard in media, and at least two lapis in item form in your other hand
   - converts the two lapis into one amethyst (overflow of 1 lapis is consumed)
-- Mind Control of entities in the game  
-  (reality check: gang, how lost are we in the sauce?)
-  - you have to un-flay with a Simple Mind first
-  - you gain a "controllable" iota from the un-flaying.
-    - in-lore, this is a set of mappings for what brain points do what, what makes the entity
-      tick basically and also IO points for stuff (to store info for example)
-    - in the event that you lose this iota, there is a pattern to get it from an entity
-      that was un-flayed by you. this costs about a shard of amethyst
-  - controllable movement
-  - Deposit Media can be used to recharge a controllable
-  - media limit of 64 dust
-  - cannot overcast
-  - credits to Sheppo from the Hex Casting discord server for these
-    - they can be pets
-    - VERY small ambit, at most 3 blocks and usually just 1 (by default too)
-    - can have pre-set conditions to cast a hex, e.g. on hurt (so kind of like Hierophantics!)
-      - not Sheppo: can only have one condition (in-lore: too much space occupied by condition and hex)
 - Mintiest and Kitkat's Gambits (`for i in range(n):`)
-- Rote Brewery
-  - Infuse a Simple Mind into a Brewing Stand
-  - Can remember up to 5 potion recipes
-  - Each write is permanent, stops brewing anything but remembered potions when at the limit
-  - When a potion from memory is selected, takes items automatically.
-  - ALWAYS takes 2 steps worth of time.
-    Manual brewing (or teaching it) is a pain as each step takes twice as long.
-    Automated brewing (or using what's been taught) is a breeze as N steps take only 2 to do.
 - Scrying patterns for blocks added by the mod.
 - Scrying lens overlays
 - Simple Mind Infusions now have (kind of basic) datapacking support.
@@ -305,18 +271,27 @@ Locked in rah
 - Amel Jar throwing the Amel in your other hand into the void if you attempted to withdraw
   with a full stack already there
 - Ancient Tomes giving you the advancement anyway despite showing the message if you dont have lapis yet
+- Attributes no longer compound when you log
 - "Bug in the mod" mishaps
 - Damage and movement speed enhancements stacking on world join (you need to kys ingame to reset tho)
+- Deposit and Withdraw actually take doubles now, not just integers
 - Enchanted Slipways having a tendency to move 0.01f more in +XYZ than -XYZ (lmao)
 - Enchantments not carrying across dimensions (:broken_heart:)
 - Enchantment Purification's order of arguments being flipped
-- Finally fixed that Cradle bug with items for fucking real, holy fucking shit  
-  IT STILL JUMPSCARES ME WHAT THE FUCK
+- Finally fixed that Cradle bug with items for fucking real, holy fucking shit I think
 - Handed Prison didn't drop blocks wtf
+- Live Jukebox top texture good again
 - Logspam begone!
+- Raycasting (Empty or Visible Dstl) would sometimes freeze your server
+- Rifts (Enchanted Slipways) should not change rotations since birth now
+- Shit should actually tell you when you don't have Fabric now
 - Sieve Thoughts not working on a spell circle
-- You may no longer convert Lapis (+ your life force) into Amethyst Shards  
-  There's a spell for that now
+- Sieve Thoughts not working sometimes I think
+- Visible Distillation and Empty Distillation should be a lot more optimized now (not that you'll notice it lmao)
+- Withdraw bug
+- You may no longer convert Lapis (+ your life force) into Amethyst Shards
+  - It now pulls from your inventory
+  - Also there's a spell for that now
 ## Interop:
 - Hierophantics
   - Max experience fishermen villagers can be flayed into you  
@@ -336,19 +311,19 @@ Locked in rah
         so if offender is 64 blocks away but your range is 256, err can be 0-64  
       however, if the offender is in your ambit the guess is always 100% precise  
   - Less than max experience fishermen can also be flayed into you  
-    costs 16 amel and 10 charged amethyst  
+    costs 16 amel and 5 charged amethyst  
     they are almost equivalent to the other mind  
     err=range/8 by default, none when offender is within ambit  
     range can only be 0-96  
-    starts casting with an entity reference to the offender on the stack  
-    has a 1/err chance of not detecting the offender  
+    starts casting with the exact position of the offender on the stack  
+    has a 1/err chance of detecting the offender  
   - "Jack" villager type  
     - villagers turn into "Jacks" when unflayed
-    "Jacks" are jacks of all trades, and start with 2-3 levels of exp on every possible profession  
+    "Jacks" start with 2-3 levels of exp on every profession  
     - (but no trades until they pick one of those professions)
     - they're called "Jacks" because they're jacks of all trades
   - FUCKING UNICORNS
-	  - IMBUE A SIMPLE MIND INTO A HORSE AND USE 128 AMEL
+	  - IMBUE A SIMPLE MIND INTO A HORSE AND USE 64 AMEL
     - After being made, a Unicorn develops an affinity for you (and so is bound to you).
     - You can only have one Unicorn bound to you (any attempts to make more fail).
     - Unicorns are uncommonly seen, however they do appear around the player from time to time.  
@@ -356,16 +331,17 @@ Locked in rah
     - Unicorns have a zone of influence around themselves with a radius of 32 blocks.
     - No hostile mobs can spawn in the presence of a unicorn, and any that spawn outside it's zone  
       of influence refuse to enter said zone of influence.
-    - No patterns can execute within the zone of influence of a Unicorn, mishapping instead.
+    - No patterns can execute within the zone of influence of a Unicorn, mishapping instead.  
 - EMI
   - You can now see Imbue Amel, Mold Amel and (most) Simple Mind Infusion recipes in EMI
   - You can also see BeegInfusion recipes in EMI
-  - On that note, the same recipes also show up in Patchouli
 - Hexical
   - the Cradle's item actually has a big hitbox now
   - the Media Jar and the Cradle are targets for Deposit Media, Withdraw Media and
     Condensed Media Prfn.
 # 1.5.9
+### Free me
+- Amethyst Piano
 - Heal your mind after breaking it. (Jacked O' Lantern finale)
 - Alchemy/potion-brewing overhaul (I'm deadass)  
   herb stuff that leads to discovering Alchemy?  
@@ -387,7 +363,12 @@ Locked in rah
 - Enchanted Scroll
   - It's literally a Hex Casting IDE.  
 - Enchantweave? (formerly part of Hexic interop)
+- Reroll enchantment selection in the table!
+  - costs 1 charged am + 1 per previous cast
+  - reset the additional cost by manually enchanting with an enchantment table
+- Start one-time rituals with Deposit Media
 # 1.6.0
+### And Alexander wept, for there were no more worlds to conquer.
 - You can have four arms now (procrastination slain)
   - Your third and fourth arms can auto-cast 20x a second  
     Both must be devoted to auto-cast, but one can hold something (e.g. Focus, Amel-tuned Orb, etc.)
@@ -403,6 +384,7 @@ Locked in rah
   - make a vessel
   - flay entities into it to get their AI
   - customize it's body and mind
+- If not already done, EVERY PLAUSIBLE LAPISWORKS THING from "hm"
 
 # 1.7.0
 LAPISWORKS IS ON BOTH FORGE AND FABRIC NOW.
@@ -415,6 +397,8 @@ hexcasting media display interop
 iotic blocks interop  
 
 addons that may have interesting interop ideas waiting to be had but idk yet:  
+- hexical
+  - give conjured color the ability to take mage block effects
 - hexcassettes? (`for i in range(n): enqueue(spell, tick_delay)`-like pattern?)
 - Hexpose interop
   - spell to remove a status effect from the entity that has it
@@ -438,6 +422,7 @@ addons that may have interesting interop ideas waiting to be had but idk yet:
   - uhhh???
   - instant adult-ification spell, i guess?
   - like the counterpart to Hastenature, i mean
+  - but Nurture exists tho...
 - scryglass
   - add the ability to unfocus your mouse
   - add buttons
@@ -450,7 +435,8 @@ addons that may have interesting interop ideas waiting to be had but idk yet:
 much bigger phials  
 ~~ability to extend pattern and stack limit by expending media~~ gave that to hexthings  
   nvm hexthings threw it right back to me (infeasible for it)  
-  0.01 dust per iota per pattern (meaning it stays that extended for that many patterns)
+  0.01 dust per iota per pattern (meaning it stays that extended for that many patterns)  
+  nvm oneironaut has it
 computers lmao
 - slab that you can use Craft Artifact on
 - you can send iotas to computers with a spell (which costs more the longer the distance)
@@ -516,8 +502,10 @@ JIT compilation
   - if there is an unsupported pattern, fail JIT
   - if this succeeds, the code just executes a bunch of effects now with the stack like a map
   - optimize stuff
-    - Explode, Fireball, Wither Nadir, Clean Effects -> Explode, Fireball, incur some media cost
-    - Raycast mantra raycast block stack manip raycast architect -> raycast to block + face  
+    - Explode, Fireball, give effect, take away effect -> explode, fireball, incur cost
+    - Raycast mantra raycast block stack manip raycast architect =
+        (many) -> (many, block (from archer) + face (from architect)) =
+        raycast to block + face
 
 make the addon more hexxy
 - "mechanics should fit into Hex Casting like legos, combinable with other stuff and robust"  
@@ -527,6 +515,75 @@ per world pattern shapes picking between a few handmade ones is boring..
 add some randomness!  
 
 jumpslate across space and time  
+-# i don't even do drugs. what does this mean, past me?  
 
 vv only if no one else is interested  
 MASSIVE wizard towers! give you ambit + cost reduction + grid size (grid size toggleable)  
+
+trinket that casts upon dropped  
+right click to prime  
+
+trinket that stops GTP item spillage and makes it half as cheap  
+- "enderman's monocle"
+- rub some amethyst dust on an eye of ender, then put it in an amel-iron-diamond case  
+
+a trinket that shows a config screen for hexes it's primed to work for! it'll show
+pre-configured-for-hex iotas and let you select their values, with a default value already present  
+
+TODO:  
+- Hex familiar that lets you interact with the Media Condensing Network at a range.
+  - floating entity. like Terraria's flying piggy bank? or maybe just a wisp?
+  - bind it to one linkable and it'll do all it's business with that one linkable
+    - this linkable is it's entrypoint into any network, basically
+    - can't make it auto-search for the nearest one because it needs to be not OP
+  - you may now pull from that by rmb on the pet with a phial (attempts to fill whole phial)
+  - you may also push to that by shift+rmb on the pet with a phial (attempts to drain whole phial)
+  - costs about 2 amel per 32 blocks of distance (so free within 32 blocks)
+  - i think it should be some kind of orb with a :3 face on it?
+  - summon the pet via wearing a necklace for a minute
+    - make it exclusive with the focus necklace :>
+- Mind Control of entities in the game  
+  (reality check: gang, how lost are we in the sauce?)
+  - you have to un-flay with a Simple Mind first
+  - you gain a "controllable" iota from the un-flaying.
+    - in-lore, this is a set of mappings for what brain points do what, what makes the entity
+      tick basically and also IO points for stuff (to store info for example)
+    - in the event that you lose this iota, there is a pattern to get it from an entity
+      that was un-flayed by you. this costs about a shard of amethyst
+  - controllable movement
+  - Deposit Media can be used to recharge a controllable
+  - media limit of 64 dust
+  - cannot overcast
+  - credits to Sheppo from the Hex Casting discord server for these
+    - they can be pets
+    - VERY small ambit, at most 3 blocks and usually just 1 (by default too)
+    - can have pre-set conditions to cast a hex, e.g. on hurt (so kind of like Hierophantics!)
+      - not Sheppo: can only have one condition (in-lore: too much space occupied by condition and hex)
+- Rote Brewery
+  - Infuse a Simple Mind into a Brewing Stand
+  - Can remember up to 5 potion recipes
+  - Each write is permanent, stops brewing anything but remembered potions when at the limit
+  - When a potion from memory is selected, takes items automatically.
+  - Brewing a recipe it doesn't know is a pain as each step takes twice as long.
+  - Brewing a recipe it DOES know has normal speed, but reduced ingredient cost.
+    - cost reduction = 20% chance not to consume the ingredient being used  
+
+potions!
+  - potions of shine and dim
+    - enable and disable the enchanted texture effect via pouring over an item
+    - "pouring" is a shapeless crafting recipe with the item and the potion
+  - chorus fruit potion
+    - causes teleportation all over the place?
+  - ender pearl potion
+    - teleports you to where you consumed it after the effect runs out
+    - milk bypasses teleportation
+    - you can just. keep. adding redstone to make it longer
+    - gives you Chaos when it teleports you, paralyzing you for a few seconds (like Terraria)  
+
+so you know about the Ultra Instinct beam effect when Goku first achieves it right  
+do that but for the chalk multiblock  
+invert the color of the world inside the beam  
+make it spin  
+make it rectangular like a beacon's  
+make it play a cool ass sound effect  
+all that jazz  

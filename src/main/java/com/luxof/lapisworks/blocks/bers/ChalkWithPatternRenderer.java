@@ -1,11 +1,13 @@
 package com.luxof.lapisworks.blocks.bers;
 
-import com.luxof.lapisworks.blocks.entities.ChalkWithPatternEntity;
-
 import at.petrak.hexcasting.client.render.PatternColors;
 import at.petrak.hexcasting.client.render.WorldlyPatternRenderHelpers;
 
+import com.luxof.lapisworks.blocks.entities.ChalkWithPatternEntity;
+
+import static com.luxof.lapisworks.Lapisworks.getRotationForHorizontal;
 import static com.luxof.lapisworks.Lapisworks.id;
+import static com.luxof.lapisworks.Lapisworks.rotateToBeAttachedTo;
 
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.RenderLayer;
@@ -14,7 +16,6 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 
 import org.joml.Matrix3f;
@@ -27,35 +28,18 @@ public class ChalkWithPatternRenderer implements BlockEntityRenderer<ChalkWithPa
     );
     private static final float[] uv_unpowered = new float[] {0.5f, 0.5f};
     private static final float[] uv_powered = new float[] {0.0f, 0.5f};
-    private static final int POWERED_LIGHT = LightmapTextureManager.pack(6, 9);
     private static final float y = 0.001f;
-    private static final PatternColors UNPOWERED_PATTERN_COLORS = new PatternColors(0xFF_533888, 0xFF_6E4EA9);
-    private static final PatternColors POWERED_PATTERN_COLORS = new PatternColors(0xFF_8B69CA, 0xFF_CD9EF0);
+
+    public static final PatternColors UNPOWERED_PATTERN_COLORS = new PatternColors(0xFF_533888, 0xFF_6E4EA9);
+    public static final PatternColors POWERED_PATTERN_COLORS = new PatternColors(0xFF_8B69CA, 0xFF_CD9EF0);
 
     @Override
     public void render(ChalkWithPatternEntity chalk, float tickDelta, MatrixStack matrices,
             VertexConsumerProvider vertexConsumers, int light, int overlay) {
         matrices.push();
         matrices.translate(0.5f, 0.5f, 0.5f);
-
-        if (chalk.attachedTo == Direction.UP)
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
-
-        else if (chalk.attachedTo == Direction.NORTH)
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
-
-        else if (chalk.attachedTo == Direction.SOUTH)
-            matrices.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(90));
-
-        else if (chalk.attachedTo == Direction.EAST)
-            matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(90));
-
-        else if (chalk.attachedTo == Direction.WEST)
-            matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(90));
-
-        if (chalk.rotated)
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
-
+        matrices.multiply(rotateToBeAttachedTo(chalk.attachedTo));
+        if (chalk.rotated) matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
         matrices.translate(-0.5f, -0.5f, -0.5f);
 
         VertexConsumer vc = vertexConsumers.getBuffer(TEXTURE);
@@ -63,7 +47,7 @@ public class ChalkWithPatternRenderer implements BlockEntityRenderer<ChalkWithPa
         Matrix3f normMat = matrices.peek().getNormalMatrix();
 
         float[] uv = chalk.powered ? uv_powered : uv_unpowered;
-        int useLight = chalk.powered ? POWERED_LIGHT : light;
+        int useLight = chalk.powered ? LightmapTextureManager.pack(6, 9) : light;
 
         float x1 = 0f;
         float x2 = 1f;
@@ -96,22 +80,14 @@ public class ChalkWithPatternRenderer implements BlockEntityRenderer<ChalkWithPa
         // cancel this rotation to not mess with any processing ahead
         if (chalk.rotated)
             matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(90));
-        matrices.multiply(
-            switch (chalk.renderPatternsInDir) {
-                // i love me some quirky quirks
-                case WEST -> RotationAxis.POSITIVE_Y.rotationDegrees(90 + (chalk.attachedTo == Direction.UP ? 180 : 0));
-                case SOUTH -> RotationAxis.POSITIVE_Y.rotationDegrees(180);
-                case EAST -> RotationAxis.POSITIVE_Y.rotationDegrees(270 - (chalk.attachedTo == Direction.UP ? 180 : 0));
-                default -> RotationAxis.POSITIVE_Z.rotationDegrees(0);
-            }
-        );
+        matrices.multiply(getRotationForHorizontal(chalk.renderPatternsInDir, chalk.attachedTo));
         matrices.translate(-0.5f, -0.5f, -0.5f);
         // by default patterns render on the south side
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
         long tick = chalk.getWorld().getTime();
 
         WorldlyPatternRenderHelpers.renderPattern(
-            // magic number 100: every 5 seconds
+            // magic numbers: every 5 seconds (20 ticks * 5 seconds = 100)
             chalk.pats.get((int)(tick / 100 % patCount)),
             WorldlyPatternRenderHelpers.WORLDLY_SETTINGS,
             chalk.powered ? POWERED_PATTERN_COLORS : UNPOWERED_PATTERN_COLORS,

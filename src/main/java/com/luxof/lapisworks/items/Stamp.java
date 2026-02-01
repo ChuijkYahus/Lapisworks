@@ -9,10 +9,8 @@ import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 
-import com.luxof.lapisworks.blocks.entities.ChalkWithPatternEntity;
+import com.luxof.lapisworks.blocks.stuff.StampableBE;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -22,6 +20,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -29,6 +29,17 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class Stamp extends Item implements IotaHolderItem {
+    public static void playStampSound(World world, BlockPos pos) {
+        world.playSoundAtBlockCenter(
+            pos,
+            SoundEvents.BLOCK_STONE_PLACE,
+            SoundCategory.BLOCKS,
+            1f,
+            3f,
+            false
+        );
+    }
+
     public Stamp() {
         super(
             new FabricItemSettings()
@@ -42,16 +53,15 @@ public class Stamp extends Item implements IotaHolderItem {
         BlockPos pos = ctx.getBlockPos();
         ItemStack stack = ctx.getStack();
 
-        if (!(world.getBlockEntity(pos) instanceof ChalkWithPatternEntity chalk))
+        if (!(world.getBlockEntity(pos) instanceof StampableBE stampable))
             return ActionResult.FAIL;
         if (!NBTHelper.contains(stack, TAG_PATTERN))
             return ActionResult.FAIL;
 
         HexPattern pattern = HexPattern.fromNBT(NBTHelper.getCompound(stack, TAG_PATTERN));
+        stampable.stamp(pattern, ctx.getHorizontalPlayerFacing());
 
-        chalk.pats = new ArrayList<>(List.of(pattern));
-        chalk.renderPatternsInDir = ctx.getHorizontalPlayerFacing();
-        chalk.save();
+        playStampSound(world, pos);
 
         return ActionResult.SUCCESS;
     }

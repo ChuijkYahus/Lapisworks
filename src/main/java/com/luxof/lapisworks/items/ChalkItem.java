@@ -1,5 +1,7 @@
 package com.luxof.lapisworks.items;
 
+import static com.luxof.lapisworks.LapisworksIDs.CANT_PLACE_CHALK_ON_TAG;
+
 import com.luxof.lapisworks.blocks.entities.ChalkEntity;
 import com.luxof.lapisworks.blocks.entities.ChalkWithPatternEntity;
 import com.luxof.lapisworks.init.ModBlocks;
@@ -39,7 +41,7 @@ public class ChalkItem extends BlockItem {
             SoundEvents.BLOCK_STONE_PLACE,
             SoundCategory.BLOCKS,
             1f,
-            5f,
+            7f,
             false
         );
     }
@@ -47,7 +49,7 @@ public class ChalkItem extends BlockItem {
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         World world = context.getWorld();
-        BlockPos chalkPos = BlockPos.ofFloored(context.getHitPos());
+        BlockPos chalkPos = context.getBlockPos();
         ItemStack chalkStack = context.getStack();
         BlockState chalkState = world.getBlockState(chalkPos);
 
@@ -55,11 +57,19 @@ public class ChalkItem extends BlockItem {
 
             Direction attachedTo = ((ChalkEntity)world.getBlockEntity(chalkPos)).attachedTo;
 
-            world.setBlockState(chalkPos, blockWithPattern.getDefaultState());
             chalkStack.damage(1, context.getPlayer(), whatever -> {});
+            world.setBlockState(chalkPos, blockWithPattern.getDefaultState());
+            BlockState stateNow = world.getBlockState(chalkPos);
 
             ((ChalkWithPatternEntity)world.getBlockEntity(chalkPos)).attachedTo = attachedTo;
             blockWithPattern.onPlaced(world, chalkPos, chalkState, context.getPlayer(), chalkStack);
+            world.updateListeners(
+                context.getBlockPos(),
+                stateNow,
+                stateNow,
+                Block.NOTIFY_ALL
+            );
+            doChalkUpdatesDude(world, chalkPos);
             playPlaceSound(world, chalkPos);
 
             return ActionResult.success(world.isClient);
@@ -67,16 +77,6 @@ public class ChalkItem extends BlockItem {
         }
 
         return super.useOnBlock(context);
-
-        // BlockItems by default decrement the item stack on successful use.
-        /*chalkStack.increment(1);
-
-        ActionResult succ = super.useOnBlock(context);
-
-        if (isFail(succ)) chalkStack.decrement(1);
-        else chalkStack.damage(1, context.getPlayer(), any -> {});
-
-        return succ;*/
     }
 
     @Override
@@ -86,10 +86,11 @@ public class ChalkItem extends BlockItem {
         World world = ctx.getWorld();
         BlockPos pos = ctx.getBlockPos();
         Direction dir = ctx.getSide();
+        BlockState worryAboutState = world.getBlockState(pos.offset(dir.getOpposite()));
 
         return og
-            && world.getBlockState(pos.offset(dir.getOpposite()))
-                .isSideSolidFullSquare(world, pos, dir);
+            && worryAboutState.isSideSolidFullSquare(world, pos, dir)
+            && !worryAboutState.isIn(CANT_PLACE_CHALK_ON_TAG);
     }
 
     @SuppressWarnings("deprecation")

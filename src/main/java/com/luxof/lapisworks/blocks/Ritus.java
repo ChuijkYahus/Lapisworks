@@ -1,14 +1,20 @@
 package com.luxof.lapisworks.blocks;
 
-import com.luxof.lapisworks.blocks.entities.RitusEntity;
-import com.luxof.lapisworks.chalk.MultiUseRitualExecutionState;
-import com.luxof.lapisworks.init.Mutables.Mutables;
-
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
+import com.luxof.lapisworks.VAULT.Flags;
+import com.luxof.lapisworks.VAULT.VAULT;
+import com.luxof.lapisworks.blocks.entities.RitusEntity;
+import com.luxof.lapisworks.chalk.MultiUseRitualExecutionState;
+import com.luxof.lapisworks.init.ModBlocks;
+import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.mixinsupport.GetVAULT;
+
+import static com.luxof.lapisworks.Lapisworks.getFacingWithRespectToDown;
 
 import java.util.List;
 
@@ -18,10 +24,13 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -83,6 +92,23 @@ public class Ritus extends BlockWithEntity {
     }
 
     @Override
+    @Nullable
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+        World world,
+        BlockState state,
+        BlockEntityType<T> type
+    ) {
+        // checkType() makes me required to do an "unsafe cast" for whatever reason
+        if (type == ModBlocks.RITUS_ENTITY_TYPE) {
+            return (worldInner, pos, stateInner, ent) -> {
+                ((RitusEntity)ent).tick(stateInner);
+            };
+        }
+        else { return null; }
+    }
+
+    @SuppressWarnings("null")
+    @Override
     public ActionResult onUse(
         BlockState state,
         World world,
@@ -94,35 +120,61 @@ public class Ritus extends BlockWithEntity {
         RitusEntity ritus = (RitusEntity)world.getBlockEntity(pos);
         ItemStack stack = player.getStackInHand(hand);
         ADIotaHolder iotaHolder = IXplatAbstractions.INSTANCE.findDataHolder(stack);
+        ritus.clearDisplay();
 
-        if (Mutables.isAmel(stack)) {
+        if (!(player instanceof ServerPlayerEntity sp)) return ActionResult.SUCCESS;
+
+        VAULT vault = ((GetVAULT)sp).grabVAULT();
+
+        if (iotaHolder != null) {
+
+            Iota iota = iotaHolder.readIota((ServerWorld)world);
+            ritus.setTunedFrequency(iota);
+
+            return ActionResult.SUCCESS;
+
+        } else if (
+            player.isCreative() ||
+            vault.drain(Mutables::isAmel, 1, true, Flags.PRESET_Hands) > 0 ||
+            stack.isEmpty() &&
+            vault.drain(Mutables::isAmel, 1, true, Flags.PRESET_Equipped_Trinkets) > 0
+        ) {
 
             if (!(world instanceof ServerWorld sw)) return ActionResult.SUCCESS;
             Vec3d look = player.getRotationVector();
 
+            // fuck you. (unbraces your curly-brace-indented programming language)
             if (ritus.addRitual(new MultiUseRitualExecutionState(
                     pos,
-                    Direction.getFacing(look.x, look.y, look.z),
+                    getFacingWithRespectToDown(look, ritus.getAttachedTo()),
                     new CastingImage(),
                     castAsStarter ? player.getUuid() : null,
                     HexAPI.instance().getColorizer(player),
                     ritus.getTunedFrequency(sw),
                     pos,
                     List.of()
-            ))) {
-                stack.decrement(1);
-            }
+            )))
+                if (!player.isCreative())
+                    if (Mutables.isAmel(stack))
+                        stack.decrement(1);
+                    else
+                        // don't worry about it
+                        vault.drain(
+                            Mutables::isAmel,
+                            1,
+                            false,
+                            Flags.PRESET_Equipped_Trinkets
+                        );
+            else
+                return ActionResult.FAIL;
 
-        } else if (iotaHolder != null) {
+        } else if (stack.isEmpty()) {
 
-            if (!(world instanceof ServerWorld sw)) return ActionResult.SUCCESS;
-
-            Iota iota = iotaHolder.readIota(sw);
-            ritus.setTunedFrequency(iota);
-            ritus.save();
+            ritus.clearDisplay();
+            return ActionResult.SUCCESS;
 
         }
 
-        return ActionResult.SUCCESS;
+        return ActionResult.PASS;
     }
 }

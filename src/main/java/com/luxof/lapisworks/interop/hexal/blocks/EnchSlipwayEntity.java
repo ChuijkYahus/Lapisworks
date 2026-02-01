@@ -92,7 +92,7 @@ public class EnchSlipwayEntity extends BlockEntity {
         }
     }
 
-    private void sync() {
+    public void sync() {
         this.markDirty();
         this.world.updateListeners(this.pos, this.getCachedState(), this.getCachedState(), 3);
     }

@@ -15,6 +15,8 @@ public class FloatingEnchant extends SpriteBillboardParticle {
         double x, double y, double z,
         double vX, double vY, double vZ
     ) {
+        // i don't know what the fuck kind of black fucking magic i was snorting
+        // while multiplying the velocities
         super(clientWorld, x, y, z, vX * 0.05, Math.abs(vY * 0.05), vZ * 0.05);
         this.scale *= 0.6f;
         this.gravityStrength = -0.15F;

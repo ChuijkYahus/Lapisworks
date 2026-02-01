@@ -14,7 +14,7 @@ import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import java.util.List;
 
 public abstract class ConstMediaActionNCT extends NCTBase implements ConstMediaAction {
-    protected boolean requiresEnlightenment = false;
+    public boolean requiresEnlightenment = false;
 
     public List<? extends Iota> execute(HexIotaStack stack, CastingEnvironment ctx) {
         throw new IllegalStateException("call executeWithOpCount instead.");
@@ -89,7 +89,7 @@ public abstract class ConstMediaActionNCT extends NCTBase implements ConstMediaA
         try {
             return this.getClass().getField("requiresEnlightenment").getBoolean(this);
         } catch (IllegalArgumentException e) {
-            LOGGER.info("your requiresEnlightenment field must be a boolean.", e);
+            LOGGER.error("your requiresEnlightenment field must be a boolean.", e);
         } catch (IllegalAccessException e) {
             e.printStackTrace(); // Never happens
         } catch (NoSuchFieldException e) {

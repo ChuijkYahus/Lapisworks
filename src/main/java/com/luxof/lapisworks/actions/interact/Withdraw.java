@@ -35,7 +35,7 @@ public class Withdraw extends SpellActionNCT {
     @Override
     public Result execute(HexIotaStack hexStack, CastingEnvironment ctx) {
         BlockPos pos = hexStack.getBlockPosInRange(0);
-        long amount = hexStack.getPositiveInt(1) * MediaConstants.DUST_UNIT;
+        long amount = (long)(hexStack.getPositiveDouble(1) * MediaConstants.DUST_UNIT);
 
         assertLinkableThere(pos, ctx);
 
@@ -46,6 +46,7 @@ public class Withdraw extends SpellActionNCT {
                 Text.translatable("mishaps.lapisworks.descs.phial")
             )
         ).stack();
+        ItemMediaBattery phial = (ItemMediaBattery)phialStack.getItem();
 
         Pair<Long, Set<BlockPos>> interactSimResult = fullLinkableMediaBlocksInteraction(
             ctx.getWorld(),
@@ -56,7 +57,7 @@ public class Withdraw extends SpellActionNCT {
         );
         long realAmount = Math.min(
             interactSimResult.getLeft(),
-            ((ItemMediaBattery)phialStack.getItem()).getMaxMedia(phialStack)
+            phial.getMaxMedia(phialStack) - phial.getMedia(phialStack)
         );
 
         List<ParticleSpray> particles = new ArrayList<>(List.of(
@@ -85,6 +86,7 @@ public class Withdraw extends SpellActionNCT {
             this.amount = amount;
         }
 
+		@SuppressWarnings("null")
 		@Override
 		public void cast(CastingEnvironment ctx) {
             long used = ((ItemMediaBattery)phialStack.getItem()).insertMedia(

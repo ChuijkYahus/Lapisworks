@@ -4,6 +4,8 @@ import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect.ConsumeMedia;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
@@ -11,16 +13,22 @@ import at.petrak.hexcasting.api.casting.math.HexPattern;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-
+import com.luxof.lapisworks.LapisConfig;
 import com.luxof.lapisworks.blocks.entities.SimpleImpetusEntity;
 import com.luxof.lapisworks.init.ModPOIs;
 import com.luxof.lapisworks.init.Patterns;
+import com.luxof.lapisworks.mixinsupport.Markable;
 
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.poi.PointOfInterestStorage.OccupationStatus;
+
+import static com.luxof.lapisworks.Lapisworks.exemptFromMediaConsumptionDecrease;
+import static com.luxof.lapisworks.Lapisworks.getIdOf;
+
+import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,9 +41,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(value = PatternIota.class, remap = false)
-public abstract class PatternIotaMixin {
-    @Unique
-    private static RegistryKey<ActionRegistryEntry> doNothing = null;
+public abstract class PatternIotaMixin implements Markable {
+    @Unique private static RegistryKey<ActionRegistryEntry> doNothing = null;
+    @Unique private boolean marked = false;
+    @Unique @Override public PatternIota mark() {
+        this.marked = true;
+        return (PatternIota)(Object)this;
+    }
 
     @Unique
     private static boolean triggerSimpleImpeti(
@@ -94,6 +106,39 @@ public abstract class PatternIotaMixin {
                 vm.getEnv()
             )) {
             lookupRef.set(new PatternShapeMatch.Normal(doNothing));
+        }
+        if (marked && exemptFromMediaConsumptionDecrease(getIdOf(lookupRef.get())))
+            marked = false;
+    }
+
+    @Unique
+    public double getCostMultiplier() {
+        return LapisConfig.getCurrentConfig().getGrandRitualSettings().cost_multiplier();
+    }
+    @Inject(
+        method = "execute",
+        at = @At(
+            value = "NEW",
+            target = "at/petrak/hexcasting/api/casting/eval/CastResult"
+        ),
+        locals = LocalCapture.CAPTURE_FAILHARD
+    )
+    public @NotNull void execute(
+        CastingVM vm,
+        ServerWorld world,
+        SpellContinuation continuation,
+        CallbackInfoReturnable<CastResult> cir,
+        @Local List<OperatorSideEffect> sideEffects
+    ) {
+        if (!marked) return;
+        List<OperatorSideEffect> copy = List.copyOf(sideEffects);
+
+        for (int i = 0; i < copy.size(); i++) {
+            OperatorSideEffect sideEffect = copy.get(i);
+
+            if (sideEffect instanceof ConsumeMedia fx) {
+                sideEffects.set(i, new ConsumeMedia((long)(fx.getAmount() * getCostMultiplier())));
+            }
         }
     }
 }

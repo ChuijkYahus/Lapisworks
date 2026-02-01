@@ -83,15 +83,13 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 
 	@Unique @Override
 	public void setAmountOfAttrJuicedUpByAmel(EntityAttribute attribute, double value) {
-
 		EntityAttributeInstance juicedAttrInst = this.juicedUpVals.getCustomInstance(attribute);
 		EntityAttributeInstance attrInst = attributes.getCustomInstance(attribute);
 
-		if (attrInst == null) return;
-
-		attrInst.setBaseValue(attrInst.getBaseValue() - juicedAttrInst.getBaseValue() + value);
+		if (attrInst != null) {
+			attrInst.setBaseValue(attrInst.getBaseValue() - juicedAttrInst.getBaseValue() + value);
+		}
 		juicedAttrInst.setBaseValue(value);
-
 	}
 
 	@Unique @Override
@@ -119,6 +117,17 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 			EntityAttributes.GENERIC_MOVEMENT_SPEED,
 			attributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)
 		);
+	}
+	@Unique
+	public void setJuicedAttributesSpecifically(AttributeContainer attributes) {
+		juicedUpVals.getCustomInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE)
+			.setBaseValue(attributes.getBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
+
+		juicedUpVals.getCustomInstance(EntityAttributes.GENERIC_MAX_HEALTH)
+			.setBaseValue(attributes.getBaseValue(EntityAttributes.GENERIC_MAX_HEALTH));
+
+		juicedUpVals.getCustomInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)
+			.setBaseValue(attributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
 	}
 
 	@Unique @Override
@@ -170,7 +179,7 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 		for (int i = 0; i < this.enchantments.size(); i++) { this.enchantments.set(i, 0); }
 	}
 
-	// may be changed in the future, i think??
+	// may be changed in the future, idk.
 	@Unique @Override
 	public void copyCrossDeath(ServerPlayerEntity oldplr) {}
 
@@ -186,13 +195,14 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
 		if (attributes != null && this.getWorld() != null && !this.getWorld().isClient) {
 
-			setLapisworksAttributes(new AttributeContainer(
-				DefaultAttributeContainer.builder()
-				.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, nbt.getDouble("LAPISWORKS_JUICED_FISTS"))
-				.add(EntityAttributes.GENERIC_MAX_HEALTH, nbt.getDouble("LAPISWORKS_JUICED_SKIN"))
-				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, nbt.getDouble("LAPISWORKS_JUICED_FEET"))
-				.build()
-			));
+			setJuicedAttributesSpecifically(
+				new AttributeContainer(DefaultAttributeContainer.builder()
+					.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, nbt.getDouble("LAPISWORKS_JUICED_FISTS"))
+					.add(EntityAttributes.GENERIC_MAX_HEALTH, nbt.getDouble("LAPISWORKS_JUICED_SKIN"))
+					.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, nbt.getDouble("LAPISWORKS_JUICED_FEET"))
+					.build())
+			);
+
 			attributes.addTemporaryModifiers(
 				nbt.getBoolean("LAPISWORKS_JUICED_REACH") ?
 					ImmutableMultimap.of(

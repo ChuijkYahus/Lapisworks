@@ -7,6 +7,8 @@ import at.petrak.hexcasting.common.lib.HexItems;
 
 import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.blocks.bers.*;
+import com.luxof.lapisworks.blocks.bigchalk.BigChalkCenterRenderer;
+import com.luxof.lapisworks.blocks.bigchalk.BigChalkPart;
 import com.luxof.lapisworks.blocks.entities.*;
 import com.luxof.lapisworks.init.*;
 import com.luxof.lapisworks.interop.hextended.items.AmelOrb;
@@ -15,13 +17,13 @@ import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.clamp;
+import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.Lapisworks.nullConfigFlags;
 import static com.luxof.lapisworks.Lapisworks.prettifyFloat;
 import static com.luxof.lapisworks.Lapisworks.prettifyDouble;
-import static com.luxof.lapisworks.LapisworksIDs.AMEL_ORB_IS_FILLED;
-import static com.luxof.lapisworks.LapisworksIDs.BLOCKING_MPP;
 import static com.luxof.lapisworks.LapisworksIDs.DOWSE_RESULT;
 import static com.luxof.lapisworks.LapisworksIDs.DOWSE_TS;
+import static com.luxof.lapisworks.LapisworksIDs.GIB_DUST;
 import static com.luxof.lapisworks.LapisworksIDs.SCRYING_MIND_END;
 import static com.luxof.lapisworks.LapisworksIDs.SCRYING_MIND_START;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_PWSHAPE_PATS;
@@ -61,8 +63,9 @@ import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-
+import net.minecraft.world.World;
 import vazkii.patchouli.api.PatchouliAPI;
 
 public class LapisworksClient implements ClientModInitializer {
@@ -73,7 +76,7 @@ public class LapisworksClient implements ClientModInitializer {
     public static void registerMPPs() {
         ModelPredicateProviderRegistry.register(
             IRON_SWORD,
-            BLOCKING_MPP, // first person doesn't work but WHATEVER
+            id("blocking"), // first person doesn't work but WHATEVER
             (stack, world, entity, seed) -> {
                 return entity != null
                     && entity.isUsingItem()
@@ -84,7 +87,7 @@ public class LapisworksClient implements ClientModInitializer {
         if (Lapisworks.HEXTENDED_INTEROP) {
             ModelPredicateProviderRegistry.register(
                 com.luxof.lapisworks.interop.hextended.Lapixtended.AMEL_ORB,
-                AMEL_ORB_IS_FILLED,
+                id("amel_orb_is_filled"),
                 (stack, world, entity, seed) -> {
                     AmelOrb orb = (AmelOrb)stack.getItem();
                     return orb.getPlaceInAmbit(stack) == null ? 0.0F : 1.0F;
@@ -181,6 +184,10 @@ public class LapisworksClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(
             ModBlocks.CHALK_WITH_PATTERN_ENTITY_TYPE,
             ChalkWithPatternRenderer::new
+        );
+        BlockEntityRendererRegistry.register(
+            ModBlocks.BIG_CHALK_CENTER_ENTITY_TYPE,
+            BigChalkCenterRenderer::new
         );
 
         // we all thank hexxy for adding a simple addDisplayer() instead of requiring mixin in unison
@@ -364,6 +371,17 @@ public class LapisworksClient implements ClientModInitializer {
                     sendBuf.writeDouble(result.getSecond());
                 }
                 ClientPlayNetworking.send(DOWSE_RESULT, sendBuf);
+            }
+        );
+
+        ClientPlayNetworking.registerGlobalReceiver(
+            GIB_DUST,
+            (client, handler, buf, responseSender) -> {
+                BlockPos pos = buf.readBlockPos();
+                Direction attachedTo = Direction.byName(buf.readString());
+
+                World world = client.player.getWorld();
+                BigChalkPart.spawnDust(world, pos, attachedTo);
             }
         );
 
