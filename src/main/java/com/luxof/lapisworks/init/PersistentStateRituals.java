@@ -1,4 +1,4 @@
-package com.luxof.lapisworks.persistentstate;
+package com.luxof.lapisworks.init;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
@@ -32,10 +32,9 @@ public class PersistentStateRituals extends PersistentState {
 
         @Override
         public boolean equals(Object other) {
-            if (other == null) return false;
-            if (!(other instanceof IotaKey otherIotaKey)) return false;
-
-            return Iota.tolerates(iota, otherIotaKey.iota);
+            return other != null
+                && other instanceof IotaKey otherIotaKey
+                && Iota.tolerates(iota, otherIotaKey.iota);
         }
     }
 

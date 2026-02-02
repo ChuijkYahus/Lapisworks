@@ -1,4 +1,4 @@
-package com.luxof.lapisworks;
+package com.luxof.lapisworks.init;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -55,6 +55,8 @@ public class LapisConfig {
     private static final String Grand_R = "grand_ritual";
     private static final String DoAnimation = "do_animation";
     private static final String CostMultiplier = "cost_multiplier";
+    private static final String Chariot = "hierophantics_interop";
+    private static final String MaxFusedAmalgams = "max_fused_amalgamations";
     private static final String defaultConfig = """
     {
       "onetime_ritual": {
@@ -71,6 +73,10 @@ public class LapisConfig {
       "grand_ritual": {
         "do_animation": true,
         "cost_multiplier": 0.5
+      },
+
+      "hierophantics_interop": {
+        "max_fused_amalgamations": 1
       }
     }
     """;
@@ -201,6 +207,14 @@ public class LapisConfig {
             new Pair<>(CostMultiplier, defaultCostMultiplier)
         );
 
+        var defaultMaxAmalgams = primitive(1);
+
+        fileIsPerfect = fileIsPerfect && defaultIfInvalid(
+            obj,
+            Chariot,
+            new Pair<>(MaxFusedAmalgams, defaultMaxAmalgams)
+        );
+
         if (!fileIsPerfect) {
             try {
                 Files.writeString(
@@ -259,6 +273,18 @@ public class LapisConfig {
         return new GrandRitualSettings(
             settings.get(DoAnimation).getAsBoolean(),
             settings.get(CostMultiplier).getAsDouble()
+        );
+    }
+
+
+    public static final record ChariotSettings(
+        int max_fused_amalgamations
+    ) {}
+    public ChariotSettings getChariotSettings() {
+        JsonObject settings = obj.getAsJsonObject(Chariot);
+
+        return new ChariotSettings(
+            settings.get(MaxFusedAmalgams).getAsInt()
         );
     }
 }

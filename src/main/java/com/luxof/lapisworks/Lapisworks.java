@@ -11,6 +11,7 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
 import com.google.gson.JsonPrimitive;
@@ -67,6 +68,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 import net.minecraft.util.Util;
 
 import org.jetbrains.annotations.Nullable;
@@ -104,6 +106,7 @@ public class Lapisworks implements ModInitializer {
 	public static boolean HEXICAL_INTEROP = false;
 	public static boolean FULL_HEXICAL_INTEROP = false;
 	public static boolean HEXAL_INTEROP = false;
+	public static boolean HIEROPHANTICS_INTEROP = false;
 
 	public static boolean isModLoaded(String modid) { return FabricLoader.getInstance().isModLoaded(modid); }
 	/** assumes the mod is actually loaded and that <code>targetVersion</code> doesn't cause an error.
@@ -138,6 +141,11 @@ public class Lapisworks implements ModInitializer {
 			HEXAL_INTEROP = true;
 			anyInterop = true;
 			com.luxof.lapisworks.interop.hexal.Lapisal.beCool();
+		}
+		if (isModLoaded("hierophantics")) {
+			HIEROPHANTICS_INTEROP = true;
+			anyInterop = true;
+			com.luxof.lapisworks.interop.hierophantics.Chariot.readTarotCards();
 		}
 
 		LapisConfig.renewCurrentConfig();
@@ -762,5 +770,43 @@ public class Lapisworks implements ModInitializer {
 	public static boolean exemptFromMediaConsumptionDecrease(Identifier pattern) {
 		return actionInTag(pattern, CANNOT_MODIFY_COST_TAG)
 			|| actionInTag(pattern, GRAND_RITUAL_BLACKLIST_TAG);
+	}
+
+	public static void makeParticlesInSpiralGoUp(
+		World world,
+		Vec3d centerBottom,
+		Vec3d up,
+		double radiusX,
+		double radiusY,
+		int color,
+		Function<Integer, Double> speedLossPerParticleFunction,
+		boolean goInReverse
+	) {
+		for (int i = 0; i < 1080; i += 3) {
+			double rads = Math.toRadians(i);
+
+			double x = radiusX*(goInReverse ? -Math.sin(rads) : Math.cos(rads));
+			double y = radiusY*(goInReverse ? Math.cos(rads) : Math.sin(rads));
+			Vec3d vel = up.multiply(speedLossPerParticleFunction.apply(i / 3));
+
+			Vec3d pos = switch (
+				Direction.getFacing(
+					Math.abs(up.x),
+					Math.abs(up.y),
+					Math.abs(up.z)
+				)
+			) {
+				case UP -> new Vec3d(centerBottom.x+x, centerBottom.y, centerBottom.z+y);
+				case EAST -> new Vec3d(centerBottom.x, centerBottom.y+y, centerBottom.z+x);
+				case SOUTH -> new Vec3d(centerBottom.x+x, centerBottom.y+y, centerBottom.z);
+				default -> centerBottom;
+			};
+
+			world.addParticle(
+				new ConjureParticleOptions(color),
+				pos.x, pos.y, pos.z,
+				vel.x, vel.y, vel.z
+			);
+		}
 	}
 }

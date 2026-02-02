@@ -91,10 +91,7 @@ public abstract class BlockEntityAbstractImpetusMixin extends HexBlockEntity imp
             pos -> Stream.of(pos.getX(), pos.getY(), pos.getZ())
         ).toList();
     }
-    @Inject(
-        method = "saveModData",
-        at = @At("HEAD")
-    )
+    @Inject(at = @At("HEAD"), method = "saveModData")
     protected void saveModData(NbtCompound nbt, CallbackInfo ci) {
         nbt.putIntArray(
             "links",
@@ -119,10 +116,7 @@ public abstract class BlockEntityAbstractImpetusMixin extends HexBlockEntity imp
         }
         return posList;
     }
-    @Inject(
-        method = "loadModData",
-        at = @At("HEAD")
-    )
+    @Inject(at = @At("HEAD"), method = "loadModData")
     protected void loadModData(NbtCompound nbt, CallbackInfo ci) {
         linked = intsToPos(nbt.getIntArray("links"));
     }

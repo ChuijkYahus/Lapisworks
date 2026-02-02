@@ -3,7 +3,7 @@ package com.luxof.lapisworks.mixinsupport;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 
 import com.luxof.lapisworks.chalk.OneTimeRitualExecutionState;
-import com.luxof.lapisworks.persistentstate.PersistentStateRituals.IotaKey;
+import com.luxof.lapisworks.init.PersistentStateRituals.IotaKey;
 
 import java.util.ArrayList;
 import java.util.HashMap;

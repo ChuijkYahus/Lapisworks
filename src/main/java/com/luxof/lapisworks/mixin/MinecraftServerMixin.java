@@ -1,6 +1,6 @@
 package com.luxof.lapisworks.mixin;
 
-import com.luxof.lapisworks.LapisConfig;
+import com.luxof.lapisworks.init.LapisConfig;
 
 import java.util.function.BooleanSupplier;
 

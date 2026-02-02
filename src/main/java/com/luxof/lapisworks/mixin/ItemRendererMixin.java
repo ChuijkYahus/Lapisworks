@@ -19,10 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 // who up rendering they items rn
 @Mixin(ItemRenderer.class)
 public class ItemRendererMixin {
-    @Inject(
-        method = "renderItem",
-        at = @At("HEAD")
-    )
+    @Inject(at = @At("HEAD"), method = "renderItem")
     public void render(
         ItemStack stack,
         ModelTransformationMode renderMode,
