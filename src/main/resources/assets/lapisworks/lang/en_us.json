@@ -130,6 +130,9 @@
     "render.lapisworks.scryinglens.tuneable.tuned": "Tuned to: ",
     "render.lapisworks.scryinglens.tuneable.nothing": "nothing.",
     "render.lapisworks.scryinglens.tuneable_amethyst.ambit": "Ambit provided: %d/%d (Minimum %d, %d from contained media)",
+    "render.lapisworks.iota_descs.amalgamation.fornoobs": "Simple",
+    "render.lapisworks.iota_descs.amalgamation.notfornoobs": "Complex",
+    "render.lapisworks.iota_descs.amalgamation.general": "%s Amalgamation (%d block range)",
 
 
     "gui.lapisworks.chalk_with_pattern.name": "Amethyst Chalk",

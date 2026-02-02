@@ -15,6 +15,9 @@ import com.luxof.lapisworks.interop.hextended.items.AmelOrb;
 import com.luxof.lapisworks.mixinsupport.BlockDowser;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 
+import static com.luxof.lapisworks.Lapisworks.FULL_HEXICAL_INTEROP;
+import static com.luxof.lapisworks.Lapisworks.HEXAL_INTEROP;
+import static com.luxof.lapisworks.Lapisworks.HIEROPHANTICS_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.clamp;
 import static com.luxof.lapisworks.Lapisworks.id;
@@ -28,6 +31,7 @@ import static com.luxof.lapisworks.LapisworksIDs.SCRYING_MIND_END;
 import static com.luxof.lapisworks.LapisworksIDs.SCRYING_MIND_START;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_PWSHAPE_PATS;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_SENT;
+import static com.luxof.lapisworks.init.ModItems.AMEL_JAR;
 import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE;
 import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE2;
 import static com.luxof.lapisworks.init.ModItems.IRON_SWORD;
@@ -105,11 +109,14 @@ public class LapisworksClient implements ClientModInitializer {
     }
 
     public static void initInterop() {
-        if (Lapisworks.FULL_HEXICAL_INTEROP) {
+        if (FULL_HEXICAL_INTEROP) {
             com.luxof.lapisworks.interop.hexical.FullLapixicalClient.initTheFullLapixicalClient();
         }
-        if (Lapisworks.HEXAL_INTEROP) {
+        if (HEXAL_INTEROP) {
             com.luxof.lapisworks.interop.hexal.LapisalClient.beCoolOnTheClient();
+        }
+        if (HIEROPHANTICS_INTEROP) {
+            com.luxof.lapisworks.interop.hierophantics.LapisphanticsClient.doMyShitTwin();
         }
     }
 
@@ -169,7 +176,7 @@ public class LapisworksClient implements ClientModInitializer {
 
         initInterop();
 
-        TrinketRendererRegistry.registerRenderer(ModItems.AMEL_JAR, new JarTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(AMEL_JAR, new JarTrinketRenderer());
         TrinketRendererRegistry.registerRenderer(FOCUS_NECKLACE, new NecklaceTrinketRenderer());
         TrinketRendererRegistry.registerRenderer(FOCUS_NECKLACE2, new NecklaceTrinketRenderer());
 
@@ -380,8 +387,14 @@ public class LapisworksClient implements ClientModInitializer {
                 BlockPos pos = buf.readBlockPos();
                 Direction attachedTo = Direction.byName(buf.readString());
 
+                // WHY DOES THIS KEEP FUCKING HAPPENING
                 World world = client.player.getWorld();
-                BigChalkPart.spawnDust(world, pos, attachedTo);
+                try {
+                    BigChalkPart.spawnDust(world, pos, attachedTo);
+                } catch (Exception e) {
+                    LOGGER.error("Error while spawning dust on big chalk break:");
+                    e.printStackTrace();
+                }
             }
         );
 

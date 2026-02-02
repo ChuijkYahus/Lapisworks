@@ -4,9 +4,14 @@ import at.petrak.hexcasting.api.casting.OperatorUtils;
 import at.petrak.hexcasting.api.casting.SpellList;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 
+import com.luxof.lapisworks.interop.hierophantics.data.Amalgamation;
+import com.luxof.lapisworks.interop.hierophantics.data.Amalgamation.AmalgamationIota;
 import com.mojang.datafixers.util.Either;
 
 import java.util.ArrayList;
@@ -17,10 +22,15 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 public class HexIotaStack {
+    private int getReverseIdx(int idx) {
+        return argc == 0 ? idx : argc - (idx + 1);
+    }
+
     public List<? extends Iota> stack;
     public int argc;
     /** keeping you believing in magic, one stupid implementation at a time */
@@ -64,6 +74,16 @@ public class HexIotaStack {
             throw new MishapNotEnoughArgs(idx + 1, stack.size());
         }
     }
+    public Iota getOfType(int idx, IotaType<? extends Iota> type) {
+        Iota iota = get(idx);
+
+        Identifier typeA = HexIotaTypes.REGISTRY.getId(iota.getType());
+        Identifier typeB = HexIotaTypes.REGISTRY.getId(type);
+        if (typeA != null && typeA.equals(typeB))
+            return iota;
+        else
+            throw new MishapInvalidIota(iota, getReverseIdx(idx), type.typeName());
+    }
     public BlockPos getBlockPosInRange(int idx) {
         BlockPos ret = getBlockPos(idx);
         ctx.assertPosInRange(ret);
@@ -85,5 +105,17 @@ public class HexIotaStack {
         }
 
         return theFuckingList;
+    }
+
+    public Amalgamation getAmalgamation(int idx) {
+        Iota iota = get(idx);
+        if (iota instanceof AmalgamationIota amalgamIota)
+            return amalgamIota.getAmalgamation();
+        else
+            throw MishapInvalidIota.ofType(
+                iota,
+                getReverseIdx(idx),
+                "amalgamation"
+            );
     }
 }
