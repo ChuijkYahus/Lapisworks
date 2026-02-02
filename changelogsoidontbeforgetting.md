@@ -215,29 +215,29 @@ Only the devs who can keep up with me...
   - 5 patterns per chalk on ground max
   - plant little chunks of amethyst (like large amethyst buds but thinner)
     - tune them with Tune Media (costs amel)
-    - rituals with the same frequency have ambit around that chunk of amethyst now
-    - by default has 1 block of ambit, that being the tuned amethyst itself. this is the lower limit
-      - Deposit Media to make the ambit larger
-      - Withdraw Media to make the ambit smaller
-      - radius of ambit = sqrt(deposited media)
-      - maximum ambit = 16 blocks
-  - draw a BIG ASS fucking pattern on the ground
-    - 9 blocks of chalk-with-pattern on the ground make a multiblock
-    - 50% media discount
-    - rmb with a staff and it casts as you with your ambit
-    - rmb with amel in the offhand and it burns up after use (does not consume the amel)
+    - rituals with the same tuned iota have ambit around that chunk of amethyst now
+    - has 2 blocks of ambit independent of ambit from deposited media.
+    - Deposit Media to make the ambit larger
+    - Withdraw Media to make the ambit smaller
+    - radius of ambit = sqrt(deposited media)
+    - maximum ambit = 16 blocks
   - one-time rituals
     - right click with media item to absorb all of it into the ritual
     - ritual burns chalk as it goes
     - ritual uses half your ambit (including gsent and enchsent)
-    - hotswap tuned frequency and whether or not it casts as the starter
+    - hotswap tuned iota and whether or not it casts as the starter
     - casting as the starter determines if it uses your ambit
   - multi-use rituals
     - right click the start block
     - ritual does not burn chalk as it goes
     - rituals uses 1/8th of your ambit (including gsent and enchsent)
-    - tuned frequency and whether or not it casts as the caster must be configured in the start block
-    - casting as the starter determines if it uses your ambit
+    - tuned iota and whether must be configured in the start block
+    - always casts as the starter
+  - grand rituals
+    - 9 blocks of chalk-with-pattern on the ground make a multiblock
+    - 50% media discount
+    - rmb with a staff and it casts as you with your ambit
+    - rmb with amel in the offhand and it burns up after use (does not consume the amel)
 - chalk_connectable block tag (all chalk attempts to connect to blocks in this tag)
 - Enchanted Brewery
   - Imbue 10 Amel into a Brewing Stand
@@ -279,6 +279,7 @@ Only the devs who can keep up with me...
 - Enchantments not carrying across dimensions (:broken_heart:)
 - Enchantment Purification's order of arguments being flipped
 - Finally fixed that Cradle bug with items for fucking real, holy fucking shit I think
+- Geode Dowser takes no media if you're in creative
 - Handed Prison didn't drop blocks wtf
 - Live Jukebox top texture good again
 - Logspam begone!
@@ -296,17 +297,18 @@ Only the devs who can keep up with me...
 - Hierophantics
   - Max experience fishermen villagers can be flayed into you  
     costs 32 amel and 10 charged amethyst  
-    they only have the on_my_reference_found trigger, triggers when your reference is found in a stack of an offender within "range"  
-      stack starts with a "guess" vector pointing from you to the enemy  
+    they trigger when your reference is added to the stack of an offender within "range"  
+    stack starts with a "guess" vector pointing from you to the enemy  
     has a "vigilance" attribute which can range from 0-3  
       0: no notification  
       1: chat notification  
       2: chat + audio notification  
       3: chat + on-screen + audio notification  
     they also have a "range" attribute (0-256)  
-      the higher, the more inaccurate the guess (err_margin=range/4)  
+      the higher, the more inaccurate the guess (err_margin=range/4)
+      maximum err_margin is 32    
       e.g. range=64 means guess can be 16 blocks from the offender  
-      or range=256 means guess can be 64 blocks from the offender  
+      or range=256 means guess can be ~~64~~32 (due to hitting max) blocks from the offender  
       err range is constant across all guesses  
         so if offender is 64 blocks away but your range is 256, err can be 0-64  
       however, if the offender is in your ambit the guess is always 100% precise  
@@ -352,7 +354,7 @@ Only the devs who can keep up with me...
   - diving suit required to even exist in there (added bonus of not drowning)
     - or maybe just a Hexical Gasp spell daemon?
   - note to self: might have to fuck with world build height limit for this, as some creatures are
-  simply gargantuan!
+    simply gargantuan!
   - think this should be a progression of the enchanted slipway
 - Valkyrien Skies interop
   air pocket in fully closed ship protects you from congested deep noosphere effects too
@@ -396,7 +398,7 @@ noophaestus interop
 hexcasting media display interop  
 iotic blocks interop  
 
-addons that may have interesting interop ideas waiting to be had but idk yet:  
+possible interop:  
 - hexical
   - give conjured color the ability to take mage block effects
 - hexcassettes? (`for i in range(n): enqueue(spell, tick_delay)`-like pattern?)
