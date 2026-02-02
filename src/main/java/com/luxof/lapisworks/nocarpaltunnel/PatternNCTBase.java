@@ -13,7 +13,7 @@ import com.luxof.lapisworks.VAULT.VAULT;
 
 import net.minecraft.server.world.ServerWorld;
 
-public abstract class NCTBase {
+public abstract class PatternNCTBase {
     public CastingEnvironment ctx;
     public ServerWorld world;
     public VAULT vault;
