@@ -42,6 +42,9 @@ public class Amalgamation {
     public double getErr() {
         return Math.min(range / (forNoobs ? 8.0 : 4.0), 32.0);
     }
+    public double getMaxRange() {
+        return forNoobs ? 64.0 : 256.0;
+    }
     
     public boolean equals(Object other) {
         return other != null

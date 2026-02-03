@@ -16,7 +16,9 @@ import com.luxof.lapisworks.actions.interact.*;
 import com.luxof.lapisworks.actions.misc.*;
 import com.luxof.lapisworks.actions.ritual.*;
 import com.luxof.lapisworks.actions.scry.*;
+import com.luxof.lapisworks.interop.hierophantics.patterns.*;
 
+import static com.luxof.lapisworks.Lapisworks.HIEROPHANTICS_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.init.ThemConfigFlags.registerPWShapePattern;
 
@@ -189,6 +191,17 @@ public class Patterns {
         registerOnlyForHexdoc("robbie_exalt1", "eedqaqddadwddwaeaeadaeqaddwedwqdadedaqqwwqqewwwaeaedqqwwwqwawaedwqqdwwaqweeeqeeewawdwqeww", HexDir.NORTH_WEST);
         registerOnlyForHexdoc("robbie_exalt", "qaeaqaweaqa", HexDir.NORTH_WEST);
         registerPWShapePattern("lapisworks:robbie_exalt");
+
+        if (HIEROPHANTICS_INTEROP) {
+            register("get_amalgamation", "qqewdwewdqqqaqqa", HexDir.NORTH_EAST, new GetAmalgamation());
+            register("set_amalgamation", "eeqwawqwaeeedeed", HexDir.NORTH_WEST, new SetAmalgamation());
+            register("get_amalgam_notiflevel", "waqaaqawqqwqqwq", HexDir.NORTH_WEST, new GetAmalgamAlert());
+            // hehe weewee
+            register("set_amalgam_notiflevel", "wdeddedweeweewe", HexDir.NORTH_EAST, new SetAmalgamAlert());
+            register("get_amalgam_range", "qqqwqwqqqaqqqwqwqqqqaqqa", HexDir.NORTH_EAST, new GetAmalgamRange());
+            register("set_amalgam_range", "eeeweweeedeeeweweeeedeed", HexDir.NORTH_WEST, new SetAmalgamRange());
+            register("get_amalgam_greater", "qwewqaqwewqqaqqa", HexDir.NORTH_EAST, new GetAmalgamGreater());
+        }
     }
 
     private static ActionRegistryEntry register(

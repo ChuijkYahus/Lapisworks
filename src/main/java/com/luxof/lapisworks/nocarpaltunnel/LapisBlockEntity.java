@@ -1,5 +1,6 @@
 package com.luxof.lapisworks.nocarpaltunnel;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -19,6 +20,11 @@ public abstract class LapisBlockEntity extends BlockEntity {
     public abstract void save(NbtCompound nbt);
     public abstract void load(NbtCompound nbt);
     public abstract void tick(BlockState state);
+
+    public void save() {
+        markDirty();
+        world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
+    }
 
     @Override
     public void writeNbt(NbtCompound nbt) {
