@@ -18,15 +18,15 @@ public class VillagerEntityMixin implements ArtMindInterface {
     @Unique private float usedMindPercentage = 0.0f;
     @Unique private int mindBeingUsedTicks = 0;
     @Unique private int dontUseAgainTicks = 0;
-    @Unique @Override public float getUsedMindPercentage() { return this.usedMindPercentage; }
-    @Unique @Override public void setUsedMindPercentage(float val) { this.usedMindPercentage = val; }
-    @Unique @Override public void incUsedMindPercentage(float amount) { this.usedMindPercentage += amount; }
-    @Unique @Override public int getMindBeingUsedTicks() { return this.mindBeingUsedTicks; }
-    @Unique @Override public void setMindBeingUsedTicks(int val) { this.mindBeingUsedTicks = val; }
-    @Unique @Override public void incMindBeingUsedTicks(int amount) { this.mindBeingUsedTicks += amount; }
-    @Unique @Override public void setDontUseAgainTicks(int ticks) { this.dontUseAgainTicks = ticks; }
-    @Unique @Override public void incDontUseAgainTicks(int ticks) { this.dontUseAgainTicks += ticks; }
-    @Unique @Override public int getDontUseAgainTicks() { return this.dontUseAgainTicks; }
+    @Override @Unique public float getUsedMindPercentage() { return this.usedMindPercentage; }
+    @Override @Unique public void setUsedMindPercentage(float val) { this.usedMindPercentage = val; }
+    @Override @Unique public void incUsedMindPercentage(float amount) { this.usedMindPercentage += amount; }
+    @Override @Unique public int getMindBeingUsedTicks() { return this.mindBeingUsedTicks; }
+    @Override @Unique public void setMindBeingUsedTicks(int val) { this.mindBeingUsedTicks = val; }
+    @Override @Unique public void incMindBeingUsedTicks(int amount) { this.mindBeingUsedTicks += amount; }
+    @Override @Unique public void setDontUseAgainTicks(int ticks) { this.dontUseAgainTicks = ticks; }
+    @Override @Unique public void incDontUseAgainTicks(int ticks) { this.dontUseAgainTicks += ticks; }
+    @Override @Unique public int getDontUseAgainTicks() { return this.dontUseAgainTicks; }
 
 	@Inject(at = @At("TAIL"), method = "readCustomDataFromNbt")
 	public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {

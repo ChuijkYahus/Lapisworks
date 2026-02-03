@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.iota.IotaType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 import org.jetbrains.annotations.NotNull;
@@ -69,8 +70,7 @@ public class Amalgamation {
 
             @Override
             public int color() {
-                // yo bro why you urple
-                return 0x8000FF;
+                return 0x7000ff;
             }
             
         };
@@ -103,13 +103,15 @@ public class Amalgamation {
         public static Text display(Amalgamation amalgamation) {
             return Text.translatable(
                 "render.lapisworks.iota_descs.amalgamation.general",
-                Text.translatable(
-                    amalgamation.forNoobs
-                        ? "render.lapisworks.iota_descs.amalgamation.lesser"
-                        : "render.lapisworks.iota_descs.amalgamation.greater"
-                ),
+                amalgamation.forNoobs
+                    ? Text.translatable(
+                        "render.lapisworks.iota_descs.amalgamation.lesser"
+                    ).setStyle(Style.EMPTY.withColor(0xFF00FF))
+                    : Text.translatable(
+                        "render.lapisworks.iota_descs.amalgamation.greater"
+                    ).setStyle(Style.EMPTY.withColor(0x440088)),
                 amalgamation.range
-            );
+            ).setStyle(Style.EMPTY.withColor(0x7000FF));
         }
         public static AmalgamationIota deserialize(NbtCompound nbt) {
             return new AmalgamationIota(new Amalgamation(nbt));

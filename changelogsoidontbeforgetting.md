@@ -268,8 +268,7 @@ Only the devs who can keep up with me...
 - Wizard lore is a lil diff now
 - You can't read an Ancient Tome before you have gotten Lapisworks Research now
 ## Fixes:
-- Amel Jar throwing the Amel in your other hand into the void if you attempted to withdraw
-  with a full stack already there
+- Amel Jar bug
 - Ancient Tomes giving you the advancement anyway despite showing the message if you dont have lapis yet
 - Attributes no longer compound when you log
 - "Bug in the mod" mishaps
@@ -288,6 +287,7 @@ Only the devs who can keep up with me...
 - Shit should actually tell you when you don't have Fabric now
 - Sieve Thoughts not working on a spell circle
 - Sieve Thoughts not working sometimes I think
+- Villager un-flaying does not preserve levels anymore
 - Visible Distillation and Empty Distillation should be a lot more optimized now (not that you'll notice it lmao)
 - Withdraw bug
 - You may no longer convert Lapis (+ your life force) into Amethyst Shards
@@ -316,7 +316,7 @@ Only the devs who can keep up with me...
     costs 16 amel and 5 charged amethyst  
     they are almost equivalent to the other mind  
     err=range/8 by default, none when offender is within ambit  
-    range can only be 0-96  
+    range can only be 0-64  
     starts casting with the exact position of the offender on the stack  
     has a 1/err chance of detecting the offender  
   - "Jack" villager type  

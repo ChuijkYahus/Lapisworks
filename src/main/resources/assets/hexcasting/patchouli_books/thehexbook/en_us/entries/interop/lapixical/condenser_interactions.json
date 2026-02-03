@@ -1,6 +1,7 @@
 {
     "name": "pages.lapisworks.interop.lapixical.condenser_interactions.title",
     "icon": "hexical:media_jar",
+    "advancement": "lapisworks:got_lapis",
     "flag": "mod:hexical",
     "category": "hexcasting:lapisworks/interop/lapixical",
     "sortnum": 3,

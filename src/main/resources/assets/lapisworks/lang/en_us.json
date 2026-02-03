@@ -96,6 +96,7 @@
     "block.lapisworks.chalk_with_pattern": "Amethyst Chalk",
     "block.lapisworks.tuneable_amethyst": "Tuneable Amethyst",
     "block.lapisworks.ritus": "Ritus",
+    "block.lapisworks.chariotmind": "Amalgamation Container",
 
     "advancements.lapisworks.gotlapis.name": "Lapisworks Research",
     "advancements.lapisworks.gotlapis.description": "A deep blue, precious mineral. Just as they wrote..",
@@ -130,8 +131,8 @@
     "render.lapisworks.scryinglens.tuneable.tuned": "Tuned to: ",
     "render.lapisworks.scryinglens.tuneable.nothing": "nothing.",
     "render.lapisworks.scryinglens.tuneable_amethyst.ambit": "Ambit provided: %d/%d (Minimum %d, %d from contained media)",
-    "render.lapisworks.iota_descs.amalgamation.fornoobs": "Simple",
-    "render.lapisworks.iota_descs.amalgamation.notfornoobs": "Complex",
+    "render.lapisworks.iota_descs.amalgamation.lesser": "Simple",
+    "render.lapisworks.iota_descs.amalgamation.greater": "Complex",
     "render.lapisworks.iota_descs.amalgamation.general": "%s Amalgamation (%d block range)",
 
 
@@ -296,6 +297,21 @@
     "hexcasting.action.book.lapisworks:robbie_exalt0": "Estrogen Exaltation",
     "hexcasting.action.book.lapisworks:robbie_exalt1": "Prosthetist's Exaltation",
     "hexcasting.action.book.lapisworks:robbie_exalt": "Robbie's Exaltation",
+
+    "hexcasting.action.lapisworks:get_amalgamation": "Amalgamation Purification",
+    "hexcasting.action.book.lapisworks:get_amalgamation": "Amalgamation Purification",
+    "hexcasting.action.lapisworks:set_amalgamation": "Amalgamation Gambit",
+    "hexcasting.action.book.lapisworks:set_amalgamation": "Amalgamation Gambit",
+    "hexcasting.action.lapisworks:get_amalgam_notiflevel": "Loudener's Decomposition",
+    "hexcasting.action.book.lapisworks:get_amalgam_notiflevel": "Loudener's Decomposition",
+    "hexcasting.action.lapisworks:set_amalgam_notiflevel": "Loudener's Distillation",
+    "hexcasting.action.book.lapisworks:set_amalgam_notiflevel": "Loudener's Distillation",
+    "hexcasting.action.lapisworks:get_amalgam_range": "Fisherman's Decomposition",
+    "hexcasting.action.book.lapisworks:get_amalgam_range": "Fisherman's Decomposition",
+    "hexcasting.action.lapisworks:set_amalgam_range": "Fisherman's Distillation",
+    "hexcasting.action.book.lapisworks:set_amalgam_range": "Fisherman's Distillation",
+    "hexcasting.action.lapisworks:get_amalgam_greater": "The Mind's Decomposition",
+    "hexcasting.action.book.lapisworks:get_amalgam_greater": "The Mind's Decomposition",
 
 
     "lapisenchantments.lapisworks.fireyfists": "FireyFists",

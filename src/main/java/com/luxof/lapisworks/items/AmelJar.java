@@ -70,12 +70,12 @@ public class AmelJar extends Item implements InventoryItem {
         if (!isAmel(amelStack) && !amelStack.isEmpty())
             return TypedActionResult.fail(stack);
 
-        int wouldBeWithdrawn = amelStack.getMaxCount() - amelStack.getCount();
-        int shouldBeWithdrawn = Math.min(getStored(amelStack), wouldBeWithdrawn);
+        int wouldBeWithdrawn = amelStack.isEmpty() ? 64 : amelStack.getMaxCount() - amelStack.getCount();
+        int shouldBeWithdrawn = Math.min(getStored(stack), wouldBeWithdrawn);
 
         user.setStackInHand(otherHand, new ItemStack(
             amelStack.isEmpty() ? ModItems.AMEL_ITEM : amelStack.getItem(),
-            amelStack.isEmpty() ? 0 : amelStack.getCount() + shouldBeWithdrawn
+            (amelStack.isEmpty() ? 0 : amelStack.getCount()) + shouldBeWithdrawn
         ));
 
         setStored(

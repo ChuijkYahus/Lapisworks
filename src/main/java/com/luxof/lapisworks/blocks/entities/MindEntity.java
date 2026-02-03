@@ -1,6 +1,7 @@
 package com.luxof.lapisworks.blocks.entities;
 
 import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 
 import com.luxof.lapisworks.blocks.Mind;
 import com.luxof.lapisworks.init.ModBlocks;
@@ -60,8 +61,9 @@ public class MindEntity extends BlockEntity {
             VillagerEntity.class,
             new Box(topLeftBack, bottomRightFront),
             (villager) -> {
-                return ((ArtMindInterface)villager).getUsedMindPercentage() < 100.0f &&
-                       ((ArtMindInterface)villager).getDontUseAgainTicks() <= 0;
+                return !HexCardinalComponents.BRAINSWEPT.get(villager).isBrainswept()
+                    && ((ArtMindInterface)villager).getUsedMindPercentage() < 100.0f
+                    && ((ArtMindInterface)villager).getDontUseAgainTicks() <= 0;
             }
         ));
         int usedVillagersCount = 0;
