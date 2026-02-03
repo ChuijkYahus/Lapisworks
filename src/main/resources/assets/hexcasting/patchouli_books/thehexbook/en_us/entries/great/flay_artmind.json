@@ -12,7 +12,7 @@
         {
             "type": "hexcasting:lapisworks/pwshape",
             "op_id": "lapisworks:flay_artmind",
-            "anchor": "lapisworks:flay_artmind",
+            "anchor": "lapisworks:flay_artmind_block",
             "input": "vec, vec",
             "output": "",
             "text": "pages.lapisworks.great.flay_artmind.summary",
@@ -89,7 +89,7 @@
             "type": "hexcasting:lapisworks/pwshape",
             "advancement": "lapisworks:enlightened",
             "op_id": "lapisworks:flay_artmind",
-            "anchor": "lapisworks:flay_artmind",
+            "anchor": "lapisworks:flay_artmind_entity",
             "input": "entity, vec",
             "output": "",
             "text": "pages.lapisworks.great.flay_artmind.alternative_summary",

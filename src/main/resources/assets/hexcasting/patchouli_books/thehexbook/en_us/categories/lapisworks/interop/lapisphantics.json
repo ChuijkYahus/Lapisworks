@@ -1,0 +1,7 @@
+{
+  "name": "categories.lapisworks.lapisworks.interop.lapisphantics.title",
+  "icon": "lapisworks:textures/entries/chariot.png",
+  "description": "categories.lapisworks.lapisworks.interop.lapisphantics.desc",
+  "parent": "hexcasting:lapisworks/interop",
+  "sortnum": 3
+}

@@ -1,0 +1,140 @@
+{
+    "name": "pages.lapisworks.interop.lapisphantics.amalgamations.title",
+    "icon": "lapisworks:chariotmind",
+    "advancement": "&lapisworks:enlightened,lapisworks:rediscover_flay_artmind",
+    "flag": "mod:hexical",
+    "category": "hexcasting:lapisworks/interop/lapisphantics",
+    "sortnum": 1,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.interop.lapisphantics.amalgamations.intro"
+        },
+        {
+            "type": "hexcasting:brainsweep",
+            "recipe": "lapisworks:lapisphantics/brainsweep/fisherman_plus_simp",
+            "text": "pages.lapisworks.interop.lapisphantics.amalgamations.fisherman_1.desc"
+        },
+        {
+            "type": "hexcasting:brainsweep",
+            "recipe": "lapisworks:lapisphantics/brainsweep/stupid_fisherman_plus_simp",
+            "text": "pages.lapisworks.interop.lapisphantics.amalgamations.fisherman_2.desc"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.interop.lapisphantics.amalgamations.differences"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.interop.lapisphantics.amalgamations.before_imbuing"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:get_amalgamation",
+            "anchor": "lapisworks:get_amalgamation",
+            "input": "vec",
+            "output": "amalgamation",
+            "text": "pages.lapisworks.lapisworks.interop.lapisphantics.get_amalgamation.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:get_amalgam_greater",
+            "anchor": "lapisworks:get_amalgam_greater",
+            "input": "amalgamation",
+            "output": "amalgamation, bool",
+            "text": "pages.lapisworks.lapisworks.interop.lapisphantics.get_amalgam_greater.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "title": "pages.lapisworks.lapisworks.interop.lapisphantics.amalgam_notiflevel.title",
+            "text": "pages.lapisworks.lapisworks.interop.lapisphantics.amalgam_notiflevel.text"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:get_amalgam_notiflevel",
+            "anchor": "lapisworks:get_amalgam_notiflevel",
+            "input": "amalgamation",
+            "output": "amalgamation, int",
+            "text": "pages.lapisworks.lapisworks.interop.lapisphantics.get_amalgamation.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:set_amalgam_notiflevel",
+            "anchor": "lapisworks:set_amalgam_notiflevel",
+            "input": "amalgamation, num",
+            "output": "amalgamation",
+            "text": "pages.lapisworks.lapisworks.interop.lapisphantics.set_amalgam_notiflevel.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "title": "pages.lapisworks.lapisworks.interop.lapisphantics.amalgam_range.title",
+            "text": "pages.lapisworks.lapisworks.interop.lapisphantics.amalgam_range.text"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:get_amalgam_range",
+            "anchor": "lapisworks:get_amalgam_range",
+            "input": "amalgamation",
+            "output": "amalgamation, num",
+            "text": "pages.lapisworks.lapisworks.interop.lapisphantics.get_amalgam_range.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:set_amalgam_range",
+            "anchor": "lapisworks:set_amalgam_range",
+            "input": "amalgamation, num",
+            "output": "amalgamation",
+            "text": "pages.lapisworks.lapisworks.interop.lapisphantics.set_amalgam_range.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "title": "pages.lapisworks.lapisworks.interop.lapisphantics.self_amalgams.poorly_named_title",
+            "text": "pages.lapisworks.lapisworks.interop.lapisphantics.self_amalgams.text"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:get_self_amalgams_num",
+            "anchor": "lapisworks:get_self_amalgams_num",
+            "input": "",
+            "output": "num",
+            "text": "pages.lapisworks.lapisworks.interop.lapisphantics.get_self_amalgams_num.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:remove_self_amalgam",
+            "anchor": "lapisworks:remove_self_amalgam",
+            "input": "num",
+            "output": "",
+            "text": "pages.lapisworks.lapisworks.interop.lapisphantics.remove_self_amalgam.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "title": "pages.lapisworks.lapisworks.interop.lapisphantics.amalgam_err.title",
+            "text": "pages.lapisworks.lapisworks.interop.lapisphantics.amalgam_err.text"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:get_amalgam_err",
+            "anchor": "lapisworks:get_amalgam_err",
+            "input": "amalgamation",
+            "output": "amalgamation, num",
+            "text": "pages.lapisworks.lapisworks.interop.lapisphantics.get_amalgam_err.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:get_amalgam_hex",
+            "anchor": "lapisworks:get_amalgam_hex",
+            "input": "amalgamation",
+            "output": "amalgamation, [pattern]",
+            "text": "pages.lapisworks.lapisworks.interop.lapisphantics.get_amalgam_hex.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:set_amalgam_hex",
+            "anchor": "lapisworks:set_amalgam_hex",
+            "input": "amalgamation, [pattern]",
+            "output": "amalgamation",
+            "text": "pages.lapisworks.lapisworks.interop.lapisphantics.set_amalgam_hex.summary"
+        }
+    ]
+}

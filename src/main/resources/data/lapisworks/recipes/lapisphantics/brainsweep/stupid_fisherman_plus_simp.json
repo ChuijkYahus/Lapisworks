@@ -4,16 +4,16 @@
         "type": "block",
         "block": "lapisworks:mind"
     },
-    "cost": 1000000,
+    "cost": 500000,
     "entityIn": {
         "type": "villager",
-        "minLevel": 4,
+        "minLevel": 3,
         "profession": "fisherman"
     },
     "result": {
         "name": "lapisworks:chariotmind",
         "properties": {
-            "fornoobs": "true"
+            "fornoobs": "false"
         }
     },
 
