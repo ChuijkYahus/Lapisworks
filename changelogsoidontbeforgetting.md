@@ -589,3 +589,7 @@ make it spin
 make it rectangular like a beacon's  
 make it play a cool ass sound effect  
 all that jazz  
+
+probably a library mod:  
+- Patchouli variables. You can embed them into text. They sync across client and server automatically.
+- Works with hexdoc.
