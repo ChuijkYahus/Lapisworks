@@ -57,6 +57,12 @@ public class LapisConfig {
     private static final String CostMultiplier = "cost_multiplier";
     private static final String Chariot = "hierophantics_interop";
     private static final String MaxFusedAmalgams = "max_fused_amalgamations";
+    // oh no
+    private static final String MaxSiARange = "max_simple_amalgam_range";
+    private static final String MaxCARange = "max_complex_amalgam_range";
+    private static final String SiAErrMult = "simple_amalgam_err_mult";
+    private static final String CAErrMult = "complex_amalgam_err_mult";
+    private static final String MaxErr = "max_err";
     private static final String defaultConfig = """
     {
       "onetime_ritual": {
@@ -76,7 +82,12 @@ public class LapisConfig {
       },
 
       "hierophantics_interop": {
-        "max_fused_amalgamations": 1
+        "max_fused_amalgamations": 3,
+        "max_simple_amalgam_range": 48.0,
+        "max_complex_amalgam_range": 96.0,
+        "simple_amalgam_err_multiplier": 0.125,
+        "complex_amalgam_err_multiplier": 0.25,
+        "max_err": 32.0
       }
     }
     """;
@@ -208,11 +219,21 @@ public class LapisConfig {
         );
 
         var defaultMaxAmalgams = primitive(1);
+        var defaultMaxSiARange = primitive(48.0);
+        var defaultMaxCARange = primitive(96.0);
+        var defaultSiAErrMult = primitive(0.125);
+        var defaultCAErrMult = primitive(0.25);
+        var defaultMaxErr = primitive(32.0);
 
         fileIsPerfect = fileIsPerfect && defaultIfInvalid(
             obj,
             Chariot,
-            new Pair<>(MaxFusedAmalgams, defaultMaxAmalgams)
+            new Pair<>(MaxFusedAmalgams, defaultMaxAmalgams),
+            new Pair<>(MaxSiARange, defaultMaxSiARange),
+            new Pair<>(MaxCARange, defaultMaxCARange),
+            new Pair<>(SiAErrMult, defaultSiAErrMult),
+            new Pair<>(CAErrMult, defaultCAErrMult),
+            new Pair<>(MaxErr, defaultMaxErr)
         );
 
         if (!fileIsPerfect) {
@@ -278,13 +299,23 @@ public class LapisConfig {
 
 
     public static final record ChariotSettings(
-        int max_fused_amalgamations
+        int max_fused_amalgamations,
+        double max_simple_amalgam_range,
+        double max_complex_amalgam_range,
+        double simple_amalgam_err_multiplier,
+        double complex_amalgam_err_multiplier,
+        double max_err
     ) {}
     public ChariotSettings getChariotSettings() {
         JsonObject settings = obj.getAsJsonObject(Chariot);
 
         return new ChariotSettings(
-            settings.get(MaxFusedAmalgams).getAsInt()
+            settings.get(MaxFusedAmalgams).getAsInt(),
+            settings.get(MaxSiARange).getAsDouble(),
+            settings.get(MaxCARange).getAsDouble(),
+            settings.get(SiAErrMult).getAsDouble(),
+            settings.get(CAErrMult).getAsDouble(),
+            settings.get(MaxErr).getAsDouble()
         );
     }
 }

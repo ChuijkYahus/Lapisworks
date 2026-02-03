@@ -16,6 +16,7 @@ public class SetAmalgamRange extends ConstMediaActionNCT {
     public List<Iota> execute(HexIotaStack stack, CastingEnvironment ctx) {
         Amalgamation amalgam = stack.getAmalgamation(0);
         amalgam.range = stack.getPositiveDoubleUnder(1, amalgam.getMaxRange());
+        amalgam.updateOrigin(world);
         return List.of(new Amalgamation.AmalgamationIota(amalgam));
     }
 }

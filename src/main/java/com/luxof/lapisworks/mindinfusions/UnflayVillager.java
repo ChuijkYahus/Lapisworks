@@ -11,7 +11,8 @@ import net.minecraft.village.VillagerProfession;
 public class UnflayVillager extends SMindInfusion {
     @Override
     public boolean testEntity() {
-        return entity instanceof VillagerEntity villager
+        return ctx.isEnlightened()
+            && entity instanceof VillagerEntity villager
             && IXplatAbstractions.INSTANCE.isBrainswept(villager);
     }
 
@@ -20,6 +21,7 @@ public class UnflayVillager extends SMindInfusion {
         VillagerEntity villager = (VillagerEntity)entity;
         HexCardinalComponents.BRAINSWEPT.get(villager).setBrainswept(false);
         villager.setExperience(0);
+        // setting profession to nil makes trades regenerate too. nice.
         villager.setVillagerData(
             villager.getVillagerData()
                 .withLevel(1)
