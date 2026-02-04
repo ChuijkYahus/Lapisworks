@@ -10,7 +10,7 @@
     "description": {
       "translate": "advancements.lapisworks.enlightened.description"
     },
-    "background": "hexcasting:textures/block/slate.png",
+    "background": "lapisworks:textures/block/amel_constructs/jumpslate/am1.png",
     "frame": "challenge",
     "show_toast": true,
     "announce_to_chat": true,

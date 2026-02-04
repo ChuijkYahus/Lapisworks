@@ -16,6 +16,7 @@ import java.util.List;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -49,7 +50,7 @@ public class Amalgamation {
             nbt.getBoolean("forNoobs"),
             nbt.getInt("notifLevel"),
             nbt.getDouble("range"),
-            nbt.getList("hex", NbtElement.LIST_TYPE)
+            ((NbtList)nbt.get("hex"))
                 .stream()
                 .map(
                     ele -> IotaType.deserialize(
@@ -101,6 +102,7 @@ public class Amalgamation {
             return;
 
         chariotMind.storedAmalgamationNbt = serialize();
+        chariotMind.save();
     }
 
     public static class AmalgamationIota extends Iota {
@@ -154,6 +156,10 @@ public class Amalgamation {
             double range = nbt.getDouble("range");
             return Text.translatable(
                 "render.lapisworks.iota_descs.amalgamation.general",
+                Text.translatable(
+                    "render.lapisworks.iota_descs.amalgamation.notiflevel." +
+                    String.valueOf(notifLevel)
+                ),
                 forNoobs
                     ? Text.translatable(
                         "render.lapisworks.iota_descs.amalgamation.lesser"
@@ -161,10 +167,6 @@ public class Amalgamation {
                     : Text.translatable(
                         "render.lapisworks.iota_descs.amalgamation.greater"
                     ).setStyle(Style.EMPTY.withColor(0x440088)),
-                Text.translatable(
-                    "render.lapisworks.iota_descs.amalgamation." +
-                    String.valueOf(notifLevel)
-                ),
                 range
             ).setStyle(Style.EMPTY.withColor(0x7000FF));
         }

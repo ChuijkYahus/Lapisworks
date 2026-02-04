@@ -96,6 +96,7 @@ public class HexIotaStack {
     }
     public ArrayList<Iota> getJUSTAList(int idx) {
         // is handrolling your own List really necessary bro
+        // doesn't even have it's own .add() :broken_heart:
         SpellList list = getList(idx);
 
         ArrayList<Iota> theFuckingList = new ArrayList<>();

@@ -29,11 +29,13 @@ public abstract class LapisBlockEntity extends BlockEntity {
     @Override
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
+        save(nbt);
     }
 
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
+        load(nbt);
     }
 
     @Override @Nullable

@@ -15,7 +15,7 @@ public class SetAmalgamAlert extends ConstMediaActionNCT {
 
     public List<Iota> execute(HexIotaStack stack, CastingEnvironment ctx) {
         Amalgamation amalgam = stack.getAmalgamation(0);
-        amalgam.notifLevel = stack.getPositiveIntUnder(argc, 4);
+        amalgam.notifLevel = stack.getPositiveIntUnder(1, 4);
         amalgam.updateOrigin(world);
         return List.of(new Amalgamation.AmalgamationIota(amalgam));
     }

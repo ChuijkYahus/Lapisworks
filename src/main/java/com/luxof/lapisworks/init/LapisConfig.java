@@ -60,8 +60,8 @@ public class LapisConfig {
     // oh no
     private static final String MaxSiARange = "max_simple_amalgam_range";
     private static final String MaxCARange = "max_complex_amalgam_range";
-    private static final String SiAErrMult = "simple_amalgam_err_mult";
-    private static final String CAErrMult = "complex_amalgam_err_mult";
+    private static final String SiAErrMult = "simple_amalgam_err_multiplier";
+    private static final String CAErrMult = "complex_amalgam_err_multiplier";
     private static final String MaxErr = "max_err";
     private static final String defaultConfig = """
     {
