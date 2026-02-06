@@ -3,6 +3,7 @@ package com.luxof.lapisworks.mindinfusions;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
+import com.luxof.lapisworks.init.ModEntities;
 import com.luxof.lapisworks.init.Mutables.SMindInfusion;
 
 import net.minecraft.entity.passive.VillagerEntity;
@@ -26,6 +27,7 @@ public class UnflayVillager extends SMindInfusion {
             villager.getVillagerData()
                 .withLevel(1)
                 .withProfession(VillagerProfession.NONE)
+                .withType(ModEntities.JACK)
         );
         villager.reinitializeBrain(ctx.getWorld());
     }

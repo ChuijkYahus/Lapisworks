@@ -43,8 +43,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -808,5 +811,14 @@ public class Lapisworks implements ModInitializer {
 				vel.x, vel.y, vel.z
 			);
 		}
+	}
+
+	public static <Any extends Object> ArrayList<Any> mapMulti(
+		Stream<? extends Object> stream,
+		BiConsumer<Object, Consumer<Any>> mapper
+	) {
+		ArrayList<Any> buffer = new ArrayList<>();
+		stream.forEach(obj -> mapper.accept(obj, buffer::add));
+		return buffer;
 	}
 }

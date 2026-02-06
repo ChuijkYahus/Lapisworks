@@ -1,12 +1,17 @@
 package com.luxof.lapisworks.interop.hierophantics.data;
 
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
+import at.petrak.hexcasting.common.lib.HexSounds;
 
 import com.luxof.lapisworks.init.LapisConfig;
 import com.luxof.lapisworks.init.LapisConfig.ChariotSettings;
 import com.luxof.lapisworks.interop.hierophantics.blocks.ChariotMindEntity;
 
+import static com.luxof.lapisworks.Lapisworks.clamp;
 import static com.luxof.lapisworks.Lapisworks.deserializeBlockPos;
 import static com.luxof.lapisworks.Lapisworks.nbtListOf;
 import static com.luxof.lapisworks.Lapisworks.serializeBlockPos;
@@ -16,14 +21,20 @@ import java.util.List;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import robotgiggle.hierophantics.HieroMindCastEnv;
 
 public class Amalgamation {
     public final BlockPos origin;
@@ -50,7 +61,7 @@ public class Amalgamation {
             nbt.getBoolean("forNoobs"),
             nbt.getInt("notifLevel"),
             nbt.getDouble("range"),
-            ((NbtList)nbt.get("hex"))
+            nbt.getList("hex", NbtElement.COMPOUND_TYPE)
                 .stream()
                 .map(
                     ele -> IotaType.deserialize(
@@ -59,6 +70,16 @@ public class Amalgamation {
                     )
                 )
                 .toList()
+        );
+    }
+    /** constructor for client shenanigans. gets everything but the hex. */
+    public Amalgamation(NbtCompound nbt) {
+        this(
+            deserializeBlockPos(nbt.getCompound("origin")),
+            nbt.getBoolean("forNoobs"),
+            nbt.getInt("notifLevel"),
+            nbt.getDouble("range"),
+            List.of()
         );
     }
 
@@ -74,27 +95,24 @@ public class Amalgamation {
 
     public double getErr() {
         ChariotSettings chariotSettings = LapisConfig.getCurrentConfig().getChariotSettings();
-        return Math.min(
-            range *
-            (forNoobs
-                ? chariotSettings.simple_amalgam_err_multiplier()
-                : chariotSettings.complex_amalgam_err_multiplier()),
-            chariotSettings.max_err()
+        return clamp(
+            forNoobs
+                ? (range - 32) * chariotSettings.simple_amalgam_err_multiplier()
+                : range * chariotSettings.complex_amalgam_err_multiplier(),
+            0.0,
+            32.0
         );
     }
+
+    public boolean willCast() {
+        return forNoobs ? (1 / getErr()) < Math.random() : true;
+    }
+
     public double getMaxRange() {
         ChariotSettings chariotSettings = LapisConfig.getCurrentConfig().getChariotSettings();
         return forNoobs
             ? chariotSettings.max_simple_amalgam_range()
             : chariotSettings.max_complex_amalgam_range();
-    }
-    
-    public boolean equals(Object other) {
-        return other != null
-            && other instanceof Amalgamation otherAmalgamation
-            && notifLevel == otherAmalgamation.notifLevel
-            && range == otherAmalgamation.range
-            && forNoobs == otherAmalgamation.forNoobs;
     }
 
     public void updateOrigin(ServerWorld world) {
@@ -103,6 +121,54 @@ public class Amalgamation {
 
         chariotMind.storedAmalgamationNbt = serialize();
         chariotMind.save();
+    }
+
+    public void cast(ServerPlayerEntity player, Vec3d onPos) {
+        if (notifLevel >= 1)
+            player.sendMessage(Text.translatable("notif.lapisworks.amalgamation.heyicasted"));
+        if (notifLevel >= 2) {
+            player.playSound(SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, 5f, 2f);
+            player.playSound(HexSounds.CAST_HERMES, 5f, 2f);
+        }
+        if (notifLevel >= 3)
+            player.networkHandler.sendPacket(
+                new TitleS2CPacket(Text.translatable("notif.lapisworks.amalgamation.heyyyicasted"))
+            );
+
+        Vec3d castWithPos = onPos;
+        if (!forNoobs) {
+            double theta = Math.random() * 2*Math.PI;
+            double err = Math.random() * getErr();
+            double z = Math.random() * 2 - 1;
+            castWithPos = onPos.add(
+                Math.cos(theta)*err,
+                Math.sin(theta)*err,
+                z*err
+            );
+        }
+
+        NbtCompound userData = new NbtCompound();
+        userData.putBoolean("counterspell_cast", true);
+
+        new CastingVM(
+            new CastingImage().copy(
+                List.of(new Vec3Iota(castWithPos)),
+                0,
+                List.of(),
+                false,
+                0,
+                userData
+            ),
+            new HieroMindCastEnv(player, Hand.MAIN_HAND, notifLevel <= 0)
+        ).queueExecuteAndWrapIotas(hex, player.getServerWorld());
+    }
+
+    public boolean equals(Object other) {
+        return other != null
+            && other instanceof Amalgamation otherAmalgamation
+            && notifLevel == otherAmalgamation.notifLevel
+            && range == otherAmalgamation.range
+            && forNoobs == otherAmalgamation.forNoobs;
     }
 
     public static class AmalgamationIota extends Iota {
@@ -151,9 +217,11 @@ public class Amalgamation {
         }
 
         public static Text display(NbtCompound nbt) {
-            int notifLevel = nbt.getInt("notifLevel");
-            boolean forNoobs = nbt.getBoolean("forNoobs");
-            double range = nbt.getDouble("range");
+            Amalgamation amalgam = new Amalgamation(nbt);
+            int notifLevel = amalgam.notifLevel;
+            boolean forNoobs = amalgam.forNoobs;
+            double range = amalgam.range;
+
             return Text.translatable(
                 "render.lapisworks.iota_descs.amalgamation.general",
                 Text.translatable(

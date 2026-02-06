@@ -8,6 +8,8 @@ import java.util.List;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 
@@ -26,6 +28,13 @@ public class ChariotMindEntity extends LapisBlockEntity {
 
     public Amalgamation getAmalgamation(ServerWorld world) {
         return new Amalgamation(storedAmalgamationNbt, world);
+    }
+    /** basically yoinks the amalgamation but without the hex. */
+    public Amalgamation getAmalgamationClient() {
+        return new Amalgamation(storedAmalgamationNbt);
+    }
+    public NbtList getHexClient() {
+        return storedAmalgamationNbt.getList("hex", NbtElement.COMPOUND_TYPE);
     }
 
     @Override

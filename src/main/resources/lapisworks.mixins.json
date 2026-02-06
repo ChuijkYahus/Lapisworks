@@ -20,7 +20,8 @@
 		"OpMakeBattery$SpellMixin",
 		"BlockEntityAbstractImpetusMixin",
 		"ServerWorldMixin",
-		"MinecraftServerMixin"
+		"MinecraftServerMixin",
+		"LoseJobOnSiteLossTaskMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

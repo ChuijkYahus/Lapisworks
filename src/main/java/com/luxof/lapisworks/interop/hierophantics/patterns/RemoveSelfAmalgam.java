@@ -15,7 +15,7 @@ import java.util.List;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public class RemoveSelfAmalgam extends ConstMediaActionNCT {
-    public int argc = 0;
+    public int argc = 1;
     public long mediaCost = 0L;
 
     public List<Iota> execute(HexIotaStack stack, CastingEnvironment ctx) {

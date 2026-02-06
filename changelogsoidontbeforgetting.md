@@ -369,6 +369,9 @@ Only the devs who can keep up with me...
   - costs 1 charged am + 1 per previous cast
   - reset the additional cost by manually enchanting with an enchantment table
 - Start one-time rituals with Deposit Media
+- Hierophantics interop
+  - new amalgamation to inject a FrameEval when your iota is used in the arguments of a pattern (and it doesn't mishap)
+  - pushes the pattern used to the top
 # 1.6.0
 ### And Alexander wept, for there were no more worlds to conquer.
 - You can have four arms now (procrastination slain)
@@ -415,6 +418,7 @@ possible interop:
 - complexhex
   - add qubits to hex casting (this is useless lmao)
 - hexmachina
+  - "i got 47 more rounds in this 6 barrel shotgun" ahh idea search
 - slate works
   - make a loci that enhances cleric ambit around player to chalk circle levels!
   - costs amel

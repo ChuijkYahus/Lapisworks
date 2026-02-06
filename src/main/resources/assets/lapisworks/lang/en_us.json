@@ -127,7 +127,7 @@
     "render.lapisworks.scryinglens.dust_with_cap": "%d%% filled. (%d/%d dust)",
     "render.lapisworks.scryinglens.simp.listening": "Listening for pattern: %s",
     "render.lapisworks.scryinglens.simp.not_listening": "Not listening for any patterns.",
-    "render.lapisworks.scryinglens.chalk.no_patterns": "No pattern present.",
+    "render.lapisworks.scryinglens.chalk.no_patterns": "Contains no patterns.",
     "render.lapisworks.scryinglens.tuneable.tuned": "Tuned to: ",
     "render.lapisworks.scryinglens.tuneable.nothing": "nothing.",
     "render.lapisworks.scryinglens.tuneable_amethyst.ambit": "Ambit provided: %d/%d (Minimum %d, %d from contained media)",
@@ -318,8 +318,8 @@
     "hexcasting.action.book.lapisworks:set_amalgam_range": "Fisherman's Dstl.",
     "hexcasting.action.lapisworks:get_self_amalgams_num": "My Mind's Decomposition",
     "hexcasting.action.book.lapisworks:get_self_amalgams_num": "My Mind's Decomp.",
-    "hexcasting.action.lapisworks:remove_self_amalgam": "Amalgamation Distillation",
-    "hexcasting.action.book.lapisworks:remove_self_amalgam": "Amalgam Dstl.",
+    "hexcasting.action.lapisworks:remove_self_amalgam": "Amalgamation Gambit",
+    "hexcasting.action.book.lapisworks:remove_self_amalgam": "Amalgam Gambit",
     "hexcasting.action.lapisworks:get_amalgam_err": "Mistake Decomposition",
     "hexcasting.action.book.lapisworks:get_amalgam_err": "Mistake Decomposition",
     "hexcasting.action.lapisworks:get_amalgam_hex": "Etched Decomposition",
@@ -385,6 +385,8 @@
     "notif.lapisworks.wizard_diaries.unreadable_diary": "Blank. Perhaps this has the same encryption as every other text? I suppose I'll unlock it in time, then.",
     "notif.lapisworks.dowser.not_enough_media": "Failure. It couldn't find enough media (%d dust, precisely) for fuel.",
     "notif.lapisworks.dowser.couldnt_find": "It runs, then stops. I suppose I must not be in range of any Budding Amethyst.",
+    "notif.lapisworks.amalgamation.heyicasted": "A sharp \"ping\" sound and an odd feeling... An amalgamation cast.",
+    "notif.lapisworks.amalgamation.heyyyicasted": "Amalgamation Cast!",
 
 
     "categories.lapisworks.lapisworks": "Lapisworks",
@@ -690,11 +692,11 @@
     "pages.lapisworks.interop.lapisphantics.amalgamations.fisherman_1.desc": "The result isn't two minds, but $(o)one singular mind in complete agony.$() Memories twisting and turning, two identities or one? I cannot imagine the suffering incurred, but don't need to. $(#05e)Their feeble lives $(#e07)are for my genius after all.$()",
     "pages.lapisworks.interop.lapisphantics.amalgamations.fisherman_2.desc": "A lesser villager to make a simpler amalgamation. Differences explained on the next page.",
     "pages.lapisworks.interop.lapisphantics.amalgamations.differences": "Embedded amalgamations cast when they detect my entity reference be added to a stack within range. Complex ones (due to being formed by more experienced villagers) always detect this event and start the cast with a \"guess\" of where the event came from, guaranteed to be within a certain error range of the real position. Simple Amalgamations have a chance to cast (which depends on their error value) and have less maximum range but always start with the exact position of the offender.",
-    "pages.lapisworks.interop.lapisphantics.amalgamations.before_imbuing": "Before $(l:lapisworks/great/flay_artmind)imbuing$() the amalgamation into the $(item)Imbuement Bed$() I'm on (or $(l:lapisworks/great/flay_artmind#lapisworks:flay_artmind_entity)imbuing$() it into me directly while I'm on it) I must configure the amalgamation. To do this, I have been granted $(thing)Amalgamation$() iotas, which are linked to their block of origin. All patterns concerning these are documented in the next pages.",
+    "pages.lapisworks.interop.lapisphantics.amalgamations.before_imbuing": "Before $(l:lapisworks/great/flay_artmind)imbuing$() the amalgamation into the $(item)Imbuement Bed$() I'm on (which may waste the amalgamation if a player is not on the bed) I must configure the amalgamation. To do this, I have been granted $(thing)Amalgamation$() iotas, which are linked to their block of origin. All patterns concerning these are documented in the next pages.",
     "pages.lapisworks.interop.lapisphantics.amalgamations.get_amalgamation.summary": "Returns the $(thing)Amalgamation$() in the container at the specified position (within range). Any changes to it are reflected in the block it came from.",
     "pages.lapisworks.interop.lapisphantics.amalgamations.get_amalgam_greater.summary": "Pushes whether the provided amalgamation is $(thing)Complex$() (true) or $(thing)Simple$() (false).",
     "pages.lapisworks.interop.lapisphantics.amalgamations.amalgam_notiflevel.title": "Loudness",
-    "pages.lapisworks.interop.lapisphantics.amalgamations.amalgam_notiflevel.text": "$(#00c)Loudness$() determines how much effort an amalgamation would put into alerting the person it's embedded in. 0 means the amalgamation would make no effort, 1 means the amalgamation would $(l:patterns/basics#hexcasting:print)Reveals$() a warning to the person, 2 means the amalgamation would produce a sound as well, and 3 means the amalgamation would make text flash in front of the player's eyes for about two seconds.",
+    "pages.lapisworks.interop.lapisphantics.amalgamations.amalgam_notiflevel.text": "$(#00c)Loudness$() determines how much effort an amalgamation would put into alerting the person it's embedded in. 0 means the amalgamation would make no effort, 1 means the amalgamation would $(l:patterns/basics#hexcasting:print)Reveals$() a warning to the person, 2 means the amalgamation would produce a sound as well, and 3 means the amalgamation would make text flash in front of the person's eyes for a few seconds.",
     "pages.lapisworks.interop.lapisphantics.amalgamations.get_amalgam_notiflevel.summary": "Pushes the loudness of the amalgamation at the top of the stack.",
     "pages.lapisworks.interop.lapisphantics.amalgamations.set_amalgam_notiflevel.summary": "Sets the provided amalgamation's loudness to the specified number (which must be positive and below 4).",
     "pages.lapisworks.interop.lapisphantics.amalgamations.amalgam_range.title": "Range",
@@ -709,5 +711,7 @@
     "pages.lapisworks.interop.lapisphantics.amalgamations.amalgam_err.text": "$(#00c)Error$() is defined as range minus 32 then divided by eight ($(l)(r-32)/8$()) for simple and just range divided by four $($(l)r/4$()) for complex amalgamations, but no matter the type, error may never exceed 32. A hundred divided by err ($(l)100/err$()) is the percentage chance a $(thing)Simple Amalgamation$() successfully triggers, while error is the range of innaccuracy of the guess a complex one provides.",
     "pages.lapisworks.interop.lapisphantics.amalgamations.get_amalgam_err.summary": "Pushes the error of the provided amalgamation.",
     "pages.lapisworks.interop.lapisphantics.amalgamations.get_amalgam_hex.summary": "Pushes the hex that the amalgamation at the top of the stack would execute upon a successful trigger.",
-    "pages.lapisworks.interop.lapisphantics.amalgamations.set_amalgam_hex.summary": "Sets the hex that the provided amalgamation would execute upon a successful trigger."
+    "pages.lapisworks.interop.lapisphantics.amalgamations.set_amalgam_hex.summary": "Sets the hex that the provided amalgamation would execute upon a successful trigger.",
+    "pages.lapisworks.interop.lapisphantics.amalgamations.howto.title": "Infusion Guide",
+    "pages.lapisworks.interop.lapisphantics.amalgamations.howto.text": "And finally, any changes made to an $(thing)Amalgamation Iota$() occur in the $(item)Amalgamation Container$() it originated from. After I have readied by $(item)Amalgamation Container$(), the process of embedding an amalgamation into myself or another person is quite simple. Use $(l:lapisworks/great/flay_artmind)Imbue Mind$() and provide it first and foremost the position of the $(l:items/imbuement_bed)Imbuement Bed$() a player is sleeping in (the amalgamation will be wasted if there isn't a player in the bed), then the position of my $(item)Amalgamation Container$()."
 }

@@ -4,7 +4,8 @@
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
 		"ServerPlayerEntityMixin2",
-		"OpBrainsweepMixin"
+		"OpBrainsweepMixin",
+		"PatternIotaMixin2"
 	],
 	"injectors": {
 		"defaultRequire": 1
