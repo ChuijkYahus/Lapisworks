@@ -128,7 +128,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements ArtM
         og.call(VD.withLevel(level));
 
         for (int i = 2; i <= level; i++) {
-            fillRecipesFor(VD.getProfession(), level);
+            fillRecipesFor(VD.getProfession(), i);
         }
     }
 }
