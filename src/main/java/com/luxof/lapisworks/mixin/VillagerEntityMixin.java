@@ -8,10 +8,15 @@ import com.luxof.lapisworks.mixinsupport.ArtMindInterface;
 
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
 
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.village.TradeOfferList;
+import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerData;
 import net.minecraft.village.VillagerProfession;
+import net.minecraft.world.World;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,7 +26,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(VillagerEntity.class)
-public abstract class VillagerEntityMixin implements ArtMindInterface {
+public abstract class VillagerEntityMixin extends MerchantEntity implements ArtMindInterface {
+    public VillagerEntityMixin(EntityType<? extends MerchantEntity> entityType, World world) {
+        super(entityType, world);
+    }
+
     @Unique private float usedMindPercentage = 0.0f;
     @Unique private int mindBeingUsedTicks = 0;
     @Unique private int dontUseAgainTicks = 0;
@@ -72,37 +81,54 @@ public abstract class VillagerEntityMixin implements ArtMindInterface {
     @Shadow public abstract VillagerData getVillagerData();
     @Shadow public abstract int getExperience();
     @Shadow public abstract void setExperience(int experience);
-    @Shadow protected abstract boolean canLevelUp();
-    @Shadow protected abstract void fillRecipes();
 
-    // modifyargs would be better no?
-    // when all you have is a hammer...
+    // mfw
+    @Unique
+    private void fillRecipesFor(VillagerProfession profession, int level) {
+        var profToTradeFactories = TradeOffers.PROFESSION_TO_LEVELED_TRADE.get(profession);
+        if (profToTradeFactories == null || profToTradeFactories.isEmpty()) return;
+
+        // which yarn remapper forgor the spelling of factories lmao
+        TradeOffers.Factory[] offerFactories = profToTradeFactories.get(level);
+        if (offerFactories == null) return;
+
+        TradeOfferList offerList = getOffers();
+        fillRecipesFromPool(offerList, offerFactories, 2);
+    }
+
     @WrapMethod(method = "setVillagerData")
     public void setVillagerData(VillagerData VD, Operation<Void> og) {
         VillagerData oldVD = getVillagerData();
         if (
             VD.getType() != ModEntities.JACK ||
-            VD.getProfession() == oldVD.getProfession() ||
+            VD.getProfession() == oldVD.getProfession()
+        ) {
+            og.call(VD);
+            return;
+        } else if (
             VD.getProfession() == VillagerProfession.NONE ||
             VD.getProfession() == VillagerProfession.NITWIT
         ) {
-            og.call(VD);
+            setExperience(0);
+            og.call(VD.withLevel(1));
             return;
         }
 
         int designated = 60 + (int)(30.0 * Math.random() - 15.0);
-        if (designated > getExperience())
-            setExperience(designated);
+        setExperience(designated);
 
-        VillagerData newVD = VD;
+        int level = 1;
         while (
-            VillagerData.canLevelUp(newVD.getLevel()) &&
-            getExperience() >= VillagerData.getUpperLevelExperience(newVD.getLevel())
+            VillagerData.canLevelUp(level) &&
+            getExperience() >= VillagerData.getUpperLevelExperience(level)
         ) {
-            newVD = newVD.withLevel(newVD.getLevel() + 1);
+            level += 1;
         }
-        fillRecipes();
 
-        og.call(newVD);
+        og.call(VD.withLevel(level));
+
+        for (int i = 2; i <= level; i++) {
+            fillRecipesFor(VD.getProfession(), level);
+        }
     }
 }

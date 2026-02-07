@@ -286,7 +286,8 @@ Only the devs who can keep up with me...
 - Rifts (Enchanted Slipways) should not change rotations since birth now
 - Shit should actually tell you when you don't have Fabric now
 - Sieve Thoughts not working on a spell circle
-- Sieve Thoughts not working sometimes I think
+- Sieve Thoughts not working sometimes (I think I fixed that)
+- Simple Impetus recipe in EMI not showing it required some amel to do
 - Villager un-flaying does not preserve levels anymore
 - Visible Distillation and Empty Distillation should be a lot more optimized now (not that you'll notice it lmao)
 - Withdraw bug
@@ -295,30 +296,8 @@ Only the devs who can keep up with me...
   - Also there's a spell for that now
 ## Interop:
 - Hierophantics
-  - Max experience fishermen villagers can be flayed into you  
-    costs 32 amel and 10 charged amethyst  
-    they trigger when your reference is added to the stack of an offender within "range"  
-    stack starts with a "guess" vector pointing from you to the enemy  
-    has a "vigilance" attribute which can range from 0-3  
-      0: no notification  
-      1: chat notification  
-      2: chat + audio notification  
-      3: chat + on-screen + audio notification  
-    they also have a "range" attribute (0-256)  
-      the higher, the more inaccurate the guess (err_margin=range/4)
-      maximum err_margin is 32    
-      e.g. range=64 means guess can be 16 blocks from the offender  
-      or range=256 means guess can be ~~64~~32 (due to hitting max) blocks from the offender  
-      err range is constant across all guesses  
-        so if offender is 64 blocks away but your range is 256, err can be 0-64  
-      however, if the offender is in your ambit the guess is always 100% precise  
-  - Less than max experience fishermen can also be flayed into you  
-    costs 16 amel and 5 charged amethyst  
-    they are almost equivalent to the other mind  
-    err=range/8 by default, none when offender is within ambit  
-    range can only be 0-64  
-    starts casting with the exact position of the offender on the stack  
-    has a 1/err chance of detecting the offender  
+  - Amalgamations!  
+    - Ever wanted a counterspell?
   - "Jack" villager type  
     - villagers turn into "Jacks" when unflayed
     "Jacks" start with 2-3 levels of exp on every profession  

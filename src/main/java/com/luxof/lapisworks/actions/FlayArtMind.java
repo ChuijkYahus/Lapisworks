@@ -17,9 +17,11 @@ import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.Mutables.Mutables.SMindInfusions;
+import com.luxof.lapisworks.interop.hierophantics.ChariotInterface;
 import com.luxof.lapisworks.init.Mutables.SMindInfusion;
 import com.luxof.lapisworks.mixinsupport.GetVAULT;
 
+import static com.luxof.lapisworks.Lapisworks.HIEROPHANTICS_INTEROP;
 import static com.luxof.lapisworks.LapisworksIDs.ENTITY_INFUSEABLE_WITH_SMIND;
 import static com.luxof.lapisworks.LapisworksIDs.FULL_SIMPLE_MIND;
 import static com.luxof.lapisworks.LapisworksIDs.INFUSEABLE_WITH_SMIND;
@@ -31,6 +33,7 @@ import com.mojang.datafixers.util.Either;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -54,6 +57,12 @@ public class FlayArtMind implements SpellAction {
         SMindInfusion infusionRecipe = new SMindInfusion();
 
         if (flayIntoPos != null) {
+
+            if (HIEROPHANTICS_INTEROP) {
+                Result result = ChariotInterface.tryImbueChariotMind(args, ctx);
+                if (result != null) return result;
+            }
+
             infusionRecipe = SMindInfusions
                 .filterAll(flayIntoPos, ctx, args, vault)
                 .values().stream().findFirst()
@@ -76,10 +85,9 @@ public class FlayArtMind implements SpellAction {
         if (blockEntity.mindCompletion < 100f) {
             throw new MishapBadBlock(mindPos, FULL_SIMPLE_MIND);
         }
-        blockEntity.mindCompletion = 0F;
 
         return new SpellAction.Result(
-            new Spell(flayIntoPos, infusionRecipe),
+            new Spell(flayIntoPos, infusionRecipe, blockEntity),
             MediaConstants.CRYSTAL_UNIT,
             List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 2, 15)),
             1
@@ -89,14 +97,24 @@ public class FlayArtMind implements SpellAction {
     public class Spell implements RenderedSpell {
         public final BlockPos flayIntoPos;
         public final SMindInfusion flayer;
+        public final MindEntity mind;
 
-        public Spell(BlockPos flayIntoPos, SMindInfusion flayer) {
+        public Spell(BlockPos flayIntoPos, SMindInfusion flayer, MindEntity mind) {
             this.flayIntoPos = flayIntoPos;
             this.flayer = flayer;
+            this.mind = mind;
         }
 
 		@Override
 		public void cast(CastingEnvironment ctx) {
+            mind.mindCompletion = 0f;
+            mind.markDirty();
+            ctx.getWorld().updateListeners(
+                mind.getPos(),
+                mind.getCachedState(),
+                mind.getCachedState(),
+                Block.NOTIFY_ALL
+            );
             this.flayer.accept();
 		}
 
