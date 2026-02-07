@@ -16,6 +16,8 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 
 import com.luxof.lapisworks.frames.FrameExecuteManyTimes;
 
+import static com.luxof.lapisworks.Lapisworks.CastingImgWithStack;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,11 +43,21 @@ public class OpForNInRange implements Action {
             stack.remove(stack.size() - 1);
             stack.remove(stack.size() - 1);
 
+            if (from == to) {
+                return new OperationResult(
+                    CastingImgWithStack(img, stack),
+                    List.of(),
+                    cont,
+                    HexEvalSounds.THOTH
+                );
+            }
+
             List<Iota> data = new ArrayList<>();
             boolean traditional = from < to;
             int inc = traditional ? 1 : -1;
-            // i just wanted   vvvvvvvvvvvvvvvvvvvvvvvvvvvvv   to be sure, okay? sorry.
-            for (int i = from; traditional ? i < to : i > to; i += inc) {
+
+            // is this understandable? lmao
+            for (int i = from; from < to ? i < to : i > to; i += inc) {
                 data.add(new DoubleIota(i));
             }
             SpellList datum = new ListIota(data).getList();
@@ -53,16 +65,11 @@ public class OpForNInRange implements Action {
             newFrame = new FrameForEach(datum, instrs, stack, new ArrayList<>());
         }
 
-        CastingImage newImg = img.withUsedOp().copy(
-            stack,
-            img.getParenCount(),
-            img.getParenthesized(),
-            img.getEscapeNext(),
-            img.getOpsConsumed(),
-            img.getUserData()
+        return new OperationResult(
+            CastingImgWithStack(img.withUsedOp(), stack),
+            List.of(),
+            cont.pushFrame(newFrame),
+            HexEvalSounds.THOTH
         );
-
-        return new OperationResult(newImg, List.of(), cont.pushFrame(newFrame), HexEvalSounds.THOTH);
     }
-    
 }
