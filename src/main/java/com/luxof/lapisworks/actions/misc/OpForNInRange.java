@@ -26,6 +26,7 @@ public class OpForNInRange implements Action {
     public OpForNInRange(boolean isThisKitkat) {
         this.isThisKitkat = isThisKitkat;
     }
+
     @Override
     public OperationResult operate(CastingEnvironment ctx, CastingImage img, SpellContinuation cont) {
         List<Iota> stack = img.getStack();
@@ -33,25 +34,21 @@ public class OpForNInRange implements Action {
         stack.remove(stack.size() - 1);
 
         ContinuationFrame newFrame;
+
         if (isThisKitkat) {
             int thisManyTimes = OperatorUtils.getInt(stack, stack.size() - 1, stack.size());
             stack.remove(stack.size() - 1);
+
+            if (thisManyTimes == 0) return fuckOff(img, stack, cont);
             newFrame = new FrameExecuteManyTimes(instrs, stack, thisManyTimes);
+
         } else {
             int from = OperatorUtils.getInt(stack, stack.size() - 2, stack.size());
             int to = OperatorUtils.getInt(stack, stack.size() - 1, stack.size());
             stack.remove(stack.size() - 1);
             stack.remove(stack.size() - 1);
 
-            if (from == to) {
-                return new OperationResult(
-                    CastingImgWithStack(img, stack),
-                    List.of(),
-                    cont,
-                    HexEvalSounds.THOTH
-                );
-            }
-
+            if (from == to) return fuckOff(img, stack, cont);
             List<Iota> data = new ArrayList<>();
             boolean traditional = from < to;
             int inc = traditional ? 1 : -1;
@@ -69,6 +66,19 @@ public class OpForNInRange implements Action {
             CastingImgWithStack(img.withUsedOp(), stack),
             List.of(),
             cont.pushFrame(newFrame),
+            HexEvalSounds.THOTH
+        );
+    }
+
+    private static OperationResult fuckOff(
+        CastingImage img,
+        List<Iota> stack,
+        SpellContinuation cont
+    ) {
+        return new OperationResult(
+            CastingImgWithStack(img.withUsedOp(), stack),
+            List.of(),
+            cont,
             HexEvalSounds.THOTH
         );
     }

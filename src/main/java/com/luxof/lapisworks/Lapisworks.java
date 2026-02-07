@@ -4,6 +4,8 @@ import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
@@ -820,5 +822,16 @@ public class Lapisworks implements ModInitializer {
 		ArrayList<Any> buffer = new ArrayList<>();
 		stream.forEach(obj -> mapper.accept(obj, buffer::add));
 		return buffer;
+	}
+
+	public static CastingImage CastingImgWithStack(CastingImage img, List<Iota> stack) {
+		return img.copy(
+			stack,
+			img.getParenCount(),
+			img.getParenthesized(),
+			img.getEscapeNext(),
+			img.getOpsConsumed(),
+			img.getUserData()
+		);
 	}
 }
