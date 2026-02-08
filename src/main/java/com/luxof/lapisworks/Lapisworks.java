@@ -27,6 +27,7 @@ import com.luxof.lapisworks.mixinsupport.GetStacks;
 import static com.luxof.lapisworks.LapisworksIDs.CANNOT_MODIFY_COST_TAG;
 import static com.luxof.lapisworks.LapisworksIDs.GRAND_RITUAL_BLACKLIST_TAG;
 import static com.luxof.lapisworks.LapisworksIDs.INFUSED_AMEL;
+import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
 import static com.luxof.lapisworks.LapisworksIDs.MAINHAND;
 import static com.luxof.lapisworks.LapisworksIDs.OFFHAND;
 import static com.luxof.lapisworks.init.ThemConfigFlags.allPerWorldShapePatterns;
@@ -40,6 +41,7 @@ import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -833,5 +835,38 @@ public class Lapisworks implements ModInitializer {
 			img.getOpsConsumed(),
 			img.getUserData()
 		);
+	}
+
+	public static boolean equalStacks(ItemStack a, ItemStack b) {
+		return a.getItem() == b.getItem() && a.getCount() == b.getCount();
+	}
+
+	public static boolean isInCradle(ItemStack stack) {
+		return NBTHelper.getBoolean(stack, IS_IN_CRADLE);
+	}
+	public static void removeFromCradle(ItemStack stack) {
+		if (NBTHelper.contains(stack, IS_IN_CRADLE))
+			NBTHelper.remove(stack, IS_IN_CRADLE);
+	}
+	public static void putInCradle(ItemStack stack) {
+		NBTHelper.putBoolean(stack, IS_IN_CRADLE, true);
+	}
+
+	public static NbtCompound nbtCompoundOf(Stream<Pair<String, ? extends NbtElement>> stream) {
+		NbtCompound nbt = new NbtCompound();
+		stream.forEach(entry -> nbt.put(entry.getLeft(), entry.getRight()));
+		return nbt;
+	}
+
+	public static <KEY extends Object, VALUE extends Object> HashMap<KEY, VALUE> hashMapof(
+		NbtCompound nbt,
+		Function<String, KEY> keyFunction,
+		Function<NbtElement, VALUE> valueFunction
+	) {
+		HashMap<KEY, VALUE> map = new HashMap<>();
+		for (String key : nbt.getKeys()) {
+			map.put(keyFunction.apply(key), valueFunction.apply(nbt.get(key)));
+		}
+		return map;
 	}
 }

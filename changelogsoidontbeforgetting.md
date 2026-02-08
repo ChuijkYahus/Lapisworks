@@ -206,6 +206,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
       with Oneironaut
     - Simple Minds, when infused into the air, produce a wandering wisp
 # 1.5.8
+(put that one image here:)
 I'm delaying this update to the next level.  
 Only the devs who can keep up with me...   
 ...Will get to see their 2000 emerald paycheck.
@@ -252,7 +253,7 @@ Only the devs who can keep up with me...
 - Mintiest and Kitkat's Gambits (`for i in range(n):`)
 - Scrying patterns for blocks added by the mod.
 - Scrying lens overlays
-- Simple Mind Infusions now have (kind of basic) datapacking support.
+- Simple Mind Infusions now have (basic) datapacking support.
 ## Changes:
 - 3D models of some blocks (and maybe an item or two?) look a little better
 - Book reformatting and extra documentation and shit
@@ -272,6 +273,7 @@ Only the devs who can keep up with me...
 - Ancient Tomes giving you the advancement anyway despite showing the message if you dont have lapis yet
 - Attributes no longer compound when you log
 - "Bug in the mod" mishaps
+- Cradle duplication bugs :sob:
 - Damage and movement speed enhancements stacking on world join (you need to kys ingame to reset tho)
 - Deposit and Withdraw actually take doubles now, not just integers
 - Enchanted Slipways having a tendency to move 0.01f more in +XYZ than -XYZ (lmao)
