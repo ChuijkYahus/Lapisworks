@@ -283,7 +283,7 @@ Only the devs who can keep up with me...
 - Handed Prison didn't drop blocks wtf
 - Live Jukebox top texture good again
 - Logspam begone!
-- Raycasting (Empty or Visible Dstl) would sometimes freeze your server
+- Raycasting (Empty or Visible Distillation) would sometimes freeze your server
 - Rifts (Enchanted Slipways) should not change rotations since birth now
 - Shit should actually tell you when you don't have Fabric now
 - Sieve Thoughts not working on a spell circle

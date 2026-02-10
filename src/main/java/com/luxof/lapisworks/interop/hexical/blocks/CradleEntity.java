@@ -81,6 +81,9 @@ public class CradleEntity extends BlockEntity implements Inventory, UnlinkableMe
 
     public void updateItemStack() {
         // client never knows the item entity btw
+        // i feel weird about letting the client do this...
+        // but eh what the fuck ever
+        // if it ain't broken, don't fix it
         if (heldEntity == null || heldEntity.isRemoved()) {
             heldEntity = null;
             if (heldStack != ItemStack.EMPTY) {
