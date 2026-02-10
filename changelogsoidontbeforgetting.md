@@ -273,13 +273,12 @@ Only the devs who can keep up with me...
 - Ancient Tomes giving you the advancement anyway despite showing the message if you dont have lapis yet
 - Attributes no longer compound when you log
 - "Bug in the mod" mishaps
-- Cradle duplication bugs :sob:
+- Cradle is fixed now (no dupes no bugs on world load etc.)
 - Damage and movement speed enhancements stacking on world join (you need to kys ingame to reset tho)
 - Deposit and Withdraw actually take doubles now, not just integers
 - Enchanted Slipways having a tendency to move 0.01f more in +XYZ than -XYZ (lmao)
 - Enchantments not carrying across dimensions (:broken_heart:)
 - Enchantment Purification's order of arguments being flipped
-- Finally fixed that Cradle bug with items for fucking real, holy fucking shit I think
 - Geode Dowser takes no media if you're in creative
 - Handed Prison didn't drop blocks wtf
 - Live Jukebox top texture good again

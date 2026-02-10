@@ -1,17 +1,20 @@
 package com.luxof.lapisworks.interop.hexical.blocks;
 
-import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 
 import com.luxof.lapisworks.blocks.stuff.UnlinkableMediaBlock;
 import com.luxof.lapisworks.interop.hexical.Lapixical;
 import com.luxof.lapisworks.mixinsupport.ItemEntityMinterface;
 
-import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
+import static com.luxof.lapisworks.Lapisworks.equalsStack;
+import static com.luxof.lapisworks.Lapisworks.isInCradle;
+import static com.luxof.lapisworks.Lapisworks.putInCradle;
+import static com.luxof.lapisworks.Lapisworks.removeFromCradle;
 
 import java.util.Set;
 import java.util.UUID;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
@@ -28,8 +31,20 @@ import net.minecraft.world.World;
 
 import org.jetbrains.annotations.Nullable;
 
+// there is so much jank here... please don't use this ever
+// this shit is held together with hopes, dreams and bubblegum
 public class CradleEntity extends BlockEntity implements Inventory, UnlinkableMediaBlock {
-    private ItemStack heldStack = ItemStack.EMPTY.copy();
+    private ItemStack heldStack = ItemStack.EMPTY;
+    public ItemStack getHeldStack() {
+        if (heldEntity == null || heldEntity.isRemoved()) return ItemStack.EMPTY;
+        return heldStack;
+    }
+    public void setHeldStack(ItemStack stack) {
+        heldStack = stack;
+        overrideItemEntity();
+        save();
+    }
+
     public ItemEntity heldEntity = null;
     private UUID persistentUUID = UUID.randomUUID();
 
@@ -39,55 +54,47 @@ public class CradleEntity extends BlockEntity implements Inventory, UnlinkableMe
 
     public static void tick(World world, BlockPos pos, BlockState state, BlockEntity blockE) {
         CradleEntity bE = (CradleEntity)blockE;
-		bE.updateItemEntity();
+        bE.heal();
+		bE.updateItemStack();
 		bE.configureItemEntity();
     }
 
-    // this bug will haunt me until the day i fucking die
-    private void heyGiveAnyFakerEntitiesAVibeCheckForMeRealQuick() {
-        if (world.isClient) return;
-        Entity entity = ((ServerWorld)world).getEntity(persistentUUID);
-        if (entity == null) return;
-        // this happens when a world loads.
-        // for some reason all cradle item entities, when loaded, bug the fuck out.
-        // no clue why.
-        // so just do this
-        persistentUUID = UUID.randomUUID();
-        entity.discard();
-    }
-    public void updateItemEntity() {
-        if (heldStack.isEmpty()) {
-            if (heldEntity == null) return;
-            persistentUUID = UUID.randomUUID();
-            heldEntity.discard();
-            heldEntity = null;
-            this.markDirty();
-            return;
-        }
+    // this is such bullshit
+    private void heal() {
+        if (world instanceof ServerWorld sw && heldEntity == null) {
+            Entity someEntity = sw.getEntity(persistentUUID);
 
-        if (heldEntity == null) heyGiveAnyFakerEntitiesAVibeCheckForMeRealQuick();
-
-        boolean itemEntityExists = heldEntity != null && !heldEntity.isRemoved();
-        boolean mismatchingStacksOrNoItemEntity = !itemEntityExists ||
-            !heldEntity.getStack().equals(heldStack);
-
-        if (mismatchingStacksOrNoItemEntity) {
-            if (itemEntityExists) {
+            if (
+                someEntity instanceof ItemEntity itemEnt &&
+                isInCradle(itemEnt.getStack())
+            ) {
+                heldEntity = itemEnt;
+                overrideItemEntity();
+                save();
+            } else if (someEntity != null) {
+                someEntity.discard();
                 persistentUUID = UUID.randomUUID();
-                heldEntity.discard();
-                heldEntity = null;
+                save();
             }
-
-            Vec3d pos = Vec3d.ofCenter(this.pos);
-            heldEntity = new ItemEntity(world, pos.x, pos.y, pos.z, heldStack);
-            heldEntity.setUuid(persistentUUID);
-            ((ItemEntityMinterface)heldEntity).setBlockPosOfCradle(this.pos);
-            configureItemEntity();
-
-            world.spawnEntity(heldEntity);
         }
+    }
 
-        this.markDirty();
+    public void updateItemStack() {
+        // client never knows the item entity btw
+        if (heldEntity == null || heldEntity.isRemoved()) {
+            heldEntity = null;
+            if (heldStack != ItemStack.EMPTY) {
+                removeFromCradle(heldStack);
+                heldStack = ItemStack.EMPTY;
+                putInCradle(heldStack);
+                save();
+            }
+        } else if (!equalsStack(heldStack, heldEntity.getStack())) {
+            removeFromCradle(heldStack); // because wristpocket
+            heldStack = heldEntity.getStack();
+            putInCradle(heldStack);
+            save();
+        }
     }
 
     public void configureItemEntity() {
@@ -101,13 +108,36 @@ public class CradleEntity extends BlockEntity implements Inventory, UnlinkableMe
         heldEntity.setInvulnerable(true);
         heldEntity.setVelocity(Vec3d.ZERO);
         heldEntity.setPickupDelayInfinite();
-        NBTHelper.putBoolean(heldEntity.getStack(), IS_IN_CRADLE, true);
+        putInCradle(heldEntity.getStack());
         heldEntity.calculateDimensions();
+    }
+
+    public void overrideItemEntity() {
+        if (heldEntity != null && !heldEntity.isRemoved()) {
+            heldEntity.setStack(heldStack);
+            return;
+        }
+
+        persistentUUID = UUID.randomUUID();
+        Vec3d pos = Vec3d.ofCenter(this.pos);
+        heldEntity = new ItemEntity(world, pos.x, pos.y, pos.z, heldStack);
+        heldEntity.setUuid(persistentUUID);
+        ((ItemEntityMinterface)heldEntity).setBlockPosOfCradle(this.pos);
+        configureItemEntity();
+
+        world.spawnEntity(heldEntity);
+        save();
+    }
+
+    public void save() {
+        markDirty();
+        world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
     }
 
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
+
         heldStack = ItemStack.fromNbt(nbt.getCompound("item"));
         this.persistentUUID = nbt.getUuid("persistent_uuid");
     }
@@ -126,58 +156,45 @@ public class CradleEntity extends BlockEntity implements Inventory, UnlinkableMe
 
     @Override
     public NbtCompound toInitialChunkDataNbt() {
-        NbtCompound nbt = new NbtCompound();
-        writeNbt(nbt);
-        return nbt;
+        return createNbt();
     }
 
     @Override
-	public void markDirty() {
-		world.updateListeners(pos, this.getCachedState(), this.getCachedState(), 3);
-		super.markDirty();
-	}
-
-    @Override
     public void clear() {
-        heldStack = ItemStack.EMPTY.copy();
-        updateItemEntity();
-        this.markDirty();
+        heldStack = ItemStack.EMPTY;
+        updateItemStack();
+        save();
     }
 
     @Override
     public boolean canPlayerUse(PlayerEntity player) { return false; }
 
     @Override
-    public ItemStack getStack(int slot) { return slot == 0 ? heldStack : ItemStack.EMPTY.copy(); }
+    public ItemStack getStack(int slot) { return slot == 0 ? getHeldStack() : ItemStack.EMPTY; }
 
     @Override
     public boolean isEmpty() { return heldStack.isEmpty(); }
 
     @Override
     public ItemStack removeStack(int slot) {
-        if (slot != 0) return ItemStack.EMPTY.copy();
-        heldStack = ItemStack.EMPTY.copy();
-        updateItemEntity();
-        this.markDirty();
+        if (slot != 0) return ItemStack.EMPTY;
+        heldStack = ItemStack.EMPTY;
+        updateItemStack();
+        save();
         return heldStack;
     }
 
     @Override
     public ItemStack removeStack(int slot, int amount) {
-        if (slot != 0) return ItemStack.EMPTY.copy();
+        if (slot != 0) return ItemStack.EMPTY;
         ItemStack removed = heldStack.split(amount);
-        updateItemEntity();
-        this.markDirty();
+        updateItemStack();
+        save();
         return removed;
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
-        if (slot != 0) return;
-        heldStack = stack;
-        updateItemEntity();
-        this.markDirty();
-    }
+    public void setStack(int slot, ItemStack stack) { if (slot == 0) setHeldStack(stack); }
 
     @Override
     public int size() { return 1; }

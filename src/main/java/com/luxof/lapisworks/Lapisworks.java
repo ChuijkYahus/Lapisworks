@@ -869,4 +869,10 @@ public class Lapisworks implements ModInitializer {
 		}
 		return map;
 	}
+
+	public static boolean equalsStack(ItemStack stackA, ItemStack stackB) {
+		return stackA == stackB ||
+			(stackA.isOf(stackB.getItem()) && stackA.getCount() == stackB.getCount()) ||
+			stackA.isEmpty() && stackB.isEmpty();
+	}
 }

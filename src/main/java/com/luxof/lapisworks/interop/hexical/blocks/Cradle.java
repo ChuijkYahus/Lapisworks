@@ -1,12 +1,11 @@
 package com.luxof.lapisworks.interop.hexical.blocks;
 
-import at.petrak.hexcasting.api.utils.NBTHelper;
-
 import com.luxof.lapisworks.blocks.entities.MindEntity;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.interop.hexical.Lapixical;
 
-import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
+import static com.luxof.lapisworks.Lapisworks.putInCradle;
+import static com.luxof.lapisworks.Lapisworks.removeFromCradle;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -66,17 +65,20 @@ public class Cradle extends BlockWithEntity {
         Hand hand,
         BlockHitResult hit
     ) {
+        // actual fucking magic that fixes EVERYTHING LMAO
+        if (world.isClient) return ActionResult.SUCCESS;
+
         CradleEntity bE = (CradleEntity)world.getBlockEntity(pos);
-        ItemStack prevStack = bE.getStack(0);
-        bE.setStack(0, player.getStackInHand(hand));
+
+        ItemStack prevStack = bE.getHeldStack();
+        ItemStack playerStack = player.getStackInHand(hand);
+
+        removeFromCradle(prevStack);
+        putInCradle(playerStack);
+
+        bE.setHeldStack(playerStack);
         player.setStackInHand(hand, prevStack);
-        NBTHelper.putBoolean(bE.getStack(0), IS_IN_CRADLE, true);
-        NBTHelper.remove(prevStack, IS_IN_CRADLE);
-        bE.updateItemEntity();
-        bE.markDirty();
-        if (!world.isClient) {
-            world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
-        }
+
         return ActionResult.SUCCESS;
     }
 
@@ -110,16 +112,15 @@ public class Cradle extends BlockWithEntity {
             bE.heldEntity.discard();
             bE.heldEntity = null;
         }
-        ItemStack stack = bE.getStack(0);
-        if (NBTHelper.contains(stack, IS_IN_CRADLE)) {
-            NBTHelper.remove(stack, IS_IN_CRADLE);
-        }
+
+        ItemStack stack = bE.getHeldStack();
+        removeFromCradle(stack);
+
         if (!stack.isEmpty()) {
             world.spawnEntity(
                 new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), stack)
             );
         }
-        bE.markDirty();
         super.onStateReplaced(state, world, pos, newState, moved);
     }
 }
