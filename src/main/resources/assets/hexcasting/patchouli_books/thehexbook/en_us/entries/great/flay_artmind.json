@@ -12,7 +12,7 @@
         {
             "type": "hexcasting:lapisworks/pwshape",
             "op_id": "lapisworks:flay_artmind",
-            "anchor": "lapisworks:flay_artmind_block",
+            "anchor": "lapisworks:flay_artmind",
             "input": "vec, vec",
             "output": "",
             "text": "pages.lapisworks.great.flay_artmind.summary",
