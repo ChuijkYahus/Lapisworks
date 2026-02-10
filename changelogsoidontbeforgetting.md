@@ -577,3 +577,6 @@ all that jazz
 probably a library mod:  
 - Patchouli variables. You can embed them into text. They sync across client and server automatically.
 - Works with hexdoc.
+
+put all this time shit in an addon  
+call it Hex To The Future  
