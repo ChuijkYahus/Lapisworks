@@ -266,7 +266,8 @@ Only the devs who can keep up with me...
 - Gold-Diamond Casting Ring has been deleted in favour of the Amel variant
 - Mishap messages n shit
 - Pattern name changes (particularly in the necklace RW patterns)
-- Wizard lore is a lil diff now
+- Wizard lore is a lil diff (they are no longer outright evil as fuck)
+- You can now disenchant yourself with the Enchant X patterns
 - You can't read an Ancient Tome before you have gotten Lapisworks Research now
 ## Fixes:
 - Amel Jar bug
@@ -278,7 +279,8 @@ Only the devs who can keep up with me...
 - Deposit and Withdraw actually take doubles now, not just integers
 - Enchanted Slipways having a tendency to move 0.01f more in +XYZ than -XYZ (lmao)
 - Enchantments not carrying across dimensions (:broken_heart:)
-- Enchantment Purification's order of arguments being flipped
+- Enchantment & Enhancement Purification's order of arguments being flipped
+- Enhancement Purification actually trying to check the react attribute of a non-player
 - Geode Dowser takes no media if you're in creative
 - Handed Prison didn't drop blocks wtf
 - Live Jukebox top texture good again
