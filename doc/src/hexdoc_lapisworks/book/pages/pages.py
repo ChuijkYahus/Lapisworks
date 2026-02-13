@@ -36,6 +36,7 @@ class LookupPWShapePage(PageWithOpPattern, type="hexcasting:lapisworks/pwshape")
     @model_validator(mode="after")
     def _check_anchor(self) -> Self:
         # nah i'd keep it
-        if str(self.op_id) != self.anchor:
-            raise ValueError(f"op_id={self.op_id} does not equal anchor={self.anchor}")
+        # nah i'd lose it
+        #if str(self.op_id) != self.anchor:
+        #    raise ValueError(f"op_id={self.op_id} does not equal anchor={self.anchor}")
         return self

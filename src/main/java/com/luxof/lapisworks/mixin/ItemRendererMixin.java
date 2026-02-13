@@ -1,8 +1,6 @@
 package com.luxof.lapisworks.mixin;
 
-import at.petrak.hexcasting.api.utils.NBTHelper;
-
-import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
+import static com.luxof.lapisworks.Lapisworks.isInCradle;
 
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -19,10 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 // who up rendering they items rn
 @Mixin(ItemRenderer.class)
 public class ItemRendererMixin {
-    @Inject(
-        method = "renderItem",
-        at = @At("HEAD")
-    )
+    @Inject(at = @At("HEAD"), method = "renderItem")
     public void render(
         ItemStack stack,
         ModelTransformationMode renderMode,
@@ -34,6 +29,6 @@ public class ItemRendererMixin {
         BakedModel model,
         CallbackInfo ci
     ) {
-        if (NBTHelper.contains(stack, IS_IN_CRADLE)) matrices.translate(0.0, -0.25, 0.0);
+        if (isInCradle(stack)) matrices.translate(0.0, -0.25, 0.0);
     }
 }

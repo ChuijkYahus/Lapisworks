@@ -20,8 +20,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 
-import org.jetbrains.annotations.Nullable;
-
 public class TuneableAmethyst extends BlockWithEntity {
     public TuneableAmethyst() {
         super(
@@ -62,9 +60,8 @@ public class TuneableAmethyst extends BlockWithEntity {
     }
 
     @Override
-    @Nullable
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState()
+        return getDefaultState()
             .with(ATTACHED, ctx.getSide().getOpposite());
     }
 

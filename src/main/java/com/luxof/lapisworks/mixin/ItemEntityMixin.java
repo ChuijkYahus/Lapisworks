@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.utils.NBTHelper;
 
 import com.luxof.lapisworks.mixinsupport.ItemEntityMinterface;
 
+import static com.luxof.lapisworks.Lapisworks.putInCradle;
 import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
 
 import net.minecraft.entity.ItemEntity;
@@ -37,7 +38,7 @@ public abstract class ItemEntityMixin implements ItemEntityMinterface {
         );
 
         if (compound.getBoolean(IS_IN_CRADLE)) {
-            NBTHelper.putBoolean(getStack(), IS_IN_CRADLE, true);
+            putInCradle(getStack());
         }
     }
     
@@ -49,7 +50,7 @@ public abstract class ItemEntityMixin implements ItemEntityMinterface {
         compound.putInt("cradlePosZ", cradlePos.getZ());
 
         if (NBTHelper.contains(getStack(), IS_IN_CRADLE)) {
-            compound.putBoolean(IS_IN_CRADLE, true);
+            putInCradle(getStack());
         }
     }
 }

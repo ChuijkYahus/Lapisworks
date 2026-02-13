@@ -16,7 +16,9 @@ import com.luxof.lapisworks.actions.interact.*;
 import com.luxof.lapisworks.actions.misc.*;
 import com.luxof.lapisworks.actions.ritual.*;
 import com.luxof.lapisworks.actions.scry.*;
+import com.luxof.lapisworks.interop.hierophantics.patterns.*;
 
+import static com.luxof.lapisworks.Lapisworks.HIEROPHANTICS_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.init.ThemConfigFlags.registerPWShapePattern;
 
@@ -189,6 +191,21 @@ public class Patterns {
         registerOnlyForHexdoc("robbie_exalt1", "eedqaqddadwddwaeaeadaeqaddwedwqdadedaqqwwqqewwwaeaedqqwwwqwawaedwqqdwwaqweeeqeeewawdwqeww", HexDir.NORTH_WEST);
         registerOnlyForHexdoc("robbie_exalt", "qaeaqaweaqa", HexDir.NORTH_WEST);
         registerPWShapePattern("lapisworks:robbie_exalt");
+
+        if (HIEROPHANTICS_INTEROP) {
+            register("get_amalgamation", "qaqqaqqa", HexDir.NORTH_EAST, new GetAmalgamation());
+            register("get_amalgam_notiflevel", "waqaaqawqqwqqwq", HexDir.NORTH_WEST, new GetAmalgamAlert());
+            // hehe weewee
+            register("set_amalgam_notiflevel", "wdeddedweeweewe", HexDir.NORTH_EAST, new SetAmalgamAlert());
+            register("get_amalgam_range", "qqqwqwqqqaqqqwqwqqqqaqqa", HexDir.NORTH_EAST, new GetAmalgamRange());
+            register("set_amalgam_range", "eeeweweeedeeeweweeeedeed", HexDir.NORTH_WEST, new SetAmalgamRange());
+            register("get_amalgam_greater", "qwewqaqwewqqaqqa", HexDir.NORTH_EAST, new GetAmalgamGreater());
+            register("get_self_amalgams_num", "qwedewqqaqqa", HexDir.NORTH_EAST, new GetSelfAmalgamsNum());
+            register("remove_self_amalgam", "edeedeed", HexDir.NORTH_WEST, new RemoveSelfAmalgam());
+            register("get_amalgam_err", "eqaqqaqqadqeqaqqaqqad", HexDir.NORTH_WEST, new GetAmalgamErr());
+            register("get_amalgam_hex", "qaqqaqqadaqdee", HexDir.NORTH_EAST, new GetAmalgamHex());
+            register("set_amalgam_hex", "edeedeedadeaqq", HexDir.NORTH_WEST, new SetAmalgamHex());
+        }
     }
 
     private static ActionRegistryEntry register(

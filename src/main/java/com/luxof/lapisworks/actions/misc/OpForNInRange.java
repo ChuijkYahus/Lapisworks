@@ -16,6 +16,8 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 
 import com.luxof.lapisworks.frames.FrameExecuteManyTimes;
 
+import static com.luxof.lapisworks.Lapisworks.CastingImgWithStack;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class OpForNInRange implements Action {
     public OpForNInRange(boolean isThisKitkat) {
         this.isThisKitkat = isThisKitkat;
     }
+
     @Override
     public OperationResult operate(CastingEnvironment ctx, CastingImage img, SpellContinuation cont) {
         List<Iota> stack = img.getStack();
@@ -31,21 +34,27 @@ public class OpForNInRange implements Action {
         stack.remove(stack.size() - 1);
 
         ContinuationFrame newFrame;
+
         if (isThisKitkat) {
             int thisManyTimes = OperatorUtils.getInt(stack, stack.size() - 1, stack.size());
             stack.remove(stack.size() - 1);
+
+            if (thisManyTimes == 0) return fuckOff(img, stack, cont);
             newFrame = new FrameExecuteManyTimes(instrs, stack, thisManyTimes);
+
         } else {
             int from = OperatorUtils.getInt(stack, stack.size() - 2, stack.size());
             int to = OperatorUtils.getInt(stack, stack.size() - 1, stack.size());
             stack.remove(stack.size() - 1);
             stack.remove(stack.size() - 1);
 
+            if (from == to) return fuckOff(img, stack, cont);
             List<Iota> data = new ArrayList<>();
             boolean traditional = from < to;
             int inc = traditional ? 1 : -1;
-            // i just wanted   vvvvvvvvvvvvvvvvvvvvvvvvvvvvv   to be sure, okay? sorry.
-            for (int i = from; traditional ? i < to : i > to; i += inc) {
+
+            // is this understandable? lmao
+            for (int i = from; from < to ? i < to : i > to; i += inc) {
                 data.add(new DoubleIota(i));
             }
             SpellList datum = new ListIota(data).getList();
@@ -53,16 +62,24 @@ public class OpForNInRange implements Action {
             newFrame = new FrameForEach(datum, instrs, stack, new ArrayList<>());
         }
 
-        CastingImage newImg = img.withUsedOp().copy(
-            stack,
-            img.getParenCount(),
-            img.getParenthesized(),
-            img.getEscapeNext(),
-            img.getOpsConsumed(),
-            img.getUserData()
+        return new OperationResult(
+            CastingImgWithStack(img.withUsedOp(), stack),
+            List.of(),
+            cont.pushFrame(newFrame),
+            HexEvalSounds.THOTH
         );
-
-        return new OperationResult(newImg, List.of(), cont.pushFrame(newFrame), HexEvalSounds.THOTH);
     }
-    
+
+    private static OperationResult fuckOff(
+        CastingImage img,
+        List<Iota> stack,
+        SpellContinuation cont
+    ) {
+        return new OperationResult(
+            CastingImgWithStack(img.withUsedOp(), stack),
+            List.of(),
+            cont,
+            HexEvalSounds.THOTH
+        );
+    }
 }

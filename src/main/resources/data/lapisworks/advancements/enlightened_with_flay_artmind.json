@@ -1,0 +1,18 @@
+{
+  "criteria": {
+    "be_enlightened_and_be_a_lapisworker_and_rediscover_imbue_mind": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": {
+          "type_specific": {
+            "type": "player",
+            "advancements": {
+              "lapisworks:enlightened": true,
+              "lapisworks:rediscover_flay_artmind": true
+            }
+          }
+        }
+      }
+    }
+  }
+}

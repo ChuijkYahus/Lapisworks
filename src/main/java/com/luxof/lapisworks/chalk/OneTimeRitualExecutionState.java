@@ -3,9 +3,9 @@ package com.luxof.lapisworks.chalk;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 
-import com.luxof.lapisworks.LapisConfig;
 import com.luxof.lapisworks.Lapisworks;
-import com.luxof.lapisworks.LapisConfig.OneTimeRitualSettings;
+import com.luxof.lapisworks.init.LapisConfig;
+import com.luxof.lapisworks.init.LapisConfig.OneTimeRitualSettings;
 
 import static com.luxof.lapisworks.Lapisworks.getPigmentFromDye;
 import static com.luxof.lapisworks.Lapisworks.nbtListOf;

@@ -13,22 +13,23 @@ import at.petrak.hexcasting.api.casting.math.HexPattern;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import com.luxof.lapisworks.LapisConfig;
+
 import com.luxof.lapisworks.blocks.entities.SimpleImpetusEntity;
+import com.luxof.lapisworks.init.LapisConfig;
 import com.luxof.lapisworks.init.ModPOIs;
 import com.luxof.lapisworks.init.Patterns;
 import com.luxof.lapisworks.mixinsupport.Markable;
+
+import static com.luxof.lapisworks.Lapisworks.exemptFromMediaConsumptionDecrease;
+import static com.luxof.lapisworks.Lapisworks.getIdOf;
+
+import java.util.List;
 
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.poi.PointOfInterestStorage.OccupationStatus;
-
-import static com.luxof.lapisworks.Lapisworks.exemptFromMediaConsumptionDecrease;
-import static com.luxof.lapisworks.Lapisworks.getIdOf;
-
-import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 

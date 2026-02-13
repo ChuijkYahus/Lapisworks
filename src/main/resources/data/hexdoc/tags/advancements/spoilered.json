@@ -2,7 +2,7 @@
     "replace": false,
     "values": [
         "lapisworks:rediscover_*",
-        "lapisworks:enlightened",
+        "lapisworks:enlightene*",
         "lapisworks:cluedin"
     ]
 }

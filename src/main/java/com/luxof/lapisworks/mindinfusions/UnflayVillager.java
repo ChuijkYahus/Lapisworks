@@ -3,14 +3,17 @@ package com.luxof.lapisworks.mindinfusions;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
+import com.luxof.lapisworks.init.ModEntities;
 import com.luxof.lapisworks.init.Mutables.SMindInfusion;
 
 import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.village.VillagerProfession;
 
 public class UnflayVillager extends SMindInfusion {
     @Override
     public boolean testEntity() {
-        return entity instanceof VillagerEntity villager
+        return ctx.isEnlightened()
+            && entity instanceof VillagerEntity villager
             && IXplatAbstractions.INSTANCE.isBrainswept(villager);
     }
 
@@ -18,5 +21,14 @@ public class UnflayVillager extends SMindInfusion {
     public void accept() {
         VillagerEntity villager = (VillagerEntity)entity;
         HexCardinalComponents.BRAINSWEPT.get(villager).setBrainswept(false);
+        villager.setExperience(0);
+        // setting profession to nil makes trades regenerate too. nice.
+        villager.setVillagerData(
+            villager.getVillagerData()
+                .withLevel(1)
+                .withProfession(VillagerProfession.NONE)
+                .withType(ModEntities.JACK)
+        );
+        villager.reinitializeBrain(ctx.getWorld());
     }
 }

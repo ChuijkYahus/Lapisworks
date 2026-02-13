@@ -206,6 +206,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
       with Oneironaut
     - Simple Minds, when infused into the air, produce a wandering wisp
 # 1.5.8
+(put that one image here:)
 I'm delaying this update to the next level.  
 Only the devs who can keep up with me...   
 ...Will get to see their 2000 emerald paycheck.
@@ -215,29 +216,29 @@ Only the devs who can keep up with me...
   - 5 patterns per chalk on ground max
   - plant little chunks of amethyst (like large amethyst buds but thinner)
     - tune them with Tune Media (costs amel)
-    - rituals with the same frequency have ambit around that chunk of amethyst now
-    - by default has 1 block of ambit, that being the tuned amethyst itself. this is the lower limit
-      - Deposit Media to make the ambit larger
-      - Withdraw Media to make the ambit smaller
-      - radius of ambit = sqrt(deposited media)
-      - maximum ambit = 16 blocks
-  - draw a BIG ASS fucking pattern on the ground
-    - 9 blocks of chalk-with-pattern on the ground make a multiblock
-    - 50% media discount
-    - rmb with a staff and it casts as you with your ambit
-    - rmb with amel in the offhand and it burns up after use (does not consume the amel)
+    - rituals with the same tuned iota have ambit around that chunk of amethyst now
+    - has 2 blocks of ambit independent of ambit from deposited media.
+    - Deposit Media to make the ambit larger
+    - Withdraw Media to make the ambit smaller
+    - radius of ambit = sqrt(deposited media)
+    - maximum ambit = 16 blocks
   - one-time rituals
     - right click with media item to absorb all of it into the ritual
     - ritual burns chalk as it goes
     - ritual uses half your ambit (including gsent and enchsent)
-    - hotswap tuned frequency and whether or not it casts as the starter
+    - hotswap tuned iota and whether or not it casts as the starter
     - casting as the starter determines if it uses your ambit
   - multi-use rituals
     - right click the start block
     - ritual does not burn chalk as it goes
     - rituals uses 1/8th of your ambit (including gsent and enchsent)
-    - tuned frequency and whether or not it casts as the caster must be configured in the start block
-    - casting as the starter determines if it uses your ambit
+    - tuned iota and whether must be configured in the start block
+    - always casts as the starter
+  - grand rituals
+    - 9 blocks of chalk-with-pattern on the ground make a multiblock
+    - 50% media discount
+    - rmb with a staff and it casts as you with your ambit
+    - rmb with amel in the offhand and it burns up after use (does not consume the amel)
 - chalk_connectable block tag (all chalk attempts to connect to blocks in this tag)
 - Enchanted Brewery
   - Imbue 10 Amel into a Brewing Stand
@@ -252,7 +253,7 @@ Only the devs who can keep up with me...
 - Mintiest and Kitkat's Gambits (`for i in range(n):`)
 - Scrying patterns for blocks added by the mod.
 - Scrying lens overlays
-- Simple Mind Infusions now have (kind of basic) datapacking support.
+- Simple Mind Infusions now have (basic) datapacking support.
 ## Changes:
 - 3D models of some blocks (and maybe an item or two?) look a little better
 - Book reformatting and extra documentation and shit
@@ -265,28 +266,32 @@ Only the devs who can keep up with me...
 - Gold-Diamond Casting Ring has been deleted in favour of the Amel variant
 - Mishap messages n shit
 - Pattern name changes (particularly in the necklace RW patterns)
-- Wizard lore is a lil diff now
+- Wizard lore is a lil diff (they are no longer outright evil as fuck)
+- You can now disenchant yourself with the Enchant X patterns
 - You can't read an Ancient Tome before you have gotten Lapisworks Research now
 ## Fixes:
-- Amel Jar throwing the Amel in your other hand into the void if you attempted to withdraw
-  with a full stack already there
+- Amel Jar bug
 - Ancient Tomes giving you the advancement anyway despite showing the message if you dont have lapis yet
 - Attributes no longer compound when you log
 - "Bug in the mod" mishaps
+- Cradle is fixed now (no dupes no bugs on world load etc.)
 - Damage and movement speed enhancements stacking on world join (you need to kys ingame to reset tho)
 - Deposit and Withdraw actually take doubles now, not just integers
 - Enchanted Slipways having a tendency to move 0.01f more in +XYZ than -XYZ (lmao)
 - Enchantments not carrying across dimensions (:broken_heart:)
-- Enchantment Purification's order of arguments being flipped
-- Finally fixed that Cradle bug with items for fucking real, holy fucking shit I think
+- Enchantment & Enhancement Purification's order of arguments being flipped
+- Enhancement Purification actually trying to check the react attribute of a non-player
+- Geode Dowser takes no media if you're in creative
 - Handed Prison didn't drop blocks wtf
 - Live Jukebox top texture good again
 - Logspam begone!
-- Raycasting (Empty or Visible Dstl) would sometimes freeze your server
+- Raycasting (Empty or Visible Distillation) would sometimes freeze your server
 - Rifts (Enchanted Slipways) should not change rotations since birth now
 - Shit should actually tell you when you don't have Fabric now
 - Sieve Thoughts not working on a spell circle
-- Sieve Thoughts not working sometimes I think
+- Sieve Thoughts not working sometimes (I think I fixed that)
+- Simple Impetus recipe in EMI not showing it required some amel to do
+- Villager un-flaying does not preserve levels anymore
 - Visible Distillation and Empty Distillation should be a lot more optimized now (not that you'll notice it lmao)
 - Withdraw bug
 - You may no longer convert Lapis (+ your life force) into Amethyst Shards
@@ -294,29 +299,8 @@ Only the devs who can keep up with me...
   - Also there's a spell for that now
 ## Interop:
 - Hierophantics
-  - Max experience fishermen villagers can be flayed into you  
-    costs 32 amel and 10 charged amethyst  
-    they only have the on_my_reference_found trigger, triggers when your reference is found in a stack of an offender within "range"  
-      stack starts with a "guess" vector pointing from you to the enemy  
-    has a "vigilance" attribute which can range from 0-3  
-      0: no notification  
-      1: chat notification  
-      2: chat + audio notification  
-      3: chat + on-screen + audio notification  
-    they also have a "range" attribute (0-256)  
-      the higher, the more inaccurate the guess (err_margin=range/4)  
-      e.g. range=64 means guess can be 16 blocks from the offender  
-      or range=256 means guess can be 64 blocks from the offender  
-      err range is constant across all guesses  
-        so if offender is 64 blocks away but your range is 256, err can be 0-64  
-      however, if the offender is in your ambit the guess is always 100% precise  
-  - Less than max experience fishermen can also be flayed into you  
-    costs 16 amel and 5 charged amethyst  
-    they are almost equivalent to the other mind  
-    err=range/8 by default, none when offender is within ambit  
-    range can only be 0-96  
-    starts casting with the exact position of the offender on the stack  
-    has a 1/err chance of detecting the offender  
+  - Amalgamations!  
+    - Ever wanted a counterspell?
   - "Jack" villager type  
     - villagers turn into "Jacks" when unflayed
     "Jacks" start with 2-3 levels of exp on every profession  
@@ -352,7 +336,7 @@ Only the devs who can keep up with me...
   - diving suit required to even exist in there (added bonus of not drowning)
     - or maybe just a Hexical Gasp spell daemon?
   - note to self: might have to fuck with world build height limit for this, as some creatures are
-  simply gargantuan!
+    simply gargantuan!
   - think this should be a progression of the enchanted slipway
 - Valkyrien Skies interop
   air pocket in fully closed ship protects you from congested deep noosphere effects too
@@ -367,6 +351,9 @@ Only the devs who can keep up with me...
   - costs 1 charged am + 1 per previous cast
   - reset the additional cost by manually enchanting with an enchantment table
 - Start one-time rituals with Deposit Media
+- Hierophantics interop
+  - new amalgamation to inject a FrameEval when your iota is used in the arguments of a pattern (and it doesn't mishap)
+  - pushes the pattern used to the top
 # 1.6.0
 ### And Alexander wept, for there were no more worlds to conquer.
 - You can have four arms now (procrastination slain)
@@ -396,7 +383,7 @@ noophaestus interop
 hexcasting media display interop  
 iotic blocks interop  
 
-addons that may have interesting interop ideas waiting to be had but idk yet:  
+possible interop:  
 - hexical
   - give conjured color the ability to take mage block effects
 - hexcassettes? (`for i in range(n): enqueue(spell, tick_delay)`-like pattern?)
@@ -413,6 +400,7 @@ addons that may have interesting interop ideas waiting to be had but idk yet:
 - complexhex
   - add qubits to hex casting (this is useless lmao)
 - hexmachina
+  - "i got 47 more rounds in this 6 barrel shotgun" ahh idea search
 - slate works
   - make a loci that enhances cleric ambit around player to chalk circle levels!
   - costs amel
@@ -587,3 +575,12 @@ make it spin
 make it rectangular like a beacon's  
 make it play a cool ass sound effect  
 all that jazz  
+
+probably a library mod:  
+- Patchouli variables. You can embed them into text. They sync across client and server automatically.
+- Works with hexdoc.  
+
+put all this time shit in an addon  
+call it Hex To The Future  
+
+port Mediaworks' Macula  

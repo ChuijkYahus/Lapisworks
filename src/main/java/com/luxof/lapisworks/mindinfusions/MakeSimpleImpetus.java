@@ -25,9 +25,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 
 public class MakeSimpleImpetus extends SMindInfusion {
-    private BlockState state;
-    private ServerWorld world;
-
     @Override
     public SMindInfusion setUp(
         BlockPos blockPos,
@@ -35,8 +32,6 @@ public class MakeSimpleImpetus extends SMindInfusion {
         List<? extends Iota> hexStack,
         VAULT vault
     ) {
-        this.world = ctx.getWorld();
-        this.state = world.getBlockState(blockPos);
         return super.setUp(blockPos, ctx, hexStack, vault);
     }
 
@@ -58,6 +53,8 @@ public class MakeSimpleImpetus extends SMindInfusion {
     @Override
     public void accept() {
         vault.drain(Mutables::isAmel, 5, false, Flags.PRESET_UpToHotbar);
+        ServerWorld world = ctx.getWorld();
+        BlockState state = world.getBlockState(blockPos);
         world.setBlockState(
             blockPos,
             ModBlocks.SIMPLE_IMPETUS.getDefaultState()

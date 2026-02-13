@@ -64,21 +64,18 @@ public class ImbueAmel implements SpellAction {
             );
         }
 
-        VAULT vault = ((GetVAULT)ctx).grabVAULT();
 
+        VAULT vault = ((GetVAULT)ctx).grabVAULT();
         List<HeldItemInfo> heldInfos = ((GetStacks)ctx).getHeldStacksOtherFirst();
         List<ItemStack> heldStacks = ((GetStacks)ctx).getHeldItemStacksOtherFirst();
 
-        MishapBadOffhandItem needImbueable = new MishapBadOffhandItem(
-            ItemStack.EMPTY.copy(),
-            IMBUEABLE
-        );
 
         Optional<ImbuementRec> recipeOpt = ctx.getWorld().getRecipeManager().getFirstMatch(
             ImbuementRec.Type.INSTANCE,
             new HandsInv(heldStacks),
             ctx.getWorld()
         );
+
         if (recipeOpt.isEmpty()) {
             // if no recipe, must test BeegInfusions which are lower prio
             Map<Identifier, BeegInfusion> beegInfusionRecipes = BeegInfusions.filter(
@@ -87,7 +84,8 @@ public class ImbueAmel implements SpellAction {
                 args,
                 vault
             );
-            if (beegInfusionRecipes.isEmpty()) throw needImbueable;
+            if (beegInfusionRecipes.isEmpty())
+                throw new MishapBadOffhandItem(ItemStack.EMPTY.copy(), IMBUEABLE);
 
             BeegInfusion selected = beegInfusionRecipes.values().iterator().next();
             selected.mishapIfNeeded();
@@ -99,6 +97,8 @@ public class ImbueAmel implements SpellAction {
                 1
             );
         }
+
+
         ImbuementRec recipe = recipeOpt.get();
         ItemStack items = null;
         Hand hand = null;
@@ -110,19 +110,22 @@ public class ImbueAmel implements SpellAction {
         }
         if (items == null) return null; // VSCode likes complaining about null
 
-        Item partAmel = recipe.getPartAmel();
-        Item fullAmel = recipe.getFullAmel();
 
         int fullInfuseCost = recipe.getFullAmelsCost() - getInfusedAmel(items);
         int infuseAmount = Math.min(wantToInfuseAmount, fullInfuseCost);
-
         assertItemAmount(ctx, Mutables::isAmel, AMEL, infuseAmount);
 
+
+        Item partAmel = recipe.getPartAmel();
+        Item fullAmel = recipe.getFullAmel();
         ItemStack newStack = null;
+
         if (infuseAmount == fullInfuseCost)
             newStack = new ItemStack(fullAmel);
+
         else if (partAmel == null)
             throw new MishapNotEnoughItems(AMEL, infuseAmount, fullInfuseCost);
+
         else {
             if (hasInfusedAmel(items)) newStack = items;
             else newStack = new ItemStack(partAmel);
@@ -130,6 +133,7 @@ public class ImbueAmel implements SpellAction {
             if (newStack.getItem() instanceof BasePartAmel partAmelI)
                 partAmelI.onImbue(newStack, infuseAmount);
         }
+
 
         return new SpellAction.Result(
             new Spell(newStack, hand, infuseAmount, vault),

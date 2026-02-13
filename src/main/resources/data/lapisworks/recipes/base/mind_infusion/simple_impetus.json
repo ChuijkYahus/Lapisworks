@@ -6,6 +6,11 @@
     },
     "output_block": "lapisworks:amel_constructs/simple_impetus",
     "display_output_item": "lapisworks:amel_constructs/simple_impetus",
-    "additional_costs": [],
+    "additional_costs": [
+        {
+            "tag": "lapisworks:amel",
+            "count": 5
+        }
+    ],
     "needs_enlightenment": true
 }

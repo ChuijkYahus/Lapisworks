@@ -8,6 +8,7 @@ resource_dirs = [  # top takes priority
     "{$_project.src}/main/resources",
     { path="{$_project.src}/generated/resources", required=false },
     { modid="hexical" },
+    { modid="hierophantics" },
     { modid="hexcasting" },
     { modid="minecraft" },
     { modid="hexdoc" },
@@ -20,6 +21,7 @@ icon = "icon.png"
 include = [
     "lapisworks",
     "hexical",
+    "hierophantics",
     "hexcasting",
     "hexdoc",
 ]

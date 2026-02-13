@@ -4,9 +4,9 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 
-import com.luxof.lapisworks.LapisConfig;
 import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.blocks.entities.RitusEntity;
+import com.luxof.lapisworks.init.LapisConfig;
 
 import static com.luxof.lapisworks.Lapisworks.getPigmentFromDye;
 import static com.luxof.lapisworks.Lapisworks.nbtListOf;

@@ -13,7 +13,7 @@ import static com.luxof.lapisworks.Lapisworks.LOGGER;
 
 import java.util.List;
 
-public abstract class ConstMediaActionNCT extends NCTBase implements ConstMediaAction {
+public abstract class ConstMediaActionNCT extends PatternNCTBase implements ConstMediaAction {
     public boolean requiresEnlightenment = false;
 
     public List<? extends Iota> execute(HexIotaStack stack, CastingEnvironment ctx) {

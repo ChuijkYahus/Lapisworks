@@ -16,7 +16,7 @@ import java.util.List;
 
 import net.minecraft.nbt.NbtCompound;
 
-public class SpellActionNCT extends NCTBase implements SpellAction {
+public class SpellActionNCT extends PatternNCTBase implements SpellAction {
     public boolean requiresEnlightenment = false;
 
     public SpellAction.Result execute(HexIotaStack stack, CastingEnvironment ctx) {

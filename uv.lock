@@ -404,12 +404,25 @@ wheels = [
 ]
 
 [[package]]
+name = "hexdoc-hierophantics"
+version = "1.3.5.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/44/d8/a0ab3b90f2796edd093014a5997de4168f3e03659522489c1ed482747955/hexdoc_hierophantics-1.3.5.1.0.tar.gz", hash = "sha256:30ca1372e2209fd085f41018a783cabf7877a5d2f6f121fa3d586c8a12fd7497", size = 61416, upload-time = "2026-01-16T00:20:57.744Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/45/0e/804687c9ba0bd996f8566b60b37b332a1149a0906903e4988311381f8304/hexdoc_hierophantics-1.3.5.1.0-py3-none-any.whl", hash = "sha256:a6e39f744adf81187b9aaa39febbf42b6508418126f1f8abcdb6f31c0c6d6953", size = 80374, upload-time = "2026-01-16T00:20:56.339Z" },
+]
+
+[[package]]
 name = "hexdoc-lapisworks"
 source = { editable = "." }
 dependencies = [
     { name = "hexdoc" },
     { name = "hexdoc-hexcasting" },
     { name = "hexdoc-hexical" },
+    { name = "hexdoc-hierophantics" },
     { name = "networkx" },
     { name = "scipy" },
 ]
@@ -424,6 +437,7 @@ requires-dist = [
     { name = "hexdoc", specifier = "~=1!0.1.0a11" },
     { name = "hexdoc-hexcasting", specifier = "~=0.11.3.1.0" },
     { name = "hexdoc-hexical", specifier = ">=1.5.0.1.0.0" },
+    { name = "hexdoc-hierophantics", specifier = ">=1.3.5.1.0" },
     { name = "networkx", specifier = "~=3.5" },
     { name = "scipy", specifier = "~=1.16" },
 ]

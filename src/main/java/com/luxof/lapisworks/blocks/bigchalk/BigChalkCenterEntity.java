@@ -8,12 +8,13 @@ import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import at.petrak.hexcasting.fabric.cc.CCStaffcastImage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 
-import com.luxof.lapisworks.LapisConfig;
 import com.luxof.lapisworks.blocks.stuff.StampableBE;
+import com.luxof.lapisworks.init.LapisConfig;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.mixinsupport.Markable;
 
 import static com.luxof.lapisworks.Lapisworks.getPigmentFromDye;
+import static com.luxof.lapisworks.Lapisworks.makeParticlesInSpiralGoUp;
 import static com.luxof.lapisworks.Lapisworks.sameAxis;
 
 import java.util.List;
@@ -90,7 +91,7 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
     public boolean isPowered() { return powered; }
     public void power(boolean on) { power(on, true); }
     public void power(boolean on, boolean shouldSave) {
-        if (skipAnimation() && on) {
+        if (skipAnimation() && !this.powered && on) {
             if (world.isClient)
                 castPatternClient();
             else
@@ -260,37 +261,20 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
             .getColorProvider()
             .getColor(world.getTime(), pos.toCenterPos());
 
-        if (special) {
-            for (int i = 0; i < 1080; i += 3) {
-                double rads = Math.toRadians(i);
+        if (special)
+            makeParticlesInSpiralGoUp(
+                world,
+                centerBottom,
+                up,
                 // sqrt of 2 matches up with the chalk outer edge line
-                double x = 1.41421356*Math.cos(rads);
-                double y = 1.41421356*Math.sin(rads);
-                // as for this... makes sure that the last particle is as close to
+                1.41421356,
+                1.41421356,
+                color,
+                // this makes sure the last particle's speed is as close to 0 as possible
                 // 0 vel as it can be
-                // i found i/5000 to be best for the speed
-                Vec3d vel = up.multiply(0.217 - (double)i/5000.0);
-
-                Vec3d pos = switch (
-                    Direction.getFacing(
-                        Math.abs(up.x),
-                        Math.abs(up.y),
-                        Math.abs(up.z)
-                    )
-                ) {
-                    case UP -> new Vec3d(centerBottom.x+x, centerBottom.y, centerBottom.z+y);
-                    case EAST -> new Vec3d(centerBottom.x, centerBottom.y+y, centerBottom.z+x);
-                    case SOUTH -> new Vec3d(centerBottom.x+x, centerBottom.y+y, centerBottom.z);
-                    default -> centerBottom;
-                };
-
-                world.addParticle(
-                    new ConjureParticleOptions(color),
-                    pos.x, pos.y, pos.z,
-                    vel.x, vel.y, vel.z
-                );
-            }
-        }
+                i -> 0.217 - (double)i*0.0006,
+                false
+            );
 
         for (int i = 0; i < (special ? 50 : 20); i++) {
             spewParticle(

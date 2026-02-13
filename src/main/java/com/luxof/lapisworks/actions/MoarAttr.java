@@ -13,6 +13,7 @@ import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
 import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 
+import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.LapisworksIDs.AMEL;
 import static com.luxof.lapisworks.MishapThrowerJava.assertItemAmount;
 
@@ -51,37 +52,28 @@ public class MoarAttr extends SpellActionNCT {
 
     @Override
     public SpellAction.Result execute(HexIotaStack args, CastingEnvironment ctx) {
-        LivingEntity entity;
-        if (!playerOnly) { entity = args.getLivingEntityButNotArmorStand(0); }
-        else { entity = args.getPlayer(0); }
+        LivingEntity entity = playerOnly
+            ? args.getPlayer(0)
+            : args.getLivingEntityButNotArmorStand(0);
         double count = args.getPositiveDouble(1);
 
         VAULT vault = ((GetVAULT)ctx).grabVAULT();
 
-        double currentCombinedVal = entity.getAttributes()
-            .getCustomInstance(this.modifyAttribute)
-            .getBaseValue();
-        double currentJuicedUpVal = ((LapisworksInterface)entity).getAmountOfAttrJuicedUpByAmel(
-            this.modifyAttribute
-        );
-        double defaultVal = currentCombinedVal - currentJuicedUpVal;
-        double defaultValCompensated = defaultVal * this.attrCompensateMult;
-        double baseLimit = defaultValCompensated * this.limitModifier + this.limitOffset;
-        double currentLimit = baseLimit - currentCombinedVal;
+        double currentCombined = getCurrentAttrValue(entity);
+        double currentJuiced = getCurrentJuiceValue(entity);
 
-        double addToVal = Math.min(
-            Math.min(defaultValCompensated + count, baseLimit) - defaultValCompensated,
-            currentLimit
+        double defaultVal = currentCombined - currentJuiced;
+        double limit = defaultVal * this.limitModifier + this.limitOffset;
+        double setTo = Math.min(
+            count / attrCompensateMult,
+            limit
         );
-        int expendedAmel = (int)Math.ceil(addToVal * this.expendedAmelModifier);
 
+        int expendedAmel = (int)Math.ceil(Math.abs(setTo - currentJuiced) * this.expendedAmelModifier);
         assertItemAmount(ctx, Mutables::isAmel, AMEL, expendedAmel);
 
         return new SpellAction.Result(
-            // caster is kinda being operated on but that's not the main effect so 2nd prio
-            new Spell(
-                entity, vault, this.modifyAttribute,
-                expendedAmel, addToVal / this.attrCompensateMult),
+            new Spell(entity, setTo, expendedAmel),
             Math.max(MediaConstants.SHARD_UNIT * expendedAmel, 0),
             List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 2, 25)),
             1
@@ -90,33 +82,41 @@ public class MoarAttr extends SpellActionNCT {
 
     public class Spell implements RenderedSpellNCT {
         public final LivingEntity entity;
-        public final VAULT vault;
-        public final EntityAttribute attr;
+        public final double setTo;
         public final int expendedAmel;
-        public final double addVal;
 
         public Spell(
             LivingEntity entity,
-            VAULT vault,
-            EntityAttribute attr,
-            int expendedAmel,
-            double addVal
+            double setTo,
+            int expendedAmel
         ) {
             this.entity = entity;
-            this.vault = vault;
+            this.setTo = setTo;
             this.expendedAmel = expendedAmel;
-            this.addVal = addVal;
-            this.attr = attr;
         }
 
 		@Override
 		public void cast(CastingEnvironment ctx) {
-            vault.drain(Mutables::isAmel, expendedAmel, false, Flags.PRESET_UpToHotbar);
-            double juicedUpAttr = ((LapisworksInterface)this.entity).getAmountOfAttrJuicedUpByAmel(this.attr);
+            ((GetVAULT)ctx).grabVAULT().drain(
+                Mutables::isAmel,
+                expendedAmel,
+                false,
+                Flags.PRESET_UpToHotbar
+            );
             ((LapisworksInterface)this.entity).setAmountOfAttrJuicedUpByAmel(
-                this.attr,
-                juicedUpAttr + this.addVal
+                modifyAttribute,
+                this.setTo
             );
 		}
+    }
+    
+    private double getCurrentAttrValue(LivingEntity entity) {
+        return entity.getAttributes()
+            .getCustomInstance(modifyAttribute)
+            .getBaseValue();
+    }
+
+    private double getCurrentJuiceValue(LivingEntity entity) {
+        return ((LapisworksInterface)entity).getAmountOfAttrJuicedUpByAmel(modifyAttribute);
     }
 }

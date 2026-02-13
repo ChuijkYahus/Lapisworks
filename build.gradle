@@ -136,7 +136,11 @@ dependencies {
 		exclude module: "mclib"
 	}
 	// Chariot
-
+	// I wonder if someone would ever realize the Tarot card connections
+	// especially the fact that Amalgamations are made of two minds, mirroring the two opposing
+	//	forces that Chariot controls by willpower
+	modCompileOnly("robotgiggle.hierophantics:hierophantics-fabric:1.3.5")
+	modLocalRuntime("robotgiggle.hierophantics:hierophantics-fabric:1.3.5")
 
 	/*testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.0'

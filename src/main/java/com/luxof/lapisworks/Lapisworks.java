@@ -4,6 +4,8 @@ import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
@@ -11,6 +13,7 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
 import com.google.gson.JsonPrimitive;
@@ -24,6 +27,7 @@ import com.luxof.lapisworks.mixinsupport.GetStacks;
 import static com.luxof.lapisworks.LapisworksIDs.CANNOT_MODIFY_COST_TAG;
 import static com.luxof.lapisworks.LapisworksIDs.GRAND_RITUAL_BLACKLIST_TAG;
 import static com.luxof.lapisworks.LapisworksIDs.INFUSED_AMEL;
+import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
 import static com.luxof.lapisworks.LapisworksIDs.MAINHAND;
 import static com.luxof.lapisworks.LapisworksIDs.OFFHAND;
 import static com.luxof.lapisworks.init.ThemConfigFlags.allPerWorldShapePatterns;
@@ -37,13 +41,17 @@ import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -67,6 +75,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 import net.minecraft.util.Util;
 
 import org.jetbrains.annotations.Nullable;
@@ -104,6 +113,7 @@ public class Lapisworks implements ModInitializer {
 	public static boolean HEXICAL_INTEROP = false;
 	public static boolean FULL_HEXICAL_INTEROP = false;
 	public static boolean HEXAL_INTEROP = false;
+	public static boolean HIEROPHANTICS_INTEROP = false;
 
 	public static boolean isModLoaded(String modid) { return FabricLoader.getInstance().isModLoaded(modid); }
 	/** assumes the mod is actually loaded and that <code>targetVersion</code> doesn't cause an error.
@@ -138,6 +148,11 @@ public class Lapisworks implements ModInitializer {
 			HEXAL_INTEROP = true;
 			anyInterop = true;
 			com.luxof.lapisworks.interop.hexal.Lapisal.beCool();
+		}
+		if (isModLoaded("hierophantics")) {
+			HIEROPHANTICS_INTEROP = true;
+			anyInterop = true;
+			com.luxof.lapisworks.interop.hierophantics.Chariot.readTarotCards();
 		}
 
 		LapisConfig.renewCurrentConfig();
@@ -762,5 +777,102 @@ public class Lapisworks implements ModInitializer {
 	public static boolean exemptFromMediaConsumptionDecrease(Identifier pattern) {
 		return actionInTag(pattern, CANNOT_MODIFY_COST_TAG)
 			|| actionInTag(pattern, GRAND_RITUAL_BLACKLIST_TAG);
+	}
+
+	public static void makeParticlesInSpiralGoUp(
+		World world,
+		Vec3d centerBottom,
+		Vec3d up,
+		double radiusX,
+		double radiusY,
+		int color,
+		Function<Integer, Double> speedLossPerParticleFunction,
+		boolean goInReverse
+	) {
+		for (int i = 0; i < 1080; i += 3) {
+			double rads = Math.toRadians(i);
+
+			double x = radiusX*(goInReverse ? -Math.sin(rads) : Math.cos(rads));
+			double y = radiusY*(goInReverse ? Math.cos(rads) : Math.sin(rads));
+			Vec3d vel = up.multiply(speedLossPerParticleFunction.apply(i / 3));
+
+			Vec3d pos = switch (
+				Direction.getFacing(
+					Math.abs(up.x),
+					Math.abs(up.y),
+					Math.abs(up.z)
+				)
+			) {
+				case UP -> new Vec3d(centerBottom.x+x, centerBottom.y, centerBottom.z+y);
+				case EAST -> new Vec3d(centerBottom.x, centerBottom.y+y, centerBottom.z+x);
+				case SOUTH -> new Vec3d(centerBottom.x+x, centerBottom.y+y, centerBottom.z);
+				default -> centerBottom;
+			};
+
+			world.addParticle(
+				new ConjureParticleOptions(color),
+				pos.x, pos.y, pos.z,
+				vel.x, vel.y, vel.z
+			);
+		}
+	}
+
+	public static <Any extends Object> ArrayList<Any> mapMulti(
+		Stream<? extends Object> stream,
+		BiConsumer<Object, Consumer<Any>> mapper
+	) {
+		ArrayList<Any> buffer = new ArrayList<>();
+		stream.forEach(obj -> mapper.accept(obj, buffer::add));
+		return buffer;
+	}
+
+	public static CastingImage CastingImgWithStack(CastingImage img, List<Iota> stack) {
+		return img.copy(
+			stack,
+			img.getParenCount(),
+			img.getParenthesized(),
+			img.getEscapeNext(),
+			img.getOpsConsumed(),
+			img.getUserData()
+		);
+	}
+
+	public static boolean equalStacks(ItemStack a, ItemStack b) {
+		return a.getItem() == b.getItem() && a.getCount() == b.getCount();
+	}
+
+	public static boolean isInCradle(ItemStack stack) {
+		return NBTHelper.getBoolean(stack, IS_IN_CRADLE);
+	}
+	public static void removeFromCradle(ItemStack stack) {
+		if (NBTHelper.contains(stack, IS_IN_CRADLE))
+			NBTHelper.remove(stack, IS_IN_CRADLE);
+	}
+	public static void putInCradle(ItemStack stack) {
+		NBTHelper.putBoolean(stack, IS_IN_CRADLE, true);
+	}
+
+	public static NbtCompound nbtCompoundOf(Stream<Pair<String, ? extends NbtElement>> stream) {
+		NbtCompound nbt = new NbtCompound();
+		stream.forEach(entry -> nbt.put(entry.getLeft(), entry.getRight()));
+		return nbt;
+	}
+
+	public static <KEY extends Object, VALUE extends Object> HashMap<KEY, VALUE> hashMapof(
+		NbtCompound nbt,
+		Function<String, KEY> keyFunction,
+		Function<NbtElement, VALUE> valueFunction
+	) {
+		HashMap<KEY, VALUE> map = new HashMap<>();
+		for (String key : nbt.getKeys()) {
+			map.put(keyFunction.apply(key), valueFunction.apply(nbt.get(key)));
+		}
+		return map;
+	}
+
+	public static boolean equalsStack(ItemStack stackA, ItemStack stackB) {
+		return stackA == stackB ||
+			(stackA.isOf(stackB.getItem()) && stackA.getCount() == stackB.getCount()) ||
+			stackA.isEmpty() && stackB.isEmpty();
 	}
 }
