@@ -60,7 +60,8 @@ public class MoarAttr extends SpellActionNCT {
         double currentJuiced = getCurrentJuiceValue(entity);
 
         double defaultVal = currentCombined - currentJuiced;
-        double limit = defaultVal * this.limitModifier + this.limitOffset;
+        // -1 since this is the limit on JUICING not TOTAL ATTRIBUTE VALUE
+        double limit = defaultVal * (this.limitModifier - 1) + this.limitOffset;
         double setTo = Math.min(
             count / attrCompensateMult,
             limit
