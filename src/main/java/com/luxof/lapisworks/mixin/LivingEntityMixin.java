@@ -92,6 +92,10 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 		}
 		juicedAttrInst.setBaseValue(value);
 	}
+	@Override @Unique
+    public void setJuicedAttrSpecifically(EntityAttribute attribute, double value) {
+		juicedUpVals.getCustomInstance(attribute).setBaseValue(value);
+	}
 
 	@Unique @Override
 	public void setAllJuicedUpAttrsToZero() {

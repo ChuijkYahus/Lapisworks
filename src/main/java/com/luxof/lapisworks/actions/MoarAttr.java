@@ -12,6 +12,7 @@ import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
 import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 
+import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.LapisworksIDs.AMEL;
 import static com.luxof.lapisworks.MishapThrowerJava.assertItemAmount;
 
@@ -67,7 +68,10 @@ public class MoarAttr extends SpellActionNCT {
             limit
         );
 
-        int expendedAmel = (int)Math.ceil(Math.abs(setTo - currentJuiced) * this.expendedAmelModifier);
+        int expendedAmel = (int)Math.max(
+            Math.ceil((setTo - currentJuiced) * this.expendedAmelModifier),
+            0
+        );
         assertItemAmount(ctx, Mutables::isAmel, AMEL, expendedAmel);
 
         return new SpellAction.Result(
@@ -80,7 +84,7 @@ public class MoarAttr extends SpellActionNCT {
 
     public class Spell implements RenderedSpellNCT {
         public final LivingEntity entity;
-        public final double setTo;
+        public double setTo;
         public final int expendedAmel;
 
         public Spell(
@@ -101,6 +105,11 @@ public class MoarAttr extends SpellActionNCT {
                 false,
                 Flags.PRESET_UpToHotbar
             );
+            if (setTo < 0) {
+                LOGGER.error("Lapisworks just shat it's pants and setTo was negative. Trying to fix this for you by abs()-ing setTo and clearing your juiced attribute! Hopefully this doesn't happpen in the future.");
+                setTo = Math.abs(setTo);
+            }
+            ((LapisworksInterface)this.entity).setJuicedAttrSpecifically(modifyAttribute, 0);
             ((LapisworksInterface)this.entity).setAmountOfAttrJuicedUpByAmel(
                 modifyAttribute,
                 this.setTo
