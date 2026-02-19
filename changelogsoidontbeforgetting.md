@@ -330,6 +330,7 @@ Only the devs who can keep up with me...
 - Alchemy/potion-brewing overhaul (I'm deadass)  
   herb stuff that leads to discovering Alchemy?  
   cauldron brewing! (definitely probably a part of herb stuff!)
+- Destroy Mind spell, reverts a simple mind infusion
 - Oneironaut interop (you will shit your pants playing Lapisworks and you will like it)  
   so you like Subnautica?  
   - added the Congested Deep Noosphere
@@ -346,6 +347,7 @@ Only the devs who can keep up with me...
   - displays can now be textures!
 - Enchanted Scroll
   - It's literally a Hex Casting IDE.  
+- Enchanted Rifts' push effect now lessened by Knockback Resistance status effect
 - Enchantweave? (formerly part of Hexic interop)
 - Reroll enchantment selection in the table!
   - costs 1 charged am + 1 per previous cast

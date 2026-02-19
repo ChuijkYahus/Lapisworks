@@ -6,14 +6,12 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.luxof.lapisworks.VAULT.Flags;
-import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.mixinsupport.GetVAULT;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
 import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.LapisworksIDs.AMEL;
 import static com.luxof.lapisworks.MishapThrowerJava.assertItemAmount;
 
@@ -57,7 +55,6 @@ public class MoarAttr extends SpellActionNCT {
             : args.getLivingEntityButNotArmorStand(0);
         double count = args.getPositiveDouble(1);
 
-        VAULT vault = ((GetVAULT)ctx).grabVAULT();
 
         double currentCombined = getCurrentAttrValue(entity);
         double currentJuiced = getCurrentJuiceValue(entity);

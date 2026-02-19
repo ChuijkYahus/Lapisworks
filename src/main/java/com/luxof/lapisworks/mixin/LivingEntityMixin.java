@@ -31,6 +31,7 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -104,30 +105,40 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	@Unique @Override
 	public AttributeContainer getLapisworksAttributes() { return this.juicedUpVals; }
 	@Unique @Override
-	public void setLapisworksAttributes(AttributeContainer attributes) {
+	public void setLapisworksAttributes(AttributeContainer toAttributes) {
 		setAmountOfAttrJuicedUpByAmel(
 			EntityAttributes.GENERIC_ATTACK_DAMAGE,
-			attributes.getBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)
+			toAttributes.getBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)
 		);
 		setAmountOfAttrJuicedUpByAmel(
 			EntityAttributes.GENERIC_MAX_HEALTH,
-			attributes.getBaseValue(EntityAttributes.GENERIC_MAX_HEALTH)
+			toAttributes.getBaseValue(EntityAttributes.GENERIC_MAX_HEALTH)
 		);
 		setAmountOfAttrJuicedUpByAmel(
 			EntityAttributes.GENERIC_MOVEMENT_SPEED,
-			attributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)
+			toAttributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)
 		);
 	}
 	@Unique
-	public void setJuicedAttributesSpecifically(AttributeContainer attributes) {
+	public void setJuicedAttributesSpecifically(AttributeContainer toAttributes) {
 		juicedUpVals.getCustomInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE)
-			.setBaseValue(attributes.getBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
+			.setBaseValue(toAttributes.getBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
 
 		juicedUpVals.getCustomInstance(EntityAttributes.GENERIC_MAX_HEALTH)
-			.setBaseValue(attributes.getBaseValue(EntityAttributes.GENERIC_MAX_HEALTH));
+			.setBaseValue(toAttributes.getBaseValue(EntityAttributes.GENERIC_MAX_HEALTH));
 
 		juicedUpVals.getCustomInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)
-			.setBaseValue(attributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
+			.setBaseValue(toAttributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
+		if ((Object)this instanceof PlayerEntity) {
+			// Mojank (tm)
+			EntityAttributeInstance speed = attributes.getCustomInstance(
+				EntityAttributes.GENERIC_MOVEMENT_SPEED
+			);
+			speed.setBaseValue(
+				speed.getBaseValue() +
+				toAttributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)
+			);
+		}
 	}
 
 	@Unique @Override
