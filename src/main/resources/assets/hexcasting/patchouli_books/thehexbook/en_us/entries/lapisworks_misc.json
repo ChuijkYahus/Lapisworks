@@ -175,6 +175,14 @@
             "input": "[any], int, any",
             "output": "[any]",
             "text": "pages.lapisworks.lapisworks_misc.robbie_exalt.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:thewhattropy",
+            "flag": "lapisworks:thewhattropy",
+            "input": "",
+            "output": "num",
+            "text": "pages.lapisworks.lapisworks_misc.thewhattropy.summary"
         }
     ]
 }

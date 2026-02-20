@@ -113,6 +113,7 @@ public class Patterns {
         register("for_n_in_range", "aqadadad", HexDir.NORTH_WEST, new OpForNInRange(false));
         register("execute_many_times", "dedadada", HexDir.SOUTH_WEST, new OpForNInRange(true));
         register("hadamard", "awddwde", HexDir.WEST, new Hadamard());
+        register("thewhattropy", "eqqqq", HexDir.NORTH_WEST, new TheCoolerEntropy());
 
         register("thought_sieve", "qadaadadqaqdadqaq", HexDir.WEST, new HexResearchYoink());
         register("absorb_mind", "aawqqwqqqaede", HexDir.WEST, new MindLiquefaction());

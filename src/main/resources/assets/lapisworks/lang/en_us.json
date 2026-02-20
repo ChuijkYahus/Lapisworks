@@ -222,6 +222,8 @@
     "hexcasting.action.book.lapisworks:execute_many_times": "Kitkat's Gambit",
     "hexcasting.action.lapisworks:hadamard": "Hadamard Distillation",
     "hexcasting.action.book.lapisworks:hadamard": "Hadamard Distillation",
+    "hexcasting.action.lapisworks:thewhattropy": "Negentropy Reflection",
+    "hexcasting.action.book.lapisworks:thewhattropy": "Negentropy Reflection",
 
     "hexcasting.action.lapisworks:thought_sieve": "Sieve Thoughts",
     "hexcasting.action.book.lapisworks:thought_sieve": "Sieve Thoughts",
@@ -447,11 +449,15 @@
     "pages.lapisworks.lapisworks_misc.execute_many_times.summary": "$(o)Do you know the definition of insanity?$()$(br2)Executes the given pattern list the specified number of times. The stack on start behaves like it does for $(thing)Thoth's Gambit$().",
     "pages.lapisworks.lapisworks_misc.hadamard.summary": "Based off the Hadamard Product, this pattern multiplies the respective elements of two vectors.",
     "pages.lapisworks.lapisworks_misc.robbie_exalt.summary": "Inserts the given iota into the given list before the specified index. An input of [a, b, c], 1, d would return [a, d, b, c].",
+    "pages.lapisworks.lapisworks_misc.thewhattropy.summary": "Like $(l:patterns/math#hexcasting:random)Entropy Reflection$(), but returns a number from 0 (inclsuive) to 1 $(l)(exclusive)$().",
 
     "pages.lapisworks.mdia_manip.title": "Block Media Manipulation",
-    "pages.lapisworks.mdia_manip.huh": "I'm not sure what to make of this... I awoke in the dead of night and drew two patterns from my dream, labelling them $(thing)Deposit Media$() and $(thing)Withdraw Media$() respectively. To my surprise, they actually function.",
-    "pages.lapisworks.mdia_manip.deposit.summary": "Deposits into the given unit the amount of media specified, in dust. Costs the media specified, plus a tax of 10%% of it.",
-    "pages.lapisworks.mdia_manip.withdraw.summary": "Withdraws, from the given unit, into the $(l:patterns/great_spells/make_battery)$(item)Phial$() in my other hand, the amount specified in dust. Costs 10%% of the media specified.",
+    "pages.lapisworks.mdia_manip.huh": "I'm not sure what to make of this... I awoke in the dead of night and felt $(thing)bewitched$(), $(#00c)enchanted$() even by some ancient being to draw two patterns from my dream, labelling them $(thing)Deposit Media$(), $(thing)Withdraw Media$(), and $(thing)Media$(). To my utter surprise, they actually function.",
+    "pages.lapisworks.mdia_manip.deposit.summary": "Deposits into the given $(thing)Media Transfer Interface$(), the amount of media specified, in dust. Costs the media specified, plus a tax of 10%% of it.",
+    "pages.lapisworks.mdia_manip.withdraw.summary": "Withdraws, from the given $(thing)Media Transfer Interface$(), into the $(item)Media-containing item$() in my other hand, the amount specified in dust. Costs 10%% of the media specified.",
+    "pages.lapisworks.mdia_manip.get_mdia.summary": "Fetches the amount of media (in units of $(item)Amethyst Dust$()) contained in the given $(thing)Media Transfer Interface$().",
+    "pages.lapisworks.mdia_manip.media_transfer_interface_waht_wdym": "A $(thing)Media Transfer Interface$() is anything that supports media transfer. For example, if I happen upon item entities like $(l:patterns/great_spells/make_battery)$(item)Phials$() or media constructs ($(thing)wisps$(), I could call them) or $(thing)blocks that contain media$(), it is extremely likely that these two patterns may be used to interface with them.",
+    "pages.lapisworks.mdia_manip.whattheheck": "$(o)These two patterns... They feel $(#00c)alive$()$(o), $(#00c)humming$()$(o) even. It's as if some$(thing)thing$(), no some$(#00c)one$() is trapped in them. The hum is so quiet and in my head, it is as if I'm imagining it. $(o)Am$() I imagining it?",
 
     "pages.lapisworks.lapisworks_mishaps.title": "Lapisworks Mishaps",
     "pages.lapisworks.lapisworks_mishaps.summary": "With a new branch of Hex Casting comes new mishaps. I've documented them here.",
