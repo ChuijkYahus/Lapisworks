@@ -108,8 +108,8 @@ public class MoarAttr extends SpellActionNCT {
             if (setTo < 0) {
                 LOGGER.error("Lapisworks just shat it's pants and setTo was negative. Trying to fix this for you by abs()-ing setTo and clearing your juiced attribute! Hopefully this doesn't happpen in the future.");
                 setTo = Math.abs(setTo);
+                ((LapisworksInterface)this.entity).setJuicedAttrSpecifically(modifyAttribute, 0);
             }
-            ((LapisworksInterface)this.entity).setJuicedAttrSpecifically(modifyAttribute, 0);
             ((LapisworksInterface)this.entity).setAmountOfAttrJuicedUpByAmel(
                 modifyAttribute,
                 this.setTo
