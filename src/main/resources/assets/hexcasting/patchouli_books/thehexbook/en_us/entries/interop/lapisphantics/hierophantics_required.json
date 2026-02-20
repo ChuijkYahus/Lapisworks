@@ -2,7 +2,7 @@
     "name": "pages.lapisworks.interop.lapisphantics.hierophantics_required.title",
     "icon": "lapisworks:textures/entries/question_mark.png",
     "advancement": "lapisworks:enlightened",
-    "flag": "!mod:hexical",
+    "flag": "!mod:heirophantics",
     "category": "hexcasting:lapisworks/interop/lapisphantics",
     "sortnum": 0,
     "pages": [
