@@ -41,8 +41,6 @@ import java.util.List;
 
 import com.mojang.datafixers.util.Pair;
 
-import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
-
 import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 
 import net.fabricmc.api.ClientModInitializer;
@@ -52,12 +50,12 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -180,19 +178,19 @@ public class LapisworksClient implements ClientModInitializer {
         TrinketRendererRegistry.registerRenderer(FOCUS_NECKLACE, new NecklaceTrinketRenderer());
         TrinketRendererRegistry.registerRenderer(FOCUS_NECKLACE2, new NecklaceTrinketRenderer());
 
-        BlockEntityRendererRegistry.register(
+        BlockEntityRendererFactories.register(
             ModBlocks.ENCH_BREWER_ENTITY_TYPE,
             EnchBrewerRenderer::new
         );
-        BlockEntityRendererRegistry.register(
+        BlockEntityRendererFactories.register(
             ModBlocks.CHALK_ENTITY_TYPE,
             ChalkRenderer::new
         );
-        BlockEntityRendererRegistry.register(
+        BlockEntityRendererFactories.register(
             ModBlocks.CHALK_WITH_PATTERN_ENTITY_TYPE,
             ChalkWithPatternRenderer::new
         );
-        BlockEntityRendererRegistry.register(
+        BlockEntityRendererFactories.register(
             ModBlocks.BIG_CHALK_CENTER_ENTITY_TYPE,
             BigChalkCenterRenderer::new
         );
