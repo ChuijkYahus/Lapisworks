@@ -286,6 +286,7 @@ Only the devs who can keep up with me...
 - Live Jukebox top texture good again
 - Logspam begone!
 - Raycasting (Empty or Visible Distillation) would sometimes freeze your server
+- Rebound Slate simple mind infusion recipe exists again
 - Rifts (Enchanted Slipways) should not change rotations since birth now
 - Shit should actually tell you when you don't have Fabric now
 - Sieve Thoughts not working on a spell circle
@@ -586,3 +587,5 @@ put all this time shit in an addon
 call it Hex To The Future  
 
 port Mediaworks' Macula  
+
+Hastenature is AOE now (and perhaps has a duration for which it boosts random tick rates?)  

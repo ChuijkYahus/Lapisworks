@@ -9,8 +9,6 @@ import com.luxof.lapisworks.blocks.ReboundSlate;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.Mutables.SMindInfusion;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
-
 import java.util.List;
 
 import net.minecraft.block.BlockState;

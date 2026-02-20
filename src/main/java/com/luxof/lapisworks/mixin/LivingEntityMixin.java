@@ -123,8 +123,9 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 			toAttributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)
 		);
 	}
+	/** on world load ragh */
 	@Unique
-	public void setJuicedAttributesSpecifically(AttributeContainer toAttributes) {
+	public void setJuiceOnWorldLoad(AttributeContainer toAttributes) {
 		juicedUpVals.getCustomInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE)
 			.setBaseValue(toAttributes.getBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
 
@@ -210,7 +211,7 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
 		if (attributes != null && this.getWorld() != null && !this.getWorld().isClient) {
 
-			setJuicedAttributesSpecifically(
+			setJuiceOnWorldLoad(
 				new AttributeContainer(DefaultAttributeContainer.builder()
 					.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, nbt.getDouble("LAPISWORKS_JUICED_FISTS"))
 					.add(EntityAttributes.GENERIC_MAX_HEALTH, nbt.getDouble("LAPISWORKS_JUICED_SKIN"))

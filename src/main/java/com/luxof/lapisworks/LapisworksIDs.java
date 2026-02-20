@@ -65,15 +65,6 @@ public class LapisworksIDs {
     public static final Identifier GOT_LAPIS = id("got_lapis");
     public static final Identifier CLUEDIN_ADVANCEMENT = id("cluedin");
 
-    // beeginfusions
-    public static final Identifier ENHANCE_ENCHANTED_BOOK = id("enhance_enchanted_book");
-    public static final Identifier MAKE_GENERIC_PARTAMEL = id("make_generic_partamel");
-    // simple mind infusions
-    public static final Identifier SIMPLE_MIND_INTO_AMETHYST = id("base/mind_infusion/budding_amethyst");
-    public static final Identifier JUKEBOX_INTO_LIVE_JUKEBOX = id("base/mind_infusion/live_jukebox");
-    public static final Identifier EMPTY_IMP_INTO_SIMP = id("base/mind_infusion/simple_impetus");
-    public static final Identifier UNFLAY_FLAYED_VILLAGER = id("base/mind_infusion/deflay_villager");
-
     // V.A.U.L.T.
     public static final Identifier PLAYER_VAULT = id("player_vault");
     public static final Identifier CASTENV_VAULT = id("castenv_vault");
