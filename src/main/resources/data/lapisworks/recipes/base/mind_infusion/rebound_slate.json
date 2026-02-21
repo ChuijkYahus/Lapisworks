@@ -1,0 +1,11 @@
+{
+    "type": "lapisworks:simple_mind_infusion",
+    "input_block": "lapisworks:amel_constructs/jumpslate/am1",
+    "display_input_item": {
+        "item": "lapisworks:amel_constructs/jumpslate/am1"
+    },
+    "output_block": "lapisworks:amel_constructs/jumpslate/rebound_1",
+    "display_output_item": "lapisworks:amel_constructs/jumpslate/rebound_1",
+    "additional_costs": [],
+    "needs_enlightenment": true
+}

@@ -2,7 +2,7 @@
     "name": "pages.lapisworks.interop.lapisphantics.amalgamations.title",
     "icon": "lapisworks:chariotmind",
     "advancement": "lapisworks:enlightened_with_flay_artmind",
-    "flag": "mod:hexical",
+    "flag": "mod:heirophantics",
     "category": "hexcasting:lapisworks/interop/lapisphantics",
     "sortnum": 1,
     "pages": [

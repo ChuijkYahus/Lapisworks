@@ -157,7 +157,9 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
         unpowerTrailing(world, 1);
 
         if (result == null || result.getLeft() == null) {
-            world.removeBlock(currentPos, false);
+            if (!world.getBlockState(currentPos).isIn(ONETIMERITUAL_BURN_BLACKLIST_TAG)) {
+                world.removeBlock(currentPos, false);
+            }
             return false;
         }
 

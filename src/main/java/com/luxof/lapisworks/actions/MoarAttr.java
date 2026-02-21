@@ -6,7 +6,6 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.luxof.lapisworks.VAULT.Flags;
-import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.mixinsupport.GetVAULT;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
@@ -57,19 +56,22 @@ public class MoarAttr extends SpellActionNCT {
             : args.getLivingEntityButNotArmorStand(0);
         double count = args.getPositiveDouble(1);
 
-        VAULT vault = ((GetVAULT)ctx).grabVAULT();
 
         double currentCombined = getCurrentAttrValue(entity);
         double currentJuiced = getCurrentJuiceValue(entity);
 
         double defaultVal = currentCombined - currentJuiced;
-        double limit = defaultVal * this.limitModifier + this.limitOffset;
+        // -1 since this is the limit on JUICING not TOTAL ATTRIBUTE VALUE
+        double limit = defaultVal * (this.limitModifier - 1) + this.limitOffset;
         double setTo = Math.min(
             count / attrCompensateMult,
             limit
         );
 
-        int expendedAmel = (int)Math.ceil(Math.abs(setTo - currentJuiced) * this.expendedAmelModifier);
+        int expendedAmel = (int)Math.max(
+            Math.ceil((setTo - currentJuiced) * this.expendedAmelModifier),
+            0
+        );
         assertItemAmount(ctx, Mutables::isAmel, AMEL, expendedAmel);
 
         return new SpellAction.Result(
@@ -82,7 +84,7 @@ public class MoarAttr extends SpellActionNCT {
 
     public class Spell implements RenderedSpellNCT {
         public final LivingEntity entity;
-        public final double setTo;
+        public double setTo;
         public final int expendedAmel;
 
         public Spell(
@@ -103,6 +105,11 @@ public class MoarAttr extends SpellActionNCT {
                 false,
                 Flags.PRESET_UpToHotbar
             );
+            if (setTo < 0) {
+                LOGGER.error("Lapisworks just shat it's pants and setTo was negative. Trying to fix this for you by abs()-ing setTo and clearing your juiced attribute! Hopefully this doesn't happpen in the future.");
+                setTo = Math.abs(setTo);
+                ((LapisworksInterface)this.entity).setJuicedAttrSpecifically(modifyAttribute, 0);
+            }
             ((LapisworksInterface)this.entity).setAmountOfAttrJuicedUpByAmel(
                 modifyAttribute,
                 this.setTo

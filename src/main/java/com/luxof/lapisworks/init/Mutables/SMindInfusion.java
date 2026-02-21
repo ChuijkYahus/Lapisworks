@@ -2,12 +2,13 @@ package com.luxof.lapisworks.init.Mutables;
 
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
 
 import com.luxof.lapisworks.VAULT.VAULT;
 
 import java.util.List;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
 
 public class SMindInfusion {
     protected boolean infusingBlock = false;

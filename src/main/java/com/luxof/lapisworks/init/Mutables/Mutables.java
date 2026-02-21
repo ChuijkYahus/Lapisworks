@@ -11,21 +11,17 @@ import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.interop.hextended.LapixtendedInterface;
 import com.luxof.lapisworks.inv.HandsInv;
 import com.luxof.lapisworks.inv.SMindInfusionSetupInv;
-import com.luxof.lapisworks.mindinfusions.MakeSimpleImpetus;
-import com.luxof.lapisworks.mindinfusions.UnflayVillager;
+import com.luxof.lapisworks.mindinfusions.*;
 import com.luxof.lapisworks.recipes.ImbuementRec;
 import com.luxof.lapisworks.recipes.SMindInfusionRec;
 
+import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.LapisworksIDs.AMEL_TAG;
-import static com.luxof.lapisworks.LapisworksIDs.EMPTY_IMP_INTO_SIMP;
 import static com.luxof.lapisworks.LapisworksIDs.ENCHSENT_ADVANCEMENT;
-import static com.luxof.lapisworks.LapisworksIDs.ENHANCE_ENCHANTED_BOOK;
 import static com.luxof.lapisworks.LapisworksIDs.FLAY_ARTMIND_ADVANCEMENT;
 import static com.luxof.lapisworks.LapisworksIDs.HASTENATURE_ADVANCEMENT;
-import static com.luxof.lapisworks.LapisworksIDs.MAKE_GENERIC_PARTAMEL;
 import static com.luxof.lapisworks.LapisworksIDs.POTION_TAG;
 import static com.luxof.lapisworks.LapisworksIDs.QUENCHED_INDIGO_ADVANCEMENT;
-import static com.luxof.lapisworks.LapisworksIDs.UNFLAY_FLAYED_VILLAGER;
 
 import java.util.List;
 import java.util.Map;
@@ -103,6 +99,7 @@ public class Mutables {
             recipes.put(id, recipe);
         }
 
+        /** does not take datapacked recipes into account. */
         public static Map<Identifier, SMindInfusion> filter(
             BlockPos bp, CastingEnvironment ctx, List<? extends Iota> iotaStack, VAULT vault
         ) {
@@ -132,7 +129,19 @@ public class Mutables {
 
             // yes, this allows you to override datapacked recipes with code.
             // this is ideal.
-            filter(bp, ctx, iotaStack, vault).forEach(ret::put);
+            for (var entry : recipes.entrySet()) {
+                var key = entry.getKey();
+                var recipe = entry.getValue().setUp(bp, ctx, iotaStack, vault);
+
+                if (recipe.testBlock()) {
+                    ret.put(key, recipes.get(key));
+                } else {
+                    // why does the SImp datapacked rec also take in jump slates
+                    // but the code recipe doesn't
+                    // that makes no sense
+                    ret.remove(key);
+                }
+            }
 
             return ret;
         }
@@ -175,10 +184,11 @@ public class Mutables {
         wizardDiariesGainableAdvancements.add(HASTENATURE_ADVANCEMENT);
         wizardDiariesGainableAdvancements.add(QUENCHED_INDIGO_ADVANCEMENT);
 
-        SMindInfusions.put(EMPTY_IMP_INTO_SIMP, new MakeSimpleImpetus());
-        SMindInfusions.put(UNFLAY_FLAYED_VILLAGER, new UnflayVillager());
+        SMindInfusions.put(id("base/mind_infusion/simple_impetus"), new MakeSimpleImpetus());
+        SMindInfusions.put(id("base/mind_infusion/deflay_villager"), new UnflayVillager());
+        SMindInfusions.put(id("base/mind_infusion/rebound_slate"), new MakeSlateBoomerang());
 
-        BeegInfusions.put(ENHANCE_ENCHANTED_BOOK, new EnhanceEnchantedBook());
-        BeegInfusions.put(MAKE_GENERIC_PARTAMEL, new MakeGenericPartAmel());
+        BeegInfusions.put(id("enhance_enchanted_book"), new EnhanceEnchantedBook());
+        BeegInfusions.put(id("make_generic_partamel"), new MakeGenericPartAmel());
     }
 }

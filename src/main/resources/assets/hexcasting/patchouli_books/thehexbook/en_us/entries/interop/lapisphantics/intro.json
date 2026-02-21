@@ -2,7 +2,7 @@
     "name": "pages.lapisworks.interop.lapisphantics.intro.title",
     "icon": "lapisworks:textures/entries/question_mark.png",
     "advancement": "lapisworks:got_lapis",
-    "flag": "mod:hexical",
+    "flag": "mod:heirophantics",
     "category": "hexcasting:lapisworks/interop/lapisphantics",
     "sortnum": 0,
     "pages": [
