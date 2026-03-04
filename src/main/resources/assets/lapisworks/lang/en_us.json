@@ -235,6 +235,8 @@
     "hexcasting.action.book.lapisworks:min": "Minimum Distillation",
     "hexcasting.action.lapisworks:max": "Maximum Distillation",
     "hexcasting.action.book.lapisworks:max": "Maximum Distillation",
+    "hexcasting.action.lapisworks:pull": "Pull",
+    "hexcasting.action.book.lapisworks:pull": "Pull",
 
     "hexcasting.action.lapisworks:thought_sieve": "Sieve Thoughts",
     "hexcasting.action.book.lapisworks:thought_sieve": "Sieve Thoughts",
@@ -469,6 +471,7 @@
     "pages.lapisworks.lapisworks_misc.thewhattropy.summary": "Like $(l:patterns/math#hexcasting:random)Entropy Reflection$(), but returns a number from 0 (inclsuive) to 1 $(l)(exclusive)$().",
     "pages.lapisworks.lapisworks_misc.min.summary": "Returns the smaller of the two numbers.",
     "pages.lapisworks.lapisworks_misc.max.summary": "Returns the larger of the two numbers.",
+    "pages.lapisworks.lapisworks_misc.pull.summary": "Accelerates the given entity by the provided vector (like Impulse) for the specified amount of time (in twentieths of a second). Can be used to achieve drift/curve-shot-like effects. Costs the same as Impulse (including the subsequent cost per entity per cast) but multiplied by the time.",
 
     "pages.lapisworks.mdia_manip.title": "Media Manipulation",
     "pages.lapisworks.mdia_manip.huh": "I'm not sure what to make of this... I awoke in the dead of night and felt $(thing)bewitched$(), $(#00c)enchanted$() even by some ancient being to draw three patterns from my dream, labelling them $(thing)Deposit Media$(), $(thing)Withdraw Media$(), and $(thing)Inner Media Purification$(). To my utter surprise, they actually function.",

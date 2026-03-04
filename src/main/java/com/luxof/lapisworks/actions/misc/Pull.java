@@ -73,9 +73,10 @@ public class Pull extends SpellActionNCT {
                 ServerPlayNetworking.send(splayer, APPLY_PULL_FOR_TIME, buf);
                 return img;
             }
+            entity.addVelocity(pullIn);
             ((AcceleratableEntity)entity).applyLingeringAccel(
                 pullIn,
-                timeInTicks
+                timeInTicks - 1
             );
             return img;
         }

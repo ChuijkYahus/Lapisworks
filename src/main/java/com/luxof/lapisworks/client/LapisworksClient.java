@@ -227,13 +227,11 @@ public class LapisworksClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(
             APPLY_PULL_FOR_TIME,
             (client, handler, buf, responseSender) -> {
-                if (client.player == null) {
-                    err("Somehow, client.player is null when using the pull spell.");
-                    return;
-                }
+                Vec3d pull = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
+                client.player.addVelocity(pull);
                 ((AcceleratableEntity)client.player).applyLingeringAccel(
-                    new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble()),
-                    buf.readInt()
+                    pull,
+                    buf.readInt() - 1
                 );
             }
         );
