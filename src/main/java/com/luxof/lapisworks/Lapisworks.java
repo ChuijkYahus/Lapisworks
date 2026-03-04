@@ -140,7 +140,7 @@ public class Lapisworks implements ModInitializer {
 		return ret;
 	}
 	public static void log(Object... message) {
-		log(format(message));
+		LOGGER.info(format(message));
 	}
 	public static void warn(Object... message) {
 		LOGGER.warn(format(message));

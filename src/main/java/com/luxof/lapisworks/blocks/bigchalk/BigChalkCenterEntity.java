@@ -89,8 +89,11 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
     }
 
     private boolean powered = false;
+
     public boolean isPowered() { return powered; }
     public void power(boolean on) { power(on, true); }
+
+    public boolean _firstTime = false;
     public void power(boolean on, boolean shouldSave) {
         if (this.skipAnimation && !this.powered && on) {
             if (world.isClient)
@@ -101,13 +104,13 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
         }
 
         if (!this.powered && on) {
-            try {
-                throw new RuntimeException("Henlo.");
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            }
+            // *why?*
+            if (_firstTime) {
+                _firstTime = false;
+                return;
+            } else
+                ticksElapsed = 0;
         }
-        if (!this.powered && on) ticksElapsed = 0;
         this.powered = on;
         if (shouldSave) save();
     }

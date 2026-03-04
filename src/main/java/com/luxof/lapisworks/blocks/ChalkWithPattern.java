@@ -1,6 +1,7 @@
 package com.luxof.lapisworks.blocks;
 
 import com.luxof.lapisworks.blocks.bigchalk.BigChalkCenter;
+import com.luxof.lapisworks.blocks.bigchalk.BigChalkCenterEntity;
 import com.luxof.lapisworks.blocks.bigchalk.BigChalkPart;
 import com.luxof.lapisworks.blocks.entities.ChalkWithPatternEntity;
 import com.luxof.lapisworks.blocks.stuff.ChalkBlockInterface;
@@ -142,6 +143,8 @@ public class ChalkWithPattern extends BlockWithEntity implements ChalkBlockInter
             BigChalkPart.spawnDust(world, pos, down);
         }
         world.playSound(null, center, SoundEvents.BLOCK_SAND_PLACE, SoundCategory.BLOCKS);
+        // *why?*
+        ((BigChalkCenterEntity)world.getBlockEntity(center))._firstTime = false;
 
         return true;
     }
