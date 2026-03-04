@@ -1,0 +1,19 @@
+{
+    "variants": {
+        "facing=north": {
+            "model": "lapisworks:block/chariotmind"
+        },
+        "facing=east": {
+            "model": "lapisworks:block/chariotmind",
+            "y": 90
+        },
+        "facing=south": {
+            "model": "lapisworks:block/chariotmind",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "lapisworks:block/chariotmind",
+            "y": 270
+        }
+    }
+}

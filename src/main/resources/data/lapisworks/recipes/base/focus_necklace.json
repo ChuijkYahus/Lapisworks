@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "G G",
+        "GAG",
+        " F "
+    ],
+    "key": {
+        "A": {
+            "tag": "lapisworks:amel"
+        },
+        "G": {
+            "item": "minecraft:gold_nugget"
+        },
+        "F": {
+            "item": "hexcasting:focus"
+        }
+    },
+    "result": {
+        "item": "lapisworks:amel_constructs/focus_necklace/1"
+    }
+}

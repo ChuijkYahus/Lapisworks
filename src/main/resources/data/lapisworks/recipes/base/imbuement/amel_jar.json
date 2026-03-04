@@ -1,0 +1,8 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "normal": {
+        "item": "minecraft:glass_bottle"
+    },
+    "fullamel": "lapisworks:amel_jar",
+    "cost": 5
+}

@@ -1,0 +1,50 @@
+{
+    "variants": {
+        "energized=false,facing=down": {
+            "model": "lapisworks:block/amel_constructs/simple_impetus/unlit",
+            "x": 90
+        },
+        "energized=false,facing=east": {
+            "model": "lapisworks:block/amel_constructs/simple_impetus/unlit",
+            "y": 90
+        },
+        "energized=false,facing=north": {
+            "model": "lapisworks:block/amel_constructs/simple_impetus/unlit"
+        },
+        "energized=false,facing=south": {
+            "model": "lapisworks:block/amel_constructs/simple_impetus/unlit",
+            "y": 180
+        },
+        "energized=false,facing=up": {
+            "model": "lapisworks:block/amel_constructs/simple_impetus/unlit",
+            "x": -90
+        },
+        "energized=false,facing=west": {
+            "model": "lapisworks:block/amel_constructs/simple_impetus/unlit",
+            "y": 270
+        },
+        "energized=true,facing=down": {
+            "model": "lapisworks:block/amel_constructs/simple_impetus/lit",
+            "x": 90
+        },
+        "energized=true,facing=east": {
+            "model": "lapisworks:block/amel_constructs/simple_impetus/lit",
+            "y": 90
+        },
+        "energized=true,facing=north": {
+            "model": "lapisworks:block/amel_constructs/simple_impetus/lit"
+        },
+        "energized=true,facing=south": {
+            "model": "lapisworks:block/amel_constructs/simple_impetus/lit",
+            "y": 180
+        },
+        "energized=true,facing=up": {
+            "model": "lapisworks:block/amel_constructs/simple_impetus/lit",
+            "x": -90
+        },
+        "energized=true,facing=west": {
+            "model": "lapisworks:block/amel_constructs/simple_impetus/lit",
+            "y": 270
+        }
+    }
+}

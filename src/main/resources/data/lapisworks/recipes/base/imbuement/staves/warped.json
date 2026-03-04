@@ -1,0 +1,9 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "normal": {
+        "item": "hexcasting:staff/warped"
+    },
+    "partamel": "lapisworks:staves/incomplete/warped",
+    "fullamel": "lapisworks:staves/amel_staff",
+    "cost": 10
+}

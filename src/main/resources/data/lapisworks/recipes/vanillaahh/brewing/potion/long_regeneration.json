@@ -1,0 +1,11 @@
+{
+    "type": "lapisworks:brewery",
+    "from": "minecraft:regeneration",
+    "input": [
+        {
+            "item": "minecraft:redstone",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:long_regeneration"
+}

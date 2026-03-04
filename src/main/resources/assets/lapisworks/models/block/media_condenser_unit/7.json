@@ -1,0 +1,6 @@
+{
+	"parent": "lapisworks:block/media_condenser_unit/0",
+	"textures": {
+		"2": "lapisworks:block/media_condenser_unit/side7"
+	}
+}

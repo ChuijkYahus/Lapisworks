@@ -1,0 +1,9 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "normal": {
+        "item": "hexcasting:staff/mangrove"
+    },
+    "partamel": "lapisworks:staves/incomplete/mangrove",
+    "fullamel": "lapisworks:staves/amel_staff",
+    "cost": 10
+}

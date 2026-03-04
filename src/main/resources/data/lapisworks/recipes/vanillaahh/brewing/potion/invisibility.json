@@ -1,0 +1,11 @@
+{
+    "type": "lapisworks:brewery",
+    "from": "minecraft:night_vision",
+    "input": [
+        {
+            "item": "minecraft:fermented_spider_eye",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:invisibility"
+}

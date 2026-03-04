@@ -1,0 +1,14 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "requiredmod": [
+        {
+            "id": "hextended"
+        }
+    ],
+    "normal": {
+        "item": "hextended:staff/long/jungle"
+    },
+    "partamel": "lapisworks:staves/incomplete/jungle_wand",
+    "fullamel": "lapisworks:staves/amel_wand",
+    "cost": 20
+}

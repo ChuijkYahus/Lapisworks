@@ -1,0 +1,123 @@
+[build-system]
+requires = [
+    "hatchling",
+    "hatch-gradle-version>=0.9.8",
+]
+build-backend = "hatchling.build"
+
+# project metadata
+
+[project]
+name = "hexdoc-lapisworks"
+description = "Who up imbuing they Amel rn"
+readme = "doc/README.md"
+authors = [
+    { name="Luxof" },
+]
+keywords = ["hexdoc"]
+requires-python = ">=3.12"
+dynamic = ["version", "dependencies", "optional-dependencies"]
+
+[project.urls]
+Homepage = "https://real-luxof.github.io/Lapisworks"
+Source = "https://github.com/Real-Luxof/Lapisworks"
+
+# project version
+
+[tool.hatch.version]
+scheme = "gradle"
+source = "gradle-properties"
+py-path = "doc/src/hexdoc_lapisworks/__version__.py"
+key = "mod_version"
+
+# Python dependencies
+
+# required
+[tool.hatch.metadata.hooks.gradle-properties]
+dependencies = [
+    "hexdoc~=1!0.1.0a11",
+    { package="hexdoc-hexcasting", op="~=", py-version="1.0", key="hexcasting_version" },
+    { package="hexdoc-hexical", op=">=", py-version="1.0.0", key="hexical_hexdoc_version" },
+    { package="hexdoc-hierophantics", op=">=", py-version="1.0", key="hierophantics_hexdoc_version" },
+    "networkx~=3.5",
+    "scipy~=1.16",
+]
+
+# dev-only
+[dependency-groups]
+dev = [
+    "ruff",
+]
+
+# directory inclusion
+
+[tool.hatch.build]
+only-include = [
+    "doc/src/hexdoc_lapisworks",
+    "gradle.properties",
+]
+artifacts = [
+    "/doc/src/hexdoc_lapisworks/_export/generated",
+    "/doc/src/hexdoc_lapisworks/__gradle_version__.py",
+]
+
+[tool.hatch.build.targets.wheel]
+sources = ["doc/src"]
+
+# hexdoc entry points
+
+[project.entry-points.hexdoc]
+lapisworks = "hexdoc_lapisworks._hooks:LapisworksPlugin"
+
+# lapisworks needs to import shit
+[tool.uv]
+override-dependencies = [
+    "hexdoc-hexcasting==0.11.3.*" # hexical fah
+]
+
+# linting
+
+[tool.pyright]
+pythonVersion = "3.12"
+pythonPlatform = "All"
+
+include = ["doc/src"]
+extraPaths = ["doc/src"]
+
+typeCheckingMode = "standard"
+
+strictDictionaryInference = true
+strictListInference = true
+strictSetInference = true
+
+reportConstantRedefinition = "error"
+reportIncompleteStub = "error"
+reportInconsistentConstructor = "error"
+reportInvalidStubStatement = "error"
+
+reportDeprecated = "warning"
+reportDuplicateImport = "warning"
+reportMatchNotExhaustive = "warning"
+reportMissingParameterType = "warning"
+reportMissingTypeArgument = "warning"
+reportMissingTypeStubs = "warning"
+reportPrivateUsage = "warning"
+reportTypeCommentUsage = "warning"
+reportUnknownArgumentType = "warning"
+reportUnknownLambdaType = "warning"
+reportUnknownMemberType = "warning"
+reportUnknownParameterType = "warning"
+reportUnknownVariableType = "warning"
+reportUnnecessaryCast = "warning"
+reportUnnecessaryComparison = "warning"
+reportUnnecessaryContains = "warning"
+reportUnnecessaryIsInstance = "warning"
+reportUntypedBaseClass = "warning"
+reportUntypedClassDecorator = "warning"
+reportUntypedFunctionDecorator = "warning"
+reportUntypedNamedTuple = "warning"
+reportUnusedClass = "warning"
+reportUnusedExpression = "warning"
+reportUnusedFunction = "warning"
+reportUnusedImport = "warning"
+reportUnusedVariable = "warning"

@@ -1,0 +1,8 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "normal": {
+        "item": "hexcasting:slate"
+    },
+    "fullamel": "lapisworks:amel_constructs/jumpslate/am1",
+    "cost": 20
+}

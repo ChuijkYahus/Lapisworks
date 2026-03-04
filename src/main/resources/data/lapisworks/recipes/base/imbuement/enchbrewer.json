@@ -1,0 +1,8 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "normal": {
+        "item": "minecraft:brewing_stand"
+    },
+    "fullamel": "lapisworks:amel_constructs/enchbrewer",
+    "cost": 10
+}

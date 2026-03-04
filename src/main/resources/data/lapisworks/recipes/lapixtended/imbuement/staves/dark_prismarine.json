@@ -1,0 +1,14 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "requiredmod": [
+        {
+            "id": "hextended"
+        }
+    ],
+    "normal": {
+        "item": "hextended:staff/dark_prismarine"
+    },
+    "partamel": "lapisworks:staves/incomplete/dark_prismarine",
+    "fullamel": "lapisworks:staves/amel_staff",
+    "cost": 10
+}

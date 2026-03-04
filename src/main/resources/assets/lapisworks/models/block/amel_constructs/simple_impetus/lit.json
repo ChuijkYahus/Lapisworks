@@ -1,0 +1,7 @@
+{
+    "parent": "lapisworks:block/amel_constructs/simple_impetus/unlit",
+    "textures": {
+        "0": "lapisworks:block/amel_constructs/simple_impetus/lit",
+        "particle": "lapisworks:block/amel_constructs/simple_impetus/lit"
+    }
+}

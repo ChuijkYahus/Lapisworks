@@ -1,0 +1,19 @@
+{
+    "name": "pages.lapisworks.interop.lapixtended.orb.title",
+    "icon": "lapisworks:amel_constructs/amel_orb",
+    "advancement": "lapisworks:got_lapis",
+    "flag": "mod:hextended",
+    "category": "hexcasting:lapisworks/interop/lapixtended",
+    "sortnum": 1,
+    "pages": [
+        {
+            "type": "patchouli:spotlight",
+            "item": "lapisworks:amel_constructs/amel_orb",
+            "text": "pages.lapisworks.interop.lapixtended.orb.text1"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.interop.lapixtended.orb.text2"
+        }
+    ]
+}

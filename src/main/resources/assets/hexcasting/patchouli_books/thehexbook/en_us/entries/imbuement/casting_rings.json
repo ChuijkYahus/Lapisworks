@@ -1,0 +1,30 @@
+{
+    "name": "pages.lapisworks.imbuement_rings.title",
+    "icon": "lapisworks:staves/amel_ring2",
+    "advancement": "lapisworks:got_lapis",
+    "category": "hexcasting:lapisworks/imbuement",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement_rings.lore"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement_rings.lore2"
+        },
+        {
+            "type": "patchouli:crafting",
+            "title": "pages.lapisworks.imbuement_rings.recipe.title",
+            "recipe": "lapisworks:base/ring",
+            "text": "pages.lapisworks.imbuement_rings.recipe.desc"
+        },
+        {
+            "type": "patchouli:image",
+            "images": [
+                "lapisworks:textures/entries/bookpic.png"
+            ],
+            "text": "pages.lapisworks.imbuement_rings.pic_desc"
+        }
+    ]
+}

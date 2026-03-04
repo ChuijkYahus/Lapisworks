@@ -1,0 +1,53 @@
+{
+    "name": "pages.lapisworks.imbuement.rituals.onetime.title",
+    "icon": "lapisworks:textures/entries/onetimeritual.png",
+    "advancement": "lapisworks:got_lapis",
+    "category": "hexcasting:lapisworks/imbuement/rituals",
+    "sortnum": 1,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.rituals.onetime.howto"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:stop_be_me",
+            "anchor": "lapisworks:stop_be_me",
+            "input": "",
+            "output": "",
+            "text": "pages.lapisworks.imbuement.rituals.onetime.stop_be_me.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:be_me",
+            "anchor": "lapisworks:be_me",
+            "input": "",
+            "output": "",
+            "text": "pages.lapisworks.imbuement.rituals.onetime.be_me.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:get_ritual_tuning",
+            "anchor": "lapisworks:get_ritual_tuning",
+            "input": "",
+            "output": "any",
+            "text": "pages.lapisworks.imbuement.rituals.onetime.get_ritual_tuning.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:tune_ritual",
+            "anchor": "lapisworks:tune_ritual",
+            "input": "any",
+            "output": "",
+            "text": "pages.lapisworks.imbuement.rituals.onetime.tune_ritual.summary"
+        },
+        {
+            "type": "patchouli:image",
+            "images": [
+                "lapisworks:textures/entries/onetimeritualexample.png"
+            ],
+            "border": true,
+            "text": "pages.lapisworks.imbuement.rituals.onetime.img_description"
+        }
+    ]
+}

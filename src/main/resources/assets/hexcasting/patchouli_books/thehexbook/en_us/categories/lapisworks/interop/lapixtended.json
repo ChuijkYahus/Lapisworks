@@ -1,0 +1,7 @@
+{
+  "name": "categories.lapisworks.lapisworks.interop.lapixtended.title",
+  "icon": "lapisworks:textures/entries/lapixtended.png",
+  "description": "categories.lapisworks.lapisworks.interop.lapixtended.desc",
+  "parent": "hexcasting:lapisworks/interop",
+  "sortnum": 0
+}

@@ -1,0 +1,9 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "normal": {
+        "item": "hexcasting:staff/mindsplice"
+    },
+    "partamel": "lapisworks:staves/incomplete/mindsplice",
+    "fullamel": "lapisworks:staves/amel_staff",
+    "cost": 10
+}

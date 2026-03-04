@@ -1,0 +1,44 @@
+{
+  "parent": "hexcasting:root",
+  "display": {
+    "icon": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "title": {
+      "translate": "advancements.lapisworks.gotlapis.name"
+    },
+    "description": {
+      "translate": "advancements.lapisworks.gotlapis.description"
+    },
+    "background": "hexcasting:textures/block/slate.png",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "get_lapis": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["minecraft:lapis_lazuli"]
+          }
+        ]
+      }
+    },
+    "be_a_hexcaster": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": {
+          "type_specific": {
+            "type": "player",
+            "advancements": {
+              "hexcasting:root": true
+            }
+          }
+        }
+      }
+    }
+  }
+}

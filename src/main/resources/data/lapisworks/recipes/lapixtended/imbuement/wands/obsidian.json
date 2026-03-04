@@ -1,0 +1,14 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "requiredmod": [
+        {
+            "id": "hextended"
+        }
+    ],
+    "normal": {
+        "item": "hextended:staff/long/obsidian"
+    },
+    "partamel": "lapisworks:staves/incomplete/obsidian_wand",
+    "fullamel": "lapisworks:staves/amel_wand",
+    "cost": 20
+}

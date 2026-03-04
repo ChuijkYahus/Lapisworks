@@ -1,0 +1,6 @@
+{
+    "parent": "lapisworks:block/mind/mindi",
+    "textures": {
+        "13": "lapisworks:block/mind/mind"
+    }
+}

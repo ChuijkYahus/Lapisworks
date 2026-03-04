@@ -1,0 +1,11 @@
+{
+    "type": "lapisworks:brewery",
+    "from": "minecraft:awkward",
+    "input": [
+        {
+            "item": "minecraft:golden_carrot",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:night_vision"
+}

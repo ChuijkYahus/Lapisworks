@@ -1,0 +1,9 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "normal": {
+        "item": "hexcasting:staff/dark_oak"
+    },
+    "partamel": "lapisworks:staves/incomplete/dark_oak",
+    "fullamel": "lapisworks:staves/amel_staff",
+    "cost": 10
+}

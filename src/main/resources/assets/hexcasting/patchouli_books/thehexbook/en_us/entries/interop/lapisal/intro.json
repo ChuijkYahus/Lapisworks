@@ -1,0 +1,14 @@
+{
+    "name": "pages.lapisworks.interop.lapisal.intro.title",
+    "icon": "lapisworks:textures/entries/question_mark.png",
+    "advancement": "lapisworks:got_lapis",
+    "flag": "mod:hexal",
+    "category": "hexcasting:lapisworks/interop/lapisal",
+    "sortnum": 0,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.interop.lapisal.intro.text"
+        }
+    ]
+}

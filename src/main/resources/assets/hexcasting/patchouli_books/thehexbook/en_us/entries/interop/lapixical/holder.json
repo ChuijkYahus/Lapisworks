@@ -1,0 +1,15 @@
+{
+    "name": "pages.lapisworks.interop.lapixical.holder.title",
+    "icon": "lapisworks:amel_constructs/holder",
+    "advancement": "lapisworks:enlightened",
+    "flag": "&mod:hexical,lapisworks:fulllapixical",
+    "category": "hexcasting:lapisworks/interop/lapixical",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "patchouli:spotlight",
+            "item": "lapisworks:amel_constructs/holder",
+            "text": "pages.lapisworks.interop.lapixical.holder.text"
+        }
+    ]
+}

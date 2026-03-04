@@ -1,0 +1,20 @@
+{
+    "variants": {
+        "color=0": { "model": "lapisworks:block/conjureable/black" },
+        "color=1": { "model": "lapisworks:block/conjureable/blue" },
+        "color=2": { "model": "lapisworks:block/conjureable/brown" },
+        "color=3": { "model": "lapisworks:block/conjureable/cyan" },
+        "color=4": { "model": "lapisworks:block/conjureable/gray" },
+        "color=5": { "model": "lapisworks:block/conjureable/green" },
+        "color=6": { "model": "lapisworks:block/conjureable/light_blue" },
+        "color=7": { "model": "lapisworks:block/conjureable/light_gray" },
+        "color=8": { "model": "lapisworks:block/conjureable/lime" },
+        "color=9": { "model": "lapisworks:block/conjureable/magenta" },
+        "color=10": { "model": "lapisworks:block/conjureable/orange" },
+        "color=11": { "model": "lapisworks:block/conjureable/pink" },
+        "color=12": { "model": "lapisworks:block/conjureable/purple" },
+        "color=13": { "model": "lapisworks:block/conjureable/red" },
+        "color=14": { "model": "lapisworks:block/conjureable/white" },
+        "color=15": { "model": "lapisworks:block/conjureable/yellow" }
+    }
+}

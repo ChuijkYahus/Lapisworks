@@ -1,0 +1,18 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+# https://copier.readthedocs.io/en/stable/updating/#never-change-the-answers-file-manually
+_commit: v0.2.0
+_src_path: gh:hexdoc-dev/hexdoc-hexcasting-template
+advanced: false
+github_repo: Lapisworks
+github_user: Real-Luxof
+gradle_deps_type: gradle.properties
+gradle_hex_version_key: hexcasting_version
+gradle_mod_version_key: mod_version
+main_branch: main
+minecraft_version: 1.20.1
+minecraft_version_in_mod_version: false
+mod_description: Who up imbuing they Amel rn
+mod_display_name: Lapisworks
+modid: lapisworks
+multiloader: false
+pattern_registry_path: main/java/com/luxof/lapisworks/init/Patterns.java

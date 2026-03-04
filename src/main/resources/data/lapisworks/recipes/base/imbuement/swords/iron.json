@@ -1,0 +1,8 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "normal": {
+        "item": "minecraft:iron_sword"
+    },
+    "fullamel": "lapisworks:amel_constructs/iron_sword",
+    "cost": 32
+}

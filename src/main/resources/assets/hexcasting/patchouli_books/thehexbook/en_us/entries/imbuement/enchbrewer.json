@@ -1,0 +1,14 @@
+{
+    "name": "pages.lapisworks.imbuement.enchbrewer.title",
+    "icon": "lapisworks:amel_constructs/enchbrewer",
+    "advancement": "lapisworks:got_lapis",
+    "category": "hexcasting:lapisworks/imbuement",
+    "sortnum": 11,
+    "pages": [
+        {
+            "type": "patchouli:spotlight",
+            "item": "lapisworks:amel_constructs/enchbrewer",
+            "text": "pages.lapisworks.imbuement.enchbrewer.text"
+        }
+    ]
+}

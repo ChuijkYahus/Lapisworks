@@ -1,0 +1,11 @@
+{
+    "type": "lapisworks:brewery",
+    "from": "minecraft:long_swiftness",
+    "input": [
+        {
+            "item": "minecraft:fermented_spider_eye",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:long_slowness"
+}

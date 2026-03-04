@@ -1,0 +1,7 @@
+{
+    "type": "lapisworks:mold_amel",
+    "input": {
+        "item": "lapisworks:staves/amel_ring"
+    },
+    "output": "lapisworks:staves/amel_ring2"
+}

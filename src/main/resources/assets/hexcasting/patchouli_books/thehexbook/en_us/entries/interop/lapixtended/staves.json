@@ -1,0 +1,21 @@
+{
+    "name": "pages.lapisworks.interop.lapixtended.staves.title",
+    "icon": "lapisworks:textures/entries/lapixtended.png",
+    "advancement": "lapisworks:got_lapis",
+    "flag": "mod:hextended",
+    "category": "hexcasting:lapisworks/interop/lapixtended",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.interop.lapixtended.staves.text"
+        },
+        {
+            "type": "patchouli:image",
+            "images": [
+                "lapisworks:textures/entries/lapixtended_wands.png"
+            ],
+            "text": "pages.lapisworks.interop.lapixtended.staves.pic_desc"
+        }
+    ]
+}

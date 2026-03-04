@@ -1,0 +1,11 @@
+{
+    "type": "lapisworks:brewery",
+    "from": "minecraft:water",
+    "input": [
+        {
+            "item": "minecraft:fermented_spider_eye",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:weakness"
+}

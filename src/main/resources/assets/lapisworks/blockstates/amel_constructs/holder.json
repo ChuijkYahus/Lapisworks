@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "state=0": { "model": "lapisworks:block/amel_constructs/holder/left" },
+        "state=1": { "model": "lapisworks:block/amel_constructs/holder/right" }
+    }
+}

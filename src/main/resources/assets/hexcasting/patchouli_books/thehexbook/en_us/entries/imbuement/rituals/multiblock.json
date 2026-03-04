@@ -1,0 +1,28 @@
+{
+    "name": "pages.lapisworks.imbuement.rituals.multiblock.title",
+    "icon": "lapisworks:textures/entries/whycantihavemycakeandeatittooitsmyfuckingcakewdymicanteatitbutrenderable.png",
+    "advancement": "lapisworks:got_lapis",
+    "category": "hexcasting:lapisworks/imbuement/rituals",
+    "sortnum": 3,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.rituals.multiblock.howtomake"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.rituals.multiblock.manual"
+        },
+        {
+            "type": "patchouli:image",
+            "images": [
+                "lapisworks:textures/entries/step1grandritual.png",
+                "lapisworks:textures/entries/step2grandritual.png",
+                "lapisworks:textures/entries/step3grandritual.png",
+                "lapisworks:textures/entries/altgrandritual.png"
+            ],
+            "border": true,
+            "text": "pages.lapisworks.imbuement.rituals.multiblock.imgs_description"
+        }
+    ]
+}

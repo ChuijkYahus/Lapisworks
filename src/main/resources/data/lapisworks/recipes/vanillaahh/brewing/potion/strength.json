@@ -1,0 +1,11 @@
+{
+    "type": "lapisworks:brewery",
+    "from": "minecraft:awkward",
+    "input": [
+        {
+            "item": "minecraft:blaze_powder",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:strength"
+}

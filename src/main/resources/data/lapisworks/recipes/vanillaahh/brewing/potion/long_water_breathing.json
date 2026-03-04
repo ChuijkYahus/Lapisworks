@@ -1,0 +1,11 @@
+{
+    "type": "lapisworks:brewery",
+    "from": "minecraft:water_breathing",
+    "input": [
+        {
+            "item": "minecraft:redstone",
+            "count": 1
+        }
+    ],
+    "to": "minecraft:long_water_breathing"
+}
