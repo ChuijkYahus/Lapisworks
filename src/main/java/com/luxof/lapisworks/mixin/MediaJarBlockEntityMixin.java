@@ -2,6 +2,8 @@ package com.luxof.lapisworks.mixin;
 
 import com.luxof.lapisworks.media.MediaTransferInterface;
 
+import kotlin.jvm.internal.Intrinsics;
+
 import miyucomics.hexical.features.media_jar.MediaJarBlock;
 import miyucomics.hexical.features.media_jar.MediaJarBlockEntity;
 
@@ -20,9 +22,16 @@ public abstract class MediaJarBlockEntityMixin extends BlockEntity implements Me
         super(type, pos, state);
     }
 
-    @Shadow abstract long getMedia();
-    @Shadow public abstract void setMedia(long media);
-    //@Shadow abstract long getMaxMedia(); // oh it's static
+    @Shadow private long media;
+    @Shadow public abstract long getMedia();
+
+    @Override @Unique public void setMedia(long media) {
+        this.media = Math.max(Math.min(media, 6400000L), 0L);
+        this.markDirty();
+        if (!world.isClient) {
+            world.updateListeners(this.pos, this.getCachedState(), this.getCachedState(), 3);
+        }
+    }
     @Override @Unique public long getMaxMedia() { return MediaJarBlock.MAX_CAPACITY; }
     @Override @Unique public long getMediaHere() { return getMedia(); }
 }
