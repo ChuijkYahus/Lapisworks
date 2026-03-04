@@ -8,10 +8,16 @@ import com.luxof.lapisworks.mixinsupport.AcceleratableEntity;
 import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
 
+import static com.luxof.lapisworks.LapisworksIDs.APPLY_PULL_FOR_TIME;
+
 import java.util.List;
 
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 
 public class Pull extends SpellActionNCT {
@@ -26,7 +32,8 @@ public class Pull extends SpellActionNCT {
         Vec3d pullIn = stack.getVec3(1);
         int timeInTicks = stack.getIntAbove(2, 0);
 
-        long extraCost = userData.getBoolean("alreadyPulled") ? dust(1) : 0L;
+        NbtCompound alreadyPulled = userData.getCompound("alreadyPulled");
+        long extraCost = alreadyPulled.getBoolean(entity.getUuidAsString()) ? dust(1) : 0L;
 
         return new Result(
             new Spell(timeInTicks, pullIn, entity),
@@ -52,11 +59,23 @@ public class Pull extends SpellActionNCT {
         }
 
         public CastingImage cast(CastingEnvironment ctx, CastingImage img) {
+            img.getUserData()
+                .getCompound("alreadyPulled")
+                .putBoolean(entity.getUuidAsString(), true);
+
+            if (entity instanceof ServerPlayerEntity splayer) {
+                PacketByteBuf buf = PacketByteBufs.create();
+                buf.writeDouble(pullIn.x);
+                buf.writeDouble(pullIn.y);
+                buf.writeDouble(pullIn.z);
+                buf.writeInt(timeInTicks);
+                ServerPlayNetworking.send(splayer, APPLY_PULL_FOR_TIME, buf);
+                return img;
+            }
             ((AcceleratableEntity)entity).applyLingeringAccel(
                 pullIn,
                 timeInTicks
             );
-            img.getUserData().putBoolean("alreadyPulled", true);
             return img;
         }
     }

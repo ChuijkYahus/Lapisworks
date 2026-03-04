@@ -7,6 +7,7 @@ import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface.AllEnchantments;
 import com.luxof.lapisworks.interop.hexical.EntityDimensionsButTheHitboxIsDown;
 
+import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.deserializeVec3d;
 import static com.luxof.lapisworks.Lapisworks.isInCradle;
 import static com.luxof.lapisworks.Lapisworks.nbtListOf;
@@ -20,6 +21,7 @@ import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.math.Vec3d;
@@ -66,8 +68,16 @@ public abstract class EntityMixin implements AcceleratableEntity {
     @Inject(at = @At("TAIL"), method = "tick")
     public void lapisworks$tickPullSpellEffects(CallbackInfo ci) {
 
+        if (
+            (Object)this instanceof PlayerEntity player &&
+            (
+                player.isSpectator() ||
+                (player.isCreative() && player.getAbilities().flying)
+            )
+        )
+            return;
+
         ArrayList<Pair<Vec3d, Integer>> newLingeringAccels = new ArrayList<>(lingeringAccels);
-        Vec3d combinedAccel = new Vec3d(0, 0, 0);
 
         for (int i = lingeringAccels.size() - 1; i >= 0; i--) {
             Pair<Vec3d, Integer> lingeringAccel = lingeringAccels.get(i);
@@ -80,9 +90,11 @@ public abstract class EntityMixin implements AcceleratableEntity {
             else
                 newLingeringAccels.remove(i);
 
-            combinedAccel = combinedAccel.add(pull);
             setVelocity(getVelocity().add(pull));
-            if (!getWorld().isClient)
+            if ((Object)this instanceof PlayerEntity)
+                if (getWorld().isClient)
+                    velocityModified = true;
+            else
                 velocityModified = true;
         }
 
