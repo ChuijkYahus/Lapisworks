@@ -1,0 +1,8 @@
+{
+    "type": "lapisworks:amel_imbuement",
+    "normal": {
+        "item": "lapisworks:staves/amel_ring"
+    },
+    "fullamel": "lapisworks:staves/amel_ring",
+    "cost": 1
+}
