@@ -1,17 +1,12 @@
 package com.luxof.lapisworks.client;
 
-import at.petrak.hexcasting.api.casting.math.HexPattern;
-import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
-import at.petrak.hexcasting.api.misc.MediaConstants;
-import at.petrak.hexcasting.common.lib.HexItems;
-
 import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.blocks.bers.*;
 import com.luxof.lapisworks.blocks.bigchalk.BigChalkCenterRenderer;
 import com.luxof.lapisworks.blocks.bigchalk.BigChalkPart;
-import com.luxof.lapisworks.blocks.entities.*;
 import com.luxof.lapisworks.init.*;
 import com.luxof.lapisworks.interop.hextended.items.AmelOrb;
+import com.luxof.lapisworks.mixinsupport.AcceleratableEntity;
 import com.luxof.lapisworks.mixinsupport.BlockDowser;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 
@@ -19,16 +14,12 @@ import static com.luxof.lapisworks.Lapisworks.FULL_HEXICAL_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.HEXAL_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.HIEROPHANTICS_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.LOGGER;
-import static com.luxof.lapisworks.Lapisworks.clamp;
 import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.Lapisworks.nullConfigFlags;
-import static com.luxof.lapisworks.Lapisworks.prettifyFloat;
-import static com.luxof.lapisworks.Lapisworks.prettifyDouble;
+import static com.luxof.lapisworks.LapisworksIDs.APPLY_PULL_FOR_TIME;
 import static com.luxof.lapisworks.LapisworksIDs.DOWSE_RESULT;
 import static com.luxof.lapisworks.LapisworksIDs.DOWSE_TS;
 import static com.luxof.lapisworks.LapisworksIDs.GIB_DUST;
-import static com.luxof.lapisworks.LapisworksIDs.SCRYING_MIND_END;
-import static com.luxof.lapisworks.LapisworksIDs.SCRYING_MIND_START;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_PWSHAPE_PATS;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_SENT;
 import static com.luxof.lapisworks.init.ModItems.AMEL_JAR;
@@ -36,8 +27,6 @@ import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE;
 import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE2;
 import static com.luxof.lapisworks.init.ModItems.IRON_SWORD;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
-
-import java.util.List;
 
 import com.mojang.datafixers.util.Pair;
 
@@ -50,6 +39,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
@@ -58,16 +48,14 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
 import vazkii.patchouli.api.PatchouliAPI;
 
 public class LapisworksClient implements ClientModInitializer {
@@ -78,7 +66,8 @@ public class LapisworksClient implements ClientModInitializer {
     public static void registerMPPs() {
         ModelPredicateProviderRegistry.register(
             IRON_SWORD,
-            id("blocking"), // first person doesn't work but WHATEVER
+            // first person doesn't work and i don't fuckign know why
+            id("blocking"),
             (stack, world, entity, seed) -> {
                 return entity != null
                     && entity.isUsingItem()
@@ -118,49 +107,6 @@ public class LapisworksClient implements ClientModInitializer {
         }
     }
 
-    private String inlineify(HexPattern pattern) {
-        return "HexPattern["
-                    + pattern.getStartDir().toString()
-                    + ", "
-                    + pattern.anglesSignature() +
-                "]";
-    }
-    private String inlineify(List<HexPattern> patterns) {
-        String ret = "";
-        for (HexPattern pattern : patterns) { ret += inlineify(pattern); }
-        return ret;
-    }
-    private Pair<ItemStack, Text> displayMedia(long amount) {
-        return new Pair<>(
-            new ItemStack(HexItems.AMETHYST_DUST),
-            Text.literal(String.valueOf((double)amount / (double)MediaConstants.DUST_UNIT))
-        );
-    }
-    private Pair<ItemStack, Text> displayMediaWithCap(long amount, long cap) {
-        return new Pair<>(
-            new ItemStack(HexItems.AMETHYST_DUST),
-            Text.translatable(
-
-                "render.lapisworks.scryinglens.dust_with_cap",
-                String.valueOf((double)amount / (double)cap * 100.0),
-                (double)amount / (double)MediaConstants.DUST_UNIT,
-                (double)cap / (double)MediaConstants.DUST_UNIT
-
-            ).formatted(Formatting.LIGHT_PURPLE)
-        );
-    }
-    private Pair<ItemStack, Text> displayTunedFrequency(Text iota) {
-        return new Pair<ItemStack, Text>(
-            new ItemStack(ModItems.TUNEABLE_AMETHYST),
-            Text.translatable(
-                "render.lapisworks.scryinglens.tuneable.tuned"
-            ).append(
-                iota != null ? iota : Text.translatable(
-                    "render.lapisworks.scryinglens.tuneable.nothing"
-                )
-            )
-        );
-    }
     @Override
     public void onInitializeClient() {
         // the eternal fucking grammar battle with this simple Markiplier ass log will drive me insane
@@ -195,119 +141,7 @@ public class LapisworksClient implements ClientModInitializer {
             BigChalkCenterRenderer::new
         );
 
-        // we all thank hexxy for adding a simple addDisplayer() instead of requiring mixin in unison
-        ScryingLensOverlayRegistry.addDisplayer(
-            ModBlocks.MIND_BLOCK,
-            (lines, state, pos, observer, world, direction) -> {
-                MindEntity blockEntity = (MindEntity)world.getBlockEntity(pos);
-
-                lines.add(
-                    new Pair<ItemStack, Text>(
-                        new ItemStack(ModItems.MIND),
-                        SCRYING_MIND_START.copy().append(
-                            Text.literal(
-                                prettifyFloat(clamp(blockEntity.mindCompletion, 0f, 100f))
-                            )
-                        ).append(
-                            SCRYING_MIND_END
-                        ).formatted(
-                            Formatting.LIGHT_PURPLE
-                        )
-                    )
-                );
-            }
-        );
-        ScryingLensOverlayRegistry.addDisplayer(
-            ModBlocks.SIMPLE_IMPETUS,
-            (lines, state, pos, observer, world, direction) -> {
-                SimpleImpetusEntity bE = (SimpleImpetusEntity)world.getBlockEntity(pos);
-                HexPattern tunedPattern = bE.getTunedPattern();
-
-                lines.add(
-                    displayMedia(bE.getMedia())
-                );
-                lines.add(
-                    new Pair<ItemStack, Text>(
-                        new ItemStack(ModItems.SIMPLE_IMPETUS),
-                        tunedPattern != null ? Text.translatable(
-                                "render.lapisworks.scryinglens.simp.listening",
-                                inlineify(tunedPattern)
-                            ) :
-                            Text.translatable("render.lapisworks.scryinglens.simp.not_listening")
-                    )
-                );
-            }
-        );
-        ScryingLensOverlayRegistry.addDisplayer(
-            ModBlocks.MEDIA_CONDENSER,
-            (lines, state, pos, observer, world, direction) -> {
-                MediaCondenserEntity blockEntity = (MediaCondenserEntity)world.getBlockEntity(pos);
-
-                lines.add(
-                    displayMediaWithCap(blockEntity.media, blockEntity.mediaCap)
-                );
-            }
-        );
-        ScryingLensOverlayRegistry.addDisplayer(
-            ModBlocks.CHALK_WITH_PATTERN,
-            (lines, state, pos, observer, world, direction) -> {
-                ChalkWithPatternEntity chalk = (ChalkWithPatternEntity)world.getBlockEntity(pos);
-
-                lines.add(
-                    new Pair<ItemStack, Text>(
-                        new ItemStack(ModItems.CHALK),
-                        chalk.pats.size() > 0 ? Text.literal(inlineify(chalk.pats)) :
-                        Text.translatable("render.lapisworks.scryinglens.chalk.no_patterns")
-                    )
-                );
-            }
-        );
-        ScryingLensOverlayRegistry.addDisplayer(
-            ModBlocks.TUNEABLE_AMETHYST,
-            (lines, state, pos, observer, world, direction) -> {
-                TuneableAmethystEntity tuneable = (TuneableAmethystEntity)world.getBlockEntity(pos);
-
-                lines.add(
-                    displayMediaWithCap(tuneable.media, tuneable.mediaCap)
-                );
-                lines.add(
-                    new Pair<>(
-                        new ItemStack(HexItems.AMETHYST_DUST),
-                        Text.translatable(
-                            "render.lapisworks.scryinglens.tuneable_amethyst.ambit",
-                            prettifyDouble(tuneable.getAmbit()),
-                            tuneable.ambitCap,
-                            tuneable.minAmbit,
-                            prettifyDouble(Math.sqrt(tuneable.getMediaInDust()))
-                        )
-                    )
-                );
-                Text iota = tuneable.getTunedFrequencyDisplay();
-                lines.add(displayTunedFrequency(iota));
-            }
-        );
-        ScryingLensOverlayRegistry.addDisplayer(
-            ModBlocks.RITUS,
-            (lines, state, pos, observer, world, direction) -> {
-                RitusEntity ritus = (RitusEntity)world.getBlockEntity(pos);
-
-                lines.add(
-                    displayMedia(ritus.media)
-                );
-
-                var display = ritus.getDisplay();
-                if (display != null) {
-                    lines.add(
-                        new Pair<ItemStack, Text>(
-                            display.getLeft(),
-                            display.getRight()
-                        )
-                    );
-                }
-
-                lines.add(displayTunedFrequency(ritus.getTunedFrequencyDisplay()));
-            }
-        );
+        ScryingOverlaysClient.addOverlays();
 
         WorldRenderEvents.AFTER_TRANSLUCENT.register((ctx) -> {
             overlayWorld(ctx.matrixStack(), ctx.tickDelta());
@@ -320,20 +154,14 @@ public class LapisworksClient implements ClientModInitializer {
 
         ClientPlayNetworking.registerGlobalReceiver(
             SEND_SENT,
-            (
-                client,
-                handler,
-                buf,
-                responseSender
-            ) -> {
+            (client, handler, buf, responseSender) -> {
                 boolean banishSentinel = buf.readBoolean();
                 if (banishSentinel) {
                     if (!this.playerHasJoined) {
                         this.bufferSentinelPos = null;
                         this.bufferSentinelAmbit = null;
-                    } else {
+                    } else
                         ((EnchSentInterface)client.player).setEnchantedSentinel(null, null);
-                    }
                     return;
                 }
                 Vec3d newPos = new Vec3d(buf.readVector3f());
@@ -341,18 +169,17 @@ public class LapisworksClient implements ClientModInitializer {
                 if (!this.playerHasJoined) {
                     this.bufferSentinelPos = newPos;
                     this.bufferSentinelAmbit = newAmbit;
-                } else {
+                } else
                     ((EnchSentInterface)client.player).setEnchantedSentinel(newPos, newAmbit);
-                }
             }
         );
+
         ClientPlayNetworking.registerGlobalReceiver(
             SEND_PWSHAPE_PATS,
             (client, handler, buf, responseSender) -> {
                 NbtCompound nbt = buf.readNbt();
                 for (String flag : chosenFlags.keySet()) {
                     chosenFlags.put(flag, nbt.getInt(flag));
-                    // vv unused but may allow for neat stuff in the future
                     PatchouliAPI.get().setConfigFlag(
                         flag + String.valueOf(nbt.getInt(flag)),
                         true
@@ -396,6 +223,20 @@ public class LapisworksClient implements ClientModInitializer {
             }
         );
 
+        ClientPlayNetworking.registerGlobalReceiver(
+            APPLY_PULL_FOR_TIME,
+            (client, handler, buf, responseSender) -> {
+                if (client.player == null) {
+                    LOGGER.error("Somehow, client.player is null when using the pull spell.");
+                    return;
+                }
+                ((AcceleratableEntity)client.player).applyLingeringAccel(
+                    new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble()),
+                    buf.readInt()
+                );
+            }
+        );
+
         ClientPlayConnectionEvents.JOIN.register((
             handler,
             sender,
@@ -409,8 +250,6 @@ public class LapisworksClient implements ClientModInitializer {
             );
         });
 
-        // i could just use the server_stopping event and send a packet then but i already wrote this so
-        // whatever
         ClientPlayConnectionEvents.DISCONNECT.register((
             handler,
             client
@@ -419,10 +258,6 @@ public class LapisworksClient implements ClientModInitializer {
             this.bufferSentinelPos = null;
             this.bufferSentinelAmbit = null;
             nullConfigFlags();
-            if (client.player != null) {
-                // i don't know, okay? just in case or something
-                ((EnchSentInterface)client.player).setEnchantedSentinel(null, null);
-            }
         });
     }
 }
