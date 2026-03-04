@@ -13,8 +13,9 @@ import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 import static com.luxof.lapisworks.Lapisworks.FULL_HEXICAL_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.HEXAL_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.HIEROPHANTICS_INTEROP;
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.err;
 import static com.luxof.lapisworks.Lapisworks.id;
+import static com.luxof.lapisworks.Lapisworks.log;
 import static com.luxof.lapisworks.Lapisworks.nullConfigFlags;
 import static com.luxof.lapisworks.LapisworksIDs.APPLY_PULL_FOR_TIME;
 import static com.luxof.lapisworks.LapisworksIDs.DOWSE_RESULT;
@@ -112,8 +113,8 @@ public class LapisworksClient implements ClientModInitializer {
         // the eternal fucking grammar battle with this simple Markiplier ass log will drive me insane
         // thankful i won't have to edit this file anymore
         // ^^^^ what was that, chief?
-        LOGGER.info("Hello everybody my name is LapisworksClient and today what we are going to do is: scrying lens tooltips, make blocks transparent, keybinds, networking, Model Predicate Providers, make blocks translucent, spin 4D hypercubes for the FUNNY, Block Entity Renderers (shudder), render trinkets, make particles, and client-side rendering!");
-        LOGGER.info("Does NONE of that sound fun? Well, that's because it isn't. So let's get started, shall we?");
+        log("Hello everybody my name is LapisworksClient and today what we are going to do is: scrying lens tooltips, make blocks transparent, keybinds, networking, Model Predicate Providers, make blocks translucent, spin 4D hypercubes for the FUNNY, Block Entity Renderers (shudder), render trinkets, make particles, and client-side rendering!");
+        log("Does NONE of that sound fun? Well, that's because it isn't. So let's get started, shall we?");
 
         LapisParticles.clientTicklesPaw();
         ModScreens.registerOnClient();
@@ -217,7 +218,7 @@ public class LapisworksClient implements ClientModInitializer {
                 try {
                     BigChalkPart.spawnDust(world, pos, attachedTo);
                 } catch (Exception e) {
-                    LOGGER.error("Error while spawning dust on big chalk break:");
+                    err("Error while spawning dust on big chalk break:");
                     e.printStackTrace();
                 }
             }
@@ -227,7 +228,7 @@ public class LapisworksClient implements ClientModInitializer {
             APPLY_PULL_FOR_TIME,
             (client, handler, buf, responseSender) -> {
                 if (client.player == null) {
-                    LOGGER.error("Somehow, client.player is null when using the pull spell.");
+                    err("Somehow, client.player is null when using the pull spell.");
                     return;
                 }
                 ((AcceleratableEntity)client.player).applyLingeringAccel(

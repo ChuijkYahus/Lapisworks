@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.err;
 import static com.luxof.lapisworks.Lapisworks.primitive;
 
 import java.io.File;
@@ -170,8 +170,8 @@ public class LapisConfig {
             this.obj = JsonParser.parseReader(new FileReader(configFile)).getAsJsonObject();
         } catch (Exception e1) {
             if (canIYell) {
-                LOGGER.error("Apparently, the Lapisworks config file is such horseshit it doesn't parse.");
-                LOGGER.error("Trying to fix that right now...");
+                err("Apparently, the Lapisworks config file is such horseshit it doesn't parse.");
+                err("Trying to fix that right now...");
             }
             this.obj = defaultConfigObject;
 
@@ -179,13 +179,13 @@ public class LapisConfig {
                 Files.writeString(configFile.toPath(), defaultConfig, StandardOpenOption.CREATE);
             } catch (IOException e2) {
                 if (!canIYell) return;
-                LOGGER.error("Yeah no, I can't fix your Lapisworks config file.");
-                LOGGER.error("I've defaulted your config options in-game, though.");
-                LOGGER.error("Your first error:");
+                err("Yeah no, I can't fix your Lapisworks config file.");
+                err("I've defaulted your config options in-game, though.");
+                err("Your first error:");
                 e1.printStackTrace();
-                LOGGER.error("And your second error:");
+                err("And your second error:");
                 e2.printStackTrace();
-                LOGGER.error("Toodles!");
+                err("Toodles!");
             }
 
             return;
@@ -243,7 +243,7 @@ public class LapisConfig {
                     StandardOpenOption.CREATE
                 );
             } catch (IOException e) {
-                LOGGER.error("Tried to correct bad Lapisworks config file, failed!");
+                err("Tried to correct bad Lapisworks config file, failed!");
                 e.printStackTrace();
             }
         }

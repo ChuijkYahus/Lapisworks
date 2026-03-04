@@ -8,7 +8,7 @@ import com.luxof.lapisworks.interop.hexical.blocks.Cradle;
 import com.luxof.lapisworks.interop.hexical.blocks.CradleEntity;
 import com.luxof.lapisworks.interop.hexical.blocks.Rod;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.err;
 import static com.luxof.lapisworks.Lapisworks.verDifference;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -36,7 +36,7 @@ public class Lapixical {
     public static void initHexicalInterop() {
         Integer verDiff = verDifference("hexical", "1.5.0");
         if (verDiff == null) {
-            LOGGER.error("How in the actual fuck did I cuck up Hexical interop?");
+            err("How in the actual fuck did I cuck up Hexical interop?");
             verDiff = 0;
         }
         if (verDiff > 0) {

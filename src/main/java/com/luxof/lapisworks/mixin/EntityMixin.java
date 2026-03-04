@@ -7,7 +7,6 @@ import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface.AllEnchantments;
 import com.luxof.lapisworks.interop.hexical.EntityDimensionsButTheHitboxIsDown;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
 import static com.luxof.lapisworks.Lapisworks.deserializeVec3d;
 import static com.luxof.lapisworks.Lapisworks.isInCradle;
 import static com.luxof.lapisworks.Lapisworks.nbtListOf;

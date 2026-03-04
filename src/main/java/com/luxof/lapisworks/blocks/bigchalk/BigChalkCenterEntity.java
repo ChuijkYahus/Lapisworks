@@ -69,6 +69,7 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
         // IT FUCKING DOES you stupid piece of shit
         // it just doesn't in SURVIVAL!
         renderData = new RenderData(attachedTo);
+        powered = false;
     }
 
     /** decides what text is displayed on the chalk. */
@@ -99,6 +100,13 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
             return;
         }
 
+        if (!this.powered && on) {
+            try {
+                throw new RuntimeException("Henlo.");
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
+        }
         if (!this.powered && on) ticksElapsed = 0;
         this.powered = on;
         if (shouldSave) save();
@@ -190,7 +198,7 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
         textVariant = nbt.getInt("textVariant");
         if (nbt.contains("pattern")) pattern = HexPattern.fromNBT(nbt.getCompound("pattern"));
 
-        // i tried really hard to sync this animation
+        // i tried really hard to sync this animation.
         // good enough!
         ticksElapsed = nbt.getInt("ticksElapsed");
 

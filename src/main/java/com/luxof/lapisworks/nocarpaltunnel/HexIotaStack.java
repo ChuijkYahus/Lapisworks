@@ -18,7 +18,7 @@ import com.luxof.lapisworks.media.MediaTransferInterface;
 import com.luxof.lapisworks.mixin.IotaAccessor;
 
 import static com.luxof.lapisworks.Lapisworks.HEXAL_INTEROP;
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.err;
 
 import com.mojang.datafixers.util.Either;
 
@@ -146,7 +146,7 @@ public class HexIotaStack {
         MediaTransferInterface MTI = null;
         if (iota instanceof MediaTransferInterface mti) {
             if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-                LOGGER.error("Why the hell is your iota itself a MediaTransferInterface? That's what your iota's payload is supposed to be. I'm only going to say this in the dev env, but still.");
+                err("Why the hell is your iota itself a MediaTransferInterface? That's what your iota's payload is supposed to be. I'm only going to say this in the dev env, but still.");
             }
             MTI = mti;
 

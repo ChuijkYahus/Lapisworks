@@ -2,7 +2,8 @@ package com.luxof.lapisworks.mixin;
 
 import com.luxof.lapisworks.mixinsupport.BlockDowser;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.err;
+import static com.luxof.lapisworks.Lapisworks.log;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
@@ -40,7 +41,7 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity implements Bl
     @Unique
     protected void Dowser() {
         // i vaguely remember some issue where the explanation was about a tree falling in a forest
-        LOGGER.info("The dowser's thread has started!");
+        log("The dowser's thread has started!");
         while (true) {
             if (MinecraftClient.getInstance().isPaused()) continue;
             mapHOT.forEach((block, any) -> {
@@ -70,7 +71,7 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity implements Bl
             try {
                 Thread.sleep(timeBetweenDowsesMillis);
             } catch (InterruptedException e) {
-                LOGGER.error("Why the fuck was the dowser's sleeping interrupted?");
+                err("Why the fuck was the dowser's sleeping interrupted?");
                 break;
             }
         }
@@ -88,7 +89,7 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity implements Bl
                     try {
                         Dowser();
                     } finally {
-                        LOGGER.error("THE THREAD DIED. WHY DID IT DIE???");
+                        err("THE THREAD DIED. WHY DID IT DIE???");
                     }
                 }
             });

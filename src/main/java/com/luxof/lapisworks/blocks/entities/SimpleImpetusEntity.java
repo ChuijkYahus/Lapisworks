@@ -8,7 +8,7 @@ import at.petrak.hexcasting.api.casting.math.HexPattern;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.mixinsupport.ControlCircleTickSpeed;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.err;
 
 import java.util.List;
 import java.util.UUID;
@@ -64,7 +64,7 @@ public class SimpleImpetusEntity extends BlockEntityAbstractImpetus {
         if (plr != null)
             nbt.putUuid(TAG_PLAYER, plr);
         else
-            LOGGER.error("Player was null in a Simple Impetus. Don't do that!");
+            err("Player was null in a Simple Impetus. Don't do that!");
     }
 
     @Override
@@ -79,7 +79,7 @@ public class SimpleImpetusEntity extends BlockEntityAbstractImpetus {
         if (nbt.contains(TAG_PLAYER))
             plr = nbt.getUuid(TAG_PLAYER);
         else
-            LOGGER.error("Player was null in a Simple Impetus. Don't do that!");
+            err("Player was null in a Simple Impetus. Don't do that!");
     }
 
     /** returns whether or not the simple impetus was tuned to the pattern in question.

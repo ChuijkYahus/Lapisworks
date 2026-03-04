@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.luxof.lapisworks.inv.DisimbuementInv;
 import com.luxof.lapisworks.inv.HandsInv;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.log;
 
 import java.util.List;
 
@@ -99,7 +99,7 @@ public class ImbuementRec implements Recipe<HandsInv> {
                 ret = ret || stack.isOf(fullAmel) || stack.isOf(partAmel);
             }
             if (ret)
-                LOGGER.info(id.toString() + " says true!");
+                log(id.toString() + " says true!");
             return ret;
         }
 

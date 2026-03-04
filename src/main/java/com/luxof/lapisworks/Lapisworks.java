@@ -114,6 +114,40 @@ public class Lapisworks implements ModInitializer {
 	public static boolean HEXAL_INTEROP = false;
 	public static boolean HIEROPHANTICS_INTEROP = false;
 
+	// rust-style format!()
+	public static String format(Object... texts) {
+		String text = texts[0].toString();
+		String ret = "";
+
+		int nextEmbedIdx = 1;
+		boolean leftCurly = false;
+		for (char character : text.toCharArray()) {
+			if (leftCurly) {
+				if (character != '}') {
+					ret += "{" + character;
+				} else {
+					ret += texts[nextEmbedIdx].toString();
+				}
+				leftCurly = false;
+			} else if (character == '{') {
+				leftCurly = true;
+			} else {
+				ret += character;
+			}
+		}
+		if (leftCurly)
+			ret += "{";
+		return ret;
+	}
+	public static void log(Object... message) {
+		log(format(message));
+	}
+	public static void warn(Object... message) {
+		LOGGER.warn(format(message));
+	}
+	public static void err(Object... message) {
+		LOGGER.error(format(message));
+	}
 	public static boolean isModLoaded(String modid) { return FabricLoader.getInstance().isModLoaded(modid); }
 	/** assumes the mod is actually loaded and that <code>targetVersion</code> doesn't cause an error.
 	 * Kurwa eksploduje if wrong? Nah, just gives <code>null</code>.
@@ -168,8 +202,8 @@ public class Lapisworks implements ModInitializer {
 		ModScreens.whatWasThatTF2CommentAboutMakingBadGUICodeSoYouDontHaveToTouchItAgain();
 		LapisParticles.pawtickle();
 
-        LOGGER.info("Luxof's pet Lapisworks is getting a bit hyperactive.");
-		LOGGER.info("\"Lapisworks! Lapis Lapis!\"");
+        log("Luxof's pet Lapisworks is getting a bit hyperactive.");
+		log("\"Lapisworks! Lapis Lapis!\"");
 		if (anyInterop) {
 			// yknow, i would love to make the Interop category/entries unavailable until the mods
 			// required exist but what if i keep it right there to garner curiosity and get people
@@ -180,8 +214,8 @@ public class Lapisworks implements ModInitializer {
 			//	"lapisworks:any_interop",
 			//	true
 			//)
-			LOGGER.info("You have an addon that has interop with Lapisworks loaded?! Oh NOO, it's overstimulated, it's gonna throw up a bunch of content! Look what you've done!");
-		} else LOGGER.info("Feed it redstone.");
+			log("You have an addon that has interop with Lapisworks loaded?! Oh NOO, it's overstimulated, it's gonna throw up a bunch of content! Look what you've done!");
+		} else log("Feed it redstone.");
 	}
 
 	public static Identifier id(String string) {
@@ -293,7 +327,7 @@ public class Lapisworks implements ModInitializer {
 
 	/** Nulls the config flags for you. */
 	public static void nullConfigFlags() {
-		LOGGER.info("Nulling config flags.");
+		log("Nulling config flags.");
 		for (String patId : allPerWorldShapePatterns.keySet()) {
 			for (int i = 0; i < allPerWorldShapePatterns.get(patId).size(); i++) {
 				PatchouliAPI.get().setConfigFlag(
@@ -392,7 +426,7 @@ public class Lapisworks implements ModInitializer {
         List<HeldItemInfo> stacks = ((GetStacks)ctx).getHeldStacks();
         try { return stacks.get(hand).stack(); }
 		catch (IndexOutOfBoundsException e) {
-			LOGGER.info("Someone tried to access idx " + hand + " of " + stacks.toString() + ".");
+			log("Someone tried to access idx " + hand + " of " + stacks.toString() + ".");
 			return null;
 		}
     }
