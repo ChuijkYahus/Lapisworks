@@ -214,7 +214,7 @@ public class CradleEntity extends BlockEntity implements Inventory, MediaTransfe
     public int size() { return 1; }
 
     @Override public Vec3d getPosIfPossible() { return this.pos.toCenterPos(); }
-    @Override public void setMedia(long media) {
+    @Override public void setMediaHere(long media) {
         if (getPhial() == null) return;
         phial.setMedia(heldStack, media);
     }

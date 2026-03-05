@@ -249,7 +249,7 @@ public class RitusEntity extends BlockEntity implements AttachedBE, RitualCompon
 
 
     @Override @Nullable public Vec3d getPosIfPossible() { return pos.toCenterPos(); }
-    @Override public void setMedia(long media) { this.media = media; save(); }
+    @Override public void setMediaHere(long media) { this.media = media; save(); }
     @Override public long getMediaHere() { return media; }
     @Override public long getMaxMedia() { return 9_000_000_000L; }
 }

@@ -18,7 +18,7 @@ public interface MediaTransferInterface {
     public Vec3d getPosIfPossible();
     /** this function does not take into account the maximum media capacity or negatives.
      * use depositMedia and withdrawMedia for that. */
-    public void setMedia(long media);
+    public void setMediaHere(long media);
     public long getMaxMedia();
     public long getMediaHere();
 
@@ -28,7 +28,7 @@ public interface MediaTransferInterface {
         long spaceLeft = getMaxMedia() - mediaHere;
         long toDeposit = Math.min(spaceLeft, amount);
         if (!simulate) {
-            setMedia(mediaHere + toDeposit);
+            setMediaHere(mediaHere + toDeposit);
         }
         return toDeposit;
     }
@@ -37,7 +37,7 @@ public interface MediaTransferInterface {
         long mediaHere = getMediaHere();
         long toWithdraw = Math.min(amount, mediaHere);
         if (!simulate) {
-            setMedia(mediaHere - toWithdraw);
+            setMediaHere(mediaHere - toWithdraw);
         }
         return toWithdraw;
     }

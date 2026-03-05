@@ -18,7 +18,7 @@ public class MTIMediaHolder implements MediaTransferInterface {
     }
 
     @Override @Nullable public Vec3d getPosIfPossible() { return null; }
-    @Override public void setMedia(long media) { innerItem.setMedia(stack, media); }
+    @Override public void setMediaHere(long media) { innerItem.setMedia(stack, media); }
     @Override public long getMaxMedia() { return innerItem.getMaxMedia(stack); }
     @Override public long getMediaHere() { return innerItem.getMedia(stack); }
 }

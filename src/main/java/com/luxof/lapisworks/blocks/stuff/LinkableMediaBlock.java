@@ -14,7 +14,7 @@ public interface LinkableMediaBlock {
     public BlockPos getThisPos();
     /** this function does not take into account the maximum media capacity or negatives.
      * use depositMedia and withdrawMedia for that. */
-    public void setMedia(long media);
+    public void setMediaHere(long media);
     public long getMaxMedia();
     /** returns the amount that was deposited. */
     default public long depositMedia(long amount, boolean simulate) {
@@ -22,7 +22,7 @@ public interface LinkableMediaBlock {
         long spaceLeft = getMaxMedia() - mediaHere;
         long toDeposit = Math.min(spaceLeft, amount);
         if (!simulate) {
-            setMedia(mediaHere + toDeposit);
+            setMediaHere(mediaHere + toDeposit);
         }
         return toDeposit;
     }
@@ -31,7 +31,7 @@ public interface LinkableMediaBlock {
         long mediaHere = getMediaHere();
         long toWithdraw = Math.min(amount, mediaHere);
         if (!simulate) {
-            setMedia(mediaHere - toWithdraw);
+            setMediaHere(mediaHere - toWithdraw);
         }
         return toWithdraw;
     }

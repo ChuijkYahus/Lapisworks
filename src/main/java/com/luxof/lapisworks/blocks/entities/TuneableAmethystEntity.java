@@ -118,6 +118,6 @@ public class TuneableAmethystEntity extends BlockEntity implements MediaTransfer
 
     @Override @Nullable public Vec3d getPosIfPossible() { return pos.toCenterPos(); }
     @Override public long getMediaHere() { return media; }
-    @Override public void setMedia(long media) { this.media = media; updateState(); save(); }
+    @Override public void setMediaHere(long media) { this.media = media; updateState(); save(); }
     @Override public long getMaxMedia() { return mediaCap; }
 }

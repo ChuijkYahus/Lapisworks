@@ -19,6 +19,10 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonPrimitive;
 import com.luxof.lapisworks.init.*;
 import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.interop.hexal.Lapisal;
+import com.luxof.lapisworks.interop.hexical.Lapixical;
+import com.luxof.lapisworks.interop.hextended.Lapixtended;
+import com.luxof.lapisworks.interop.hierophantics.Chariot;
 import com.luxof.lapisworks.media.LinkableMediaBlock;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 import com.luxof.lapisworks.mixinsupport.GetStacks;
@@ -113,40 +117,16 @@ public class Lapisworks implements ModInitializer {
 	public static boolean FULL_HEXICAL_INTEROP = false;
 	public static boolean HEXAL_INTEROP = false;
 	public static boolean HIEROPHANTICS_INTEROP = false;
+	public static boolean ONEIRONAUT_INTEROP = false;
 
-	// rust-style format!()
-	public static String format(Object... texts) {
-		String text = texts[0].toString();
-		String ret = "";
-
-		int nextEmbedIdx = 1;
-		boolean leftCurly = false;
-		for (char character : text.toCharArray()) {
-			if (leftCurly) {
-				if (character != '}') {
-					ret += "{" + character;
-				} else {
-					ret += texts[nextEmbedIdx].toString();
-				}
-				leftCurly = false;
-			} else if (character == '{') {
-				leftCurly = true;
-			} else {
-				ret += character;
-			}
-		}
-		if (leftCurly)
-			ret += "{";
-		return ret;
+	public static void log(String text, Object... args) {
+		LOGGER.info(String.format(text, args));
 	}
-	public static void log(Object... message) {
-		LOGGER.info(format(message));
+	public static void warn(String text, Object... args) {
+		LOGGER.warn(String.format(text, args));
 	}
-	public static void warn(Object... message) {
-		LOGGER.warn(format(message));
-	}
-	public static void err(Object... message) {
-		LOGGER.error(format(message));
+	public static void err(String text, Object... args) {
+		LOGGER.error(String.format(text, args));
 	}
 	public static boolean isModLoaded(String modid) { return FabricLoader.getInstance().isModLoaded(modid); }
 	/** assumes the mod is actually loaded and that <code>targetVersion</code> doesn't cause an error.
@@ -170,22 +150,27 @@ public class Lapisworks implements ModInitializer {
         if (isModLoaded("hextended")) {
 			HEXTENDED_INTEROP = true;
 			anyInterop = true;
-            com.luxof.lapisworks.interop.hextended.Lapixtended.initHextendedInterop();
+			Lapixtended.initHextendedInterop();
         }
 		if (isModLoaded("hexical")) {
 			HEXICAL_INTEROP = true;
 			anyInterop = true;
-			com.luxof.lapisworks.interop.hexical.Lapixical.initHexicalInterop();
+			Lapixical.initHexicalInterop();
 		}
 		if (isModLoaded("hexal")) {
 			HEXAL_INTEROP = true;
 			anyInterop = true;
-			com.luxof.lapisworks.interop.hexal.Lapisal.beCool();
+			Lapisal.beCool();
 		}
 		if (isModLoaded("hierophantics")) {
 			HIEROPHANTICS_INTEROP = true;
 			anyInterop = true;
-			com.luxof.lapisworks.interop.hierophantics.Chariot.readTarotCards();
+			Chariot.readTarotCards();
+		}
+		if (isModLoaded("oneironaut")) {
+			err("ONEIRONAUT IS HERE!");
+			ONEIRONAUT_INTEROP = true;
+			anyInterop = true;
 		}
 
 		LapisConfig.renewCurrentConfig();

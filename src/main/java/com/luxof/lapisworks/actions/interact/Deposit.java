@@ -15,8 +15,11 @@ import com.luxof.lapisworks.mixin.PlayerBasedCastEnvAccessor;
 import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
 import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 
+import static com.luxof.lapisworks.Lapisworks.ONEIRONAUT_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.fullLinkableMediaBlocksInteraction;
 import static com.luxof.lapisworks.Lapisworks.interactWithLinkableMediaBlocks;
+import static com.luxof.lapisworks.Lapisworks.log;
+import static com.luxof.lapisworks.interop.oneironaut.FuckingInexhaustiblePhials.getBottomlessContrib;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,16 +32,18 @@ import net.minecraft.util.math.BlockPos;
 public class Deposit extends SpellActionNCT {
     public int argc = 2;
 
-    private void assertNoOvercast(long cost) {
-        if (
-            ctx instanceof PlayerBasedCastEnv pbcenv &&
-            ((PlayerBasedCastEnvAccessor)pbcenv).lapisworks$invokeCanOvercast() &&
-            ctx.extractMedia(-1, true) - 20*MediaConstants.DUST_UNIT < cost &&
-            !((ServerPlayerEntity)pbcenv.getCastingEntity()).isCreative() &&
-            !((ServerPlayerEntity)pbcenv.getCastingEntity()).isSpectator()
-        ) {
+    private void assertNoFunnyMedia(long cost) {
+        if (!(ctx instanceof PlayerBasedCastEnv pbcenv)) return;
+
+        ServerPlayerEntity player = pbcenv.getCaster();
+        if (player.isCreative()) return;
+
+        cost -= ((PlayerBasedCastEnvAccessor)pbcenv).lapisworks$invokeCanOvercast()
+            ? 20L*MediaConstants.DUST_UNIT : 0;
+        cost -= ONEIRONAUT_INTEROP ? getBottomlessContrib(pbcenv) : 0L;
+
+        if (ctx.extractMedia(-1, true) < cost)
             throw new MishapNotEnoughMedia(cost);
-        }
     }
 
     @Override
@@ -69,8 +74,7 @@ public class Deposit extends SpellActionNCT {
 
 
             long cost = (long)(1.1*realAmount);
-            assertNoOvercast(cost);
-
+            assertNoFunnyMedia(cost);
 
             return new SpellAction.Result(
                 new LMBSpell(pos, realAmount),
@@ -86,11 +90,11 @@ public class Deposit extends SpellActionNCT {
         );
 
         long cost = (long)(1.1*realAmount);
-        assertNoOvercast(cost);
+        assertNoFunnyMedia(cost);
 
         return new SpellAction.Result(
             new MTISpell(MTI, realAmount),
-            realAmount + (long)(realAmount * 0.1),
+            cost,
             particles,
             1
         );

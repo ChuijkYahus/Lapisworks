@@ -48,7 +48,7 @@ public abstract class ItemEntityMixin extends Entity implements MediaTransferInt
     }
 
     @Override @Unique
-    public void setMedia(long media) {
+    public void setMediaHere(long media) {
         getMediaHolder().setMedia(media);
         if (getMediaHere() <= 0L) {
             this.discard();
