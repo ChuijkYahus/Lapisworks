@@ -5,6 +5,8 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import com.luxof.lapisworks.media.MediaTransferInterface;
 import com.luxof.lapisworks.mixinsupport.WispCanIntoItem;
 
+import static com.luxof.lapisworks.Lapisworks.err;
+
 import java.util.UUID;
 
 import net.minecraft.entity.Entity;
@@ -63,17 +65,31 @@ public abstract class BaseCastingWispMixin extends Entity implements MediaTransf
         BaseCastingWisp.class,
         TrackedDataHandlerRegistry.ITEM_STACK
     );
-    @Inject(
-        at = @At("HEAD"),
-        method = "initDataTracker"
-    )
-    protected void initDataTracker(CallbackInfo ci) {
+    private void TRACKMYFUCKINGITEMSTACKYOUSLOBFUCKINGSHITGARGLINGSLABOFSHITIWILLFUCKINGMURDEREVERYFUCKINGLASTONEOFYOURFUCKINGFAMILYMEMBERSBECAUSEOFTHISFUCKINGASSFUCKINGSHITFUCKINGBITCHBUGBULLSHIT() {
         getDataTracker().startTracking(
             heldStack,
             ItemStack.EMPTY
         );
     }
-    @Override @Unique public ItemStack getStack() { return getDataTracker().get(heldStack); }
+    @Inject(
+        at = @At("HEAD"),
+        method = "initDataTracker"
+    )
+    protected void initDataTracker(CallbackInfo ci) {
+        TRACKMYFUCKINGITEMSTACKYOUSLOBFUCKINGSHITGARGLINGSLABOFSHITIWILLFUCKINGMURDEREVERYFUCKINGLASTONEOFYOURFUCKINGFAMILYMEMBERSBECAUSEOFTHISFUCKINGASSFUCKINGSHITFUCKINGBITCHBUGBULLSHIT();
+    }
+    @Override @Unique public ItemStack getStack() {
+        // for some reason, whenever i test outside the dev env, this errs.
+        // it errs because heldStack wasn't registered.
+        // with an NPE.
+        try {
+            return getDataTracker().get(heldStack);
+        } catch (NullPointerException e) {
+            err("uh oh! there was an oopsy woopsy!! Lapisworks' mixin did a fuhhcky wucky!!! a wittle fucko boingo!!!!");
+            TRACKMYFUCKINGITEMSTACKYOUSLOBFUCKINGSHITGARGLINGSLABOFSHITIWILLFUCKINGMURDEREVERYFUCKINGLASTONEOFYOURFUCKINGFAMILYMEMBERSBECAUSEOFTHISFUCKINGASSFUCKINGSHITFUCKINGBITCHBUGBULLSHIT();
+            return getDataTracker().get(heldStack);
+        }
+    }
     @Override @Unique public ItemStack setStack(ItemStack stack) {
         ItemStack old = getStack();
         getDataTracker().set(heldStack, stack);

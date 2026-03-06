@@ -168,7 +168,6 @@ public class Lapisworks implements ModInitializer {
 			Chariot.readTarotCards();
 		}
 		if (isModLoaded("oneironaut")) {
-			err("ONEIRONAUT IS HERE!");
 			ONEIRONAUT_INTEROP = true;
 			anyInterop = true;
 		}
