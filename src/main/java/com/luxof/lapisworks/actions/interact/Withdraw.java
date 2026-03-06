@@ -45,12 +45,9 @@ public class Withdraw extends SpellActionNCT {
 
         } else {
             // how do i make it not warn...
-            @SuppressWarnings("unchecked")
-            HeldItemInfo heldInfo = getHeldItemMatchingPredicates(
-                new Pair<>(
-                    itemStack -> itemStack.getItem() instanceof MediaHolderItem,
-                    "rechargeable"
-                )
+            HeldItemInfo heldInfo = ctx.getHeldItemToOperateOn(
+                itemStack -> itemStack.getItem() instanceof MediaHolderItem mhi
+                    && mhi.canRecharge(itemStack)
             );
             if (heldInfo == null)
                 throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "rechargeable");

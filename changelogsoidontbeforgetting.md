@@ -256,6 +256,7 @@ Only the devs who can keep up with me...
 - 3D models of some blocks (and maybe an item or two?) look a little better
 - Book reformatting and extra documentation and shit
   - e.g. Villager un-flaying is actually documented now
+  - also thanks to @pool.critter and @rose.sylvanis
 - Deposit Media and Withdraw Media work conveniently now
 - Enchanted Sentinels actually use your base ambit instead of a flat 32 blocks around you
 - Enchanted Slipways got changed to have nearly precisely 2x slipway wisp spawn rate  
