@@ -1,5 +1,54 @@
 package com.luxof.lapisworks;
 
+import static com.luxof.lapisworks.LapisworksIDs.CANNOT_MODIFY_COST_TAG;
+import static com.luxof.lapisworks.LapisworksIDs.GRAND_RITUAL_BLACKLIST_TAG;
+import static com.luxof.lapisworks.LapisworksIDs.INFUSED_AMEL;
+import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
+import static com.luxof.lapisworks.LapisworksIDs.MAINHAND;
+import static com.luxof.lapisworks.LapisworksIDs.OFFHAND;
+import static com.luxof.lapisworks.init.ThemConfigFlags.allPerWorldShapePatterns;
+import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.Stack;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
+import org.joml.Random;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.JsonPrimitive;
+import com.luxof.lapisworks.init.LapisConfig;
+import com.luxof.lapisworks.init.LapisParticles;
+import com.luxof.lapisworks.init.LapisworksLoot;
+import com.luxof.lapisworks.init.ModBlocks;
+import com.luxof.lapisworks.init.ModEntities;
+import com.luxof.lapisworks.init.ModItems;
+import com.luxof.lapisworks.init.ModPOIs;
+import com.luxof.lapisworks.init.ModRecipes;
+import com.luxof.lapisworks.init.ModScreens;
+import com.luxof.lapisworks.init.Patterns;
+import com.luxof.lapisworks.init.ThemConfigFlags;
+import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.interop.hexal.Lapisal;
+import com.luxof.lapisworks.interop.hexical.Lapixical;
+import com.luxof.lapisworks.interop.hextended.Lapixtended;
+import com.luxof.lapisworks.interop.hierophantics.Chariot;
+import com.luxof.lapisworks.media.LinkableMediaBlock;
+import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
+import com.luxof.lapisworks.mixinsupport.GetStacks;
+
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
@@ -15,51 +64,14 @@ import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-
-import com.google.gson.JsonPrimitive;
-import com.luxof.lapisworks.init.*;
-import com.luxof.lapisworks.init.Mutables.Mutables;
-import com.luxof.lapisworks.interop.hexal.Lapisal;
-import com.luxof.lapisworks.interop.hexical.Lapixical;
-import com.luxof.lapisworks.interop.hextended.Lapixtended;
-import com.luxof.lapisworks.interop.hierophantics.Chariot;
-import com.luxof.lapisworks.media.LinkableMediaBlock;
-import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
-import com.luxof.lapisworks.mixinsupport.GetStacks;
-
-import static com.luxof.lapisworks.LapisworksIDs.CANNOT_MODIFY_COST_TAG;
-import static com.luxof.lapisworks.LapisworksIDs.GRAND_RITUAL_BLACKLIST_TAG;
-import static com.luxof.lapisworks.LapisworksIDs.INFUSED_AMEL;
-import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
-import static com.luxof.lapisworks.LapisworksIDs.MAINHAND;
-import static com.luxof.lapisworks.LapisworksIDs.OFFHAND;
-import static com.luxof.lapisworks.init.ThemConfigFlags.allPerWorldShapePatterns;
-import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
-
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.Stack;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -73,21 +85,13 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraft.util.Util;
-
-import org.jetbrains.annotations.Nullable;
-import org.joml.Quaternionf;
-import org.joml.Random;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import vazkii.patchouli.api.PatchouliAPI;
 
 // why is this project actually big?
@@ -740,6 +744,7 @@ public class Lapisworks implements ModInitializer {
 		Direction horizontal,
 		Direction down
 	) {
+		if (horizontal == down) return RotationAxis.NEGATIVE_Y.rotationDegrees(0);
 		return switch (horizontal) {
 			case WEST ->
 				RotationAxis.NEGATIVE_Y.rotationDegrees(90 + (down == Direction.UP ? 180 : 0));
@@ -748,7 +753,7 @@ public class Lapisworks implements ModInitializer {
 			case EAST ->
 				RotationAxis.NEGATIVE_Y.rotationDegrees(270 - (down == Direction.UP ? 180 : 0));
 			default ->
-				RotationAxis.POSITIVE_Z.rotationDegrees(0);
+				RotationAxis.NEGATIVE_Y.rotationDegrees(0);
 		};
 	}
 	public static Quaternionf rotateToBeAttachedTo(
@@ -756,11 +761,11 @@ public class Lapisworks implements ModInitializer {
 	) {
 		return switch (attachedTo) {
 			case UP -> RotationAxis.POSITIVE_X.rotationDegrees(180);
+			case DOWN -> RotationAxis.POSITIVE_X.rotationDegrees(0);
 			case NORTH -> RotationAxis.POSITIVE_X.rotationDegrees(90);
 			case SOUTH -> RotationAxis.NEGATIVE_X.rotationDegrees(90);
 			case EAST -> RotationAxis.POSITIVE_Z.rotationDegrees(90);
 			case WEST -> RotationAxis.NEGATIVE_Z.rotationDegrees(90);
-			case DOWN -> RotationAxis.POSITIVE_X.rotationDegrees(0);
 		};
 	}
 	

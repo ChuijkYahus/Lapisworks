@@ -80,8 +80,8 @@ public abstract class BaseCastingWispMixin extends Entity implements MediaTransf
     }
     @Override @Unique public ItemStack getStack() {
         // for some reason, whenever i test outside the dev env, this errs.
-        // it errs because heldStack wasn't registered.
         // with an NPE.
+        // it errs because heldStack wasn't registered.
         try {
             return getDataTracker().get(heldStack);
         } catch (NullPointerException e) {

@@ -15,7 +15,6 @@ import com.luxof.lapisworks.mixinsupport.Markable;
 
 import static com.luxof.lapisworks.Lapisworks.getPigmentFromDye;
 import static com.luxof.lapisworks.Lapisworks.makeParticlesInSpiralGoUp;
-import static com.luxof.lapisworks.Lapisworks.sameAxis;
 
 import java.util.List;
 import java.util.UUID;
@@ -68,7 +67,7 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
         // how doesn't this err on the server?
         // IT FUCKING DOES you stupid piece of shit
         // it just doesn't in SURVIVAL!
-        renderData = new RenderData(attachedTo);
+        renderData = new RenderData();
         powered = false;
     }
 
@@ -267,7 +266,7 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
         140
     );
     private void spewParticles(boolean special, DyeColor urplePinkMagentaWhatever) {
-        Vec3d up = renderData.translateDir.toVec3d();
+        Vec3d up = Vec3d.of(attachedTo.getOpposite().getVector());
 
         Vec3d centerBottom = pos.toCenterPos().subtract(up.multiply(0.5));
         // hexagon is at the tippy top.
@@ -361,48 +360,23 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
     public RenderData renderData;
     // power-on is a 7-second animation
     // it charges up for 5 seconds, casts, then cools down for 2
-    // therefore, whatever target
+    // therefore, whatever target <-- fuck you mean "therefore, whatever target", past me?
     protected class RenderData {
-        private RenderData(Direction whereverDownGoes) {
-            // argument name shorten
-            Direction axis = whereverDownGoes;
-
-            translateDir = new ANormalFuckingVector3f(
-                axis.getOpposite()
-            );
-
-            if (sameAxis(axis, Direction.WEST)) {
-                rotationAxis = RotationAxis.POSITIVE_X;
-                inverseRotationAxis = RotationAxis.NEGATIVE_X;
-
-            } else if (sameAxis(axis, Direction.DOWN)) {
-                rotationAxis = RotationAxis.POSITIVE_Y;
-                inverseRotationAxis = RotationAxis.NEGATIVE_Y;
-
-            } else {
-                rotationAxis = RotationAxis.POSITIVE_Z;
-                inverseRotationAxis = RotationAxis.NEGATIVE_Z;
-            }
-
-        }
+        private RenderData() {}
 
         public Quaternionf rotate(float tickDelta) {
-            return rotationAxis.rotationDegrees(
+            return RotationAxis.POSITIVE_Y.rotationDegrees(
                 MathHelper.lerp(tickDelta, rotation, rotationNext)
             );
         }
         public Quaternionf rotateInverse(float tickDelta) {
-            return inverseRotationAxis.rotationDegrees(
+            return RotationAxis.NEGATIVE_Y.rotationDegrees(
                 MathHelper.lerp(tickDelta, rotation, rotationNext)
             );
         }
-        public ANormalFuckingVector3f translate(float tickDelta) {
-            return translateDir.mul(MathHelper.lerp(tickDelta, translation, translationNext));
+        public float getTranslation(float tickDelta) {
+            return MathHelper.lerp(tickDelta, translation, translationNext);
         }
-
-
-        public final RotationAxis rotationAxis;
-        public final RotationAxis inverseRotationAxis;
 
         private float rotateEquation(int x) {
             // math sure is neat
@@ -428,7 +402,6 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
             translation = translateLerp(ticksElapsed);
             translationNext = translateLerp(ticksElapsed + 1);
         }
-        public final ANormalFuckingVector3f translateDir;
         private final float peakTranslation = 0.7f;
         private final float peakTranslationTime = 100f; // 5s
         private final float translationDropOffTime = 40f; // 2s
