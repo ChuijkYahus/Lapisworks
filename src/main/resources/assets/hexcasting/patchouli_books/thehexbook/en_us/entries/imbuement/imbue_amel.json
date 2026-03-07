@@ -20,6 +20,14 @@
         {
             "type": "patchouli:text",
             "text": "pages.lapisworks.imbuement_spell.specialhandlers"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:disimbue_amel",
+            "anchor": "lapisworks:disimbue_amel",
+            "input": "",
+            "output": "",
+            "text": "pages.lapisworks.imbuement_spell.disimbuement_spell.summary"
         }
     ]
 }

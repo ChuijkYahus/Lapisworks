@@ -9,11 +9,6 @@
         {
             "type": "patchouli:text",
             "text": "pages.lapisworks.interop.lapixical.condenser_interactions.text"
-        },
-        {
-            "type": "patchouli:text",
-            "advancement": "lapisworks:enlightened",
-            "text": "pages.lapisworks.interop.lapixical.condenser_interactions.ohandthatonetoo"
         }
     ]
 }

@@ -9,10 +9,14 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.luxof.lapisworks.VAULT.Flags;
+import com.luxof.lapisworks.init.LapisConfig;
 import com.luxof.lapisworks.init.ModItems;
+import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.mishaps.MishapNotEnoughItems;
+import com.luxof.lapisworks.mixinsupport.GetVAULT;
 import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 
-import static com.luxof.lapisworks.MishapThrowerJava.assertItemAmount;
+import static com.luxof.lapisworks.LapisworksIDs.AMEL;
 
 import java.util.List;
 
@@ -35,7 +39,18 @@ public class ImbueLap extends SpellActionNCT {
 
         int count = heldStackInfo.stack().getCount();
 
-        assertItemAmount(ctx, Items.AMETHYST_SHARD, count);
+        if (LapisConfig.getCurrentConfig().getSpellSettings().allow_reclaim_amethyst()) {
+
+            int got = ((GetVAULT)ctx).grabVAULT().drain(
+                Mutables::isAmel,
+                count,
+                true,
+                Flags.PRESET_EVERYTHING
+            );
+            if (got < count)
+                throw new MishapNotEnoughItems(AMEL, got, count);
+
+        } else count *= 2;
 
         return new SpellAction.Result(
             new Spell(count, heldStackInfo.hand()),
@@ -53,8 +68,12 @@ public class ImbueLap extends SpellActionNCT {
 
 		@Override
 		public void cast(CastingEnvironment ctx) {
-            vault.drain(Items.AMETHYST_SHARD, this.count, false, Flags.PRESET_UpToHotbar);
+
+            if (LapisConfig.getCurrentConfig().getSpellSettings().allow_reclaim_amethyst())
+                vault.drain(Items.AMETHYST_SHARD, this.count, false, Flags.PRESET_UpToHotbar);
+
             ctx.replaceItem(ImbueLap::isLapis, new ItemStack(ModItems.AMEL_ITEM, this.count), hand);
-		}
+
+        }
     }
 }

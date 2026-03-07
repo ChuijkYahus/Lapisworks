@@ -4,7 +4,7 @@
     "advancement": "lapisworks:enlightened",
     "flag": "mod:hexal",
     "category": "hexcasting:lapisworks/interop/lapisal",
-    "sortnum": 2,
+    "sortnum": 3,
     "pages": [
         {
             "type": "patchouli:text",

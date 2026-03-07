@@ -2,7 +2,10 @@ package com.luxof.lapisworks.recipes;
 
 import com.google.gson.JsonObject;
 
+import com.luxof.lapisworks.inv.DisimbuementInv;
 import com.luxof.lapisworks.inv.HandsInv;
+
+import static com.luxof.lapisworks.Lapisworks.log;
 
 import java.util.List;
 
@@ -90,10 +93,21 @@ public class ImbuementRec implements Recipe<HandsInv> {
 
     @Override
     public boolean matches(HandsInv inventory, World world) {
+        if (inventory instanceof DisimbuementInv) {
+            boolean ret = false;
+            for (ItemStack stack : inventory.getHands()) {
+                ret = ret || stack.isOf(fullAmel) || stack.isOf(partAmel);
+            }
+            if (ret)
+                log(id.toString() + " says true!");
+            return ret;
+        }
+
+
         if (!this.requiredModIsLoaded) return false;
         boolean ret = false;
         for (ItemStack stack : inventory.getHands()) {
-            ret = ret || normal.test(stack) || partAmel == stack.getItem();
+            ret = ret || normal.test(stack) || stack.isOf(partAmel);
         }
         return ret;
     }

@@ -1,5 +1,54 @@
 package com.luxof.lapisworks;
 
+import static com.luxof.lapisworks.LapisworksIDs.CANNOT_MODIFY_COST_TAG;
+import static com.luxof.lapisworks.LapisworksIDs.GRAND_RITUAL_BLACKLIST_TAG;
+import static com.luxof.lapisworks.LapisworksIDs.INFUSED_AMEL;
+import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
+import static com.luxof.lapisworks.LapisworksIDs.MAINHAND;
+import static com.luxof.lapisworks.LapisworksIDs.OFFHAND;
+import static com.luxof.lapisworks.init.ThemConfigFlags.allPerWorldShapePatterns;
+import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.Stack;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
+import org.joml.Random;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.JsonPrimitive;
+import com.luxof.lapisworks.init.LapisConfig;
+import com.luxof.lapisworks.init.LapisParticles;
+import com.luxof.lapisworks.init.LapisworksLoot;
+import com.luxof.lapisworks.init.ModBlocks;
+import com.luxof.lapisworks.init.ModEntities;
+import com.luxof.lapisworks.init.ModItems;
+import com.luxof.lapisworks.init.ModPOIs;
+import com.luxof.lapisworks.init.ModRecipes;
+import com.luxof.lapisworks.init.ModScreens;
+import com.luxof.lapisworks.init.Patterns;
+import com.luxof.lapisworks.init.ThemConfigFlags;
+import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.interop.hexal.Lapisal;
+import com.luxof.lapisworks.interop.hexical.Lapixical;
+import com.luxof.lapisworks.interop.hextended.Lapixtended;
+import com.luxof.lapisworks.interop.hierophantics.Chariot;
+import com.luxof.lapisworks.media.LinkableMediaBlock;
+import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
+import com.luxof.lapisworks.mixinsupport.GetStacks;
+
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
@@ -15,48 +64,14 @@ import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-
-import com.google.gson.JsonPrimitive;
-
-import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
-import com.luxof.lapisworks.init.*;
-import com.luxof.lapisworks.init.Mutables.Mutables;
-import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
-import com.luxof.lapisworks.mixinsupport.GetStacks;
-
-import static com.luxof.lapisworks.LapisworksIDs.CANNOT_MODIFY_COST_TAG;
-import static com.luxof.lapisworks.LapisworksIDs.GRAND_RITUAL_BLACKLIST_TAG;
-import static com.luxof.lapisworks.LapisworksIDs.INFUSED_AMEL;
-import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
-import static com.luxof.lapisworks.LapisworksIDs.MAINHAND;
-import static com.luxof.lapisworks.LapisworksIDs.OFFHAND;
-import static com.luxof.lapisworks.init.ThemConfigFlags.allPerWorldShapePatterns;
-import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
-
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.Stack;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -70,21 +85,13 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraft.util.Util;
-
-import org.jetbrains.annotations.Nullable;
-import org.joml.Quaternionf;
-import org.joml.Random;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import vazkii.patchouli.api.PatchouliAPI;
 
 // why is this project actually big?
@@ -114,7 +121,17 @@ public class Lapisworks implements ModInitializer {
 	public static boolean FULL_HEXICAL_INTEROP = false;
 	public static boolean HEXAL_INTEROP = false;
 	public static boolean HIEROPHANTICS_INTEROP = false;
+	public static boolean ONEIRONAUT_INTEROP = false;
 
+	public static void log(String text, Object... args) {
+		LOGGER.info(String.format(text, args));
+	}
+	public static void warn(String text, Object... args) {
+		LOGGER.warn(String.format(text, args));
+	}
+	public static void err(String text, Object... args) {
+		LOGGER.error(String.format(text, args));
+	}
 	public static boolean isModLoaded(String modid) { return FabricLoader.getInstance().isModLoaded(modid); }
 	/** assumes the mod is actually loaded and that <code>targetVersion</code> doesn't cause an error.
 	 * Kurwa eksploduje if wrong? Nah, just gives <code>null</code>.
@@ -137,22 +154,26 @@ public class Lapisworks implements ModInitializer {
         if (isModLoaded("hextended")) {
 			HEXTENDED_INTEROP = true;
 			anyInterop = true;
-            com.luxof.lapisworks.interop.hextended.Lapixtended.initHextendedInterop();
+			Lapixtended.initHextendedInterop();
         }
 		if (isModLoaded("hexical")) {
 			HEXICAL_INTEROP = true;
 			anyInterop = true;
-			com.luxof.lapisworks.interop.hexical.Lapixical.initHexicalInterop();
+			Lapixical.initHexicalInterop();
 		}
 		if (isModLoaded("hexal")) {
 			HEXAL_INTEROP = true;
 			anyInterop = true;
-			com.luxof.lapisworks.interop.hexal.Lapisal.beCool();
+			Lapisal.beCool();
 		}
 		if (isModLoaded("hierophantics")) {
 			HIEROPHANTICS_INTEROP = true;
 			anyInterop = true;
-			com.luxof.lapisworks.interop.hierophantics.Chariot.readTarotCards();
+			Chariot.readTarotCards();
+		}
+		if (isModLoaded("oneironaut")) {
+			ONEIRONAUT_INTEROP = true;
+			anyInterop = true;
 		}
 
 		LapisConfig.renewCurrentConfig();
@@ -169,8 +190,8 @@ public class Lapisworks implements ModInitializer {
 		ModScreens.whatWasThatTF2CommentAboutMakingBadGUICodeSoYouDontHaveToTouchItAgain();
 		LapisParticles.pawtickle();
 
-        LOGGER.info("Luxof's pet Lapisworks is getting a bit hyperactive.");
-		LOGGER.info("\"Lapisworks! Lapis Lapis!\"");
+        log("Luxof's pet Lapisworks is getting a bit hyperactive.");
+		log("\"Lapisworks! Lapis Lapis!\"");
 		if (anyInterop) {
 			// yknow, i would love to make the Interop category/entries unavailable until the mods
 			// required exist but what if i keep it right there to garner curiosity and get people
@@ -181,8 +202,8 @@ public class Lapisworks implements ModInitializer {
 			//	"lapisworks:any_interop",
 			//	true
 			//)
-			LOGGER.info("You have an addon that has interop with Lapisworks loaded?! Oh NOO, it's overstimulated, it's gonna throw up a bunch of content! Look what you've done!");
-		} else LOGGER.info("Feed it redstone.");
+			log("You have an addon that has interop with Lapisworks loaded?! Oh NOO, it's overstimulated, it's gonna throw up a bunch of content! Look what you've done!");
+		} else log("Feed it redstone.");
 	}
 
 	public static Identifier id(String string) {
@@ -240,23 +261,23 @@ public class Lapisworks implements ModInitializer {
 	@Nullable
 	public static DyeColor getDyeFromPigment(FrozenPigment pigment) {
 		// uncommon, that's my excuse
-		if (pigment == BLACK_FP) { return DyeColor.BLACK; }
-		else if (pigment == BROWN_FP) { return DyeColor.BROWN; }
-		else if (pigment == BLUE_FP) { return DyeColor.BLUE; }
-		else if (pigment == CYAN_FP) { return DyeColor.CYAN; }
-		else if (pigment == GRAY_FP) { return DyeColor.GRAY; }
-		else if (pigment == GREEN_FP) { return DyeColor.GREEN; }
-		else if (pigment == LIGHT_BLUE_FP) { return DyeColor.LIGHT_BLUE; }
-		else if (pigment == LIGHT_GRAY_FP) { return DyeColor.LIGHT_GRAY; }
-		else if (pigment == LIME_FP) { return DyeColor.LIME; }
-		else if (pigment == MAGENTA_FP) { return DyeColor.MAGENTA; }
-		else if (pigment == ORANGE_FP) { return DyeColor.ORANGE; }
-		else if (pigment == PINK_FP) { return DyeColor.PINK; }
-		else if (pigment == PURPLE_FP) { return DyeColor.PURPLE; }
-		else if (pigment == RED_FP) { return DyeColor.RED; }
-		else if (pigment == WHITE_FP) { return DyeColor.WHITE; }
-		else if (pigment == YELLOW_FP) { return DyeColor.YELLOW; }
-		else { return null; }
+		if (pigment.equals(BLACK_FP)) return DyeColor.BLACK;
+		else if (pigment.equals(BROWN_FP)) return DyeColor.BROWN;
+		else if (pigment.equals(BLUE_FP)) return DyeColor.BLUE;
+		else if (pigment.equals(CYAN_FP)) return DyeColor.CYAN;
+		else if (pigment.equals(GRAY_FP)) return DyeColor.GRAY;
+		else if (pigment.equals(GREEN_FP)) return DyeColor.GREEN;
+		else if (pigment.equals(LIGHT_BLUE_FP)) return DyeColor.LIGHT_BLUE;
+		else if (pigment.equals(LIGHT_GRAY_FP)) return DyeColor.LIGHT_GRAY;
+		else if (pigment.equals(LIME_FP)) return DyeColor.LIME;
+		else if (pigment.equals(MAGENTA_FP)) return DyeColor.MAGENTA;
+		else if (pigment.equals(ORANGE_FP)) return DyeColor.ORANGE;
+		else if (pigment.equals(PINK_FP)) return DyeColor.PINK;
+		else if (pigment.equals(PURPLE_FP)) return DyeColor.PURPLE;
+		else if (pigment.equals(RED_FP)) return DyeColor.RED;
+		else if (pigment.equals(WHITE_FP)) return DyeColor.WHITE;
+		else if (pigment.equals(YELLOW_FP)) return DyeColor.YELLOW;
+		else return null;
 	}
 
 	public static int clamp(int num, int min, int max) { return Math.min(Math.max(num, min), max); }
@@ -294,7 +315,7 @@ public class Lapisworks implements ModInitializer {
 
 	/** Nulls the config flags for you. */
 	public static void nullConfigFlags() {
-		LOGGER.info("Nulling config flags.");
+		log("Nulling config flags.");
 		for (String patId : allPerWorldShapePatterns.keySet()) {
 			for (int i = 0; i < allPerWorldShapePatterns.get(patId).size(); i++) {
 				PatchouliAPI.get().setConfigFlag(
@@ -393,7 +414,7 @@ public class Lapisworks implements ModInitializer {
         List<HeldItemInfo> stacks = ((GetStacks)ctx).getHeldStacks();
         try { return stacks.get(hand).stack(); }
 		catch (IndexOutOfBoundsException e) {
-			LOGGER.info("Someone tried to access idx " + hand + " of " + stacks.toString() + ".");
+			log("Someone tried to access idx " + hand + " of " + stacks.toString() + ".");
 			return null;
 		}
     }
@@ -657,7 +678,26 @@ public class Lapisworks implements ModInitializer {
 	public static BlockPos deserializeBlockPos(NbtElement nbt) {
 		return deserializeBlockPos((NbtCompound)nbt);
 	}
-    public static NbtList nbtListOf(List<? extends NbtElement> list) {
+
+	public static NbtCompound serializeVec3d(Vec3d vec) {
+		NbtCompound nbt = new NbtCompound();
+		nbt.putDouble("x", vec.x);
+		nbt.putDouble("y", vec.y);
+		nbt.putDouble("z", vec.z);
+		return nbt;
+	}
+	public static Vec3d deserializeVec3d(NbtCompound nbt) {
+		return new Vec3d(
+			nbt.getDouble("x"),
+			nbt.getDouble("y"),
+			nbt.getDouble("z")
+		);
+	}
+	public static Vec3d deserializeVec3d(NbtElement ele) {
+		return deserializeVec3d((NbtCompound)ele);
+	}
+
+	public static NbtList nbtListOf(List<? extends NbtElement> list) {
         NbtList nbtList = new NbtList();
         nbtList.addAll(list);
         return nbtList;
@@ -704,6 +744,7 @@ public class Lapisworks implements ModInitializer {
 		Direction horizontal,
 		Direction down
 	) {
+		if (horizontal == down) return RotationAxis.NEGATIVE_Y.rotationDegrees(0);
 		return switch (horizontal) {
 			case WEST ->
 				RotationAxis.NEGATIVE_Y.rotationDegrees(90 + (down == Direction.UP ? 180 : 0));
@@ -712,7 +753,7 @@ public class Lapisworks implements ModInitializer {
 			case EAST ->
 				RotationAxis.NEGATIVE_Y.rotationDegrees(270 - (down == Direction.UP ? 180 : 0));
 			default ->
-				RotationAxis.POSITIVE_Z.rotationDegrees(0);
+				RotationAxis.NEGATIVE_Y.rotationDegrees(0);
 		};
 	}
 	public static Quaternionf rotateToBeAttachedTo(
@@ -720,11 +761,11 @@ public class Lapisworks implements ModInitializer {
 	) {
 		return switch (attachedTo) {
 			case UP -> RotationAxis.POSITIVE_X.rotationDegrees(180);
+			case DOWN -> RotationAxis.POSITIVE_X.rotationDegrees(0);
 			case NORTH -> RotationAxis.POSITIVE_X.rotationDegrees(90);
 			case SOUTH -> RotationAxis.NEGATIVE_X.rotationDegrees(90);
 			case EAST -> RotationAxis.POSITIVE_Z.rotationDegrees(90);
 			case WEST -> RotationAxis.NEGATIVE_Z.rotationDegrees(90);
-			case DOWN -> RotationAxis.POSITIVE_X.rotationDegrees(0);
 		};
 	}
 	

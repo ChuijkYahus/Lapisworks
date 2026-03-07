@@ -31,7 +31,6 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -134,16 +133,6 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 
 		juicedUpVals.getCustomInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)
 			.setBaseValue(toAttributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
-		if ((Object)this instanceof PlayerEntity) {
-			// Mojank (tm)
-			EntityAttributeInstance speed = attributes.getCustomInstance(
-				EntityAttributes.GENERIC_MOVEMENT_SPEED
-			);
-			speed.setBaseValue(
-				speed.getBaseValue() +
-				toAttributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)
-			);
-		}
 	}
 
 	@Unique @Override

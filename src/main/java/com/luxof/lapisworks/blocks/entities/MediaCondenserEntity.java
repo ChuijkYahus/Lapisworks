@@ -3,14 +3,15 @@ package com.luxof.lapisworks.blocks.entities;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.luxof.lapisworks.blocks.MediaCondenser;
-import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
 import com.luxof.lapisworks.init.ModBlocks;
+import com.luxof.lapisworks.media.LinkableMediaBlock;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -31,7 +32,7 @@ public class MediaCondenserEntity extends BlockEntity implements LinkableMediaBl
     public HashSet<BlockPos> linkedCondensers = new HashSet<>();
 
     @SuppressWarnings("deprecation")
-    public void updateState() {
+    private void updateState() {
         BlockState state = world.getBlockState(pos);
         int filledState = (int)Math.floor(media / (mediaCap / 14));
 
@@ -40,6 +41,12 @@ public class MediaCondenserEntity extends BlockEntity implements LinkableMediaBl
         BlockState newState = state.with(MediaCondenser.FILLED, filledState);
         world.setBlockState(pos, newState);
         setCachedState(newState);
+    }
+
+    public void save() {
+        updateState();
+        markDirty();
+        world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
     }
 
     private List<Integer> posToInts(HashSet<BlockPos> posList) {
@@ -94,13 +101,14 @@ public class MediaCondenserEntity extends BlockEntity implements LinkableMediaBl
 
 
 
-    @Override public void addLink(BlockPos pos) { linkedCondensers.add(pos); }
-    @Override public void removeLink(BlockPos pos) { linkedCondensers.remove(pos); }
-    @Override public boolean isLinkedTo(BlockPos pos) { return linkedCondensers.contains(pos); }
-    @Override public Set<BlockPos> getLinks() { return linkedCondensers; }
-    @Override public int getNumberOfLinks() { return linkedCondensers.size(); }
+    @Override public void addLink(BlockPos pos) { removeDeadLinks(world); linkedCondensers.add(pos); save(); }
+    @Override public void removeLink(BlockPos pos) { linkedCondensers.remove(pos); save(); }
+    @Override public boolean isLinkedTo(BlockPos pos) { removeDeadLinks(world); return linkedCondensers.contains(pos); }
+    @Override public Set<BlockPos> getLinks() { removeDeadLinks(world); return linkedCondensers; }
+    @Override public Set<BlockPos> getLinksNoRefresh() { return linkedCondensers; }
+    @Override public int getNumberOfLinks() { removeDeadLinks(world); return linkedCondensers.size(); }
     @Override public BlockPos getThisPos() { return this.getPos(); }
     @Override public long getMediaHere() { return media; }
-    @Override public void setMedia(long media) { this.media = media; updateState(); markDirty(); }
+    @Override public void setMediaHere(long media) { this.media = media; save(); }
     @Override public long getMaxMedia() { return mediaCap; }
 }

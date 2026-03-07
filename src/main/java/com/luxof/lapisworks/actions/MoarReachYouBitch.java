@@ -58,24 +58,34 @@ public class MoarReachYouBitch implements SpellAction {
     );
 
     public int getArgc() {
-        return 1;
+        return 2;
     }
 
     @Override
     public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
         LivingEntity entity = OperatorUtils.getPlayer(args, 0, getArgc());
+        boolean enableIt = OperatorUtils.getBool(args, 1, getArgc());
 
         boolean expendShit = !entity.getAttributes().hasModifierForAttribute(
             ReachEntityAttributes.REACH,
             REACH_ENHANCEMENT_UUID
         );
+        expendShit = enableIt ? expendShit : !expendShit;
+
+        if (!expendShit)
+            return new SpellAction.Result(
+                new DoNothing.DoNothingSpell(),
+                0L,
+                List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 2, 25)),
+                1
+            );
 
         VAULT vault = ((GetVAULT)ctx).grabVAULT();
         assertItemAmount(ctx, Mutables::isAmel, AMEL, amelCost);
 
         return new SpellAction.Result(
-            new Spell(entity, vault),
-            Math.max(MediaConstants.SHARD_UNIT * (expendShit ? 4 : 0), 0),
+            new Spell(entity, enableIt, vault),
+            MediaConstants.SHARD_UNIT * 4,
             List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 2, 25)),
             1
         );
@@ -83,13 +93,16 @@ public class MoarReachYouBitch implements SpellAction {
 
     public class Spell implements RenderedSpell {
         public final LivingEntity entity;
+        public final boolean enableIt;
         public final VAULT vault;
 
         public Spell(
             LivingEntity entity,
+            boolean enableIt,
             VAULT vault
         ) {
             this.entity = entity;
+            this.enableIt = enableIt;
             this.vault = vault;
         }
 
@@ -104,7 +117,10 @@ public class MoarReachYouBitch implements SpellAction {
                 false,
                 Flags.PRESET_UpToHotbar
             );
-            entity.getAttributes().addTemporaryModifiers(modifiers);
+            if (enableIt)
+                entity.getAttributes().addTemporaryModifiers(modifiers);
+            else
+                entity.getAttributes().removeModifiers(modifiers);
 		}
 
         @Override

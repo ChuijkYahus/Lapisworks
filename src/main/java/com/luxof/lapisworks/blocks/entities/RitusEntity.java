@@ -6,11 +6,11 @@ import at.petrak.hexcasting.api.casting.iota.IotaType;
 
 import com.luxof.lapisworks.blocks.Ritus;
 import com.luxof.lapisworks.blocks.stuff.AttachedBE;
-import com.luxof.lapisworks.blocks.stuff.UnlinkableMediaBlock;
 import com.luxof.lapisworks.chalk.MultiUseRitualExecutionState;
 import com.luxof.lapisworks.chalk.RitualCastEnv;
 import com.luxof.lapisworks.chalk.RitualComponent;
 import com.luxof.lapisworks.init.ModBlocks;
+import com.luxof.lapisworks.media.MediaTransferInterface;
 
 import static com.luxof.lapisworks.Lapisworks.nbtListOf;
 
@@ -32,10 +32,11 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 
 import org.jetbrains.annotations.Nullable;
 
-public class RitusEntity extends BlockEntity implements AttachedBE, RitualComponent, UnlinkableMediaBlock {
+public class RitusEntity extends BlockEntity implements AttachedBE, RitualComponent, MediaTransferInterface {
 
     public RitusEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.RITUS_ENTITY_TYPE, pos, state);
@@ -247,7 +248,8 @@ public class RitusEntity extends BlockEntity implements AttachedBE, RitualCompon
     }
 
 
-    @Override public BlockPos getThisPos() { return pos; }
-    @Override public void setMedia(long media) { this.media = media; save(); }
+    @Override @Nullable public Vec3d getPosIfPossible() { return pos.toCenterPos(); }
+    @Override public void setMediaHere(long media) { this.media = media; save(); }
     @Override public long getMediaHere() { return media; }
+    @Override public long getMaxMedia() { return 9_000_000_000L; }
 }

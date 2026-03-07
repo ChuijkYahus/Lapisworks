@@ -4,9 +4,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import com.google.gson.reflect.TypeToken;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.err;
 import static com.luxof.lapisworks.Lapisworks.primitive;
 
 import java.io.File;
@@ -63,6 +62,8 @@ public class LapisConfig {
     private static final String SiAErrMult = "simple_amalgam_err_multiplier";
     private static final String CAErrMult = "complex_amalgam_err_multiplier";
     private static final String MaxErr = "max_err";
+    private static final String Spells = "spells";
+    private static final String AllowReclaimAmethyst = "allow_reclaim_amethyst_but_imbue_lapis_takes_items_instead_of_raw_media";
     private static final String defaultConfig = """
     {
       "onetime_ritual": {
@@ -88,6 +89,10 @@ public class LapisConfig {
         "simple_amalgam_err_multiplier": 0.125,
         "complex_amalgam_err_multiplier": 0.25,
         "max_err": 32.0
+      },
+
+      "spells": {
+        "allow_reclaim_amethyst_but_imbue_lapis_takes_items_instead_of_raw_media": true
       }
     }
     """;
@@ -165,8 +170,8 @@ public class LapisConfig {
             this.obj = JsonParser.parseReader(new FileReader(configFile)).getAsJsonObject();
         } catch (Exception e1) {
             if (canIYell) {
-                LOGGER.error("Apparently, the Lapisworks config file is such horseshit it doesn't parse.");
-                LOGGER.error("Trying to fix that right now...");
+                err("Apparently, the Lapisworks config file is such horseshit it doesn't parse.");
+                err("Trying to fix that right now...");
             }
             this.obj = defaultConfigObject;
 
@@ -174,13 +179,13 @@ public class LapisConfig {
                 Files.writeString(configFile.toPath(), defaultConfig, StandardOpenOption.CREATE);
             } catch (IOException e2) {
                 if (!canIYell) return;
-                LOGGER.error("Yeah no, I can't fix your Lapisworks config file.");
-                LOGGER.error("I've defaulted your config options in-game, though.");
-                LOGGER.error("Your first error:");
+                err("Yeah no, I can't fix your Lapisworks config file.");
+                err("I've defaulted your config options in-game, though.");
+                err("Your first error:");
                 e1.printStackTrace();
-                LOGGER.error("And your second error:");
+                err("And your second error:");
                 e2.printStackTrace();
-                LOGGER.error("Toodles!");
+                err("Toodles!");
             }
 
             return;
@@ -188,52 +193,43 @@ public class LapisConfig {
 
         boolean fileIsPerfect = true;
 
-        var defaultPlayerAmbitMult = primitive(0.5);
-        var defaultTuneableAmbitMult = primitive(1.0);
-        var defaultPoweredTrailLength = primitive(1);
         fileIsPerfect = fileIsPerfect && defaultIfInvalid(
             obj,
             OneTime_R,
-            new Pair<>(PlayerAmbitMult, defaultPlayerAmbitMult),
-            new Pair<>(TuneableAmbitMult, defaultTuneableAmbitMult),
-            new Pair<>(PoweredTrailLength, defaultPoweredTrailLength)
+            new Pair<>(PlayerAmbitMult, primitive(0.5)),
+            new Pair<>(TuneableAmbitMult, primitive(1.0)),
+            new Pair<>(PoweredTrailLength, primitive(1))
         );
-
-        defaultPoweredTrailLength = primitive(5);
 
         fileIsPerfect = fileIsPerfect && defaultIfInvalid(
             obj,
             MultiUse_R,
-            new Pair<>(TuneableAmbitMult, defaultTuneableAmbitMult),
-            new Pair<>(PoweredTrailLength, defaultPoweredTrailLength)
+            new Pair<>(TuneableAmbitMult, primitive(1.0)),
+            new Pair<>(PoweredTrailLength, primitive(5))
         );
-
-        var defaultDoAnimation = primitive(true);
-        var defaultCostMultiplier = primitive(0.5);
 
         fileIsPerfect = fileIsPerfect && defaultIfInvalid(
             obj,
             Grand_R,
-            new Pair<>(DoAnimation, defaultDoAnimation),
-            new Pair<>(CostMultiplier, defaultCostMultiplier)
+            new Pair<>(DoAnimation, primitive(true)),
+            new Pair<>(CostMultiplier, primitive(0.5))
         );
-
-        var defaultMaxAmalgams = primitive(1);
-        var defaultMaxSiARange = primitive(48.0);
-        var defaultMaxCARange = primitive(96.0);
-        var defaultSiAErrMult = primitive(0.125);
-        var defaultCAErrMult = primitive(0.25);
-        var defaultMaxErr = primitive(32.0);
 
         fileIsPerfect = fileIsPerfect && defaultIfInvalid(
             obj,
             Chariot,
-            new Pair<>(MaxFusedAmalgams, defaultMaxAmalgams),
-            new Pair<>(MaxSiARange, defaultMaxSiARange),
-            new Pair<>(MaxCARange, defaultMaxCARange),
-            new Pair<>(SiAErrMult, defaultSiAErrMult),
-            new Pair<>(CAErrMult, defaultCAErrMult),
-            new Pair<>(MaxErr, defaultMaxErr)
+            new Pair<>(MaxFusedAmalgams, primitive(1)),
+            new Pair<>(MaxSiARange, primitive(48.0)),
+            new Pair<>(MaxCARange, primitive(96.0)),
+            new Pair<>(SiAErrMult, primitive(0.125)),
+            new Pair<>(CAErrMult, primitive(0.25)),
+            new Pair<>(MaxErr, primitive(32.0))
+        );
+
+        fileIsPerfect = fileIsPerfect && defaultIfInvalid(
+            obj,
+            Spells,
+            new Pair<>(AllowReclaimAmethyst, primitive(true))
         );
 
         if (!fileIsPerfect) {
@@ -243,11 +239,11 @@ public class LapisConfig {
                     new GsonBuilder()
                         .setPrettyPrinting()
                         .create()
-                        .fromJson(defaultPlayerAmbitMult, TypeToken.get(String.class)),
+                        .toJson(obj),
                     StandardOpenOption.CREATE
                 );
             } catch (IOException e) {
-                LOGGER.error("Tried to correct bad Lapisworks config file, failed!");
+                err("Tried to correct bad Lapisworks config file, failed!");
                 e.printStackTrace();
             }
         }
@@ -316,6 +312,18 @@ public class LapisConfig {
             settings.get(SiAErrMult).getAsDouble(),
             settings.get(CAErrMult).getAsDouble(),
             settings.get(MaxErr).getAsDouble()
+        );
+    }
+
+
+    public static final record SpellSettings(
+        boolean allow_reclaim_amethyst
+    ) {}
+    public SpellSettings getSpellSettings() {
+        JsonObject settings = obj.getAsJsonObject(Spells);
+
+        return new SpellSettings(
+            settings.get(AllowReclaimAmethyst).getAsBoolean()
         );
     }
 }

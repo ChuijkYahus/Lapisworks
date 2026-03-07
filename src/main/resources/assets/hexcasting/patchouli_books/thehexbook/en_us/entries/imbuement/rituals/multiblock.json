@@ -12,6 +12,17 @@
         {
             "type": "patchouli:text",
             "text": "pages.lapisworks.imbuement.rituals.multiblock.manual"
+        },
+        {
+            "type": "patchouli:image",
+            "images": [
+                "lapisworks:textures/entries/step1grandritual.png",
+                "lapisworks:textures/entries/step2grandritual.png",
+                "lapisworks:textures/entries/step3grandritual.png",
+                "lapisworks:textures/entries/altgrandritual.png"
+            ],
+            "border": true,
+            "text": "pages.lapisworks.imbuement.rituals.multiblock.imgs_description"
         }
     ]
 }

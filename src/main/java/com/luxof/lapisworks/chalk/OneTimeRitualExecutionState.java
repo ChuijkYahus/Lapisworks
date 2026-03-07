@@ -7,6 +7,7 @@ import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.init.LapisConfig;
 import com.luxof.lapisworks.init.LapisConfig.OneTimeRitualSettings;
 
+import static com.luxof.lapisworks.Lapisworks.deserializeBlockPos;
 import static com.luxof.lapisworks.Lapisworks.getPigmentFromDye;
 import static com.luxof.lapisworks.Lapisworks.nbtListOf;
 import static com.luxof.lapisworks.LapisworksIDs.ONETIMERITUAL_BURN_BLACKLIST_TAG;
@@ -114,7 +115,7 @@ public class OneTimeRitualExecutionState extends RitualExecutionState {
             nbt.getLong("media"),
             nbt.getList("visitedPositions", NbtElement.COMPOUND_TYPE)
                 .stream()
-                .map(e -> Lapisworks.deserializeBlockPos((NbtCompound)e))
+                .map(e -> deserializeBlockPos(e))
                 .toList()
         );
     }

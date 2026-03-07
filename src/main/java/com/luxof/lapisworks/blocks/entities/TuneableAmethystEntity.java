@@ -6,8 +6,8 @@ import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.luxof.lapisworks.blocks.TuneableAmethyst;
-import com.luxof.lapisworks.blocks.stuff.UnlinkableMediaBlock;
 import com.luxof.lapisworks.init.ModBlocks;
+import com.luxof.lapisworks.media.MediaTransferInterface;
 import com.luxof.lapisworks.mixinsupport.RitualsUtil;
 
 import net.minecraft.block.Block;
@@ -20,10 +20,11 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 import org.jetbrains.annotations.Nullable;
 
-public class TuneableAmethystEntity extends BlockEntity implements UnlinkableMediaBlock {
+public class TuneableAmethystEntity extends BlockEntity implements MediaTransferInterface {
     public TuneableAmethystEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.TUNEABLE_AMETHYST_ENTITY_TYPE, pos, state);
     }
@@ -115,8 +116,8 @@ public class TuneableAmethystEntity extends BlockEntity implements UnlinkableMed
         return BlockEntityUpdateS2CPacket.create(this); }
     @Override public NbtCompound toInitialChunkDataNbt() { return createNbt(); }
 
-    @Override public BlockPos getThisPos() { return this.getPos(); }
+    @Override @Nullable public Vec3d getPosIfPossible() { return pos.toCenterPos(); }
     @Override public long getMediaHere() { return media; }
-    @Override public void setMedia(long media) { this.media = media; updateState(); save(); }
+    @Override public void setMediaHere(long media) { this.media = media; updateState(); save(); }
     @Override public long getMaxMedia() { return mediaCap; }
 }

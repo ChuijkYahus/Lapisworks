@@ -8,8 +8,10 @@ import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.blocks.entities.RitusEntity;
 import com.luxof.lapisworks.init.LapisConfig;
 
+import static com.luxof.lapisworks.Lapisworks.deserializeBlockPos;
 import static com.luxof.lapisworks.Lapisworks.getPigmentFromDye;
 import static com.luxof.lapisworks.Lapisworks.nbtListOf;
+import static com.luxof.lapisworks.Lapisworks.serializeBlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +61,7 @@ public class MultiUseRitualExecutionState extends RitualExecutionState {
     @Override
     public void save(NbtCompound nbt) {
         saveBase(nbt);
-        nbt.put("startingPos", Lapisworks.serializeBlockPos(startingPos));
+        nbt.put("startingPos", serializeBlockPos(startingPos));
         nbt.put(
             "visitedPositions",
             nbtListOf(
@@ -79,10 +81,10 @@ public class MultiUseRitualExecutionState extends RitualExecutionState {
             base.caster(),
             base.pigment(),
             base.tunedFrequency(),
-            Lapisworks.deserializeBlockPos(nbt.getCompound("startingPos")),
+            deserializeBlockPos(nbt.getCompound("startingPos")),
             nbt.getList("visitedPositions", NbtElement.COMPOUND_TYPE)
                 .stream()
-                .map(e -> Lapisworks.deserializeBlockPos((NbtCompound)e))
+                .map(e -> deserializeBlockPos(e))
                 .toList()
         );
     }
@@ -126,9 +128,10 @@ public class MultiUseRitualExecutionState extends RitualExecutionState {
 
             sprayParticlesOutOf(
                 world,
-                startingPos,
+                startingPos.toCenterPos(),
                 (RitualComponent)world.getBlockEntity(startingPos),
-                getPigmentFromDye(DyeColor.RED)
+                getPigmentFromDye(DyeColor.RED),
+                40
             );
 
             unpowerTrailing(world, 0);

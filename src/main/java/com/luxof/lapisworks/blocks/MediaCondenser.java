@@ -13,7 +13,6 @@ import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
@@ -62,8 +61,14 @@ public class MediaCondenser extends BlockWithEntity {
 
     // fffffFFFUCK your explosion drop chances!
     @Override
-    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        super.onBreak(world, pos, state, player);
+    public void onStateReplaced(
+        BlockState state,
+        World world,
+        BlockPos pos,
+        BlockState newState,
+        boolean moved
+    ) {
+        if (state.isOf(newState.getBlock())) return;
         MediaCondenserEntity condenser = (MediaCondenserEntity)world.getBlockEntity(pos);
         ItemStack stack = new ItemStack(ModItems.MEDIA_CONDENSER);
         NBTHelper.putLong(stack, "media", condenser.media);
@@ -72,7 +77,7 @@ public class MediaCondenser extends BlockWithEntity {
         ItemScatterer.spawn(
             world,
             pos,
-            DefaultedList.copyOf(ItemStack.EMPTY.copy(), stack)
+            DefaultedList.copyOf(ItemStack.EMPTY, stack)
         );
     }
 
@@ -87,6 +92,6 @@ public class MediaCondenser extends BlockWithEntity {
         MediaCondenserEntity condenser = (MediaCondenserEntity)world.getBlockEntity(pos);
         condenser.media = NBTHelper.getLong(itemStack, "media", 0L);
         condenser.mediaCap = NBTHelper.getLong(itemStack, "max", 640000L);
-        condenser.updateState();
+        condenser.save();
     }
 }

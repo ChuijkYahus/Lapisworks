@@ -40,6 +40,14 @@
             "input": "any",
             "output": "",
             "text": "pages.lapisworks.imbuement.rituals.onetime.tune_ritual.summary"
+        },
+        {
+            "type": "patchouli:image",
+            "images": [
+                "lapisworks:textures/entries/onetimeritualexample.png"
+            ],
+            "border": true,
+            "text": "pages.lapisworks.imbuement.rituals.onetime.img_description"
         }
     ]
 }

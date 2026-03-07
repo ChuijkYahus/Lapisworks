@@ -9,7 +9,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 
 import com.luxof.lapisworks.mixinsupport.GetVAULT;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.err;
 
 import java.util.List;
 
@@ -60,11 +60,11 @@ public abstract class ConstMediaActionNCT extends PatternNCTBase implements Cons
         try {
             return this.getClass().getField("argc").getInt(this);
         } catch (NoSuchFieldException e) {
-            LOGGER.error("you must have an argc field in the first place.", e);
+            err("you must have an argc field in the first place.", e);
         } catch (IllegalAccessException e) {
-            LOGGER.error("your argc field must be accessible.", e);
+            err("your argc field must be accessible.", e);
         } catch (IllegalArgumentException e) {
-            LOGGER.error("your argc field must be an int.", e);
+            err("your argc field must be an int.", e);
         }
         return 0;
     }
@@ -75,11 +75,11 @@ public abstract class ConstMediaActionNCT extends PatternNCTBase implements Cons
         try {
             return this.getClass().getField("mediaCost").getLong(this);
         } catch (NoSuchFieldException e) {
-            LOGGER.error("you must have a mediaCost field in the first place.", e);
+            err("you must have a mediaCost field in the first place.", e);
         } catch (IllegalAccessException e) {
-            LOGGER.error("your mediaCost field must be accessible.", e);
+            err("your mediaCost field must be accessible.", e);
         } catch (IllegalArgumentException e) {
-            LOGGER.error("your mediaCost field must be a long.", e);
+            err("your mediaCost field must be a long.", e);
         }
         return 0;
     }
@@ -89,7 +89,7 @@ public abstract class ConstMediaActionNCT extends PatternNCTBase implements Cons
         try {
             return this.getClass().getField("requiresEnlightenment").getBoolean(this);
         } catch (IllegalArgumentException e) {
-            LOGGER.error("your requiresEnlightenment field must be a boolean.", e);
+            err("your requiresEnlightenment field must be a boolean.", e);
         } catch (IllegalAccessException e) {
             e.printStackTrace(); // Never happens
         } catch (NoSuchFieldException e) {

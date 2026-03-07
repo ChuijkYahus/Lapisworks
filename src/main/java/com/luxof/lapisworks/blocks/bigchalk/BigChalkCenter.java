@@ -116,6 +116,7 @@ public class BigChalkCenter extends BigChalkPart implements BlockEntityProvider 
     ) {
         BigChalkCenterEntity bE = (BigChalkCenterEntity)world.getBlockEntity(pos);
         if (bE.isPowered()) return ActionResult.FAIL;
+        else if (!NBTHelper.contains(stampStack, Stamp.TAG_PATTERN)) return ActionResult.FAIL;
         bE.stamp(
             HexPattern.fromNBT(NBTHelper.getCompound(stampStack, Stamp.TAG_PATTERN)),
             player.getHorizontalFacing()

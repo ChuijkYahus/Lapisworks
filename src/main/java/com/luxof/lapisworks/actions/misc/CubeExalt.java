@@ -26,21 +26,13 @@ public class CubeExalt implements Action {
     @Override
     public OperationResult operate(CastingEnvironment ctx, CastingImage img, SpellContinuation cont) {
         List<Iota> stack = new ArrayList<Iota>(img.getStack());
-        if (stack.size() < getArgc()) throw new MishapNotEnoughArgs(3, stack.size());
+        if (stack.size() < getArgc()) throw new MishapNotEnoughArgs(4, stack.size());
 
         int lastIdx = stack.size() - 1;
         SpellList intrs = OperatorUtils.getList(stack, lastIdx - 3, getArgc());
         Vec3d pointA = OperatorUtils.getVec3(stack, lastIdx - 2, getArgc());
         Vec3d pointB = OperatorUtils.getVec3(stack, lastIdx - 1, getArgc());
 
-        CastingImage img2 = img.withUsedOp().copy(
-            stack,
-            img.getParenCount(),
-            img.getParenthesized(),
-            img.getEscapeNext(),
-            img.getOpsConsumed(),
-            img.getUserData()
-        );
         SpellList datum = OperatorUtils.getBool(stack, lastIdx, getArgc()) ?
             generatePointsInHollowCube(pointA, pointB) :
             generatePointsInFilledCube(pointA, pointB);
@@ -50,6 +42,15 @@ public class CubeExalt implements Action {
         stack.remove(lastIdx - 1);
         stack.remove(lastIdx - 2);
         stack.remove(lastIdx - 3);
+
+        CastingImage img2 = img.withUsedOp().copy(
+            stack,
+            img.getParenCount(),
+            img.getParenthesized(),
+            img.getEscapeNext(),
+            img.getOpsConsumed(),
+            img.getUserData()
+        );
 
         return new OperationResult(img2, List.of(), cont.pushFrame(frame), HexEvalSounds.THOTH);
     }

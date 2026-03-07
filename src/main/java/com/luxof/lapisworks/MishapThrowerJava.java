@@ -13,10 +13,10 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs;
 import at.petrak.hexcasting.api.casting.mishaps.circle.MishapNoSpellCircle;
 
 import com.luxof.lapisworks.VAULT.Flags;
-import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
 import com.luxof.lapisworks.chalk.OneTimeRitualExecutionState;
 import com.luxof.lapisworks.chalk.RitualCastEnv;
 import com.luxof.lapisworks.chalk.RitualExecutionState;
+import com.luxof.lapisworks.media.LinkableMediaBlock;
 import com.luxof.lapisworks.mishaps.MishapNotEnoughItems;
 import com.luxof.lapisworks.mishaps.MishapOutsideOfRitual;
 import com.luxof.lapisworks.mixinsupport.GetVAULT;

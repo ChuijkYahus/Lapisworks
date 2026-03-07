@@ -21,7 +21,10 @@
 		"BlockEntityAbstractImpetusMixin",
 		"ServerWorldMixin",
 		"MinecraftServerMixin",
-		"LoseJobOnSiteLossTaskMixin"
+		"LoseJobOnSiteLossTaskMixin",
+		"IotaAccessor",
+		"ItemEntityMixin",
+		"PlayerBasedCastEnvAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

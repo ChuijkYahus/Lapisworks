@@ -57,6 +57,8 @@ public class Stamp extends Item implements IotaHolderItem {
             return ActionResult.FAIL;
         if (!NBTHelper.contains(stack, TAG_PATTERN))
             return ActionResult.FAIL;
+        else if (NBTHelper.getCompound(stack, TAG_PATTERN) == null) // HOW
+            return ActionResult.FAIL;
 
         HexPattern pattern = HexPattern.fromNBT(NBTHelper.getCompound(stack, TAG_PATTERN));
         stampable.stamp(pattern, ctx.getHorizontalPlayerFacing());

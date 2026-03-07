@@ -71,9 +71,9 @@ public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCente
 
         VertexConsumer vc = vertexConsumers.getBuffer(chalk.altTexture ? TEXTURE_alt : TEXTURE_main);
 
-        var fullT = renderData.translate(tickDelta);
-        var halfT = fullT.mul(0.5f);
-        var quarTer = fullT.mul(0.25f); // ba dum tss
+        float fullT = renderData.getTranslation(tickDelta);
+        float halfT = fullT * 0.5f;
+        float quarTer = fullT * 0.25f;
 
         float[] uv;
 
@@ -84,7 +84,7 @@ public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCente
         vc.vertex(posMat, 2f, y, 2f).color(255, 255, 255, 255).texture(uv[2], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
         vc.vertex(posMat, 2f, y, -1f).color(255, 255, 255, 255).texture(uv[2], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
 
-        matrices.translate(halfT.x, halfT.y, halfT.z);
+        matrices.translate(0f, halfT, 0f);
         matrices.translate(0.5f, 0.5f, 0.5f);
         matrices.multiply(renderData.rotate(tickDelta));
         matrices.translate(-0.5f, -0.5f, -0.5f);
@@ -97,7 +97,7 @@ public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCente
         vc.vertex(posMat, 2f, y*2, 2f).color(255, 255, 255, 255).texture(uv[2], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
         vc.vertex(posMat, 2f, y*2, -1f).color(255, 255, 255, 255).texture(uv[2], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
 
-        matrices.translate(halfT.x, halfT.y, halfT.z);
+        matrices.translate(0f, halfT, 0f);
         matrices.translate(0.5f, 0.5f, 0.5f);
         matrices.multiply(renderData.rotateInverse(tickDelta));
         matrices.multiply(renderData.rotateInverse(tickDelta));
@@ -119,7 +119,7 @@ public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCente
         vc.vertex(posMat, 2f, y*4, 2f).color(255, 255, 255, 255).texture(uv[2], uv[3]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
         vc.vertex(posMat, 2f, y*4, -1f).color(255, 255, 255, 255).texture(uv[2], uv[1]).overlay(overlay).light(useLight).normal(normMat, 0f, 1f, 0f).next();
 
-        matrices.translate(halfT.x, halfT.y, halfT.z);
+        matrices.translate(0f, halfT, 0f);
         matrices.translate(0.5f, 0.5f, 0.5f);
         matrices.multiply(renderData.rotate(tickDelta));
         matrices.translate(-0.5f, -0.5f, -0.5f);
@@ -148,7 +148,7 @@ public class BigChalkCenterRenderer implements BlockEntityRenderer<BigChalkCente
         //matrices.multiply(getReverseRotationForHorizontal(chalk.facing, chalk.attachedTo));
         //matrices.multiply(getRotationForHorizontal(chalk.patternFacing, chalk.attachedTo));
         //matrices.translate(-0.5f, 0.5f, 0.5f);
-        matrices.translate(quarTer.x, quarTer.y, quarTer.z);
+        matrices.translate(0f, quarTer, 0f);
         matrices.translate(0.5f, 0.5f, 0.5f);
         matrices.scale(0.8f, 1f, 0.8f);
         matrices.translate(-0.5f, -0.5f, -0.5f);

@@ -201,20 +201,24 @@ public class BigChalkPart extends Block {
     ) {
         // i'll smoke a million litres of 'caine b4 i explain this gl
         boolean posX = attachedTo == Direction.WEST;
-        boolean xAxis = posX || attachedTo == Direction.EAST;
+        boolean flipXSpawn = attachedTo == Direction.EAST;
+        boolean xAxis = posX || flipXSpawn;
 
         boolean posY = attachedTo == Direction.DOWN;
-        boolean yAxis = posY || attachedTo == Direction.UP;
+        boolean flipYSpawn = attachedTo == Direction.UP;
+        boolean yAxis = posY || flipYSpawn;
 
         boolean posZ = attachedTo == Direction.NORTH;
-        boolean zAxis = posZ || attachedTo == Direction.SOUTH;
+        boolean flipZSpawn = attachedTo == Direction.SOUTH;
+        boolean zAxis = posZ || flipZSpawn;
 
+        // trust me :)
         double x = (double)pos.getX() + 0.5 +
-            (xAxis ? posX ? -0.2 : -0.8 : Math.random() * 1.25 - 0.75);
+            (xAxis ? (posX ? -0.2 : -0.8) : Math.random() * 1.25 - 0.75) * (flipXSpawn ? -1 : 1);
         double y = (double)pos.getY() + 0.5 +
-            (yAxis ? posY ? -0.2 : -0.8 : Math.random() * 1.25 - 0.75);
+            (yAxis ? (posY ? -0.2 : -0.8) : Math.random() * 1.25 - 0.75)  * (flipYSpawn ? -1 : 1);
         double z = (double)pos.getZ() + 0.5 +
-            (zAxis ? posZ ? -0.2 : -0.8 : Math.random() * 1.25 - 0.75);
+            (zAxis ? (posZ ? -0.2 : -0.8) : Math.random() * 1.25 - 0.75)  * (flipZSpawn ? -1 : 1);
 
         double vX = xAxis ? 0.0 : Math.random() * 0.2 - 0.1;
         double vY = yAxis ? 0.0 : Math.random() * 0.2 - 0.1;

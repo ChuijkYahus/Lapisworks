@@ -30,6 +30,7 @@ public class LapisworksIDs {
     public static final Identifier DOWSE_RESULT = id("dowse_result");
     public static final Identifier SET_PATTERNS_ON_CHALK = id("set_patterns_on_chalk");
     public static final Identifier GIB_DUST = id("gib_dust");
+    public static final Identifier APPLY_PULL_FOR_TIME = id("apply_lingering_accel");
 
     // items and shit
     public static final Identifier LAPIS_MAGIC_SHIT_GROUP = id("lapismagicshitgroup");

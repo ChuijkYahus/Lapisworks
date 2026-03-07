@@ -214,32 +214,23 @@ Only the devs who can keep up with me...
 - Amethyst/Chalk Rituals (pre-enlightenment)  
   - same-plane-only (no wall-to-floor or wall-to-ceiling etc.)
   - 5 patterns per chalk on ground max
-  - plant little chunks of amethyst (like large amethyst buds but thinner)
-    - tune them with Tune Media (costs amel)
-    - rituals with the same tuned iota have ambit around that chunk of amethyst now
-    - has 2 blocks of ambit independent of ambit from deposited media.
-    - Deposit Media to make the ambit larger
-    - Withdraw Media to make the ambit smaller
-    - radius of ambit = sqrt(deposited media)
-    - maximum ambit = 16 blocks
+  - tuneable amethyst
+    - tune rituals to the same iota as they are tuned to to grant them some ambit around them.
+    - radius of ambit = sqrt(deposited media in tuneable amethyst)
   - one-time rituals
-    - right click with media item to absorb all of it into the ritual
-    - ritual burns chalk as it goes
-    - ritual uses half your ambit (including gsent and enchsent)
-    - hotswap tuned iota and whether or not it casts as the starter
-    - casting as the starter determines if it uses your ambit
+    - half your ambit, can or can not cast as you (you pick), burns chalk.
   - multi-use rituals
-    - right click the start block
-    - ritual does not burn chalk as it goes
-    - rituals uses 1/8th of your ambit (including gsent and enchsent)
-    - tuned iota and whether must be configured in the start block
-    - always casts as the starter
+    - always casts as you, has none of your ambit, doesn't burn chalk.
   - grand rituals
-    - 9 blocks of chalk-with-pattern on the ground make a multiblock
-    - 50% media discount
-    - rmb with a staff and it casts as you with your ambit
-    - rmb with amel in the offhand and it burns up after use (does not consume the amel)
+    - multi-block
+    - uses your staff stack, has an animation, halves spell cost.
+    - rmb with amel (does not consume) to make it burn up after use.
+- block tags
+  - chalk_connectable: all chalk SHOULD attempt to connect to blocks in this tag.
+  - cant_place_chalk_on: the name.
+  - onetimeritual_burn_blacklist: blacklists blocks from being burned by one time rituals when stepped over.
 - chalk_connectable block tag (all chalk attempts to connect to blocks in this tag)
+- Config! See your `.minecraft/config/lapisworks.json`.
 - Enchanted Brewery
   - Imbue 10 Amel into a Brewing Stand
   - 1.5x blaze usage for 2x speed
@@ -250,42 +241,57 @@ Only the devs who can keep up with me...
   - alternative name: Noetic Lapidary
   - costs one amethyst shard in media, and at least two lapis in item form in your other hand
   - converts the two lapis into one amethyst (overflow of 1 lapis is consumed)
+- Minimum and Maximum Distillations (it's just `min(n1, n2)` and `max(n1, n2)`)
 - Mintiest and Kitkat's Gambits (`for i in range(n):`)
+- Negentropy Reflection (Entropy Reflection but 0 inclusive to 1 exclusive)
+- Pull (spell)
+  - Impulse constantly for X ticks after Y ticks
+  - Ever wanted to do a curve shot?
+  - Cost = Y/20 + speed\*X dust.
 - Scrying patterns for blocks added by the mod.
 - Scrying lens overlays
 - Simple Mind Infusions now have (basic) datapacking support.
+- Slate Imprinter
 ## Changes:
 - 3D models of some blocks (and maybe an item or two?) look a little better
 - Book reformatting and extra documentation and shit
   - e.g. Villager un-flaying is actually documented now
+  - also thanks to @pool.critter and @rose.sylvanis
 - Deposit Media and Withdraw Media work conveniently now
 - Enchanted Sentinels actually use your base ambit instead of a flat 32 blocks around you
 - Enchanted Slipways got changed to have nearly precisely 2x slipway wisp spawn rate  
   (as i intended them to have when i first made them)
 - Fall Damage Resistance, you may now have 60 blocks of fall damage reduction with 3 levels
-- Gold-Diamond Casting Ring has been deleted in favour of the Amel variant
+- Gold-Diamond Casting Ring has been deleted in favour of the Amel variant  
+  buff has also been removed
+- May have done some funkies with the media spells (relocated and added entity support etc.)
 - Mishap messages n shit
 - Pattern name changes (particularly in the necklace RW patterns)
 - Wizard lore is a lil diff (they are no longer outright evil as fuck)
 - You can now disenchant yourself with the Enchant X patterns
 - You can't read an Ancient Tome before you have gotten Lapisworks Research now
+- You don't need Amel if in creative now
 ## Fixes:
 - Amel Jar bug
 - Ancient Tomes giving you the advancement anyway despite showing the message if you dont have lapis yet
 - Attributes no longer compound when you log
 - "Bug in the mod" mishaps
-- Cradle is fixed now (no dupes no bugs on world load etc.)
-- Damage and movement speed enhancements stacking on world join (you need to kys ingame to reset tho)
-- Deposit and Withdraw actually take doubles now, not just integers
+- Cradle is fixed now (no dupes, no bugs on world load etc.)
+- Enhancements stacking on world join (you need to kys ingame to reset tho)
+- Deposit Media and Withdraw Media actually take doubles now, not just integers
+- Deposit Media can no longer be healthcasted, nor can it draw from Inexhaustible Phials or Trinkets!
 - Enchanted Slipways having a tendency to move 0.01f more in +XYZ than -XYZ (lmao)
 - Enchantments not carrying across dimensions (:broken_heart:)
 - Enchantment & Enhancement Purification's order of arguments being flipped
 - Enhancement Purification actually trying to check the react attribute of a non-player
 - Geode Dowser takes no media if you're in creative
 - Handed Prison didn't drop blocks wtf
+- Imbue Amel prioritizes your left hand always instead of following whichever recipe came first  
+  (was a bug where Imbue Amel would rather imbue a staff over a jar)
 - Live Jukebox top texture good again
 - Logspam begone!
-- Raycasting (Empty or Visible Distillation) would sometimes freeze your server
+- Media Condensing Units not dropping sometimes (e.g. with Break Block) and Empty Units not dropping in general
+- Raycasting (Empty or Visible Distillation) would sometimes freeze your server (for alexyzer at least)
 - Rebound Slate simple mind infusion recipe exists again
 - Rifts (Enchanted Slipways) should not change rotations since birth now
 - Shit should actually tell you when you don't have Fabric now
@@ -294,7 +300,7 @@ Only the devs who can keep up with me...
 - Simple Impetus recipe in EMI not showing it required some amel to do
 - Villager un-flaying does not preserve levels anymore
 - Visible Distillation and Empty Distillation should be a lot more optimized now (not that you'll notice it lmao)
-- Withdraw bug
+- Withdraw Media bug
 - You may no longer convert Lapis (+ your life force) into Amethyst Shards
   - It now pulls from your inventory
   - Also there's a spell for that now
@@ -304,19 +310,9 @@ Only the devs who can keep up with me...
     - Ever wanted a counterspell?
   - "Jack" villager type  
     - villagers turn into "Jacks" when unflayed
-    "Jacks" start with 2-3 levels of exp on every profession  
+    - "Jacks" start with 2-3 levels of exp on every profession  
     - (but no trades until they pick one of those professions)
     - they're called "Jacks" because they're jacks of all trades
-  - FUCKING UNICORNS
-	  - IMBUE A SIMPLE MIND INTO A HORSE AND USE 64 AMEL
-    - After being made, a Unicorn develops an affinity for you (and so is bound to you).
-    - You can only have one Unicorn bound to you (any attempts to make more fail).
-    - Unicorns are uncommonly seen, however they do appear around the player from time to time.  
-      They VERY rarely spawn during the night.
-    - Unicorns have a zone of influence around themselves with a radius of 32 blocks.
-    - No hostile mobs can spawn in the presence of a unicorn, and any that spawn outside it's zone  
-      of influence refuse to enter said zone of influence.
-    - No patterns can execute within the zone of influence of a Unicorn, mishapping instead.  
 - EMI
   - You can now see Imbue Amel, Mold Amel and (most) Simple Mind Infusion recipes in EMI
   - You can also see BeegInfusion recipes in EMI
@@ -324,9 +320,13 @@ Only the devs who can keep up with me...
   - the Cradle's item actually has a big hitbox now
   - the Media Jar and the Cradle are targets for Deposit Media, Withdraw Media and
     Condensed Media Prfn.
+- Hexal
+  - Wisps work with the media patterns
+  - Wisps can hold an item now
 # 1.5.9
 ### Free me
 - Amethyst Piano
+- Enchant stack size (+64 every upgrade)
 - Heal your mind after breaking it. (Jacked O' Lantern finale)
 - Alchemy/potion-brewing overhaul (I'm deadass)  
   herb stuff that leads to discovering Alchemy?  
@@ -339,6 +339,9 @@ Only the devs who can keep up with me...
     - or maybe just a Hexical Gasp spell daemon?
   - note to self: might have to fuck with world build height limit for this, as some creatures are
     simply gargantuan!
+    - hey past Luxof, what the FUCK do you mean "FUCK WITH WORLD BUILD HEIGHT LIMIT"
+    - THERE IS NO WAY IN HELL THE CREATURES NEED TO BE THAT BIG
+    - CHRIST
   - think this should be a progression of the enchanted slipway
 - Valkyrien Skies interop
   air pocket in fully closed ship protects you from congested deep noosphere effects too
@@ -422,7 +425,8 @@ possible interop:
   - ship variant of the jumpslate that jumps to the nearest ship in the specified radius
   - wisp-ify a ship by imbuing a simple mind into it
     - unlocks spells for fine-tuned ship movement?
-  
+    - Nah, executes spells on physics ticks
+
 much bigger phials  
 ~~ability to extend pattern and stack limit by expending media~~ gave that to hexthings  
   nvm hexthings threw it right back to me (infeasible for it)  
@@ -477,11 +481,6 @@ backdrawn patterns
 
 zone dstl projectile  
 
-Impulse over time spell (schedules x velocity be applied in y time on an entity z)
-- lets you do curve shots  
-- name "Pull", "Sustain", "Impulse: Flow", "Tween", "Drive"?  
-- Pull.
-
 JIT compilation
 - not sure if i can do this or if it'd even be worth it
 - it would be very funny if i did add this though lmao
@@ -508,8 +507,9 @@ add some randomness!
 jumpslate across space and time  
 -# i don't even do drugs. what does this mean, past me?  
 
-vv only if no one else is interested  
-MASSIVE wizard towers! give you ambit + cost reduction + grid size (grid size toggleable)  
+- vv only if no one else is interested  
+  - MASSIVE multi-block wizard towers! give you ambit + cost reduction + grid size
+    (grid size toggleable)  
 
 trinket that casts upon dropped  
 right click to prime  
@@ -573,7 +573,7 @@ potions!
 
 so you know about the Ultra Instinct beam effect when Goku first achieves it right  
 do that but for the chalk multiblock  
-invert the color of the world inside the beam  
+invert the color of the world inside the beam (shader)  
 make it spin  
 make it rectangular like a beacon's  
 make it play a cool ass sound effect  
@@ -586,6 +586,19 @@ probably a library mod:
 put all this time shit in an addon  
 call it Hex To The Future  
 
-port Mediaworks' Macula  
-
 Hastenature is AOE now (and perhaps has a duration for which it boosts random tick rates?)  
+
+FUCKING UNICORNS
+  - IMBUE A SIMPLE MIND INTO A HORSE AND USE 64 AMEL
+  - After being made, a Unicorn develops an affinity for you (and so is bound to you).
+  - You can only have one Unicorn bound to you (any attempts to make more fail).
+  - Unicorns are uncommonly seen, however they do appear around the player from time to time.  
+    They VERY rarely spawn during the night.
+  - Unicorns have a zone of influence around themselves with a radius of 32 blocks.
+  - No hostile mobs can spawn in the presence of a unicorn, and any that spawn outside it's zone  
+    of influence refuse to enter said zone of influence.
+  - No patterns can execute within the zone of influence of a Unicorn, mishapping instead.  
+  - see that one convo i had with Miyu (search up Tulpa on TechTastic)
+
+wearable cypher/trinket/artifact trinket  
+enchanted flowers?

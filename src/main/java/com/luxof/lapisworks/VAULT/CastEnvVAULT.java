@@ -9,6 +9,7 @@ import static com.luxof.lapisworks.LapisworksIDs.CASTENV_VAULT;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -65,5 +66,15 @@ public class CastEnvVAULT extends VAULT {
     protected List<ItemStack> getInventory() {
         if (playerVAULT == null) return List.of();
         return playerVAULT.getInventory();
+    }
+
+    @Override
+    public int drain(Predicate<ItemStack> itemPred, int amount, boolean sim, Flags flags) {
+        if (
+            playerVAULT != null &&
+            playerVAULT instanceof ServPlayerVAULT SPVAULT &&
+            SPVAULT.creativePlayer()
+        ) return amount;
+        return super.drain(itemPred, amount, sim, flags);
     }
 }

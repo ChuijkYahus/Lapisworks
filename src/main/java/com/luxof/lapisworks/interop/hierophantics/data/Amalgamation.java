@@ -34,6 +34,7 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+// Lazy imports, cover me please!
 import robotgiggle.hierophantics.HieroMindCastEnv;
 
 public class Amalgamation {

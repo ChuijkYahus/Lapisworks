@@ -5,7 +5,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.ListIota;
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
 
-import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
+import com.luxof.lapisworks.media.LinkableMediaBlock;
 import com.luxof.lapisworks.nocarpaltunnel.ConstMediaActionNCT;
 import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
 

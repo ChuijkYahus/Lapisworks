@@ -16,8 +16,12 @@ import com.luxof.lapisworks.actions.interact.*;
 import com.luxof.lapisworks.actions.misc.*;
 import com.luxof.lapisworks.actions.ritual.*;
 import com.luxof.lapisworks.actions.scry.*;
+import com.luxof.lapisworks.interop.hexal.actions.*;
+// REF the JVM is doing lazy imports LOOK AT THIS CODE it feels like a
+// bomb blast begging to happen :sob::sob::sob:
 import com.luxof.lapisworks.interop.hierophantics.patterns.*;
 
+import static com.luxof.lapisworks.Lapisworks.HEXAL_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.HIEROPHANTICS_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.init.ThemConfigFlags.registerPWShapePattern;
@@ -97,6 +101,7 @@ public class Patterns {
         register("checkenchant", "aqawwqqwqqw", HexDir.SOUTH_EAST, new CheckEnchant());
 
         register("imbue_amel", "wqwwawwqwwaqwewaawewa", HexDir.NORTH_EAST, new ImbueAmel());
+        register("disimbue_amel", "wwaqqddqqawwewwaqqddqqaww", HexDir.SOUTH_WEST, new DisenchantImbued());
         register("conjure_color", "qqaa", HexDir.NORTH_EAST, new ConjureColor());
         register("spherical_dstl", "wqwqwqwqwqwaeaqaaeaqaa", HexDir.NORTH_WEST, new SphereDst());
         register("cubic_exalt", "wqwawqwqqwqwq", HexDir.NORTH_WEST, new CubeExalt());
@@ -114,6 +119,9 @@ public class Patterns {
         register("execute_many_times", "dedadada", HexDir.SOUTH_WEST, new OpForNInRange(true));
         register("hadamard", "awddwde", HexDir.WEST, new Hadamard());
         register("thewhattropy", "eqqqq", HexDir.NORTH_WEST, new TheCoolerEntropy());
+        register("min", "waqqwqddqwqqaw", HexDir.WEST, new MinMax(true));
+        register("max", "wdeeweaaeweedw", HexDir.WEST, new MinMax(false));
+        register("pull", "awwqqqwwaqww", HexDir.SOUTH_WEST, new Pull());
 
         register("thought_sieve", "qadaadadqaqdadqaq", HexDir.WEST, new HexResearchYoink());
         register("absorb_mind", "aawqqwqqqaede", HexDir.WEST, new MindLiquefaction());
@@ -130,10 +138,10 @@ public class Patterns {
 
         register("deposit", "qaqqdwdwd", HexDir.NORTH_EAST, new Deposit());
         register("withdraw", "qaqwwdwdw", HexDir.NORTH_EAST, new Withdraw());
+        register("get_mdia", "wddwqwddweqeee", HexDir.NORTH_WEST, new GetThatMedia());
         // the term Phianglement comes from Miyu. it's like quantum entanglement but for phials
         register("phiangle", "wadqaqdawewadqaqdaw", HexDir.NORTH_EAST, new LinkCondensers());
         register("dephiangle", "wwqaqwwdwawwedeww", HexDir.SOUTH_WEST, new UnlinkCondensers());
-        register("get_condenser_mdia", "wddwqwddweqeee", HexDir.NORTH_WEST, new GetCondenserMedia());
         register("get_linkable_links", "qaqdaweqaqewaqwawaw", HexDir.NORTH_EAST, new GetLinkableLinks());
 
         // Rituals
@@ -193,10 +201,16 @@ public class Patterns {
         registerOnlyForHexdoc("robbie_exalt", "qaeaqaweaqa", HexDir.NORTH_WEST);
         registerPWShapePattern("lapisworks:robbie_exalt");
 
+        // i register these here instead of their respective interop initializers
+        // because hexdoc needs to see them
+        if (HEXAL_INTEROP) {
+            register("gib_wisp_item", "aqawewewaqaweqqaqqedeae", HexDir.NORTH_WEST, new GibWispItem());
+            register("take_away_poor_baby_wisp_candy_like_evil_monster", "dedwqwqwdedwqeedeeqaqdq", HexDir.SOUTH_WEST, new RemoveWispItem());
+        }
         if (HIEROPHANTICS_INTEROP) {
             register("get_amalgamation", "qaqqaqqa", HexDir.NORTH_EAST, new GetAmalgamation());
             register("get_amalgam_notiflevel", "waqaaqawqqwqqwq", HexDir.NORTH_WEST, new GetAmalgamAlert());
-            // hehe weewee
+            //                                      hehe weewee
             register("set_amalgam_notiflevel", "wdeddedweeweewe", HexDir.NORTH_EAST, new SetAmalgamAlert());
             register("get_amalgam_range", "qqqwqwqqqaqqqwqwqqqqaqqa", HexDir.NORTH_EAST, new GetAmalgamRange());
             register("set_amalgam_range", "eeeweweeedeeeweweeeedeed", HexDir.NORTH_WEST, new SetAmalgamRange());

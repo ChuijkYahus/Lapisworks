@@ -8,6 +8,7 @@ import dev.emi.trinkets.api.TrinketsApi;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -54,5 +55,14 @@ public class ServPlayerVAULT extends VAULT {
         }
 
         return ret;
+    }
+
+    @Override
+    public int drain(Predicate<ItemStack> itemPred, int amount, boolean sim, Flags flags) {
+        if (creativePlayer()) return amount;
+        return super.drain(itemPred, amount, sim, flags);
+    }
+    public boolean creativePlayer() {
+        return player.isCreative();
     }
 }

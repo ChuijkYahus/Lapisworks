@@ -8,15 +8,15 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import java.util.List;
 
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 
 public class MishapOutsideOfRitual extends Mishap {
     private final boolean oneTimeRitual;
@@ -40,28 +40,14 @@ public class MishapOutsideOfRitual extends Mishap {
     }
 
     private void dropAll(LivingEntity entity, List<ItemStack> stacks) {
-        for (ItemStack _stack : stacks) {
-            ItemStack stack = _stack.copyAndEmpty();
-            World world = entity.getWorld();
-
-            // ???
-            float f = world.random.nextFloat() * 0.5F;
-            float g = world.random.nextFloat() * 6.2831855F;
-
-            ItemEntity itemEntity = new ItemEntity(
-                world,
-                entity.getX(),
-                // mojang try not to have random numbers challenge
-                entity.getEyeY() - 0.30000001192092896,
-                entity.getZ(),
-                stack,
-                -MathHelper.sin(g) * f,
-                0.20000000298023224,
-                MathHelper.cos(g) * g
-            );
-            itemEntity.setToDefaultPickupDelay();
-            world.spawnEntity(itemEntity);
-        }
+        ItemScatterer.spawn(
+            entity.getWorld(),
+            BlockPos.ofFloored(entity.getPos()),
+            DefaultedList.copyOf(
+                ItemStack.EMPTY,
+                (ItemStack[])stacks.toArray()
+            )
+        );
     }
     private boolean DoesntHaveBindingCurse(ItemStack stack) {
         // y u no !EnchantmentHelper::hasBindingCurse or even Stream.filterOut

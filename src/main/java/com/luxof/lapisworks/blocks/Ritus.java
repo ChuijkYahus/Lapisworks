@@ -135,9 +135,11 @@ public class Ritus extends BlockWithEntity {
 
         } else if (
             player.isCreative() ||
+            // it drains from hands first
+            // i also don't want it draining from trinkets if hand is full (no accidents pls)
             vault.drain(Mutables::isAmel, 1, true, Flags.PRESET_Hands) > 0 ||
-            stack.isEmpty() &&
-            vault.drain(Mutables::isAmel, 1, true, Flags.PRESET_Equipped_Trinkets) > 0
+            (stack.isEmpty() &&
+            vault.drain(Mutables::isAmel, 1, true, Flags.PRESET_Equipped_Trinkets) > 0)
         ) {
 
             if (!(world instanceof ServerWorld sw)) return ActionResult.SUCCESS;
@@ -163,16 +165,10 @@ public class Ritus extends BlockWithEntity {
                             Mutables::isAmel,
                             1,
                             false,
-                            Flags.PRESET_Equipped_Trinkets
+                            Flags.PRESET_UpToHands
                         );
             else
                 return ActionResult.FAIL;
-
-        } else if (stack.isEmpty()) {
-
-            ritus.clearDisplay();
-            return ActionResult.SUCCESS;
-
         }
 
         return ActionResult.PASS;

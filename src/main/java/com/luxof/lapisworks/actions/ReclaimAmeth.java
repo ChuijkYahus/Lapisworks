@@ -10,9 +10,13 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
+import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
+import com.luxof.lapisworks.init.LapisConfig;
 import com.luxof.lapisworks.init.Mutables.Mutables;
+
+import static com.luxof.lapisworks.Lapisworks.id;
 
 import java.util.List;
 
@@ -30,6 +34,13 @@ public class ReclaimAmeth implements SpellAction {
 
     @Override
     public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
+        if (!LapisConfig.getCurrentConfig().getSpellSettings().allow_reclaim_amethyst()) {
+            throw new MishapDisallowedSpell(
+                "disallowed",
+                id("reclaim_ameth")
+            );
+        }
+
         HeldItemInfo heldStackInfo = ctx.getHeldItemToOperateOn(Mutables::isAmel);
         if (heldStackInfo == null)
             throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "amel");

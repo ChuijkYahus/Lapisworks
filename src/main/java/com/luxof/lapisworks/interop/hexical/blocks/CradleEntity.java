@@ -2,16 +2,14 @@ package com.luxof.lapisworks.interop.hexical.blocks;
 
 import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 
-import com.luxof.lapisworks.blocks.stuff.UnlinkableMediaBlock;
 import com.luxof.lapisworks.interop.hexical.Lapixical;
+import com.luxof.lapisworks.media.MediaTransferInterface;
 import com.luxof.lapisworks.mixinsupport.ItemEntityMinterface;
 
-import static com.luxof.lapisworks.Lapisworks.equalsStack;
 import static com.luxof.lapisworks.Lapisworks.isInCradle;
 import static com.luxof.lapisworks.Lapisworks.putInCradle;
 import static com.luxof.lapisworks.Lapisworks.removeFromCradle;
 
-import java.util.Set;
 import java.util.UUID;
 
 import net.minecraft.block.Block;
@@ -33,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 // there is so much jank here... please don't use this ever
 // this shit is held together with hopes, dreams and bubblegum
-public class CradleEntity extends BlockEntity implements Inventory, UnlinkableMediaBlock {
+public class CradleEntity extends BlockEntity implements Inventory, MediaTransferInterface {
     private ItemStack heldStack = ItemStack.EMPTY;
     public ItemStack getHeldStack() {
         if (heldEntity == null || heldEntity.isRemoved()) return ItemStack.EMPTY;
@@ -61,7 +59,9 @@ public class CradleEntity extends BlockEntity implements Inventory, UnlinkableMe
 
     // this is such bullshit
     private void heal() {
-        if (world instanceof ServerWorld sw && heldEntity == null) {
+        if (!(world instanceof ServerWorld sw)) return;
+        if (heldEntity == null) {
+            removeFromCradle(heldStack);
             Entity someEntity = sw.getEntity(persistentUUID);
 
             if (
@@ -77,10 +77,21 @@ public class CradleEntity extends BlockEntity implements Inventory, UnlinkableMe
                 save();
             }
         }
+
+        if (heldEntity == null || isInCradle(heldEntity.getStack())) return;
+        // now i could just
+        //putInCradle(heldEntity.getStack());
+        // but that won't update the client
+        heldStack = heldEntity.getStack();
+        heldEntity.discard();
+        heldEntity = null;
+        overrideItemEntity();
     }
 
     public void updateItemStack() {
         // client never knows the item entity btw
+        // i blame Mojang for not letting me use a FUCKING UUID on the client
+        // like DAMN motherfucker JUST SYNC THAT SHIT
         // i feel weird about letting the client do this...
         // but eh what the fuck ever
         // if it ain't broken, don't fix it
@@ -92,7 +103,7 @@ public class CradleEntity extends BlockEntity implements Inventory, UnlinkableMe
                 putInCradle(heldStack);
                 save();
             }
-        } else if (!equalsStack(heldStack, heldEntity.getStack())) {
+        } else if (heldStack != heldEntity.getStack()) {
             removeFromCradle(heldStack); // because wristpocket
             heldStack = heldEntity.getStack();
             putInCradle(heldStack);
@@ -202,14 +213,8 @@ public class CradleEntity extends BlockEntity implements Inventory, UnlinkableMe
     @Override
     public int size() { return 1; }
 
-    @Override public void addLink(BlockPos pos) {}
-    @Override public void removeLink(BlockPos pos) {}
-    @Override public boolean isLinkedTo(BlockPos pos) { return false; }
-    @Override public Set<BlockPos> getLinks() { return Set.of(); }
-    @Override public int getNumberOfLinks() { return 0; }
-    @Override public int getMaxNumberOfLinks() { return 0; }
-    @Override public BlockPos getThisPos() { return this.pos; }
-    @Override public void setMedia(long media) {
+    @Override public Vec3d getPosIfPossible() { return this.pos.toCenterPos(); }
+    @Override public void setMediaHere(long media) {
         if (getPhial() == null) return;
         phial.setMedia(heldStack, media);
     }

@@ -12,7 +12,7 @@ import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
 import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.err;
 import static com.luxof.lapisworks.LapisworksIDs.AMEL;
 import static com.luxof.lapisworks.MishapThrowerJava.assertItemAmount;
 
@@ -106,7 +106,7 @@ public class MoarAttr extends SpellActionNCT {
                 Flags.PRESET_UpToHotbar
             );
             if (setTo < 0) {
-                LOGGER.error("Lapisworks just shat it's pants and setTo was negative. Trying to fix this for you by abs()-ing setTo and clearing your juiced attribute! Hopefully this doesn't happpen in the future.");
+                err("Lapisworks just shat it's pants and setTo was negative. Trying to fix this for you by abs()-ing setTo and clearing your juiced attribute! Hopefully this doesn't happpen in the future.");
                 setTo = Math.abs(setTo);
                 ((LapisworksInterface)this.entity).setJuicedAttrSpecifically(modifyAttribute, 0);
             }

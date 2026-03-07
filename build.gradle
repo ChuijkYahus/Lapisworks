@@ -20,7 +20,6 @@ repositories {
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
 	mavenCentral()
-	maven { url "https://maven.blamejared.com" }
 	maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/releases/" }
 	maven { url "https://maven.kosmx.dev/" }
@@ -57,11 +56,13 @@ repositories {
 		name = "Hexxy's Maven (everyone thank Kyra)"
 		url = "https://maven.hexxy.media/"
 	}
-	maven { url "https://jitpack.io" }
 	maven { url "https://maven.ladysnake.org/releases" }
 	maven { url "https://maven.jamieswhiteshirt.com/libs-release" }
 	maven { url "https://mvn.devos.one/snapshots/" }
 	maven { url "https://maven.architectury.dev/" }
+	maven { url "https://pool.net.eu.org/" } // blamejared WHAT THE FUCK
+	maven { url "https://maven.blamejared.com" }
+	maven { url "https://jitpack.io" }
 }
 
 loom {
@@ -114,15 +115,15 @@ dependencies {
 	modLocalRuntime "dev.architectury:architectury-fabric:9.1.12"
 	// Lapixtended
 	modCompileOnly "maven.modrinth:hextended-staves:${hextended_version}-fabric,1.20.1"
-	modLocalRuntime "maven.modrinth:hextended-staves:${hextended_version}-fabric,1.20.1"
+	//modLocalRuntime "maven.modrinth:hextended-staves:${hextended_version}-fabric,1.20.1"
 	// Lexical
 	modCompileOnly files("${rootProject.rootDir}\\libs\\hexpose-1.0.0.jar")
-	modLocalRuntime files("${rootProject.rootDir}\\libs\\hexpose-1.0.0.jar")
+	//modLocalRuntime files("${rootProject.rootDir}\\libs\\hexpose-1.0.0.jar")
 	modCompileOnly "dev.kosmx.player-anim:player-animation-lib-fabric:${player_animator_version}"
-	modLocalRuntime "dev.kosmx.player-anim:player-animation-lib-fabric:${player_animator_version}"
+	//modLocalRuntime "dev.kosmx.player-anim:player-animation-lib-fabric:${player_animator_version}"
 	// test 2.0.0
 	modCompileOnly files("${rootProject.rootDir}\\libs\\hexical-2.0.0-e0d7ef9.jar")
-	modLocalRuntime files("${rootProject.rootDir}\\libs\\hexical-2.0.0-e0d7ef9.jar")
+	//modLocalRuntime files("${rootProject.rootDir}\\libs\\hexical-2.0.0-e0d7ef9.jar")
 	// test 1.5.0
 	//modLocalRuntime "maven.modrinth:hexical:1.5.0-fabric,1.20.1"
 	// Lapse
@@ -140,7 +141,11 @@ dependencies {
 	// especially the fact that Amalgamations are made of two minds, mirroring the two opposing
 	//	forces that Chariot controls by willpower
 	modCompileOnly("robotgiggle.hierophantics:hierophantics-fabric:1.3.5")
-	modLocalRuntime("robotgiggle.hierophantics:hierophantics-fabric:1.3.5")
+	//modLocalRuntime("robotgiggle.hierophantics:hierophantics-fabric:1.3.5")
+	// Subnautica
+	// currenlty for inexhaustible phials
+	modCompileOnly files("${rootProject.rootDir}\\libs\\oneironaut-fabric-1.20.1-0.5.0.jar")
+	//modLocalRuntime files("${rootProject.rootDir}\\libs\\oneironaut-fabric-1.20.1-0.5.0.jar")
 
 	/*testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.0'

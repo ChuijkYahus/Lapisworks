@@ -242,11 +242,27 @@ public abstract class RitualExecutionState {
         int amount
     ) {
         Vec3d particleSprayDir = Vec3d.of(component.getParticleSprayDir().getVector());
-
-        new ParticleSpray(
+        sprayParticlesOutOf(
+            world,
             pos.toCenterPos().add(
                 particleSprayDir.multiply(-0.45)
             ),
+            component,
+            pigment,
+            amount
+        );
+    }
+    protected void sprayParticlesOutOf(
+        ServerWorld world,
+        Vec3d pos,
+        RitualComponent component,
+        FrozenPigment pigment,
+        int amount
+    ) {
+        Vec3d particleSprayDir = Vec3d.of(component.getParticleSprayDir().getVector());
+
+        new ParticleSpray(
+            pos,
             particleSprayDir.multiply(2.0),
             0.2,
             0.7853981633974483,

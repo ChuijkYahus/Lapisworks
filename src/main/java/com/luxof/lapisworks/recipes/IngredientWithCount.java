@@ -126,6 +126,8 @@ public class IngredientWithCount {
         if (tag == null) {
             Ingredient.Entry[] entries = ingredient.entries;
             // literally physically impossible if gotten from JSON, which is the use case :relieved:
+            // ^^ "what the hell are you talking about unc"
+            // basically it's either { "tag": "thing" } or { "item": "thing" }
             if (entries.length > 1) return null;
             if (entries[0] instanceof Ingredient.TagEntry tagEntry) {
                 return getTagName(tagEntry.tag);

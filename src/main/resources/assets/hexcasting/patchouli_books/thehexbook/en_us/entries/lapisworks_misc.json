@@ -179,10 +179,34 @@
         {
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:thewhattropy",
-            "flag": "lapisworks:thewhattropy",
-            "input": "",
-            "output": "num",
+            "anchor": "lapisworks:thewhattropy",
+            "input": "[any]",
+            "output": "any",
             "text": "pages.lapisworks.lapisworks_misc.thewhattropy.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:min",
+            "anchor": "lapisworks:min",
+            "input": "num, num",
+            "output": "num",
+            "text": "pages.lapisworks.lapisworks_misc.min.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:max",
+            "anchor": "lapisworks:max",
+            "input": "num, num",
+            "output": "num",
+            "text": "pages.lapisworks.lapisworks_misc.max.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:pull",
+            "anchor": "lapisworks:pull",
+            "input": "entity, vec, num",
+            "output": "",
+            "text": "pages.lapisworks.lapisworks_misc.pull.summary"
         }
     ]
 }

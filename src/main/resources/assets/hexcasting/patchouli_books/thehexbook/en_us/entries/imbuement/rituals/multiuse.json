@@ -17,6 +17,14 @@
         {
             "type": "patchouli:text",
             "text": "pages.lapisworks.imbuement.rituals.multiuse.manual"
+        },
+        {
+            "type": "patchouli:image",
+            "images": [
+                "lapisworks:textures/entries/multiuseritualexample.png"
+            ],
+            "border": true,
+            "text": "pages.lapisworks.imbuement.rituals.multiuse.img_description"
         }
     ]
 }

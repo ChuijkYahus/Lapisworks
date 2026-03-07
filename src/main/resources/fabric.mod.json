@@ -28,7 +28,8 @@
 		"lapisworks.mixins.json",
 		"lapisworks.fulllapixical.mixins.json",
 		"lapisworks.lapixical.mixins.json",
-		"lapisworks.chariot.mixins.json"
+		"lapisworks.chariot.mixins.json",
+		"lapisworks.lapisal.mixins.json"
 	],
 	"depends": {
 		"fabric-api": "*",

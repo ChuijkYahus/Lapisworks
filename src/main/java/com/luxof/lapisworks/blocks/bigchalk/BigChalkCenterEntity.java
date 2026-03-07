@@ -15,13 +15,9 @@ import com.luxof.lapisworks.mixinsupport.Markable;
 
 import static com.luxof.lapisworks.Lapisworks.getPigmentFromDye;
 import static com.luxof.lapisworks.Lapisworks.makeParticlesInSpiralGoUp;
-import static com.luxof.lapisworks.Lapisworks.sameAxis;
 
 import java.util.List;
 import java.util.UUID;
-
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -47,9 +43,10 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 
 public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
-    private static boolean skipAnimation() {
+    private static boolean shouldSkipAnimation() {
         return !LapisConfig.getCurrentConfig().getGrandRitualSettings().do_animation();
     }
+    private boolean skipAnimation = shouldSkipAnimation();
 
     public final Direction facing;
     public final Direction attachedTo;
@@ -68,7 +65,10 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
         textVariant = (int)Math.round((seed & 0xFFFFFFFFL) / (double) 0x100000000L);*/
         textVariant = Math.min((int)Math.floor(3 * Math.random()), 2);
         // how doesn't this err on the server?
-        renderData = new RenderData(attachedTo);
+        // IT FUCKING DOES you stupid piece of shit
+        // it just doesn't in SURVIVAL!
+        renderData = new RenderData();
+        powered = false;
     }
 
     /** decides what text is displayed on the chalk. */
@@ -88,10 +88,13 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
     }
 
     private boolean powered = false;
+
     public boolean isPowered() { return powered; }
     public void power(boolean on) { power(on, true); }
+
+    public boolean _firstTime = false;
     public void power(boolean on, boolean shouldSave) {
-        if (skipAnimation() && !this.powered && on) {
+        if (this.skipAnimation && !this.powered && on) {
             if (world.isClient)
                 castPatternClient();
             else
@@ -99,7 +102,14 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
             return;
         }
 
-        if (!this.powered && on) ticksElapsed = 0;
+        if (!this.powered && on) {
+            // *why?*
+            if (_firstTime) {
+                _firstTime = false;
+                return;
+            } else
+                ticksElapsed = 0;
+        }
         this.powered = on;
         if (shouldSave) save();
     }
@@ -139,7 +149,6 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
 
         ticksElapsed++;
     }
-    @Environment(EnvType.CLIENT)
     private void castPatternClient() {
         spewParticles(true, DyeColor.MAGENTA);
         makeDaSound(HexSounds.CAST_HERMES, 3f, 0.7f);
@@ -191,7 +200,7 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
         textVariant = nbt.getInt("textVariant");
         if (nbt.contains("pattern")) pattern = HexPattern.fromNBT(nbt.getCompound("pattern"));
 
-        // i tried really hard to sync this animation
+        // i tried really hard to sync this animation.
         // good enough!
         ticksElapsed = nbt.getInt("ticksElapsed");
 
@@ -200,6 +209,10 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
             playerWhoTouchedMe = nbt.getUuid("playerWhoTouchedMe");
         handThatTouchedMe = Hand.valueOf(nbt.getString("handThatTouchedMe"));
         disappearAfterCasting = nbt.getBoolean("disappearAfterCasting");
+
+        if (world != null && world.isClient) {
+            skipAnimation = nbt.getBoolean("skipAnimation");
+        }
     }
     @Override
     public void writeNbt(NbtCompound nbt) {
@@ -214,6 +227,11 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
             nbt.putUuid("playerWhoTouchedMe", playerWhoTouchedMe);
         nbt.putString("handThatTouchedMe", handThatTouchedMe.toString());
         nbt.putBoolean("disappearAfterCasting", disappearAfterCasting);
+
+        if (world != null && !world.isClient) {
+            skipAnimation = shouldSkipAnimation();
+            nbt.putBoolean("skipAnimation", skipAnimation);
+        }
     }
 
     @Override @Nullable
@@ -229,7 +247,6 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
     private final int animationLength = 140;
     private int ticksElapsed = animationLength;
 
-    @Environment(EnvType.CLIENT)
     private final List<Integer> particleTicks = List.of(
         30,
         42,
@@ -248,9 +265,8 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
         124,
         140
     );
-    @Environment(EnvType.CLIENT)
     private void spewParticles(boolean special, DyeColor urplePinkMagentaWhatever) {
-        Vec3d up = renderData.translateDir.toVec3d();
+        Vec3d up = Vec3d.of(attachedTo.getOpposite().getVector());
 
         Vec3d centerBottom = pos.toCenterPos().subtract(up.multiply(0.5));
         // hexagon is at the tippy top.
@@ -285,7 +301,6 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
             );
         }
     }
-    @Environment(EnvType.CLIENT)
     private void spewParticle(
         Vec3d up,
         Vec3d basePos,
@@ -329,7 +344,6 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
             vel.x, vel.y, vel.z
         );
     }
-    @Environment(EnvType.CLIENT)
     private void makeDaSound(SoundEvent sound, float volume, float pitch) {
         Vec3d pos = this.pos.toCenterPos();
         world.playSound(
@@ -343,53 +357,26 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
             false
         );
     }
-    @Environment(EnvType.CLIENT)
     public RenderData renderData;
     // power-on is a 7-second animation
     // it charges up for 5 seconds, casts, then cools down for 2
-    // therefore, whatever target
-    @Environment(EnvType.CLIENT)
+    // therefore, whatever target <-- fuck you mean "therefore, whatever target", past me?
     protected class RenderData {
-        private RenderData(Direction whereverDownGoes) {
-            // argument name shorten
-            Direction axis = whereverDownGoes;
-
-            translateDir = new ANormalFuckingVector3f(
-                axis.getOpposite()
-            );
-
-            if (sameAxis(axis, Direction.WEST)) {
-                rotationAxis = RotationAxis.POSITIVE_X;
-                inverseRotationAxis = RotationAxis.NEGATIVE_X;
-
-            } else if (sameAxis(axis, Direction.DOWN)) {
-                rotationAxis = RotationAxis.POSITIVE_Y;
-                inverseRotationAxis = RotationAxis.NEGATIVE_Y;
-
-            } else {
-                rotationAxis = RotationAxis.POSITIVE_Z;
-                inverseRotationAxis = RotationAxis.NEGATIVE_Z;
-            }
-
-        }
+        private RenderData() {}
 
         public Quaternionf rotate(float tickDelta) {
-            return rotationAxis.rotationDegrees(
+            return RotationAxis.POSITIVE_Y.rotationDegrees(
                 MathHelper.lerp(tickDelta, rotation, rotationNext)
             );
         }
         public Quaternionf rotateInverse(float tickDelta) {
-            return inverseRotationAxis.rotationDegrees(
+            return RotationAxis.NEGATIVE_Y.rotationDegrees(
                 MathHelper.lerp(tickDelta, rotation, rotationNext)
             );
         }
-        public ANormalFuckingVector3f translate(float tickDelta) {
-            return translateDir.mul(MathHelper.lerp(tickDelta, translation, translationNext));
+        public float getTranslation(float tickDelta) {
+            return MathHelper.lerp(tickDelta, translation, translationNext);
         }
-
-
-        public final RotationAxis rotationAxis;
-        public final RotationAxis inverseRotationAxis;
 
         private float rotateEquation(int x) {
             // math sure is neat
@@ -415,7 +402,6 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
             translation = translateLerp(ticksElapsed);
             translationNext = translateLerp(ticksElapsed + 1);
         }
-        public final ANormalFuckingVector3f translateDir;
         private final float peakTranslation = 0.7f;
         private final float peakTranslationTime = 100f; // 5s
         private final float translationDropOffTime = 40f; // 2s

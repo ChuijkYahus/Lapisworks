@@ -70,7 +70,7 @@ public abstract class VAULT {
     }
 
 
-    /** Returns the amount that couldn't be drained. */
+    /** Returns the amount that could be drained. */
     public int drain(Predicate<ItemStack> itemPred, int amount, boolean sim, Flags flags) {
         int left = amount;
 
@@ -140,13 +140,13 @@ public abstract class VAULT {
 
         return amount - left;
     }
-    /** Returns the amount that couldn't be drained. */
+    /** Returns the amount that could be drained. */
     public int drain(Item item, int amount, boolean sim, Flags flags) {
         return this.drain(it -> it.getItem() == item, amount, sim, flags);
     }
 
 
-    /** Returns the amount that couldn't be given. */
+    /** Returns the amount that could be given. */
     public int give(Predicate<ItemStack> itemPred, int amount, boolean sim, Flags flags) {
         int left = amount;
 
@@ -216,7 +216,7 @@ public abstract class VAULT {
 
         return amount - left;
     }
-    /** Returns the amount that couldn't be given. */
+    /** Returns the amount that could be given. */
     public int give(Item item, int amount, boolean sim, Flags flags) {
         return this.give(it -> it.getItem() == item, amount, sim, flags);
     }

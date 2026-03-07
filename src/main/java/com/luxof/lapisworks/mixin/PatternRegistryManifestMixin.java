@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.err;
 import static com.luxof.lapisworks.Lapisworks.getIdOf;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 import static com.luxof.lapisworks.init.ThemConfigFlags.allPerWorldShapePatterns;
@@ -34,7 +34,7 @@ public abstract class PatternRegistryManifestMixin {
         if (id == null) return shapeMatch;
 
         if (chosenFlags.values().contains(null)) {
-            LOGGER.error("Why the fuck have the flags not been chosen yet?!");
+            err("Why the fuck have the flags not been chosen yet?!");
             return shapeMatch;
         }
 

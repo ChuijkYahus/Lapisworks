@@ -7,7 +7,7 @@ import com.luxof.lapisworks.init.ModEntities;
 import com.luxof.lapisworks.mixinsupport.ArtMindInterface;
 import com.luxof.lapisworks.mixinsupport.JackMinterface;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.warn;
 import static com.luxof.lapisworks.Lapisworks.hashMapof;
 import static com.luxof.lapisworks.Lapisworks.nbtCompoundOf;
 
@@ -90,7 +90,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity implements ArtM
             }
         } else if (this.getMindBeingUsedTicks() < 0) {
             // if you have a use case for this, hmu and tell me to make it fuck off
-            LOGGER.warn("why was mindBeingUsedTicks below 0?");
+            warn("why was mindBeingUsedTicks below 0?");
             this.setMindBeingUsedTicks(0);
         } else {
             this.incMindBeingUsedTicks(-1);

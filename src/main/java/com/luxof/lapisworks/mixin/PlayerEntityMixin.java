@@ -1,12 +1,15 @@
 package com.luxof.lapisworks.mixin;
 
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
+import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 
 import static com.luxof.lapisworks.Lapisworks._shouldBreakSent;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -46,5 +49,19 @@ public abstract class PlayerEntityMixin extends LivingEntity implements EnchSent
     @Inject(at = @At("HEAD"), method = "tick")
     public void tick(CallbackInfo ci) {
         if (this.shouldBreakSent()) { this.breakSent(); }
+    }
+
+    // mojang............
+    @Inject(
+        at = @At("TAIL"),
+        method = "readCustomDataFromNbt"
+    )
+    public void lapisworks$JUSTFUCKINGCARRYTHESPEEDYOUTWAT(NbtCompound nbt, CallbackInfo ci) {
+        var speed = this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
+        speed.setBaseValue(
+            speed.getBaseValue() +
+            ((LapisworksInterface)this)
+                .getAmountOfAttrJuicedUpByAmel(EntityAttributes.GENERIC_MOVEMENT_SPEED)
+        );
     }
 }

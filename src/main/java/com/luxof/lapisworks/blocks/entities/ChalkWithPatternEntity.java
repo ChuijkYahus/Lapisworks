@@ -14,7 +14,7 @@ import com.luxof.lapisworks.chalk.RitualExecutionState;
 import com.luxof.lapisworks.client.screens.ChalkWithPatternScreenHandler;
 import com.luxof.lapisworks.init.ModBlocks;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.warn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +71,7 @@ public class ChalkWithPatternEntity extends BlockEntity implements ExtendedScree
         for (int i = 0; i < patCount; i++) {
             String idx = String.valueOf(i);
             if (!nbt.contains(idx)) {
-                LOGGER.warn("NBT says it contains " + String.valueOf(patCount) + " but we found " + String.valueOf(i + 1) + "!");
+                warn("NBT says it contains " + String.valueOf(patCount) + " but we found " + String.valueOf(i + 1) + "!");
                 break;
             }
 

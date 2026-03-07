@@ -35,14 +35,16 @@ import static com.luxof.lapisworks.MishapThrowerJava.assertItemAmount;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 
-/** object-Object's honest reaction to seeing this:
+/** kyra (object-Object)'s honest reaction to seeing this:
  * "this code makes no sense"
  * "..and the code is incomprehensible anyway.."
  * I can confirm, this code is indeed incomprehensible. */
@@ -67,14 +69,23 @@ public class ImbueAmel implements SpellAction {
 
         VAULT vault = ((GetVAULT)ctx).grabVAULT();
         List<HeldItemInfo> heldInfos = ((GetStacks)ctx).getHeldStacksOtherFirst();
-        List<ItemStack> heldStacks = ((GetStacks)ctx).getHeldItemStacksOtherFirst();
 
 
-        Optional<ImbuementRec> recipeOpt = ctx.getWorld().getRecipeManager().getFirstMatch(
-            ImbuementRec.Type.INSTANCE,
-            new HandsInv(heldStacks),
-            ctx.getWorld()
+        // prioritize recipes in the non-casting hand
+        Optional<ImbuementRec> recipeOnOtherhand = getImbuementOnOneHand(
+            ctx.getWorld(),
+            heldInfos,
+            ctx.getCastingHand() == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND
         );
+        Optional<ImbuementRec> recipeOnCastinghand = getImbuementOnOneHand(
+            ctx.getWorld(),
+            heldInfos,
+            ctx.getCastingHand()
+        );
+        Optional<ImbuementRec> recipeOpt = recipeOnOtherhand.isPresent()
+            ? recipeOnOtherhand
+            : recipeOnCastinghand;
+
 
         if (recipeOpt.isEmpty()) {
             // if no recipe, must test BeegInfusions which are lower prio
@@ -100,7 +111,7 @@ public class ImbueAmel implements SpellAction {
 
 
         ImbuementRec recipe = recipeOpt.get();
-        ItemStack items = null;
+        ItemStack items = ItemStack.EMPTY;
         Hand hand = null;
         for (HeldItemInfo held : heldInfos) {
             if (recipe.getNormal().test(held.stack()) || held.stack().isOf(recipe.getPartAmel())) {
@@ -108,7 +119,6 @@ public class ImbueAmel implements SpellAction {
                 hand = held.hand();
             }
         }
-        if (items == null) return null; // VSCode likes complaining about null
 
 
         int fullInfuseCost = recipe.getFullAmelsCost() - getInfusedAmel(items);
@@ -129,6 +139,7 @@ public class ImbueAmel implements SpellAction {
         else {
             if (hasInfusedAmel(items)) newStack = items;
             else newStack = new ItemStack(partAmel);
+
             setInfusedAmel(newStack, getInfusedAmel(newStack) + infuseAmount);
             if (newStack.getItem() instanceof BasePartAmel partAmelI)
                 partAmelI.onImbue(newStack, infuseAmount);
@@ -140,6 +151,28 @@ public class ImbueAmel implements SpellAction {
             MediaConstants.DUST_UNIT * 2 * infuseAmount,
             List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 1, 10 + infuseAmount)),
             1
+        );
+    }
+
+    public Optional<ImbuementRec> getImbuementOnOneHand(
+        ServerWorld world,
+        List<HeldItemInfo> heldInfos,
+        Hand hand
+    ) {
+        return world.getRecipeManager().getFirstMatch(
+            ImbuementRec.Type.INSTANCE,
+            new HandsInv(
+                heldInfos.stream()
+                    .flatMap(
+                        info -> {
+                            return info.component2() == hand
+                                ? Stream.of(info.component1())
+                                : Stream.of();
+                        }
+                    )
+                    .toList()
+            ),
+            world
         );
     }
 

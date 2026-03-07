@@ -13,7 +13,7 @@
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:deposit",
             "anchor": "lapisworks:deposit",
-            "input": "vec, num",
+            "input": "M.T.I, num",
             "output": "",
             "text": "pages.lapisworks.mdia_manip.deposit.summary"
         },
@@ -21,9 +21,25 @@
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:withdraw",
             "anchor": "lapisworks:withdraw",
-            "input": "vec, num",
+            "input": "M.T.I, num",
             "output": "",
             "text": "pages.lapisworks.mdia_manip.withdraw.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:get_mdia",
+            "anchor": "lapisworks:get_mdia",
+            "input": "M.T.I",
+            "output": "num",
+            "text": "pages.lapisworks.mdia_manip.get_mdia.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.mdia_manip.media_transfer_interface_waht_wdym"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.mdia_manip.whattheheck"
         }
     ]
 }
