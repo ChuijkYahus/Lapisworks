@@ -50,7 +50,7 @@ public class ImbueLap extends SpellActionNCT {
             if (got < count)
                 throw new MishapNotEnoughItems(AMEL, got, count);
 
-        } else count *= 2;
+        }
 
         return new SpellAction.Result(
             new Spell(count, heldStackInfo.hand()),
