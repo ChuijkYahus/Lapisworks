@@ -12,11 +12,13 @@ import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 import com.luxof.lapisworks.recipes.ImbuementRec;
 
 import static com.luxof.lapisworks.Lapisworks.getInfusedAmel;
+import static com.luxof.lapisworks.Lapisworks.log;
 
 import java.util.List;
 import java.util.Optional;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Ingredient.StackEntry;
 import net.minecraft.server.world.ServerWorld;
@@ -27,19 +29,29 @@ public class DisenchantImbued extends SpellActionNCT {
 
     public Result execute(HexIotaStack stack, CastingEnvironment ctx) {
 
+        ItemStack[] disimbuement = { new ItemStack(Items.AIR) };
+
         CastingEnvironment.HeldItemInfo performOn = ctx.getHeldItemToOperateOn(
-            itemstack -> getDisimbuementFor(world, itemstack).isPresent()
+            itemstack -> {
+                log("hey, tryna get a disimbuement.");
+                Optional<ItemStack> possible = getDisimbuementFor(world, itemstack);
+                if (possible.isEmpty()) return false;
+                log("found one.");
+                disimbuement[0] = possible.get();
+                return true;
+            }
         );
+
         if (performOn == null)
             throw new MishapBadOffhandItem(
                 ItemStack.EMPTY,
                 Text.translatable("mishaps.lapisworks.descs.imbued")
             );
 
-        ItemStack transform = performOn.component1();
+        ItemStack transform = performOn.stack();
 
         return new Result(
-            new Spell(getDisimbuementFor(world, transform).get(), transform),
+            new Spell(disimbuement[0], transform),
             dust(1),
             List.of(
                 transform.getItem() instanceof BasePartAmel
@@ -74,10 +86,13 @@ public class DisenchantImbued extends SpellActionNCT {
 
         Ingredient ing = recipe.getNormal();
 
+        log("checking ingredient entries length");
         if (ing.entries.length > 1) return Optional.empty();
+        log("success. checking if that shit's a stack");
         if (!(ing.entries[0] instanceof StackEntry entry)) return Optional.empty();
+        log("wow");
 
-        return Optional.of(entry.stack.copy());
+        return Optional.of(entry.stack.copyWithCount(stack.getCount()));
     }
 
     private Optional<ItemStack> getGeneralDisimbuementFor(
@@ -108,7 +123,7 @@ public class DisenchantImbued extends SpellActionNCT {
     ) {
         return world.getRecipeManager().getAllMatches(
             ImbuementRec.Type.INSTANCE,
-            new DisimbuementInv(List.of(stack, ItemStack.EMPTY)),
+            new DisimbuementInv(List.of(stack, stack)),
             world
         );
     }
