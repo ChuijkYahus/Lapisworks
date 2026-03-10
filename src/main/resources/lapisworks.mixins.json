@@ -18,7 +18,13 @@
 		"CircleExecutionStateMixin2",
 		"PatternIotaMixin",
 		"OpMakeBattery$SpellMixin",
-		"BlockEntityAbstractImpetusMixin"
+		"BlockEntityAbstractImpetusMixin",
+		"ServerWorldMixin",
+		"MinecraftServerMixin",
+		"LoseJobOnSiteLossTaskMixin",
+		"IotaAccessor",
+		"ItemEntityMixin",
+		"PlayerBasedCastEnvAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

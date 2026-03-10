@@ -61,7 +61,7 @@ public abstract class CircleCastEnvMixin extends CastingEnvironment {
         return init;
     }
 
-    @Inject(method = {"replaceItem"}, at = {@At("HEAD")}, cancellable = true)
+    @Inject(at = {@At("HEAD")}, method = {"replaceItem"}, cancellable = true)
     public void replaceItem(
         Predicate<ItemStack> stackOk,
         ItemStack replaceWith,

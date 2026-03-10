@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "lapisworks:block/tuneable_amethyst/stage3"
+  }
+}

@@ -4,7 +4,6 @@ import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 
 import com.luxof.lapisworks.blocks.entities.MediaCondenserEntity;
-import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.ModItems;
 
 import net.minecraft.block.Block;
@@ -13,10 +12,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
@@ -59,25 +55,20 @@ public class MediaCondenser extends BlockWithEntity {
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
-        World world,
-        BlockState state,
-        BlockEntityType<T> type
-    ) {
-        if (type == ModBlocks.MEDIA_CONDENSER_ENTITY_TYPE) {
-            return (a, b, c, bE) -> ((MediaCondenserEntity)bE).tick(a, b, c);
-        } else return null;
-    }
-
-    @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(FILLED);
     }
 
     // fffffFFFUCK your explosion drop chances!
     @Override
-    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        super.onBreak(world, pos, state, player);
+    public void onStateReplaced(
+        BlockState state,
+        World world,
+        BlockPos pos,
+        BlockState newState,
+        boolean moved
+    ) {
+        if (state.isOf(newState.getBlock())) return;
         MediaCondenserEntity condenser = (MediaCondenserEntity)world.getBlockEntity(pos);
         ItemStack stack = new ItemStack(ModItems.MEDIA_CONDENSER);
         NBTHelper.putLong(stack, "media", condenser.media);
@@ -86,7 +77,7 @@ public class MediaCondenser extends BlockWithEntity {
         ItemScatterer.spawn(
             world,
             pos,
-            DefaultedList.copyOf(ItemStack.EMPTY.copy(), stack)
+            DefaultedList.copyOf(ItemStack.EMPTY, stack)
         );
     }
 
@@ -101,6 +92,6 @@ public class MediaCondenser extends BlockWithEntity {
         MediaCondenserEntity condenser = (MediaCondenserEntity)world.getBlockEntity(pos);
         condenser.media = NBTHelper.getLong(itemStack, "media", 0L);
         condenser.mediaCap = NBTHelper.getLong(itemStack, "max", 640000L);
-        condenser.tick(world, pos, state);
+        condenser.save();
     }
 }

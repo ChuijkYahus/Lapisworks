@@ -1,22 +1,25 @@
 package com.luxof.lapisworks.interop.hexical.blocks;
 
-import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 
-import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
 import com.luxof.lapisworks.interop.hexical.Lapixical;
 import com.luxof.lapisworks.interop.valkyrienskies.ValkyrienUtils;
 import com.luxof.lapisworks.mixinsupport.GetServerStatus;
+import com.luxof.lapisworks.media.MediaTransferInterface;
 import com.luxof.lapisworks.mixinsupport.ItemEntityMinterface;
 
-import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
+import static com.luxof.lapisworks.Lapisworks.isInCradle;
+import static com.luxof.lapisworks.Lapisworks.putInCradle;
+import static com.luxof.lapisworks.Lapisworks.removeFromCradle;
 
-import java.util.Set;
 import java.util.UUID;
 
 import net.fabricmc.loader.api.FabricLoader;
+
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -28,8 +31,22 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class CradleEntity extends BlockEntity implements Inventory, LinkableMediaBlock {
-    private ItemStack heldStack = ItemStack.EMPTY.copy();
+import org.jetbrains.annotations.Nullable;
+
+// there is so much jank here... please don't use this ever
+// this shit is held together with hopes, dreams and bubblegum
+public class CradleEntity extends BlockEntity implements Inventory, MediaTransferInterface {
+    private ItemStack heldStack = ItemStack.EMPTY;
+    public ItemStack getHeldStack() {
+        if (heldEntity == null || heldEntity.isRemoved()) return ItemStack.EMPTY;
+        return heldStack;
+    }
+    public void setHeldStack(ItemStack stack) {
+        heldStack = stack;
+        overrideItemEntity();
+        save();
+    }
+
     public ItemEntity heldEntity = null;
     private UUID persistentUUID = UUID.randomUUID();
 
@@ -39,43 +56,63 @@ public class CradleEntity extends BlockEntity implements Inventory, LinkableMedi
 
     public static void tick(World world, BlockPos pos, BlockState state, BlockEntity blockE) {
         CradleEntity bE = (CradleEntity)blockE;
-		bE.updateItemEntity();
+        bE.heal();
+		bE.updateItemStack();
 		bE.configureItemEntity();
     }
 
-    public void updateItemEntity() {
-        if (world.isClient) return;
-        if (heldStack.isEmpty()) {
-            if (heldEntity == null) return;
-            persistentUUID = UUID.randomUUID();
-            heldEntity.discard();
-            heldEntity = null;
-            markDirty();
-            return;
+    // this is such bullshit
+    private void heal() {
+        if (!(world instanceof ServerWorld sw)) return;
+        if (heldEntity == null) {
+            removeFromCradle(heldStack);
+            Entity someEntity = sw.getEntity(persistentUUID);
+
+            if (
+                someEntity instanceof ItemEntity itemEnt &&
+                isInCradle(itemEnt.getStack())
+            ) {
+                heldEntity = itemEnt;
+                overrideItemEntity();
+                save();
+            } else if (someEntity != null) {
+                someEntity.discard();
+                persistentUUID = UUID.randomUUID();
+                save();
+            }
         }
 
-        ServerWorld sWorld = (ServerWorld)world;
+        if (heldEntity == null || isInCradle(heldEntity.getStack())) return;
+        // now i could just
+        //putInCradle(heldEntity.getStack());
+        // but that won't update the client
+        heldStack = heldEntity.getStack();
+        heldEntity.discard();
+        heldEntity = null;
+        overrideItemEntity();
+    }
 
-        // just be over with please
+    public void updateItemStack() {
+        // client never knows the item entity btw
+        // i blame Mojang for not letting me use a FUCKING UUID on the client
+        // like DAMN motherfucker JUST SYNC THAT SHIT
+        // i feel weird about letting the client do this...
+        // but eh what the fuck ever
+        // if it ain't broken, don't fix it
         if (heldEntity == null || heldEntity.isRemoved()) {
-            Vec3d pos = Vec3d.ofCenter(this.pos);
-            heldEntity = new ItemEntity(sWorld, pos.x, pos.y, pos.z, heldStack);
-            heldEntity.setUuid(persistentUUID);
-            configureItemEntity();
-            ((ItemEntityMinterface)heldEntity).setBlockPosOfCradle(this.pos);
-            sWorld.spawnEntity(heldEntity);
-        } else if (heldEntity.getStack() != heldStack) {
-            persistentUUID = UUID.randomUUID();
-            heldEntity.discard();
             heldEntity = null;
-            Vec3d pos = Vec3d.ofCenter(this.pos);
-            heldEntity = new ItemEntity(sWorld, pos.x, pos.y, pos.z, heldStack);
-            heldEntity.setUuid(persistentUUID);
-            configureItemEntity();
-            ((ItemEntityMinterface)heldEntity).setBlockPosOfCradle(this.pos);
-            sWorld.spawnEntity(heldEntity);
+            if (heldStack != ItemStack.EMPTY) {
+                removeFromCradle(heldStack);
+                heldStack = ItemStack.EMPTY;
+                putInCradle(heldStack);
+                save();
+            }
+        } else if (heldStack != heldEntity.getStack()) {
+            removeFromCradle(heldStack); // because wristpocket
+            heldStack = heldEntity.getStack();
+            putInCradle(heldStack);
+            save();
         }
-        markDirty();
     }
 
     public void configureItemEntity() {
@@ -91,13 +128,36 @@ public class CradleEntity extends BlockEntity implements Inventory, LinkableMedi
         heldEntity.setInvulnerable(true);
         heldEntity.setVelocity(Vec3d.ZERO);
         heldEntity.setPickupDelayInfinite();
-        NBTHelper.putBoolean(heldEntity.getStack(), IS_IN_CRADLE, true);
+        putInCradle(heldEntity.getStack());
         heldEntity.calculateDimensions();
+    }
+
+    public void overrideItemEntity() {
+        if (heldEntity != null && !heldEntity.isRemoved()) {
+            heldEntity.setStack(heldStack);
+            return;
+        }
+
+        persistentUUID = UUID.randomUUID();
+        Vec3d pos = Vec3d.ofCenter(this.pos);
+        heldEntity = new ItemEntity(world, pos.x, pos.y, pos.z, heldStack);
+        heldEntity.setUuid(persistentUUID);
+        ((ItemEntityMinterface)heldEntity).setBlockPosOfCradle(this.pos);
+        configureItemEntity();
+
+        world.spawnEntity(heldEntity);
+        save();
+    }
+
+    public void save() {
+        markDirty();
+        world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
     }
 
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
+
         heldStack = ItemStack.fromNbt(nbt.getCompound("item"));
         this.persistentUUID = nbt.getUuid("persistent_uuid");
     }
@@ -107,14 +167,6 @@ public class CradleEntity extends BlockEntity implements Inventory, LinkableMedi
         super.writeNbt(nbt);
         nbt.put("item", heldStack.writeNbt(new NbtCompound()));
         nbt.putUuid("persistent_uuid", persistentUUID);
-
-        if (world.isClient) return;
-        if (heldEntity != null && ((GetServerStatus)world.getServer()).isShuttingDown()) {
-            // the item entities always seem to become glitchy on world load
-            // i reckon it's because i can't grab them on world load
-            heldEntity.discard();
-            heldEntity = null;
-        }
     }
 
     @Override
@@ -124,87 +176,72 @@ public class CradleEntity extends BlockEntity implements Inventory, LinkableMedi
 
     @Override
     public NbtCompound toInitialChunkDataNbt() {
-        NbtCompound nbt = new NbtCompound();
-        writeNbt(nbt);
-        return nbt;
+        return createNbt();
     }
 
     @Override
-	public void markDirty() {
-		world.updateListeners(pos, this.getCachedState(), this.getCachedState(), 3);
-		super.markDirty();
-	}
-
-    @Override
     public void clear() {
-        heldStack = ItemStack.EMPTY.copy();
-        updateItemEntity();
-        markDirty();
+        heldStack = ItemStack.EMPTY;
+        updateItemStack();
+        save();
     }
 
     @Override
     public boolean canPlayerUse(PlayerEntity player) { return false; }
 
     @Override
-    public ItemStack getStack(int slot) { return slot == 0 ? heldStack : ItemStack.EMPTY.copy(); }
+    public ItemStack getStack(int slot) { return slot == 0 ? getHeldStack() : ItemStack.EMPTY; }
 
     @Override
     public boolean isEmpty() { return heldStack.isEmpty(); }
 
     @Override
     public ItemStack removeStack(int slot) {
-        if (slot != 0) return ItemStack.EMPTY.copy();
-        heldStack = ItemStack.EMPTY.copy();
-        updateItemEntity();
-        markDirty();
+        if (slot != 0) return ItemStack.EMPTY;
+        heldStack = ItemStack.EMPTY;
+        updateItemStack();
+        save();
         return heldStack;
     }
 
     @Override
     public ItemStack removeStack(int slot, int amount) {
-        if (slot != 0) return ItemStack.EMPTY.copy();
+        if (slot != 0) return ItemStack.EMPTY;
         ItemStack removed = heldStack.split(amount);
-        updateItemEntity();
-        markDirty();
+        updateItemStack();
+        save();
         return removed;
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
-        if (slot != 0) return;
-        heldStack = stack;
-        updateItemEntity();
-        markDirty();
-    }
+    public void setStack(int slot, ItemStack stack) { if (slot == 0) setHeldStack(stack); }
 
     @Override
     public int size() { return 1; }
 
-    @Override public void addLink(BlockPos pos) {}
-    @Override public void removeLink(BlockPos pos) {}
-    @Override public boolean isLinkedTo(BlockPos pos) { return false; }
-    @Override public Set<BlockPos> getLinks() { return Set.of(); }
-    @Override public int getNumberOfLinks() { return 0; }
-    @Override public int getMaxNumberOfLinks() { return 0; }
-    @Override public BlockPos getThisPos() { return this.pos; }
-
-    @Override
-    public long depositMedia(long amount, boolean simulate) {
-        if (!(heldStack.getItem() instanceof ItemMediaBattery phial)) return 0;
-        phial.insertMedia(heldEntity.getStack(), amount, simulate);
-        return phial.insertMedia(heldStack, amount, simulate);
+    @Override public Vec3d getPosIfPossible() { return this.pos.toCenterPos(); }
+    @Override public void setMediaHere(long media) {
+        if (getPhial() == null) return;
+        phial.setMedia(heldStack, media);
     }
-
-    @Override
-    public long withdrawMedia(long amount, boolean simulate) {
-        if (!(heldStack.getItem() instanceof ItemMediaBattery phial)) return 0;
-        phial.withdrawMedia(heldEntity.getStack(), amount, simulate);
-        return phial.withdrawMedia(heldStack, amount, simulate);
-    }
-
     @Override
     public long getMediaHere() {
-        if (!(heldStack.getItem() instanceof ItemMediaBattery phial)) return 0;
+        if (getPhial() == null) return 0;
         return phial.getMedia(heldStack);
     }
+    @Override
+    public long getMaxMedia() {
+        if (getPhial() == null) return 0L;
+        return phial.getMaxMedia(heldStack);
+    }
+
+
+    // DRY and less lines respectively
+    @Nullable
+    private ItemMediaBattery getPhial() {
+        if (!(heldStack.getItem() instanceof ItemMediaBattery phial)) return null;
+        this.phial = phial;
+        return phial;
+    }
+    private ItemMediaBattery phial;
 }

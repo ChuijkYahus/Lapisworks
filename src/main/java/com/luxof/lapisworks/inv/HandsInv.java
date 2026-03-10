@@ -16,11 +16,11 @@ public class HandsInv implements Inventory {
 
     @Override public void clear() {}
     @Override public boolean canPlayerUse(PlayerEntity player) { return false; }
-    @Override public ItemStack getStack(int slot) { return ItemStack.EMPTY.copy(); }
+    @Override public ItemStack getStack(int slot) { return ItemStack.EMPTY; }
     @Override public boolean isEmpty() { return true; }
     @Override public void markDirty() {}
-    @Override public ItemStack removeStack(int slot) { return ItemStack.EMPTY.copy(); }
-    @Override public ItemStack removeStack(int slot, int amount) { return ItemStack.EMPTY.copy(); }
+    @Override public ItemStack removeStack(int slot) { return ItemStack.EMPTY; }
+    @Override public ItemStack removeStack(int slot, int amount) { return ItemStack.EMPTY; }
     @Override public void setStack(int slot, ItemStack stack) {}
     @Override public int size() { return 0; }
 }

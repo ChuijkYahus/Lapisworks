@@ -12,6 +12,7 @@ from ..merge_pattern import HexCoord, overlay_patterns
 class LookupPWShapePage(PageWithOpPattern, type="hexcasting:lapisworks/pwshape"):
     origins: list[HexCoord]
     allowed: list[int]
+    show_stroke_order: bool = False
 
     @property
     def patterns(self) -> list[PatternInfo]:
@@ -29,12 +30,13 @@ class LookupPWShapePage(PageWithOpPattern, type="hexcasting:lapisworks/pwshape")
             patterns.append((pattern, self.origins[i]))
             i += 1
 
-        self._patterns = [overlay_patterns(self.op_id, patterns)]
+        self._patterns = [overlay_patterns(self.op_id, patterns, not self.show_stroke_order)]
         return self
     
     @model_validator(mode="after")
     def _check_anchor(self) -> Self:
         # nah i'd keep it
-        if str(self.op_id) != self.anchor:
-            raise ValueError(f"op_id={self.op_id} does not equal anchor={self.anchor}")
+        # nah i'd lose it
+        #if str(self.op_id) != self.anchor:
+        #    raise ValueError(f"op_id={self.op_id} does not equal anchor={self.anchor}")
         return self

@@ -11,10 +11,11 @@ import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.inv.HandsInv;
 import com.luxof.lapisworks.mixinsupport.GetStacks;
 import com.luxof.lapisworks.recipes.MoldRec;
+
+import static com.luxof.lapisworks.MishapThrowerJava.throwIfEmpty;
 
 import java.util.List;
 
@@ -31,17 +32,21 @@ public class SwapAmel implements SpellAction {
 
     @Override
     public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
-        MoldRec recipe = ctx.getWorld().getRecipeManager().getFirstMatch(
-            MoldRec.Type.INSTANCE,
-            new HandsInv(((GetStacks)ctx).getHeldItemStacks()),
-            ctx.getWorld()
-        ).orElseGet(() -> {
-            MishapThrowerJava.throwMishap(new MishapBadOffhandItem(
+        MoldRec recipe = throwIfEmpty(
+
+            ctx.getWorld().getRecipeManager().getFirstMatch(
+                MoldRec.Type.INSTANCE,
+                new HandsInv(((GetStacks)ctx).getHeldItemStacks()),
+                ctx.getWorld()
+            ),
+
+            new MishapBadOffhandItem(
                 ItemStack.EMPTY.copy(),
                 Text.translatable("mishaps.lapisworks.descs.moldable")
-            ));
-            return null;
-        });
+            )
+
+        );
+
         Item swapWith = recipe.getOutput();
         HeldItemInfo inputItems = ctx.getHeldItemToOperateOn(stack -> recipe.getInput().test(stack));
         int count = inputItems.stack().getCount();

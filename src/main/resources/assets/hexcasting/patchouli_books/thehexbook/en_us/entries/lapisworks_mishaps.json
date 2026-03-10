@@ -3,7 +3,7 @@
     "icon": "minecraft:textures/mob_effect/poison.png",
     "advancement": "lapisworks:got_lapis",
     "category": "hexcasting:lapisworks",
-    "sortnum": 6,
+    "sortnum": 7,
     "pages": [
         {
             "type": "patchouli:text",
@@ -23,6 +23,21 @@
             "type": "patchouli:text",
             "title": "pages.lapisworks.lapisworks_mishaps.badspechand.title",
             "text": "pages.lapisworks.lapisworks_mishaps.badspechand.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "title": "pages.lapisworks.lapisworks_mishaps.notrinket.title",
+            "text": "pages.lapisworks.lapisworks_mishaps.notrinket.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "title": "pages.lapisworks.lapisworks_mishaps.badtrinket.title",
+            "text": "pages.lapisworks.lapisworks_mishaps.badtrinket.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "title": "pages.lapisworks.lapisworks_mishaps.outsideofritual.title",
+            "text": "pages.lapisworks.lapisworks_mishaps.outsideofritual.summary"
         }
     ]
 }

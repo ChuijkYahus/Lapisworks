@@ -1,0 +1,7 @@
+{
+    "parent": "block/air",
+    "textures": {
+        "all": "lapisworks:block/empty",
+        "particle": "lapisworks:block/chalk/particles"
+    }
+}

@@ -11,12 +11,10 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.blocks.entities.LiveJukeboxEntity;
 import com.luxof.lapisworks.init.ModBlocks;
 
@@ -24,6 +22,7 @@ import static com.luxof.lapisworks.LapisworksIDs.LIVE_JUKEBOX_BLOCK;
 import static com.luxof.lapisworks.LapisworksIDs.NOTELIST;
 import static com.luxof.lapisworks.LapisworksIDs.NOTELIST_MOFO;
 import static com.luxof.lapisworks.LapisworksIDs.NOTELIST_OUTOFRANGE;
+import static com.luxof.lapisworks.MishapThrowerJava.throwIfEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,10 +41,9 @@ public class TeachSong implements SpellAction {
     @Override
     public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
         BlockPos liveJukeboxPos = OperatorUtils.getBlockPos(args, 0, getArgc());
-        try { ctx.assertPosInRange(liveJukeboxPos); }
-        catch (Mishap mishap) { MishapThrowerJava.throwMishap(mishap); }
+        ctx.assertPosInRange(liveJukeboxPos);
 
-        LiveJukeboxEntity blockEntity = MishapThrowerJava.throwIfEmpty(
+        LiveJukeboxEntity blockEntity = throwIfEmpty(
             ctx.getWorld().getBlockEntity(liveJukeboxPos, ModBlocks.LIVE_JUKEBOX_ENTITY_TYPE),
             new MishapBadBlock(liveJukeboxPos, LIVE_JUKEBOX_BLOCK)
         );
@@ -59,30 +57,24 @@ public class TeachSong implements SpellAction {
                 double doubleNote = ((DoubleIota)iota).getDouble();
                 double roundedNote = (int)Math.round(doubleNote);
                 if (Math.abs(doubleNote - roundedNote) > DoubleIota.TOLERANCE) {
-                    MishapThrowerJava.throwMishap(
-                        new MishapInvalidIota(
-                            mishapOnIota,
-                            mishapOnIndex,
-                            NOTELIST_MOFO
-                        )
+                    throw new MishapInvalidIota(
+                        mishapOnIota,
+                        mishapOnIndex,
+                        NOTELIST_MOFO
                     );
                 } else if (roundedNote < 0.0 || roundedNote > 24.0) {
-                    MishapThrowerJava.throwMishap(
-                        new MishapInvalidIota(
-                            mishapOnIota,
-                            mishapOnIndex,
-                            NOTELIST_OUTOFRANGE
-                        )
+                    throw new MishapInvalidIota(
+                        mishapOnIota,
+                        mishapOnIndex,
+                        NOTELIST_OUTOFRANGE
                     );
                 }
                 notes.add((int)roundedNote);
             } else {
-                MishapThrowerJava.throwMishap(
-                    new MishapInvalidIota(
-                        mishapOnIota,
-                        mishapOnIndex,
-                        NOTELIST
-                    )
+                throw new MishapInvalidIota(
+                    mishapOnIota,
+                    mishapOnIndex,
+                    NOTELIST
                 );
             }
         });

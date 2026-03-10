@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 
 public class Mind extends BlockWithEntity {
     public Mind() {
-        // strong as deepslate
         super(
             Settings.create().sounds(BlockSoundGroup.DEEPSLATE_TILES).breakInstantly().nonOpaque()
         );

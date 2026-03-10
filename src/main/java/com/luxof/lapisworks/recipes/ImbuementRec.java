@@ -2,9 +2,18 @@ package com.luxof.lapisworks.recipes;
 
 import com.google.gson.JsonObject;
 
+import com.luxof.lapisworks.VAULT.VAULT;
+import com.luxof.lapisworks.inv.DisimbuementInv;
 import com.luxof.lapisworks.inv.HandsInv;
+import com.luxof.lapisworks.items.shit.BasePartAmel;
+
+import static com.luxof.lapisworks.Lapisworks.getInfusedAmel;
+import static com.luxof.lapisworks.Lapisworks.log;
+import static com.luxof.lapisworks.Lapisworks.setInfusedAmel;
 
 import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,6 +23,7 @@ import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 
 public class ImbuementRec implements Recipe<HandsInv> {
@@ -72,6 +82,57 @@ public class ImbuementRec implements Recipe<HandsInv> {
         return new ItemStack(this.getFullAmel());
     }
 
+    private ItemStack withInfusedAmel(Item item, int count, int infused) {
+        ItemStack ret = new ItemStack(item, count);
+        setInfusedAmel(ret, infused);
+        ((BasePartAmel)item).onImbue(ret, infused);
+        return ret;
+    }
+    /** returns Pair<TurnInputInto, DrainThisMuchAmel> or null if it can't infuse a single item. */
+    @Nullable
+    public Pair<List<ItemStack>, Integer> craft(
+        ItemStack item,
+        VAULT vault,
+        int tryAmel
+    ) {
+        int costToInfuseOne = cost - getInfusedAmel(item);
+
+        int batches = (int)Math.floor(Math.min(
+            (double)item.getCount(),
+            (double)tryAmel / Math.max(1.0, (double)costToInfuseOne) // pls no div by zero
+        ));
+        int amel = batches * costToInfuseOne;
+        if (batches < 1 && partAmel == null) return null;
+
+        if (partAmel == null) {
+            return new Pair<>(
+                List.of(
+                    new ItemStack(item.getItem(), item.getCount() - batches),
+                    new ItemStack(fullAmel, batches)
+                ),
+                amel
+            );
+
+        } else {
+            return new Pair<>(
+                List.of(
+                    new ItemStack(
+                        item.getItem(),
+                        item.getCount() - 1
+                    ),
+                    withInfusedAmel(
+                        partAmel,
+                        item.getCount() > batches && tryAmel % costToInfuseOne > 0 ? 1 : 0,
+                        getInfusedAmel(item) + tryAmel % costToInfuseOne
+                    ),
+                    new ItemStack(fullAmel, batches)
+                ),
+                tryAmel / Math.max(costToInfuseOne, 1) + tryAmel % costToInfuseOne
+            );
+        }
+    }
+
+    /** use the other one, not this. */
     @Override
     public ItemStack craft(HandsInv inventory, DynamicRegistryManager registryManager) {
         return this.getOutput(registryManager).copy();
@@ -91,9 +152,25 @@ public class ImbuementRec implements Recipe<HandsInv> {
     @Override
     public boolean matches(HandsInv inventory, World world) {
         if (!this.requiredModIsLoaded) return false;
+
+
+        if (inventory instanceof DisimbuementInv) {
+            boolean ret = false;
+            log(id.toString());
+            for (ItemStack stack : inventory.getHands()) {
+                log("hey. " + stack.getItem().toString() + " and " + fullAmel.toString() + " and " + (partAmel != null ? partAmel.toString() : "null"));
+                log("%B %B %B", ret, stack.getItem() == fullAmel, stack.getItem() == partAmel);
+                ret = ret || stack.getItem() == fullAmel || stack.getItem() == partAmel;
+            }
+            if (ret)
+                log(id.toString() + " says true!");
+            return ret;
+        }
+
+
         boolean ret = false;
         for (ItemStack stack : inventory.getHands()) {
-            ret = ret || normal.test(stack) || partAmel == stack.getItem();
+            ret = ret || normal.test(stack) || stack.isOf(partAmel);
         }
         return ret;
     }

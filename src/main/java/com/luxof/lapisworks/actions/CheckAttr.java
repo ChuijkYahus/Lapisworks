@@ -29,14 +29,13 @@ public class CheckAttr implements ConstMediaAction {
 
     @Override
     public List<Iota> execute(List<? extends Iota> args, CastingEnvironment ctx) {
-        int chosen = OperatorUtils.getIntBetween(args, 0, 0, 4, getArgc());
+        int chosen = OperatorUtils.getIntBetween(args, 1, 0, 4, getArgc());
         return List.of(
             new DoubleIota(
                 ((LapisworksInterface)(
-                    chosen == 2 ? // fuck your readability my Java is opinionated to look fancy -old Luxof
-                        OperatorUtils.getPlayer(args, 1, getArgc())
-                            :
-                        OperatorUtils.getLivingEntityButNotArmorStand(args, 1, getArgc())
+                    chosen == 2 || chosen == 4
+                        ? OperatorUtils.getPlayer(args, 0, getArgc())
+                        : OperatorUtils.getLivingEntityButNotArmorStand(args, 0, getArgc())
                     )
                 ).getAmountOfAttrJuicedUpByAmel(
                     this.attributes.get(

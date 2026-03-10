@@ -10,32 +10,36 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadEntity;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.blocks.entities.MindEntity;
 import com.luxof.lapisworks.init.ModBlocks;
-import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.init.Mutables.Mutables.SMindInfusions;
+import com.luxof.lapisworks.interop.hierophantics.ChariotInterface;
 import com.luxof.lapisworks.init.Mutables.SMindInfusion;
 import com.luxof.lapisworks.mixinsupport.GetVAULT;
-import com.mojang.datafixers.util.Either;
 
+import static com.luxof.lapisworks.Lapisworks.HIEROPHANTICS_INTEROP;
+import static com.luxof.lapisworks.LapisworksIDs.ENTITY_INFUSEABLE_WITH_SMIND;
 import static com.luxof.lapisworks.LapisworksIDs.FULL_SIMPLE_MIND;
 import static com.luxof.lapisworks.LapisworksIDs.INFUSEABLE_WITH_SMIND;
 import static com.luxof.lapisworks.LapisworksIDs.MIND_BLOCK;
 import static com.luxof.lapisworks.MishapThrowerJava.getBlockPosOrEntity;
+import static com.luxof.lapisworks.MishapThrowerJava.throwIfEmpty;
+
+import com.mojang.datafixers.util.Either;
 
 import java.util.List;
-import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
-
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+
+import org.jetbrains.annotations.Nullable;
 
 public class FlayArtMind implements SpellAction {
     public int getArgc() {
@@ -49,48 +53,41 @@ public class FlayArtMind implements SpellAction {
         Entity flayIntoEntity = flayInto.right().orElse(null);
 
         VAULT vault = ((GetVAULT)ctx).grabVAULT();
-        Map<Identifier, SMindInfusion> recipes = Map.of();
+        // stop complaing about maybe not init fuckahh :pray:
+        SMindInfusion infusionRecipe = new SMindInfusion();
 
         if (flayIntoPos != null) {
-            recipes = Mutables.testSMindInfusionFilters(
-                flayIntoPos,
-                ctx,
-                args,
-                vault
-            );
-        } else if (flayIntoEntity != null) {
-            recipes = Mutables.testSMindInfusionFilters(
-                flayIntoEntity,
-                ctx,
-                args,
-                vault
-            );
+
+            if (HIEROPHANTICS_INTEROP) {
+                Result result = ChariotInterface.tryImbueChariotMind(args, ctx);
+                if (result != null) return result;
+            }
+
+            infusionRecipe = SMindInfusions
+                .filterAll(flayIntoPos, ctx, args, vault)
+                .values().stream().findFirst()
+                .orElseThrow(() -> new MishapBadBlock(flayIntoPos, INFUSEABLE_WITH_SMIND));
         }
-        if (recipes.isEmpty()) {
-            MishapThrowerJava.throwMishap(new MishapBadBlock(
-                flayIntoPos,
-                INFUSEABLE_WITH_SMIND
-            ));
+        else if (flayIntoEntity != null) {
+            infusionRecipe = SMindInfusions.filterAll(flayIntoEntity, ctx, args, vault )
+                .values().stream().findFirst()
+                .orElseThrow(() -> new MishapBadEntity(flayIntoEntity, ENTITY_INFUSEABLE_WITH_SMIND));
         }
-        SMindInfusion recipe = recipes.values().iterator().next();
-        recipe.mishapIfNeeded();
+
+        infusionRecipe.mishapIfNeeded();
 
         // be funny. come on. try it.
         BlockPos mindPos = OperatorUtils.getBlockPos(args, 1, getArgc());
-        MindEntity blockEntity = MishapThrowerJava.throwIfEmpty(
+        MindEntity blockEntity = throwIfEmpty(
             ctx.getWorld().getBlockEntity(mindPos, ModBlocks.MIND_ENTITY_TYPE),
             new MishapBadBlock(mindPos, MIND_BLOCK)
         );
         if (blockEntity.mindCompletion < 100f) {
-            MishapThrowerJava.throwMishap(new MishapBadBlock(
-                mindPos,
-                FULL_SIMPLE_MIND
-            ));
+            throw new MishapBadBlock(mindPos, FULL_SIMPLE_MIND);
         }
-        blockEntity.mindCompletion = 0F;
 
         return new SpellAction.Result(
-            new Spell(flayIntoPos, recipe),
+            new Spell(flayIntoPos, infusionRecipe, blockEntity),
             MediaConstants.CRYSTAL_UNIT,
             List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 2, 15)),
             1
@@ -100,14 +97,24 @@ public class FlayArtMind implements SpellAction {
     public class Spell implements RenderedSpell {
         public final BlockPos flayIntoPos;
         public final SMindInfusion flayer;
+        public final MindEntity mind;
 
-        public Spell(BlockPos flayIntoPos, SMindInfusion flayer) {
+        public Spell(BlockPos flayIntoPos, SMindInfusion flayer, MindEntity mind) {
             this.flayIntoPos = flayIntoPos;
             this.flayer = flayer;
+            this.mind = mind;
         }
 
 		@Override
 		public void cast(CastingEnvironment ctx) {
+            mind.mindCompletion = 0f;
+            mind.markDirty();
+            ctx.getWorld().updateListeners(
+                mind.getPos(),
+                mind.getCachedState(),
+                mind.getCachedState(),
+                Block.NOTIFY_ALL
+            );
             this.flayer.accept();
 		}
 

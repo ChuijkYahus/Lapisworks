@@ -10,11 +10,11 @@
     "description": {
       "translate": "advancements.lapisworks.enlightened.description"
     },
-    "background": "hexcasting:textures/block/slate.png",
-    "frame": "task",
+    "background": "lapisworks:textures/block/amel_constructs/jumpslate/am1.png",
+    "frame": "challenge",
     "show_toast": true,
     "announce_to_chat": true,
-    "hidden": false
+    "hidden": true
   },
   "criteria": {
     "be_enlightened_and_be_a_lapisworker": {

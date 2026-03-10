@@ -102,14 +102,14 @@ public class EnchBrewerEntity extends AbstractBrewerEntity {
             return;
         }
         ticksToParticle = isBrewing ? ticksToParticleWhenActive : ticksToParticleWhenInactive;
-		double d = pos.getX() + 0.4 + world.random.nextFloat() * 0.2;
-		double e = pos.getY() + 0.7 + world.random.nextFloat() * 0.3;
-		double f = pos.getZ() + 0.4 + world.random.nextFloat() * 0.2;
+		double x = pos.getX() + 0.4 + world.random.nextFloat() * 0.2;
+		double y = pos.getY() + 0.7 + world.random.nextFloat() * 0.3;
+		double z = pos.getZ() + 0.4 + world.random.nextFloat() * 0.2;
 
-        double g = isBrewing ? 0.05 - world.random.nextDouble() * 0.1 : 0.0;
-        double h = isBrewing ? 0.15 - world.random.nextDouble() * 0.3 : 0.0;
-        double i = isBrewing ? 0.05 - world.random.nextDouble() * 0.1 : 0.0;
-        world.addParticle(LapisParticles.FLOATING_ENCHANT, d, e, f, g, h, i);
+        double vX = isBrewing ? 0.05 - world.random.nextDouble() * 0.1 : 0.0;
+        double vY = isBrewing ? 0.15 - world.random.nextDouble() * 0.3 : 0.0;
+        double vZ = isBrewing ? 0.05 - world.random.nextDouble() * 0.1 : 0.0;
+        world.addParticle(LapisParticles.FLOATING_ENCHANT, x, y, z, vX, vY, vZ);
     }
 
 

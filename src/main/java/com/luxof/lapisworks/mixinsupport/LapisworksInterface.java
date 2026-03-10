@@ -19,6 +19,7 @@ public interface LapisworksInterface {
     double getAmountOfAttrJuicedUpByAmel(EntityAttribute attribute);
     /** does not have support for player reach and attack range because wtf entity attrs. */
     void setAmountOfAttrJuicedUpByAmel(EntityAttribute attribute, double value);
+    void setJuicedAttrSpecifically(EntityAttribute attribute, double value);
     void setAllJuicedUpAttrsToZero();
     
     AttributeContainer getLapisworksAttributes();

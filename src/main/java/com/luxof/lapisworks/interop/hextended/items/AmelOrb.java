@@ -2,7 +2,11 @@ package com.luxof.lapisworks.interop.hextended.items;
 
 import at.petrak.hexcasting.api.utils.NBTHelper;
 
-import static com.luxof.lapisworks.Lapisworks.getAllHands;
+import com.luxof.lapisworks.VAULT.Flags;
+import com.luxof.lapisworks.VAULT.VAULT;
+import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.mixinsupport.GetVAULT;
+
 import static com.luxof.lapisworks.Lapisworks.prettifyVec3d;
 
 import java.util.List;
@@ -11,6 +15,7 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
@@ -19,8 +24,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.Nullable;
-
-import com.luxof.lapisworks.init.Mutables.Mutables;
 
 public class AmelOrb extends Item {
     private static final Settings defaultSettings = new Item.Settings().maxCount(1);
@@ -34,26 +37,13 @@ public class AmelOrb extends Item {
     public double ambitRadius = 3.0;
     
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        List<Hand> hands = getAllHands();
-        hands.remove(hand);
         ItemStack stack = user.getStackInHand(hand);
-        ItemStack amelStack = null;
-        Hand amelHand = null;
-        for (Hand selectedHand : hands) {
-            ItemStack possiblyAmel = user.getStackInHand(selectedHand);
-            if (!Mutables.isAmel(possiblyAmel.getItem())) continue;
-            else if (possiblyAmel.getCount() < 10) continue;
-            amelStack = possiblyAmel;
-            amelHand = selectedHand;
-        }
-        if (amelStack == null) return TypedActionResult.fail(stack);
-        user.setStackInHand(
-            amelHand,
-            amelStack.getCount() == 10 ? ItemStack.EMPTY.copy() : new ItemStack(
-                amelStack.getItem(),
-                amelStack.getCount() - 10
-            )
-        );
+
+        if (user.getWorld().isClient) return TypedActionResult.success(stack, true);
+
+        VAULT vault = ((GetVAULT)(ServerPlayerEntity)user).grabVAULT();
+        vault.drain(Mutables::isAmel, 10, true, Flags.PRESET_UpToHands);
+
         this.setPlaceInAmbit(stack, user.getEyePos());
         return TypedActionResult.success(stack, true);
     }

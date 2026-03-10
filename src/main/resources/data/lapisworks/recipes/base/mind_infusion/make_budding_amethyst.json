@@ -1,0 +1,11 @@
+{
+    "type": "lapisworks:simple_mind_infusion",
+    "input_block": "minecraft:amethyst_block",
+    "display_input_item": {
+        "item": "minecraft:amethyst_block"
+    },
+    "output_block": "minecraft:budding_amethyst",
+    "display_output_item": "minecraft:budding_amethyst",
+    "additional_costs": [],
+    "needs_enlightenment": false
+}

@@ -13,39 +13,38 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.init.Mutables.BeegInfusion;
 import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.init.Mutables.Mutables.BeegInfusions;
 import com.luxof.lapisworks.inv.HandsInv;
-import com.luxof.lapisworks.items.shit.BasePartAmel;
 import com.luxof.lapisworks.mishaps.MishapNotEnoughItems;
 import com.luxof.lapisworks.mixinsupport.GetStacks;
 import com.luxof.lapisworks.mixinsupport.GetVAULT;
 import com.luxof.lapisworks.recipes.ImbuementRec;
 
-import static com.luxof.lapisworks.Lapisworks.getInfusedAmel;
-import static com.luxof.lapisworks.Lapisworks.hasInfusedAmel;
-import static com.luxof.lapisworks.Lapisworks.setInfusedAmel;
 import static com.luxof.lapisworks.LapisworksIDs.AMEL;
 import static com.luxof.lapisworks.LapisworksIDs.IMBUEABLE;
-import static com.luxof.lapisworks.init.Mutables.Mutables.testBeegInfusionFilters;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 
-/** Object-object's honest reaction to seeing this:
+/** kyra (object-Object)'s honest reaction to seeing this:
  * "this code makes no sense"
  * "..and the code is incomprehensible anyway.."
- * I don't know if I should wear that like a badge of honour or what */
+ * I can confirm, this code is indeed incomprehensible. */
 public class ImbueAmel implements SpellAction {
     public int getArgc() {
         return 1;
@@ -64,31 +63,37 @@ public class ImbueAmel implements SpellAction {
             );
         }
 
+
         VAULT vault = ((GetVAULT)ctx).grabVAULT();
-
-        int availableAmel = vault.fetch(Mutables::isAmel, Flags.PRESET_Stacks_InvItem_UpToHotbar);
         List<HeldItemInfo> heldInfos = ((GetStacks)ctx).getHeldStacksOtherFirst();
-        List<ItemStack> heldStacks = ((GetStacks)ctx).getHeldItemStacksOtherFirst();
 
-        MishapBadOffhandItem needImbueable = new MishapBadOffhandItem(
-            ItemStack.EMPTY.copy(),
-            IMBUEABLE
-        );
 
-        Optional<ImbuementRec> recipeOpt = ctx.getWorld().getRecipeManager().getFirstMatch(
-            ImbuementRec.Type.INSTANCE,
-            new HandsInv(heldStacks),
-            ctx.getWorld()
+        // prioritize recipes in the non-casting hand
+        Optional<ImbuementRec> recipeOnOtherhand = getImbuementOnOneHand(
+            ctx.getWorld(),
+            heldInfos,
+            ctx.getCastingHand() == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND
         );
+        Optional<ImbuementRec> recipeOnCastinghand = getImbuementOnOneHand(
+            ctx.getWorld(),
+            heldInfos,
+            ctx.getCastingHand()
+        );
+        Optional<ImbuementRec> recipeOpt = recipeOnOtherhand.isPresent()
+            ? recipeOnOtherhand
+            : recipeOnCastinghand;
+
+
         if (recipeOpt.isEmpty()) {
             // if no recipe, must test BeegInfusions which are lower prio
-            Map<Identifier, BeegInfusion> beegInfusionRecipes = testBeegInfusionFilters(
+            Map<Identifier, BeegInfusion> beegInfusionRecipes = BeegInfusions.filter(
                 heldInfos,
                 ctx,
                 args,
                 vault
             );
-            if (beegInfusionRecipes.isEmpty()) MishapThrowerJava.throwMishap(needImbueable);
+            if (beegInfusionRecipes.isEmpty())
+                throw new MishapBadOffhandItem(ItemStack.EMPTY.copy(), IMBUEABLE);
 
             BeegInfusion selected = beegInfusionRecipes.values().iterator().next();
             selected.mishapIfNeeded();
@@ -100,8 +105,10 @@ public class ImbueAmel implements SpellAction {
                 1
             );
         }
+
+
         ImbuementRec recipe = recipeOpt.get();
-        ItemStack items = null;
+        ItemStack items = ItemStack.EMPTY;
         Hand hand = null;
         for (HeldItemInfo held : heldInfos) {
             if (recipe.getNormal().test(held.stack()) || held.stack().isOf(recipe.getPartAmel())) {
@@ -109,48 +116,54 @@ public class ImbueAmel implements SpellAction {
                 hand = held.hand();
             }
         }
-        if (items == null) return null; // VSCode likes complaining about null
 
-        Item partAmel = recipe.getPartAmel();
-        Item fullAmel = recipe.getFullAmel();
 
-        int fullInfuseCost = recipe.getFullAmelsCost() - getInfusedAmel(items);
-        int infuseAmount = Math.min(wantToInfuseAmount, fullInfuseCost);
-
-        if (availableAmel < infuseAmount) {
-            MishapThrowerJava.throwMishap(new MishapNotEnoughItems(AMEL, availableAmel, infuseAmount));
-        }
-
-        ItemStack newStack = null;
-        if (infuseAmount == fullInfuseCost) { newStack = new ItemStack(fullAmel); }
-        else if (partAmel == null) {
-            MishapThrowerJava.throwMishap(
-                new MishapNotEnoughItems(AMEL, infuseAmount, fullInfuseCost)
+        var result = recipe.craft(items, vault, wantToInfuseAmount);
+        if (result == null)
+            throw new MishapNotEnoughItems(
+                AMEL,
+                vault.drain(Mutables::isAmel, 99999, true, Flags.PRESET_UpToHotbar),
+                recipe.getFullAmelsCost()
             );
-            return null; // VSCode likes complaining about null
-        } else {
-            if (hasInfusedAmel(items)) newStack = items;
-            else newStack = new ItemStack(partAmel);
-            setInfusedAmel(newStack, getInfusedAmel(newStack) + infuseAmount);
-            if (newStack.getItem() instanceof BasePartAmel partAmelI)
-                partAmelI.onImbue(newStack, infuseAmount);
-        }
 
+        int infuseAmount = result.getRight();
         return new SpellAction.Result(
-            new Spell(newStack, hand, infuseAmount, vault),
+            new Spell(result.getLeft(), hand, infuseAmount, vault),
             MediaConstants.DUST_UNIT * 2 * infuseAmount,
             List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 1, 10 + infuseAmount)),
             1
         );
     }
 
+    public Optional<ImbuementRec> getImbuementOnOneHand(
+        ServerWorld world,
+        List<HeldItemInfo> heldInfos,
+        Hand hand
+    ) {
+        return world.getRecipeManager().getFirstMatch(
+            ImbuementRec.Type.INSTANCE,
+            new HandsInv(
+                heldInfos.stream()
+                    .flatMap(
+                        info -> {
+                            return info.component2() == hand
+                                ? Stream.of(info.component1())
+                                : Stream.of();
+                        }
+                    )
+                    .toList()
+            ),
+            world
+        );
+    }
+
     public class Spell implements RenderedSpell {
-        public final ItemStack changeToItem;
+        public final List<ItemStack> changeToItem;
         public final Hand hand;
         public final int count;
         public final VAULT vault;
 
-        public Spell(ItemStack changeToItem, Hand hand, int count, VAULT vault) {
+        public Spell(List<ItemStack> changeToItem, Hand hand, int count, VAULT vault) {
             this.changeToItem = changeToItem;
             this.hand = hand;
             this.count = count;
@@ -159,8 +172,23 @@ public class ImbueAmel implements SpellAction {
 
 		@Override
 		public void cast(CastingEnvironment ctx) {
-            vault.drain(Mutables::isAmel, count, Flags.PRESET_Stacks_InvItem_UpToHotbar);
-            ctx.replaceItem(any -> true, changeToItem, hand);
+            vault.drain(Mutables::isAmel, count, false, Flags.PRESET_UpToHotbar);
+
+            int changeHandTo = changeToItem.get(0).isEmpty() ? 1 : 0;
+            ctx.replaceItem(any -> true, changeToItem.get(changeHandTo), hand);
+
+            if (changeHandTo == 1 && changeToItem.size() < 3)
+                return;
+
+            ItemScatterer.spawn(
+                ctx.getWorld(),
+                BlockPos.ofFloored(ctx.mishapSprayPos()),
+                DefaultedList.copyOf(
+                    ItemStack.EMPTY,
+                    changeToItem.subList(changeHandTo + 1, changeToItem.size())
+                        .toArray(new ItemStack[0])
+                )
+            );
 		}
 
         @Override

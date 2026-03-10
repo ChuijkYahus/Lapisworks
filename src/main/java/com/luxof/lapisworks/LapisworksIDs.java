@@ -1,9 +1,13 @@
 package com.luxof.lapisworks;
 
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.common.lib.HexRegistries;
+
 import static com.luxof.lapisworks.Lapisworks.id;
 
 import java.util.UUID;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
@@ -24,10 +28,9 @@ public class LapisworksIDs {
     public static final Identifier SEND_PWSHAPE_PATS = id("send_pwshape_pats");
     public static final Identifier DOWSE_TS = id("dowse_ts");
     public static final Identifier DOWSE_RESULT = id("dowse_result");
-
-    // mpp
-    public static final Identifier BLOCKING_MPP = id("blocking");
-    public static final Identifier AMEL_ORB_IS_FILLED = id("amel_orb_is_filled");
+    public static final Identifier SET_PATTERNS_ON_CHALK = id("set_patterns_on_chalk");
+    public static final Identifier GIB_DUST = id("gib_dust");
+    public static final Identifier APPLY_PULL_FOR_TIME = id("apply_lingering_accel");
 
     // items and shit
     public static final Identifier LAPIS_MAGIC_SHIT_GROUP = id("lapismagicshitgroup");
@@ -37,21 +40,31 @@ public class LapisworksIDs {
     public static final TagKey<Item> AMEL_TAG = TagKey.of(RegistryKeys.ITEM, AMEL_TAG_ID);
     public static final TagKey<Item> POTION_TAG = TagKey.of(RegistryKeys.ITEM, POTION_TAG_ID);
 
+    // block tags
+    // ids
+    public static final Identifier CHALK_CONNECTABLE_TAG_ID = id("chalk_connectable");
+    public static final Identifier CANT_PLACE_CHALK_ON_TAG_ID = id("cant_place_chalk_on");
+    public static final Identifier ONETIMERITUAL_BURN_BLACKLIST_TAG_ID = id("onetimeritual_burn_blacklist");
+    // tags
+    public static final TagKey<Block> CANT_PLACE_CHALK_ON_TAG = TagKey.of(RegistryKeys.BLOCK, CANT_PLACE_CHALK_ON_TAG_ID);
+    public static final TagKey<Block> CHALK_CONNECTABLE_TAG = TagKey.of(RegistryKeys.BLOCK, CHALK_CONNECTABLE_TAG_ID);
+    public static final TagKey<Block> ONETIMERITUAL_BURN_BLACKLIST_TAG = TagKey.of(RegistryKeys.BLOCK, ONETIMERITUAL_BURN_BLACKLIST_TAG_ID);
+
+    // action tags
+    // ids
+    public static final Identifier GRAND_RITUAL_BLACKLIST_TAG_ID = id("grand_ritual_blacklist");
+    public static final Identifier CANNOT_MODIFY_COST_TAG_ID = new Identifier("hexcasting", "cannot_modify_cost"); // futureproof
+    // tags
+    public static final TagKey<ActionRegistryEntry> GRAND_RITUAL_BLACKLIST_TAG = TagKey.of(HexRegistries.ACTION, GRAND_RITUAL_BLACKLIST_TAG_ID);
+    public static final TagKey<ActionRegistryEntry> CANNOT_MODIFY_COST_TAG = TagKey.of(HexRegistries.ACTION, CANNOT_MODIFY_COST_TAG_ID); // futureproof
+
     // advancements
     public static final Identifier ENCHSENT_ADVANCEMENT = id("rediscover_enchsent");
     public static final Identifier FLAY_ARTMIND_ADVANCEMENT = id("rediscover_flay_artmind");
     public static final Identifier HASTENATURE_ADVANCEMENT = id("rediscover_hastenature");
+    public static final Identifier QUENCHED_INDIGO_ADVANCEMENT = id("rediscover_quenched_indigo");
     public static final Identifier GOT_LAPIS = id("got_lapis");
     public static final Identifier CLUEDIN_ADVANCEMENT = id("cluedin");
-
-    // beeginfusions
-    public static final Identifier ENHANCE_ENCHANTED_BOOK = id("enhance_enchanted_book");
-    public static final Identifier MAKE_GENERIC_PARTAMEL = id("make_generic_partamel");
-    // simple mind infusions
-    public static final Identifier SIMPLE_MIND_INTO_AMETHYST = id("make_budding_am");
-    public static final Identifier JUKEBOX_INTO_LIVE_JUKEBOX = id("make_live_jukbx");
-    public static final Identifier EMPTY_IMP_INTO_SIMP = id("make_simp");
-    public static final Identifier UNFLAY_FLAYED_VILLAGER = id("unflay_flayed_villager");
 
     // V.A.U.L.T.
     public static final Identifier PLAYER_VAULT = id("player_vault");
@@ -70,6 +83,7 @@ public class LapisworksIDs {
     public static final Text LINKABLE_MEDIA_BLOCK = t("mishaps.lapisworks.descs.linkable_media_block");
     public static final Text IMBUEABLE = t("mishaps.lapisworks.descs.imbueable");
     public static final Text INFUSEABLE_WITH_SMIND = t("mishaps.lapisworks.descs.smind_infuseable");
+    public static final Text ENTITY_INFUSEABLE_WITH_SMIND = t("mishaps.lapisworks.descs.smind_infuseable_entity");
     public static final Text READABLE = t("mishaps.lapisworks.descs.readable");
     public static final Text WRITEABLE = t("mishaps.lapisworks.descs.writeable");
     public static final Text NON_IOTAHOLDER = t("mishaps.lapisworks.descs.noniotaholder");

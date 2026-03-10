@@ -12,7 +12,6 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapOthersName;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.mishaps.MishapBadHandItem;
 
 import static com.luxof.lapisworks.Lapisworks.getStackFromHand;
@@ -37,33 +36,33 @@ public class WriteToHand implements SpellAction {
         final Hand HAND = intToHand(hand);
         ItemStack stack = getStackFromHand(ctx, hand);
         if (stack == null) {
-            MishapThrowerJava.throwMishap(new MishapBadHandItem(
+            throw new MishapBadHandItem(
                 stack,
                 WRITEABLE,
                 HAND
-            ));
+            );
         }
         ADIotaHolder iotaHolder = IXplatAbstractions.INSTANCE.findDataHolder(stack);
         // "let's make the error message more helpful!"
         // :thumbsup:
         if (iotaHolder == null) {
-            MishapThrowerJava.throwMishap(new MishapBadHandItem(
+            throw new MishapBadHandItem(
                 stack,
                 WRITEABLE,
                 NON_IOTAHOLDER,
                 HAND
-            ));
+            );
         } else if (!iotaHolder.writeIota(iota, true)) {
-            MishapThrowerJava.throwMishap(new MishapBadHandItem(
+            throw new MishapBadHandItem(
                 stack,
                 WRITEABLE,
                 READONLY_HOLDER,
                 HAND
-            ));
+            );
         }
         PlayerEntity truename = MishapOthersName
             .getTrueNameFromDatum(iota, (PlayerEntity)ctx.getCastingEntity());
-        if (truename != null) { MishapThrowerJava.throwMishap(new MishapOthersName(truename)); }
+        if (truename != null) { throw new MishapOthersName(truename); }
 
         return new SpellAction.Result(
             new Spell(iota, iotaHolder),

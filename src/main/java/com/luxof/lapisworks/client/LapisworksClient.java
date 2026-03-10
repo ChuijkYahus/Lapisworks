@@ -1,34 +1,29 @@
 package com.luxof.lapisworks.client;
 
-import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
-import at.petrak.hexcasting.api.misc.MediaConstants;
-import at.petrak.hexcasting.common.lib.HexItems;
-
 import com.luxof.lapisworks.Lapisworks;
-import com.luxof.lapisworks.blocks.bers.EnchBrewerRenderer;
-import com.luxof.lapisworks.blocks.entities.MediaCondenserEntity;
-import com.luxof.lapisworks.blocks.entities.MindEntity;
-import com.luxof.lapisworks.client.screens.EnchBrewerScreen;
-import com.luxof.lapisworks.init.LapisParticles;
-import com.luxof.lapisworks.init.ModBlocks;
-import com.luxof.lapisworks.init.ModItems;
-import com.luxof.lapisworks.init.ModScreens;
+import com.luxof.lapisworks.blocks.bers.*;
+import com.luxof.lapisworks.blocks.bigchalk.BigChalkCenterRenderer;
+import com.luxof.lapisworks.blocks.bigchalk.BigChalkPart;
+import com.luxof.lapisworks.init.*;
 import com.luxof.lapisworks.interop.hextended.items.AmelOrb;
+import com.luxof.lapisworks.mixinsupport.AcceleratableEntity;
 import com.luxof.lapisworks.mixinsupport.BlockDowser;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
-import static com.luxof.lapisworks.Lapisworks.clamp;
+import static com.luxof.lapisworks.Lapisworks.FULL_HEXICAL_INTEROP;
+import static com.luxof.lapisworks.Lapisworks.HEXAL_INTEROP;
+import static com.luxof.lapisworks.Lapisworks.HIEROPHANTICS_INTEROP;
+import static com.luxof.lapisworks.Lapisworks.err;
+import static com.luxof.lapisworks.Lapisworks.id;
+import static com.luxof.lapisworks.Lapisworks.log;
 import static com.luxof.lapisworks.Lapisworks.nullConfigFlags;
-import static com.luxof.lapisworks.Lapisworks.prettifyFloat;
-import static com.luxof.lapisworks.LapisworksIDs.AMEL_ORB_IS_FILLED;
-import static com.luxof.lapisworks.LapisworksIDs.BLOCKING_MPP;
+import static com.luxof.lapisworks.LapisworksIDs.APPLY_PULL_FOR_TIME;
 import static com.luxof.lapisworks.LapisworksIDs.DOWSE_RESULT;
 import static com.luxof.lapisworks.LapisworksIDs.DOWSE_TS;
-import static com.luxof.lapisworks.LapisworksIDs.SCRYING_MIND_END;
-import static com.luxof.lapisworks.LapisworksIDs.SCRYING_MIND_START;
+import static com.luxof.lapisworks.LapisworksIDs.GIB_DUST;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_PWSHAPE_PATS;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_SENT;
+import static com.luxof.lapisworks.init.ModItems.AMEL_JAR;
 import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE;
 import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE2;
 import static com.luxof.lapisworks.init.ModItems.IRON_SWORD;
@@ -36,11 +31,7 @@ import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 
 import com.mojang.datafixers.util.Pair;
 
-import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
-
 import dev.emi.trinkets.api.client.TrinketRendererRegistry;
-
-import java.util.Optional;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -53,19 +44,18 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 import vazkii.patchouli.api.PatchouliAPI;
 
@@ -77,7 +67,8 @@ public class LapisworksClient implements ClientModInitializer {
     public static void registerMPPs() {
         ModelPredicateProviderRegistry.register(
             IRON_SWORD,
-            BLOCKING_MPP, // first person doesn't work but WHATEVER
+            // first person doesn't work and i don't fuckign know why
+            id("blocking"),
             (stack, world, entity, seed) -> {
                 return entity != null
                     && entity.isUsingItem()
@@ -88,7 +79,7 @@ public class LapisworksClient implements ClientModInitializer {
         if (Lapisworks.HEXTENDED_INTEROP) {
             ModelPredicateProviderRegistry.register(
                 com.luxof.lapisworks.interop.hextended.Lapixtended.AMEL_ORB,
-                AMEL_ORB_IS_FILLED,
+                id("amel_orb_is_filled"),
                 (stack, world, entity, seed) -> {
                     AmelOrb orb = (AmelOrb)stack.getItem();
                     return orb.getPlaceInAmbit(stack) == null ? 0.0F : 1.0F;
@@ -106,11 +97,14 @@ public class LapisworksClient implements ClientModInitializer {
     }
 
     public static void initInterop() {
-        if (Lapisworks.FULL_HEXICAL_INTEROP) {
+        if (FULL_HEXICAL_INTEROP) {
             com.luxof.lapisworks.interop.hexical.FullLapixicalClient.initTheFullLapixicalClient();
         }
-        if (Lapisworks.HEXAL_INTEROP) {
+        if (HEXAL_INTEROP) {
             com.luxof.lapisworks.interop.hexal.LapisalClient.beCoolOnTheClient();
+        }
+        if (HIEROPHANTICS_INTEROP) {
+            com.luxof.lapisworks.interop.hierophantics.LapisphanticsClient.doMyShitTwin();
         }
     }
 
@@ -119,116 +113,56 @@ public class LapisworksClient implements ClientModInitializer {
         // the eternal fucking grammar battle with this simple Markiplier ass log will drive me insane
         // thankful i won't have to edit this file anymore
         // ^^^^ what was that, chief?
-        LOGGER.info("Hello everybody my name is LapisworksClient and today what we are going to do is: scrying lens tooltips, make blocks transparent, keybinds, networking, Model Predicate Providers, make blocks translucent, spin 4D hypercubes for the FUNNY, Block Entity Renderers (shudder), render trinkets, make particles, and client-side rendering!");
-        LOGGER.info("Does NONE of that sound fun? Well, that's because it isn't. So let's get started, shall we?");
+        log("Hello everybody my name is LapisworksClient and today what we are going to do is: scrying lens tooltips, make blocks transparent, keybinds, networking, Model Predicate Providers, make blocks translucent, spin 4D hypercubes for the FUNNY, Block Entity Renderers (shudder), render trinkets, make particles, and client-side rendering!");
+        log("Does NONE of that sound fun? Well, that's because it isn't. So let's get started, shall we?");
 
         LapisParticles.clientTicklesPaw();
-
-        HandledScreens.register(ModScreens.ENCH_BREWER_SCREEN_HANDLER, EnchBrewerScreen::new);
+        ModScreens.registerOnClient();
 
         initInterop();
 
-        TrinketRendererRegistry.registerRenderer(ModItems.AMEL_JAR, new JarTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(AMEL_JAR, new JarTrinketRenderer());
         TrinketRendererRegistry.registerRenderer(FOCUS_NECKLACE, new NecklaceTrinketRenderer());
         TrinketRendererRegistry.registerRenderer(FOCUS_NECKLACE2, new NecklaceTrinketRenderer());
 
-        BlockEntityRendererRegistry.register(
+        BlockEntityRendererFactories.register(
             ModBlocks.ENCH_BREWER_ENTITY_TYPE,
             EnchBrewerRenderer::new
         );
-
-        // we all thank hexxy for adding simple addDisplayer() instead of requiring mixin in unison
-        ScryingLensOverlayRegistry.addDisplayer(
-            ModBlocks.MIND_BLOCK,
-            (lines, state, pos, observer, world, direction) -> {
-                Optional<MindEntity> blockEntityOpt = world.getBlockEntity(
-                    pos,
-                    ModBlocks.MIND_ENTITY_TYPE
-                );
-                if (blockEntityOpt.isEmpty()) return;
-                MindEntity blockEntity = blockEntityOpt.get();
-                lines.add(
-                    new Pair<ItemStack, Text>(
-                        new ItemStack(ModItems.MIND),
-                        SCRYING_MIND_START.copy().append(
-                            Text.literal(
-                                prettifyFloat(clamp(blockEntity.mindCompletion, 0f, 100f))
-                            )
-                        ).append(
-                            SCRYING_MIND_END
-                        ).formatted(
-                            Formatting.LIGHT_PURPLE
-                        )
-                    )
-                );
-            }
+        BlockEntityRendererFactories.register(
+            ModBlocks.CHALK_ENTITY_TYPE,
+            ChalkRenderer::new
         );
-        /*ScryingLensOverlayRegistry.addDisplayer(
-            ModBlocks.SIMPLE_IMPETUS,
-            (lines, state, pos, observer, world, direction) -> {
-                Optional<BlockEntity> opt = world.getBlockEntity(
-                    pos,
-                    ModBlocks.SIMPLE_IMPETUS_ENTITY_TYPE
-                );
-                if (opt.isEmpty()) return;
-                SimpleImpetusEntity bE = (SimpleImpetusEntity)opt.get();
-                lines.add(
-                    new Pair<ItemStack, Text>(
-                        new ItemStack(ModItems.SIMPLE_IMPETUS),
-
-                    )
-                )
-            }
-        );*/
-        ScryingLensOverlayRegistry.addDisplayer(
-            ModBlocks.MEDIA_CONDENSER,
-            (lines, state, pos, observer, world, direction) -> {
-                Optional<MediaCondenserEntity> blockEntityOpt = world.getBlockEntity(
-                    pos,
-                    ModBlocks.MEDIA_CONDENSER_ENTITY_TYPE
-                );
-                if (blockEntityOpt.isEmpty()) return;
-                MediaCondenserEntity blockEntity = blockEntityOpt.get();
-                lines.add(
-                    new Pair<ItemStack, Text>(
-                        new ItemStack(HexItems.AMETHYST_DUST),
-                        Text.translatable(
-                            "render.lapisworks.scryinglens.mediacondenser",
-                            prettifyFloat((float)blockEntity.media / (float)blockEntity.mediaCap * 100f),
-                            (double)blockEntity.media / (double)MediaConstants.DUST_UNIT,
-                            (double)blockEntity.mediaCap / (double)MediaConstants.DUST_UNIT
-                        ).formatted(Formatting.LIGHT_PURPLE)
-                    )
-                );
-            }
+        BlockEntityRendererFactories.register(
+            ModBlocks.CHALK_WITH_PATTERN_ENTITY_TYPE,
+            ChalkWithPatternRenderer::new
         );
+        BlockEntityRendererFactories.register(
+            ModBlocks.BIG_CHALK_CENTER_ENTITY_TYPE,
+            BigChalkCenterRenderer::new
+        );
+
+        ScryingOverlaysClient.addOverlays();
 
         WorldRenderEvents.AFTER_TRANSLUCENT.register((ctx) -> {
             overlayWorld(ctx.matrixStack(), ctx.tickDelta());
         });
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MIND_BLOCK, RenderLayer.getTranslucent());
-        //BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.CHALK_BLOCK, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TUNEABLE_AMETHYST, RenderLayer.getCutout());
 
         KeyEvents.staticInit();
         ClientTickEvents.END_CLIENT_TICK.register(KeyEvents::endClientTick);
 
         ClientPlayNetworking.registerGlobalReceiver(
             SEND_SENT,
-            (
-                client,
-                handler,
-                buf,
-                responseSender
-            ) -> {
-                LOGGER.info("Got a SEND_SENT packet!");
+            (client, handler, buf, responseSender) -> {
                 boolean banishSentinel = buf.readBoolean();
                 if (banishSentinel) {
                     if (!this.playerHasJoined) {
                         this.bufferSentinelPos = null;
                         this.bufferSentinelAmbit = null;
-                    } else {
+                    } else
                         ((EnchSentInterface)client.player).setEnchantedSentinel(null, null);
-                    }
                     return;
                 }
                 Vec3d newPos = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
@@ -236,20 +170,17 @@ public class LapisworksClient implements ClientModInitializer {
                 if (!this.playerHasJoined) {
                     this.bufferSentinelPos = newPos;
                     this.bufferSentinelAmbit = newAmbit;
-                } else {
+                } else
                     ((EnchSentInterface)client.player).setEnchantedSentinel(newPos, newAmbit);
-                }
             }
         );
+
         ClientPlayNetworking.registerGlobalReceiver(
             SEND_PWSHAPE_PATS,
             (client, handler, buf, responseSender) -> {
-                LOGGER.info("So we got sent the shit.");
                 NbtCompound nbt = buf.readNbt();
                 for (String flag : chosenFlags.keySet()) {
                     chosenFlags.put(flag, nbt.getInt(flag));
-                    LOGGER.info("For " + flag + " we have " + nbt.getInt(flag));
-                    // vv unused but may allow for neat stuff in the future
                     PatchouliAPI.get().setConfigFlag(
                         flag + String.valueOf(nbt.getInt(flag)),
                         true
@@ -276,6 +207,35 @@ public class LapisworksClient implements ClientModInitializer {
             }
         );
 
+        ClientPlayNetworking.registerGlobalReceiver(
+            GIB_DUST,
+            (client, handler, buf, responseSender) -> {
+                BlockPos pos = buf.readBlockPos();
+                Direction attachedTo = Direction.byName(buf.readString());
+
+                // WHY DOES THIS KEEP FUCKING HAPPENING
+                World world = client.player.getWorld();
+                try {
+                    BigChalkPart.spawnDust(world, pos, attachedTo);
+                } catch (Exception e) {
+                    err("Error while spawning dust on big chalk break:");
+                    e.printStackTrace();
+                }
+            }
+        );
+
+        ClientPlayNetworking.registerGlobalReceiver(
+            APPLY_PULL_FOR_TIME,
+            (client, handler, buf, responseSender) -> {
+                Vec3d pull = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
+                client.player.addVelocity(pull);
+                ((AcceleratableEntity)client.player).applyLingeringAccel(
+                    pull,
+                    buf.readInt() - 1
+                );
+            }
+        );
+
         ClientPlayConnectionEvents.JOIN.register((
             handler,
             sender,
@@ -289,8 +249,6 @@ public class LapisworksClient implements ClientModInitializer {
             );
         });
 
-        // i could just use the server_stopping event and send a packet then but i already wrote this so
-        // whatever
         ClientPlayConnectionEvents.DISCONNECT.register((
             handler,
             client
@@ -299,10 +257,6 @@ public class LapisworksClient implements ClientModInitializer {
             this.bufferSentinelPos = null;
             this.bufferSentinelAmbit = null;
             nullConfigFlags();
-            if (client.player != null) {
-                // i don't know, okay? just in case or something
-                ((EnchSentInterface)client.player).setEnchantedSentinel(null, null);
-            }
         });
     }
 }

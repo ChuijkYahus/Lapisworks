@@ -3,10 +3,8 @@ package com.luxof.lapisworks.blocks.entities;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.luxof.lapisworks.blocks.MediaCondenser;
-import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
 import com.luxof.lapisworks.init.ModBlocks;
-
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import com.luxof.lapisworks.media.LinkableMediaBlock;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,9 +18,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -31,25 +27,26 @@ public class MediaCondenserEntity extends BlockEntity implements LinkableMediaBl
         super(ModBlocks.MEDIA_CONDENSER_ENTITY_TYPE, pos, state);
     }
 
-    public long media = 0;
-    public long mediaCap = MediaConstants.DUST_UNIT * 64;
+    public long media = 0L;
+    public long mediaCap = MediaConstants.DUST_UNIT * 64L;
     public HashSet<BlockPos> linkedCondensers = new HashSet<>();
 
-    public void tick(World world, BlockPos pos, BlockState state) {
-        if (world.isClient) return;
-        ServerWorld sw = (ServerWorld)world;
-        int filledState;
-        try {
-            filledState = Math.min(14, (int)Math.floor(media / (mediaCap / 15.0)));
-        } catch (ArithmeticException e) { return; } // btw: does not return..????
+    @SuppressWarnings("deprecation")
+    private void updateState() {
+        BlockState state = world.getBlockState(pos);
+        int filledState = (int)Math.floor(media / (mediaCap / 14));
+
         if (filledState == state.get(MediaCondenser.FILLED)) return;
-        sw.setBlockState(
-            pos,
-            state.with(
-                MediaCondenser.FILLED,
-                filledState
-            )
-        );
+
+        BlockState newState = state.with(MediaCondenser.FILLED, filledState);
+        world.setBlockState(pos, newState);
+        setCachedState(newState);
+    }
+
+    public void save() {
+        updateState();
+        markDirty();
+        world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
     }
 
     private List<Integer> posToInts(HashSet<BlockPos> posList) {
@@ -104,40 +101,14 @@ public class MediaCondenserEntity extends BlockEntity implements LinkableMediaBl
 
 
 
-    @Override public void addLink(BlockPos pos) { linkedCondensers.add(pos); }
-    @Override public void removeLink(BlockPos pos) { linkedCondensers.remove(pos); }
-    @Override public boolean isLinkedTo(BlockPos pos) { return linkedCondensers.contains(pos); }
-    @Override public Set<BlockPos> getLinks() { return linkedCondensers; }
-    @Override public int getNumberOfLinks() { return linkedCondensers.size(); }
+    @Override public void addLink(BlockPos pos) { removeDeadLinks(world); linkedCondensers.add(pos); save(); }
+    @Override public void removeLink(BlockPos pos) { linkedCondensers.remove(pos); save(); }
+    @Override public boolean isLinkedTo(BlockPos pos) { removeDeadLinks(world); return linkedCondensers.contains(pos); }
+    @Override public Set<BlockPos> getLinks() { removeDeadLinks(world); return linkedCondensers; }
+    @Override public Set<BlockPos> getLinksNoRefresh() { return linkedCondensers; }
+    @Override public int getNumberOfLinks() { removeDeadLinks(world); return linkedCondensers.size(); }
     @Override public BlockPos getThisPos() { return this.getPos(); }
     @Override public long getMediaHere() { return media; }
-    @Override
-    public long depositMedia(long amount, boolean simulate) {
-        long prevMedia = media;
-
-        long nowMedia = Math.min(media + amount, mediaCap);
-        if (!simulate) {
-            media = nowMedia;
-            this.markDirty();
-            BlockState state = world.getBlockState(pos);
-            world.updateListeners(pos, state, state, Block.NOTIFY_LISTENERS);
-        }
-
-        return nowMedia - prevMedia;
-    }
-    @Override
-    public long withdrawMedia(long amount, boolean simulate) {
-        long prevMedia = media;
-
-        long nowMedia = Math.max(media - amount, 0);
-        LOGGER.info("withdrawal request of " + amount + "! " + (prevMedia - nowMedia) + " left!");
-        if (!simulate) {
-            media = nowMedia;
-            this.markDirty();
-            BlockState state = world.getBlockState(pos);
-            world.updateListeners(pos, state, state, Block.NOTIFY_LISTENERS);
-        }
-
-        return prevMedia - nowMedia;
-    }
+    @Override public void setMediaHere(long media) { this.media = media; save(); }
+    @Override public long getMaxMedia() { return mediaCap; }
 }

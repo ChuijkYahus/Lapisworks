@@ -3,13 +3,17 @@ package com.luxof.lapisworks.client;
 import at.petrak.hexcasting.client.ClientTickCounter;
 
 import com.luxof.lapisworks.interop.valkyrienskies.ValkyrienUtils;
+
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import java.util.List;
+
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 import net.fabricmc.loader.api.FabricLoader;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Camera;
@@ -122,7 +126,7 @@ public class THEGRANDROTATER {
     );
     public static Vector3f projectTo3D(Vector4f v) {
         // 4 - v.w. Why?
-        // projection. v.w is also never above 1, so i need something above that.
+        // projection. v.w is also never above 1, so i can get away with something above that.
         return new Vector3f(v.x, v.y, v.z).div(4 - v.w);
     }
     public static void renderEnchantedSentinel(

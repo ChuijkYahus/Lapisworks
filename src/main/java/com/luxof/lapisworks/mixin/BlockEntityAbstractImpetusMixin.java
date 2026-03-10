@@ -3,7 +3,7 @@ package com.luxof.lapisworks.mixin;
 import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 
-import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
+import com.luxof.lapisworks.media.LinkableMediaBlock;
 
 import java.util.HashSet;
 import java.util.List;
@@ -28,61 +28,24 @@ public abstract class BlockEntityAbstractImpetusMixin extends HexBlockEntity imp
     public BlockEntityAbstractImpetusMixin(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) { super(pType, pWorldPosition, pBlockState); }
 
     @Unique
-    private static final long MAX_CAPACITY = 9_000_000_000_000_000_000L;
-    @Unique
     private HashSet<BlockPos> linked = new HashSet<>();
     @Shadow
     protected long media;
 
-    @Unique @Override
-    public void addLink(BlockPos pos) {
-        linked.add(pos);
-    }
+    @Unique @Override public void addLink(BlockPos pos) { removeDeadLinks(world); linked.add(pos); }
+    @Unique @Override public void removeLink(BlockPos pos) { linked.remove(pos); }
+    @Unique @Override public boolean isLinkedTo(BlockPos pos) { removeDeadLinks(world); return linked.contains(pos); }
+    @Unique @Override public Set<BlockPos> getLinks() { removeDeadLinks(world); return linked; }
+    @Unique @Override public Set<BlockPos> getLinksNoRefresh() { return linked; }
+    @Unique @Override public int getNumberOfLinks() { removeDeadLinks(world); return linked.size(); }
+    @Unique @Override public int getMaxNumberOfLinks() { return 1; }
+    @Unique @Override public BlockPos getThisPos() { return getPos(); }
 
-    @Unique @Override
-    public void removeLink(BlockPos pos) {
-        linked.remove(pos);
-    }
+    // I do this to make sure the impetus is not interactable with by the network
+    @Unique @Override public long depositMedia(long amount, boolean simulate) { return 0; }
+    @Unique @Override public long withdrawMedia(long amount, boolean simulate) { return 0; }
 
-    @Unique @Override
-    public boolean isLinkedTo(BlockPos pos) {
-        return linked.contains(pos);
-    }
-
-    @Unique @Override
-    public Set<BlockPos> getLinks() {
-        return linked;
-    }
-
-    @Unique @Override
-    public int getNumberOfLinks() {
-        return linked.size();
-    }
-
-    @Unique @Override
-    public int getMaxNumberOfLinks() {
-        return 1;
-    }
-
-    @Unique @Override
-    public BlockPos getThisPos() {
-        return getPos();
-    }
-
-    // I do this to make sure the impetus is un-interactable with by the network
-    @Unique @Override
-    public long depositMedia(long amount, boolean simulate) {
-        return 0;
-    }
-
-    @Unique @Override
-    public long withdrawMedia(long amount, boolean simulate) {
-        return 0;
-    }
-    
-    @Unique @Override public long getMediaHere() {
-        return media;
-    }
+    @Unique @Override public long getMediaHere() { return media; }
 
 
     @Unique
@@ -91,10 +54,7 @@ public abstract class BlockEntityAbstractImpetusMixin extends HexBlockEntity imp
             pos -> Stream.of(pos.getX(), pos.getY(), pos.getZ())
         ).toList();
     }
-    @Inject(
-        method = "saveModData",
-        at = @At("HEAD")
-    )
+    @Inject(at = @At("HEAD"), method = "saveModData")
     protected void saveModData(NbtCompound nbt, CallbackInfo ci) {
         nbt.putIntArray(
             "links",
@@ -119,10 +79,7 @@ public abstract class BlockEntityAbstractImpetusMixin extends HexBlockEntity imp
         }
         return posList;
     }
-    @Inject(
-        method = "loadModData",
-        at = @At("HEAD")
-    )
+    @Inject(at = @At("HEAD"), method = "loadModData")
     protected void loadModData(NbtCompound nbt, CallbackInfo ci) {
         linked = intsToPos(nbt.getIntArray("links"));
     }

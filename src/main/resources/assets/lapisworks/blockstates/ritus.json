@@ -1,0 +1,56 @@
+{
+    "variants": {
+        "attached=down,powered=false": {
+            "model": "lapisworks:block/ritus/unpowered"
+        },
+        "attached=down,powered=true": {
+            "model": "lapisworks:block/ritus/powered"
+        },
+        "attached=up,powered=false": {
+            "model": "lapisworks:block/ritus/unpowered",
+            "x": 180
+        },
+        "attached=up,powered=true": {
+            "model": "lapisworks:block/ritus/powered",
+            "x": 180
+        },
+        "attached=north,powered=false": {
+            "model": "lapisworks:block/ritus/unpowered",
+            "x": 90,
+            "y": 180
+        },
+        "attached=north,powered=true": {
+            "model": "lapisworks:block/ritus/powered",
+            "x": 90,
+            "y": 180
+        },
+        "attached=west,powered=false": {
+            "model": "lapisworks:block/ritus/unpowered",
+            "x": 90,
+            "y": 90
+        },
+        "attached=west,powered=true": {
+            "model": "lapisworks:block/ritus/powered",
+            "x": 90,
+            "y": 90
+        },
+        "attached=south,powered=false": {
+            "model": "lapisworks:block/ritus/unpowered",
+            "x": 90
+        },
+        "attached=south,powered=true": {
+            "model": "lapisworks:block/ritus/powered",
+            "x": 90
+        },
+        "attached=east,powered=false": {
+            "model": "lapisworks:block/ritus/unpowered",
+            "x": 90,
+            "y": 270
+        },
+        "attached=east,powered=true": {
+            "model": "lapisworks:block/ritus/powered",
+            "x": 90,
+            "y": 270
+        }
+    }
+}

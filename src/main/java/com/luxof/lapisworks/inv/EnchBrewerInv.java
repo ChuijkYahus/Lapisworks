@@ -32,7 +32,6 @@ public class EnchBrewerInv extends BrewerInv {
         dust = ItemStack.fromNbt(nbt.getCompound("dust"));
     }
 
-    /** mutates, but returns for chaining convenience. */
     @Override
     public NbtCompound writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);

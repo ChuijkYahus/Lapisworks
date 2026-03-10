@@ -72,11 +72,11 @@ public class GeodeDowser extends Item {
         ServerPlayerEntity plr = (ServerPlayerEntity)user;
 
         List<ADMediaHolder> sources = MediaHelper.scanPlayerForMediaStuff(plr);
-        long left = getMediaCost();
+        long left = plr.isCreative() ? 0L : getMediaCost();
         for (ADMediaHolder source : sources) {
+            if (left == 0) break;
             long found = MediaHelper.extractMedia(source, left, true, false);
             left -= found;
-            if (left == 0) break;
         }
         if (left > 0) {
             plr.sendMessage(

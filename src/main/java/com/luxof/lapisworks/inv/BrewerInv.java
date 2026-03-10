@@ -42,7 +42,6 @@ public class BrewerInv implements Inventory {
         this.brewingInto = brewingInto;
     }
 
-    /** mutates, but returns for chaining convenience. */
     public NbtCompound writeNbt(NbtCompound nbt) {
         NbtCompound inventoryNBT = new NbtCompound();
 

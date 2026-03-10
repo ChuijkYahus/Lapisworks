@@ -92,7 +92,7 @@ public class EnchSlipwayEntity extends BlockEntity {
         }
     }
 
-    private void sync() {
+    public void sync() {
         this.markDirty();
         this.world.updateListeners(this.pos, this.getCachedState(), this.getCachedState(), 3);
     }
@@ -109,6 +109,7 @@ public class EnchSlipwayEntity extends BlockEntity {
         super.readNbt(nbt);
         nextSpawnTick = nbt.getLong("nextSpawnTick");
         if (nbt.contains("degrees")) degrees = nbt.getInt("degrees");
+        else degrees = null;
     }
 
     @Override @Nullable

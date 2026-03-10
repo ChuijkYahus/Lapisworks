@@ -1,0 +1,11 @@
+{
+    "type": "lapisworks:simple_mind_infusion",
+    "input_block": "minecraft:jukebox",
+    "display_input_item": {
+        "item": "minecraft:jukebox"
+    },
+    "output_block": "lapisworks:amel_constructs/live_jukebox",
+    "display_output_item": "lapisworks:amel_constructs/live_jukebox",
+    "additional_costs": [],
+    "needs_enlightenment": false
+}

@@ -7,10 +7,10 @@ import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE2;
 import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE2_WORN;
 import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE_WORN;
 
-import java.util.Map;
-
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.client.TrinketRenderer;
+
+import java.util.Map;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;

@@ -6,7 +6,6 @@ import com.luxof.lapisworks.interop.hextended.items.PartAmelWand;
 import com.luxof.lapisworks.items.PartiallyAmelStaff;
 
 import static com.luxof.lapisworks.init.ModItems.registerItem;
-import static com.luxof.lapisworks.init.Mutables.Mutables.registerBaseCostFor;
 
 import net.minecraft.item.Item;
 
@@ -45,7 +44,5 @@ public class Lapixtended {
     public static final Item AMEL_ORB = registerItem("amel_constructs/amel_orb", new AmelOrb());
 
     public static void initHextendedInterop() {
-        registerBaseCostFor(AMEL_WAND, 20);
-        registerBaseCostFor(AMEL_ORB, 10);
     }
 }

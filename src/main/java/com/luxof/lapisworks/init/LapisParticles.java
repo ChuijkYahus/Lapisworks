@@ -16,12 +16,15 @@ import net.minecraft.registry.Registry;
 
 public class LapisParticles {
     public static final DefaultParticleType FLOATING_ENCHANT = FabricParticleTypes.simple();
+    public static final DefaultParticleType AMETHYST_DUST = FabricParticleTypes.simple();
 
     public static void pawtickle() {
         register(FLOATING_ENCHANT, "floating_enchant");
+        register(AMETHYST_DUST, "amethyst_dust");
     }
     public static void clientTicklesPaw() {
         register(FLOATING_ENCHANT, FloatingEnchant.FloatingEnchantFactory::new);
+        register(AMETHYST_DUST, AmethystDust.AmethystDustFactory::new);
     }
 
     private static void register(

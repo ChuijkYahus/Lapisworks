@@ -10,11 +10,9 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock;
-import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.common.items.pigment.ItemDyePigment;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.init.ModBlocks;
 
 import static com.luxof.lapisworks.blocks.ConjuredColorable.COLOR;
@@ -52,10 +50,7 @@ public class ConjureColor implements SpellAction {
 
         int color = OperatorUtils.getIntBetween(args, 1, 0, 15, getArgc());
         BlockPos place = OperatorUtils.getBlockPos(args, 0, getArgc());
-        try { ctx.assertPosInRangeForEditing(place); }
-        catch (MishapBadLocation e) {
-            MishapThrowerJava.throwMishap(new MishapBadLocation(e.getLocation(), e.getType()));
-        }
+        ctx.assertPosInRangeForEditing(place);
 
         AutomaticItemPlacementContext AIPC = new AutomaticItemPlacementContext(
             ctx.getWorld(),
@@ -64,9 +59,8 @@ public class ConjureColor implements SpellAction {
             ItemStack.EMPTY,
             Direction.UP
         );
-        if (!ctx.getWorld().getBlockState(place).canReplace(AIPC)) {
-            MishapThrowerJava.throwMishap(MishapBadBlock.of(place, "replaceable"));
-        };
+        if (!ctx.getWorld().getBlockState(place).canReplace(AIPC))
+            throw MishapBadBlock.of(place, "replaceable");
 
         return new SpellAction.Result(
             new Spell(color, place, AIPC),

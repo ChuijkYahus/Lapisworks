@@ -1,46 +1,143 @@
 package com.luxof.lapisworks.mixin;
 
-import at.petrak.hexcasting.api.utils.NBTHelper;
-
-import com.google.common.collect.ImmutableMultimap;
-
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 
-import com.luxof.lapisworks.actions.MoarReachYouBitch;
-import com.luxof.lapisworks.mixinsupport.ArtMindInterface;
+import com.luxof.lapisworks.mixinsupport.AcceleratableEntity;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface.AllEnchantments;
 import com.luxof.lapisworks.interop.hexical.EntityDimensionsButTheHitboxIsDown;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
-import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
-import static com.luxof.lapisworks.LapisworksIDs.REACH_ENHANCEMENT_UUID;
+import static com.luxof.lapisworks.Lapisworks.deserializeVec3d;
+import static com.luxof.lapisworks.Lapisworks.isInCradle;
+import static com.luxof.lapisworks.Lapisworks.nbtListOf;
+import static com.luxof.lapisworks.Lapisworks.serializeVec3d;
 
-import static com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes.ATTACK_RANGE;
-import static com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes.REACH;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.AttributeContainer;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.Pair;
+import net.minecraft.registry.tag.DamageTypeTags;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
-public class EntityMixin {
-	@Inject(at = @At("HEAD"), method = "isInvulnerableTo", cancellable = true)
+public abstract class EntityMixin implements AcceleratableEntity {
+
+    @Unique
+    private ArrayList<Pair<Vec3d, Integer>> lingeringAccels = new ArrayList<>();
+
+    @Override @Unique
+    public List<Pair<Vec3d, Integer>> getLingeringAccels() {
+        return List.copyOf(lingeringAccels);
+    }
+
+    @Override @Unique
+    public void applyLingeringAccel(Vec3d accel, int duration) {
+        lingeringAccels.add(new Pair<>(accel, duration));
+    }
+
+    @Shadow
+    public abstract World getWorld();
+    @Shadow
+    public abstract void setVelocity(Vec3d velocity);
+    @Shadow
+    public abstract Vec3d getVelocity();
+    @Shadow
+    public abstract void addVelocity(double x, double y, double z);
+    @Shadow
+    public boolean velocityModified;
+
+    @Inject(at = @At("TAIL"), method = "tick")
+    public void lapisworks$tickPullSpellEffects(CallbackInfo ci) {
+
+        if (
+            (Object)this instanceof PlayerEntity player &&
+            (
+                player.isSpectator() ||
+                (player.isCreative() && player.getAbilities().flying)
+            )
+        )
+            return;
+
+        ArrayList<Pair<Vec3d, Integer>> newLingeringAccels = new ArrayList<>(lingeringAccels);
+
+        for (int i = lingeringAccels.size() - 1; i >= 0; i--) {
+            Pair<Vec3d, Integer> lingeringAccel = lingeringAccels.get(i);
+
+            Vec3d pull = lingeringAccel.getLeft();
+            int newTicksLeft = lingeringAccel.getRight() - 1;
+
+            if (newTicksLeft > 0)
+                newLingeringAccels.set(i, new Pair<>(pull, newTicksLeft));
+            else
+                newLingeringAccels.remove(i);
+
+            setVelocity(getVelocity().add(pull));
+            if ((Object)this instanceof PlayerEntity)
+                if (getWorld().isClient)
+                    velocityModified = true;
+            else
+                velocityModified = true;
+        }
+
+        lingeringAccels = newLingeringAccels;
+    }
+
+    @Inject(at = @At("HEAD"), method = "readNbt")
+    protected void lapisworks$readPullSpellFX(NbtCompound nbt, CallbackInfo ci) {
+        ArrayList<Pair<Vec3d, Integer>> newLingeringAccels = new ArrayList<>();
+        
+        nbt.getList("pullSpellFX", NbtElement.COMPOUND_TYPE)
+            .stream()
+            .forEach(
+                ele -> {
+                    NbtCompound pair = (NbtCompound)ele;
+                    newLingeringAccels.add(
+                        new Pair<>(
+                            deserializeVec3d(pair.getCompound("pull")),
+                            nbt.getInt("ticksLeft")
+                        )
+                    );
+                }
+            );
+
+        this.lingeringAccels = newLingeringAccels;
+    }
+
+    @Inject(at = @At("HEAD"), method = "writeNbt")
+    protected void lapisworks$writePullSpellFX(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
+        nbt.put("pullSpellFX", nbtListOf(
+            lingeringAccels.stream()
+                .map(
+                    pullSpellEffect -> {
+                        NbtCompound pair = new NbtCompound();
+                        pair.put("pull", serializeVec3d(pullSpellEffect.getLeft()));
+                        pair.putInt("ticksLeft", pullSpellEffect.getRight());
+                        return pair;
+                    }
+                )
+                .toList()
+        ));
+    }
+
+    @Inject(at = @At("HEAD"), method = "isInvulnerableTo", cancellable = true)
 	public void isInvulnerableTo(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
         if ((Object)this instanceof LivingEntity) {
             if (damageSource.isIn(DamageTypeTags.IS_FIRE) &&
@@ -50,73 +147,26 @@ public class EntityMixin {
         }
 	}
 
-    @Inject(at = @At("HEAD"), method = "readNbt")
-	public void readNbt(NbtCompound nbt, CallbackInfo ci) {
-        if ((Object)this instanceof LivingEntity living) {
-            ((LapisworksInterface)this).setLapisworksAttributes(new AttributeContainer(
-                DefaultAttributeContainer.builder()
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, nbt.getDouble("LAPISWORKS_JUICED_FISTS"))
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, nbt.getDouble("LAPISWORKS_JUICED_SKIN"))
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, nbt.getDouble("LAPISWORKS_JUICED_FEET"))
-                .build()
-            ));
-            living.getAttributes().addTemporaryModifiers(
-                nbt.getBoolean("LAPISWORKS_JUICED_REACH") ?
-                    ImmutableMultimap.of(
-                        REACH, MoarReachYouBitch.REACH_MODIFIER,
-                        ATTACK_RANGE, MoarReachYouBitch.ATTACK_REACH_MODIFIER
-                    ) : ImmutableMultimap.of()
-            );
-            try {
-                ((LapisworksInterface)this).setEnchantments(
-                    nbt.getIntArray("LAPISWORKS_ENCHANTMENTS")
-                );
-            } catch (Exception e) {
-                LOGGER.warn("couldn't load enchantments!!");
-                e.printStackTrace();
-            }
-
-            if ((Object)this instanceof VillagerEntity) {
-                ((ArtMindInterface)this).setUsedMindPercentage(nbt.getFloat("LAPISWORKS_MIND_USED"));
-                ((ArtMindInterface)this).setMindBeingUsedTicks(nbt.getInt("LAPISWORKS_MIND_HEAL_COOLDOWN"));
-            }
-        }
-	}
-
-	@Inject(at = @At("HEAD"), method = "writeNbt")
-	public void writeNbt(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
-        if ((Object)this instanceof LivingEntity living) {
-            AttributeContainer attrs = ((LapisworksInterface)this).getLapisworksAttributes();
-            nbt.putDouble("LAPISWORKS_JUICED_FISTS", attrs.getBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
-            nbt.putDouble("LAPISWORKS_JUICED_SKIN", attrs.getBaseValue(EntityAttributes.GENERIC_MAX_HEALTH));
-            nbt.putDouble("LAPISWORKS_JUICED_FEET", attrs.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
-            nbt.putIntArray("LAPISWORKS_ENCHANTMENTS", ((LapisworksInterface)this).getEnchantments());
-            nbt.putBoolean(
-                "LAPISWORKS_JUICED_REACH",
-                living.getAttributes().hasModifierForAttribute(REACH, REACH_ENHANCEMENT_UUID)
-            );
-            if ((Object)this instanceof VillagerEntity) {
-                nbt.putFloat("LAPISWORKS_MIND_USED", ((ArtMindInterface)this).getUsedMindPercentage());
-                nbt.putInt("LAPISWORKS_MIND_HEAL_COOLDOWN", ((ArtMindInterface)this).getMindBeingUsedTicks());
-            }
-        }
-	}
-
+    // why can't i just inject in ItemEntityMixin bruh
     @ModifyReturnValue(method = "getDimensions", at = @At("RETURN"))
     private EntityDimensions lapisworks$getDimensions(EntityDimensions og) {
-        if (!((Object)this instanceof ItemEntity itemEntity)) return og;
+        if (
+            (Object)this instanceof ItemEntity itemEntity &&
+            isInCradle(itemEntity.getStack())
+        )
+            return new EntityDimensionsButTheHitboxIsDown(1.0F, 1.0F);
 
-        if (!NBTHelper.contains(itemEntity.getStack(), IS_IN_CRADLE)) return og;
-
-        return new EntityDimensionsButTheHitboxIsDown(1.0F, 1.0F);
+        return og;
     }
 
     @ModifyReturnValue(method = "getBoundingBox", at = @At("RETURN"))
     private Box lapisworks$getBoundingBox(Box og) {
-        if (!((Object)this instanceof ItemEntity itemEntity)) return og;
+        if (
+            (Object)this instanceof ItemEntity itemEntity &&
+            isInCradle(itemEntity.getStack())
+        )
+            return itemEntity.getDimensions(itemEntity.getPose()).getBoxAt(itemEntity.getPos());
 
-        if (!NBTHelper.contains(itemEntity.getStack(), IS_IN_CRADLE)) return og;
-
-        return itemEntity.getDimensions(itemEntity.getPose()).getBoxAt(itemEntity.getPos());
+        return og;
     }
 }

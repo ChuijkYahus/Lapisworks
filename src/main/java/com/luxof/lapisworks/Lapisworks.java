@@ -1,93 +1,117 @@
 package com.luxof.lapisworks;
 
-import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
-import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
-import at.petrak.hexcasting.api.casting.math.HexCoord;
-import at.petrak.hexcasting.api.casting.math.HexDir;
-import at.petrak.hexcasting.api.casting.math.HexPattern;
-import at.petrak.hexcasting.api.pigment.FrozenPigment;
-import at.petrak.hexcasting.api.utils.NBTHelper;
-import at.petrak.hexcasting.common.lib.HexItems;
-
-import com.luxof.lapisworks.init.ModItems;
-import com.luxof.lapisworks.init.ModPOIs;
-import com.luxof.lapisworks.init.ModRecipes;
-import com.luxof.lapisworks.init.ModScreens;
-import com.luxof.lapisworks.init.Patterns;
-import com.luxof.lapisworks.blocks.stuff.LinkableMediaBlock;
-import com.luxof.lapisworks.init.LapisParticles;
-import com.luxof.lapisworks.init.LapisworksLoot;
-import com.luxof.lapisworks.init.ModBlocks;
-import com.luxof.lapisworks.init.ModEntities;
-import com.luxof.lapisworks.init.ThemConfigFlags;
-import com.luxof.lapisworks.init.Mutables.Mutables;
-import com.luxof.lapisworks.mixinsupport.GetStacks;
-
+import static com.luxof.lapisworks.LapisworksIDs.CANNOT_MODIFY_COST_TAG;
+import static com.luxof.lapisworks.LapisworksIDs.GRAND_RITUAL_BLACKLIST_TAG;
 import static com.luxof.lapisworks.LapisworksIDs.INFUSED_AMEL;
+import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
 import static com.luxof.lapisworks.LapisworksIDs.MAINHAND;
 import static com.luxof.lapisworks.LapisworksIDs.OFFHAND;
 import static com.luxof.lapisworks.init.ThemConfigFlags.allPerWorldShapePatterns;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.TrinketComponent;
-import dev.emi.trinkets.api.TrinketsApi;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
+import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
+import org.joml.Random;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.JsonPrimitive;
+import com.luxof.lapisworks.init.LapisConfig;
+import com.luxof.lapisworks.init.LapisParticles;
+import com.luxof.lapisworks.init.LapisworksLoot;
+import com.luxof.lapisworks.init.ModBlocks;
+import com.luxof.lapisworks.init.ModEntities;
+import com.luxof.lapisworks.init.ModItems;
+import com.luxof.lapisworks.init.ModPOIs;
+import com.luxof.lapisworks.init.ModRecipes;
+import com.luxof.lapisworks.init.ModScreens;
+import com.luxof.lapisworks.init.Patterns;
+import com.luxof.lapisworks.init.ThemConfigFlags;
+import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.interop.hexal.Lapisal;
+import com.luxof.lapisworks.interop.hexical.Lapixical;
+import com.luxof.lapisworks.interop.hextended.Lapixtended;
+import com.luxof.lapisworks.interop.hierophantics.Chariot;
+import com.luxof.lapisworks.media.LinkableMediaBlock;
+import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
+import com.luxof.lapisworks.mixinsupport.GetStacks;
+
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.PatternShapeMatch;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.math.HexCoord;
+import at.petrak.hexcasting.api.casting.math.HexDir;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import dev.emi.emi.api.stack.EmiIngredient;
+import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.TrinketComponent;
+import dev.emi.trinkets.api.TrinketsApi;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.Util;
-
-import org.jetbrains.annotations.Nullable;
-
-import org.joml.Random;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import net.minecraft.world.World;
 import vazkii.patchouli.api.PatchouliAPI;
 
 // why is this project actually big?
 public class Lapisworks implements ModInitializer {
-	private static FrozenPigment BLACK_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.BLACK)), Util.NIL_UUID);
-	private static FrozenPigment BROWN_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.BROWN)), Util.NIL_UUID);
-	private static FrozenPigment BLUE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.BLUE)), Util.NIL_UUID);
-	private static FrozenPigment CYAN_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.CYAN)), Util.NIL_UUID);
-	private static FrozenPigment GRAY_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.GRAY)), Util.NIL_UUID);
-	private static FrozenPigment GREEN_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.GREEN)), Util.NIL_UUID);
-	private static FrozenPigment LIGHT_BLUE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.LIGHT_BLUE)), Util.NIL_UUID);
-	private static FrozenPigment LIGHT_GRAY_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.LIGHT_GRAY)), Util.NIL_UUID);
-	private static FrozenPigment LIME_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.LIME)), Util.NIL_UUID);
-	private static FrozenPigment MAGENTA_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.MAGENTA)), Util.NIL_UUID);
-	private static FrozenPigment ORANGE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.ORANGE)), Util.NIL_UUID);
-	private static FrozenPigment PINK_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.PINK)), Util.NIL_UUID);
-	private static FrozenPigment PURPLE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.PURPLE)), Util.NIL_UUID);
-	private static FrozenPigment RED_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.RED)), Util.NIL_UUID);
-	private static FrozenPigment WHITE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.WHITE)), Util.NIL_UUID);
-	private static FrozenPigment YELLOW_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.YELLOW)), Util.NIL_UUID);
+	private static final FrozenPigment BLACK_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.BLACK)), Util.NIL_UUID);
+	private static final FrozenPigment BROWN_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.BROWN)), Util.NIL_UUID);
+	private static final FrozenPigment BLUE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.BLUE)), Util.NIL_UUID);
+	private static final FrozenPigment CYAN_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.CYAN)), Util.NIL_UUID);
+	private static final FrozenPigment GRAY_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.GRAY)), Util.NIL_UUID);
+	private static final FrozenPigment GREEN_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.GREEN)), Util.NIL_UUID);
+	private static final FrozenPigment LIGHT_BLUE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.LIGHT_BLUE)), Util.NIL_UUID);
+	private static final FrozenPigment LIGHT_GRAY_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.LIGHT_GRAY)), Util.NIL_UUID);
+	private static final FrozenPigment LIME_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.LIME)), Util.NIL_UUID);
+	private static final FrozenPigment MAGENTA_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.MAGENTA)), Util.NIL_UUID);
+	private static final FrozenPigment ORANGE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.ORANGE)), Util.NIL_UUID);
+	private static final FrozenPigment PINK_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.PINK)), Util.NIL_UUID);
+	private static final FrozenPigment PURPLE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.PURPLE)), Util.NIL_UUID);
+	private static final FrozenPigment RED_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.RED)), Util.NIL_UUID);
+	private static final FrozenPigment WHITE_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.WHITE)), Util.NIL_UUID);
+	private static final FrozenPigment YELLOW_FP = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.YELLOW)), Util.NIL_UUID);
 
 	public static final String MOD_ID = "lapisworks";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
@@ -96,7 +120,18 @@ public class Lapisworks implements ModInitializer {
 	public static boolean HEXICAL_INTEROP = false;
 	public static boolean FULL_HEXICAL_INTEROP = false;
 	public static boolean HEXAL_INTEROP = false;
+	public static boolean HIEROPHANTICS_INTEROP = false;
+	public static boolean ONEIRONAUT_INTEROP = false;
 
+	public static void log(String text, Object... args) {
+		LOGGER.info(String.format(text, args));
+	}
+	public static void warn(String text, Object... args) {
+		LOGGER.warn(String.format(text, args));
+	}
+	public static void err(String text, Object... args) {
+		LOGGER.error(String.format(text, args));
+	}
 	public static boolean isModLoaded(String modid) { return FabricLoader.getInstance().isModLoaded(modid); }
 	/** assumes the mod is actually loaded and that <code>targetVersion</code> doesn't cause an error.
 	 * Kurwa eksploduje if wrong? Nah, just gives <code>null</code>.
@@ -119,19 +154,29 @@ public class Lapisworks implements ModInitializer {
         if (isModLoaded("hextended")) {
 			HEXTENDED_INTEROP = true;
 			anyInterop = true;
-            com.luxof.lapisworks.interop.hextended.Lapixtended.initHextendedInterop();
+			Lapixtended.initHextendedInterop();
         }
 		if (isModLoaded("hexical")) {
 			HEXICAL_INTEROP = true;
 			anyInterop = true;
-			com.luxof.lapisworks.interop.hexical.Lapixical.initHexicalInterop();
+			Lapixical.initHexicalInterop();
 		}
 		if (isModLoaded("hexal")) {
 			HEXAL_INTEROP = true;
 			anyInterop = true;
-			com.luxof.lapisworks.interop.hexal.Lapisal.beCool();
+			Lapisal.beCool();
+		}
+		if (isModLoaded("hierophantics")) {
+			HIEROPHANTICS_INTEROP = true;
+			anyInterop = true;
+			Chariot.readTarotCards();
+		}
+		if (isModLoaded("oneironaut")) {
+			ONEIRONAUT_INTEROP = true;
+			anyInterop = true;
 		}
 
+		LapisConfig.renewCurrentConfig();
 		ThemConfigFlags.declareEm();
 		ModEntities.doSomethingFun();
 		Patterns.init();
@@ -145,8 +190,8 @@ public class Lapisworks implements ModInitializer {
 		ModScreens.whatWasThatTF2CommentAboutMakingBadGUICodeSoYouDontHaveToTouchItAgain();
 		LapisParticles.pawtickle();
 
-        LOGGER.info("Luxof's pet Lapisworks is getting a bit hyperactive.");
-		LOGGER.info("\"Lapisworks! Lapis Lapis!\"");
+        log("Luxof's pet Lapisworks is getting a bit hyperactive.");
+		log("\"Lapisworks! Lapis Lapis!\"");
 		if (anyInterop) {
 			// yknow, i would love to make the Interop category/entries unavailable until the mods
 			// required exist but what if i keep it right there to garner curiosity and get people
@@ -157,14 +202,19 @@ public class Lapisworks implements ModInitializer {
 			//	"lapisworks:any_interop",
 			//	true
 			//)
-			LOGGER.info("You have an addon that has interop with Lapisworks loaded?! Oh NOO, it's overstimulated, it's gonna throw up a bunch of content! Look what you've done!");
-		} else LOGGER.info("Feed it redstone.");
-
-		;
+			log("You have an addon that has interop with Lapisworks loaded?! Oh NOO, it's overstimulated, it's gonna throw up a bunch of content! Look what you've done!");
+		} else log("Feed it redstone.");
 	}
 
 	public static Identifier id(String string) {
 		return new Identifier(MOD_ID, string);
+	}
+
+	public static JsonPrimitive primitive(Number number) {
+		return new JsonPrimitive(number);
+	}
+	public static JsonPrimitive primitive(Boolean bool) {
+		return new JsonPrimitive(bool);
 	}
 
 	public static boolean trinketEquipped(LivingEntity entity, Item item) {
@@ -211,25 +261,26 @@ public class Lapisworks implements ModInitializer {
 	@Nullable
 	public static DyeColor getDyeFromPigment(FrozenPigment pigment) {
 		// uncommon, that's my excuse
-		if (pigment == BLACK_FP) { return DyeColor.BLACK; }
-		else if (pigment == BROWN_FP) { return DyeColor.BROWN; }
-		else if (pigment == BLUE_FP) { return DyeColor.BLUE; }
-		else if (pigment == CYAN_FP) { return DyeColor.CYAN; }
-		else if (pigment == GRAY_FP) { return DyeColor.GRAY; }
-		else if (pigment == GREEN_FP) { return DyeColor.GREEN; }
-		else if (pigment == LIGHT_BLUE_FP) { return DyeColor.LIGHT_BLUE; }
-		else if (pigment == LIGHT_GRAY_FP) { return DyeColor.LIGHT_GRAY; }
-		else if (pigment == LIME_FP) { return DyeColor.LIME; }
-		else if (pigment == MAGENTA_FP) { return DyeColor.MAGENTA; }
-		else if (pigment == ORANGE_FP) { return DyeColor.ORANGE; }
-		else if (pigment == PINK_FP) { return DyeColor.PINK; }
-		else if (pigment == PURPLE_FP) { return DyeColor.PURPLE; }
-		else if (pigment == RED_FP) { return DyeColor.RED; }
-		else if (pigment == WHITE_FP) { return DyeColor.WHITE; }
-		else if (pigment == YELLOW_FP) { return DyeColor.YELLOW; }
-		else { return null; }
+		if (pigment.equals(BLACK_FP)) return DyeColor.BLACK;
+		else if (pigment.equals(BROWN_FP)) return DyeColor.BROWN;
+		else if (pigment.equals(BLUE_FP)) return DyeColor.BLUE;
+		else if (pigment.equals(CYAN_FP)) return DyeColor.CYAN;
+		else if (pigment.equals(GRAY_FP)) return DyeColor.GRAY;
+		else if (pigment.equals(GREEN_FP)) return DyeColor.GREEN;
+		else if (pigment.equals(LIGHT_BLUE_FP)) return DyeColor.LIGHT_BLUE;
+		else if (pigment.equals(LIGHT_GRAY_FP)) return DyeColor.LIGHT_GRAY;
+		else if (pigment.equals(LIME_FP)) return DyeColor.LIME;
+		else if (pigment.equals(MAGENTA_FP)) return DyeColor.MAGENTA;
+		else if (pigment.equals(ORANGE_FP)) return DyeColor.ORANGE;
+		else if (pigment.equals(PINK_FP)) return DyeColor.PINK;
+		else if (pigment.equals(PURPLE_FP)) return DyeColor.PURPLE;
+		else if (pigment.equals(RED_FP)) return DyeColor.RED;
+		else if (pigment.equals(WHITE_FP)) return DyeColor.WHITE;
+		else if (pigment.equals(YELLOW_FP)) return DyeColor.YELLOW;
+		else return null;
 	}
 
+	public static int clamp(int num, int min, int max) { return Math.min(Math.max(num, min), max); }
 	public static double clamp(double num, double min, double max) { return Math.min(Math.max(num, min), max); }
 	public static float clamp(float num, float min, float max) { return Math.min(Math.max(num, min), max); }
 
@@ -264,7 +315,7 @@ public class Lapisworks implements ModInitializer {
 
 	/** Nulls the config flags for you. */
 	public static void nullConfigFlags() {
-		LOGGER.info("Nulling config flags.");
+		log("Nulling config flags.");
 		for (String patId : allPerWorldShapePatterns.keySet()) {
 			for (int i = 0; i < allPerWorldShapePatterns.get(patId).size(); i++) {
 				PatchouliAPI.get().setConfigFlag(
@@ -347,6 +398,15 @@ public class Lapisworks implements ModInitializer {
 	public static boolean closeEnough(double a, double b, double epsilon) {
 		return Math.abs(b - a) < epsilon;
 	}
+	public static boolean closeEnough(Vec3d a, Vec3d b, double epsilon) {
+		return closeEnough(a.x, b.x, epsilon)
+			&& closeEnough(a.y, b.y, epsilon)
+			&& closeEnough(a.z, b.z, epsilon);
+	}
+	/** epsilon is 0.0000001. */
+	public static boolean closeEnough(double a, double b) {
+		return closeEnough(a, b, 0.0000001);
+	}
 
     /** returns null if hand isn't MAIN_HAND or OFF_HAND or inaccessible (i'll add more eventually..!!) */
     @Nullable
@@ -354,7 +414,7 @@ public class Lapisworks implements ModInitializer {
         List<HeldItemInfo> stacks = ((GetStacks)ctx).getHeldStacks();
         try { return stacks.get(hand).stack(); }
 		catch (IndexOutOfBoundsException e) {
-			LOGGER.info("Someone tried to access idx " + hand + " of " + stacks.toString() + ".");
+			log("Someone tried to access idx " + hand + " of " + stacks.toString() + ".");
 			return null;
 		}
     }
@@ -389,7 +449,7 @@ public class Lapisworks implements ModInitializer {
 	public static int getInfusedAmel(ItemStack stack) {
 		return NBTHelper.getInt(stack, INFUSED_AMEL, 0);
 	}
-	
+
 	public static void setInfusedAmel(ItemStack stack, int count) {
 		NBTHelper.putInt(stack, INFUSED_AMEL, count);
 	}
@@ -418,34 +478,97 @@ public class Lapisworks implements ModInitializer {
 	 * and a boolean which states if the raycast was interrupted suddenly instead of completing.
 	 * <p>to skip a pos in the final list, return <code>null</code> for the pos.
 	 * If you send a valid pos instead, it will be added to the final list.
-	 * <p>to terminate the line, simply return <code>false</code> for the boolean.
-	 * <p>P.S. this prioritizes accuracy and as such increments from start to end in steps of 0.1.
-	 * of course, all the positions passed to the function are unique, however you may not want to
-	 * use this if you value performance. */
+	 * <p>to terminate the line, simply return <code>false</code> for the boolean. */
+	// Amanatides-Woo is a silly name
 	public static Pair<List<BlockPos>, Boolean> castRay(
-		BlockPos startPos,
-		BlockPos endPos,
+		Vec3d start,
+		Vec3d end,
 		Function<BlockPos, Pair<BlockPos, Boolean>> atEachStep
 	) {
-		Vec3d start = startPos.toCenterPos();
-		Vec3d end = endPos.toCenterPos();
+		BlockPos ray = BlockPos.ofFloored(start);
+		BlockPos endPos = BlockPos.ofFloored(end);
+
+		Vec3d diff = end.subtract(start);
+
+		Vec3i step = new Vec3i(
+			(int)Math.signum(diff.x),
+			(int)Math.signum(diff.y),
+			(int)Math.signum(diff.z)
+		);
+		Vec3d dir = diff.normalize();
+		Vec3d delta = new Vec3d(
+			1.0 / Math.abs(dir.x),
+			1.0 / Math.abs(dir.y),
+			1.0 / Math.abs(dir.z)
+		);
+
+
+		BlockPos nextBoundary = new BlockPos(
+			step.getX() < 0 ? 0 : step.getX(),
+			step.getY() < 0 ? 0 : step.getY(),
+			step.getZ() < 0 ? 0 : step.getZ()
+		);
+		// because Vec3d fields are final... :(
+		double tMaxX = dir.x == 0 ?
+			Double.POSITIVE_INFINITY : (ray.getX() + nextBoundary.getX() - start.x) / dir.x;
+		double tMaxY = dir.y == 0 ?
+			Double.POSITIVE_INFINITY : (ray.getY() + nextBoundary.getY() - start.y) / dir.y;
+		double tMaxZ = dir.z == 0 ?
+			Double.POSITIVE_INFINITY : (ray.getZ() + nextBoundary.getZ() - start.z) / dir.z;
+
+
 		List<BlockPos> positions = new ArrayList<>();
 
-		BlockPos prev = null;
-		Vec3d curr = start;
-		double step = 0.1;
-		Vec3d dir = end.subtract(start).normalize().multiply(step);
+		while (!ray.equals(endPos)) {
 
-		while (curr.squaredDistanceTo(end) > step*step) {
-			BlockPos currPos = BlockPos.ofFloored(curr);
-			if (currPos != prev) {
-				Pair<BlockPos, Boolean> ret = atEachStep.apply(currPos);
-				if (!ret.getRight()) return new Pair<>(positions, true);
-				if (ret.getLeft() != null) positions.add(ret.getLeft());
+			var result = atEachStep.apply(ray);
+			if (result.getLeft() != null)
+				positions.add(result.getLeft());
+			if (!result.getRight())
+				return new Pair<>(positions, true);
+
+			// fucking diagonals! hate these motherfuckers!
+			if (closeEnough(tMaxX, tMaxY)) {
+				ray = ray.add(step.getX(), step.getY(), 0);
+				tMaxX += delta.x;
+				tMaxY += delta.y;
+
+				if (closeEnough(tMaxX, tMaxZ)) {
+					ray = ray.add(0, 0, step.getZ());
+					tMaxZ += delta.z;
+				}
+
+			} else if (closeEnough(tMaxX, tMaxZ)) {
+				ray = ray.add(step.getX(), 0, step.getZ());
+				tMaxX += delta.x;
+				tMaxZ += delta.z;
+
+			} else if (closeEnough(tMaxY, tMaxZ)) {
+				ray = ray.add(0, step.getY(), step.getZ());
+				tMaxY += delta.y;
+				tMaxZ += delta.z;
+
+			} else {
+				if (tMaxX < tMaxY) {
+					if (tMaxX < tMaxZ) {
+						ray = ray.add(step.getX(), 0, 0);
+						tMaxX += delta.x;
+					} else {
+						ray = ray.add(0, 0, step.getZ());
+						tMaxZ += delta.z;
+					}
+				} else {
+					if (tMaxY < tMaxZ) {
+						ray = ray.add(0, step.getY(), 0);
+						tMaxY += delta.y;
+					} else {
+						ray = ray.add(0, 0, step.getZ());
+						tMaxZ += delta.z;
+					}
+				}
 			}
-			prev = currPos;
-			curr.add(dir);
 		}
+
 		return new Pair<>(positions, false);
 	}
 
@@ -520,5 +643,277 @@ public class Lapisworks implements ModInitializer {
 
 	public static double getDistance(BlockPos pos1, BlockPos pos2) {
 		return Math.sqrt(pos2.getSquaredDistance(pos1));
+	}
+
+	public static boolean _shouldBreakSent(LivingEntity plr) {
+		EnchSentInterface eSentInterface = (EnchSentInterface)plr;
+		return eSentInterface.getEnchantedSentinel() == null ?
+			false :
+			plr.getPos().squaredDistanceTo(eSentInterface.getEnchantedSentinel()) > 32.0*32.0;
+	}
+
+	public static boolean testEmiIngredient(EmiIngredient ingredient, Item item) {
+		for (EmiStack stack : ingredient.getEmiStacks()) {
+			if (stack.getItemStack().isOf(item)) return true;
+		}
+		return false;
+	}
+
+	public static NbtCompound serializeBlockPos(BlockPos pos) {
+		NbtCompound nbt = new NbtCompound();
+		nbt.putInt("x", pos.getX());
+		nbt.putInt("y", pos.getY());
+		nbt.putInt("z", pos.getZ());
+		return nbt;
+	}
+	/** deserializes a blockpos that was serialized by <code>serializeBlockPos</code>. */
+	public static BlockPos deserializeBlockPos(NbtCompound nbt) {
+		return new BlockPos(
+			nbt.getInt("x"),
+			nbt.getInt("y"),
+			nbt.getInt("z")
+		);
+	}
+	/** deserializes a blockpos that was serialized by <code>serializeBlockPos</code>. */
+	public static BlockPos deserializeBlockPos(NbtElement nbt) {
+		return deserializeBlockPos((NbtCompound)nbt);
+	}
+
+	public static NbtCompound serializeVec3d(Vec3d vec) {
+		NbtCompound nbt = new NbtCompound();
+		nbt.putDouble("x", vec.x);
+		nbt.putDouble("y", vec.y);
+		nbt.putDouble("z", vec.z);
+		return nbt;
+	}
+	public static Vec3d deserializeVec3d(NbtCompound nbt) {
+		return new Vec3d(
+			nbt.getDouble("x"),
+			nbt.getDouble("y"),
+			nbt.getDouble("z")
+		);
+	}
+	public static Vec3d deserializeVec3d(NbtElement ele) {
+		return deserializeVec3d((NbtCompound)ele);
+	}
+
+	public static NbtList nbtListOf(List<? extends NbtElement> list) {
+        NbtList nbtList = new NbtList();
+        nbtList.addAll(list);
+        return nbtList;
+    }
+
+	@SafeVarargs
+	public static <ANY extends Object> boolean either(
+		Predicate<ANY> predicate, ANY... options
+	) {
+		for (ANY option : options) {
+			if (predicate.test(option)) return true;
+		}
+		return false;
+	}
+
+	public static Direction getFacingWithRespectToDown(
+		Vec3d looking,
+		Direction whereDownGoes
+	) {
+		return Direction.getFacing(
+			whereDownGoes == Direction.EAST || whereDownGoes == Direction.WEST ? 0.0 : looking.x,
+			whereDownGoes == Direction.UP || whereDownGoes == Direction.DOWN ? 0.0 : looking.y,
+			whereDownGoes == Direction.NORTH || whereDownGoes == Direction.SOUTH ? 0.0 : looking.z
+		);
+	}
+
+	public static Quaternionf getRotationForHorizontal(
+		Direction horizontal,
+		Direction down
+	) {
+		return switch (horizontal) {
+            // i love me some quirky quirks
+			case WEST ->
+				RotationAxis.POSITIVE_Y.rotationDegrees(90 + (down == Direction.UP ? 180 : 0));
+			case SOUTH ->
+				RotationAxis.POSITIVE_Y.rotationDegrees(180);
+			case EAST ->
+				RotationAxis.POSITIVE_Y.rotationDegrees(270 - (down == Direction.UP ? 180 : 0));
+			default ->
+				RotationAxis.POSITIVE_Z.rotationDegrees(0);
+		};
+	}
+	public static Quaternionf getReverseRotationForHorizontal(
+		Direction horizontal,
+		Direction down
+	) {
+		if (horizontal == down) return RotationAxis.NEGATIVE_Y.rotationDegrees(0);
+		return switch (horizontal) {
+			case WEST ->
+				RotationAxis.NEGATIVE_Y.rotationDegrees(90 + (down == Direction.UP ? 180 : 0));
+			case SOUTH ->
+				RotationAxis.NEGATIVE_Y.rotationDegrees(180);
+			case EAST ->
+				RotationAxis.NEGATIVE_Y.rotationDegrees(270 - (down == Direction.UP ? 180 : 0));
+			default ->
+				RotationAxis.NEGATIVE_Y.rotationDegrees(0);
+		};
+	}
+	public static Quaternionf rotateToBeAttachedTo(
+		Direction attachedTo
+	) {
+		return switch (attachedTo) {
+			case UP -> RotationAxis.POSITIVE_X.rotationDegrees(180);
+			case DOWN -> RotationAxis.POSITIVE_X.rotationDegrees(0);
+			case NORTH -> RotationAxis.POSITIVE_X.rotationDegrees(90);
+			case SOUTH -> RotationAxis.NEGATIVE_X.rotationDegrees(90);
+			case EAST -> RotationAxis.POSITIVE_Z.rotationDegrees(90);
+			case WEST -> RotationAxis.NEGATIVE_Z.rotationDegrees(90);
+		};
+	}
+	
+	public static List<BlockPos> get3x3(
+		BlockPos pos,
+		Direction axis,
+		boolean includeCenter
+	) {
+		Direction forward = axis == Direction.NORTH || axis == Direction.SOUTH ?
+            Direction.UP : Direction.NORTH;
+        Direction backward = forward.getOpposite();
+
+        Vec3i _leftVec = forward.getVector().crossProduct(axis.getVector());
+        Direction left = Direction.getFacing(_leftVec.getX(), _leftVec.getY(), _leftVec.getZ());
+        Direction right = left.getOpposite();
+
+		List<BlockPos> ret = new ArrayList<>(List.of(
+			pos.offset(forward),
+			pos.offset(forward).offset(left),
+			pos.offset(forward).offset(right),
+			pos.offset(left),
+			pos.offset(right),
+			pos.offset(backward),
+			pos.offset(backward).offset(left),
+			pos.offset(backward).offset(right)
+		));
+		if (includeCenter) ret.add(4, pos);
+		return ret;
+	}
+
+	public static boolean sameAxis(Direction a, Direction b) {
+		return a == b || a == b.getOpposite();
+	}
+
+	@Nullable
+	public static Identifier getIdOf(PatternShapeMatch psm) {
+        if (psm instanceof PatternShapeMatch.Normal nsm)
+            return nsm.key.getValue();
+        else if (psm instanceof PatternShapeMatch.PerWorld pwsm && pwsm.certain)
+            return pwsm.key.getValue();
+        else if (psm instanceof PatternShapeMatch.Special ssm)
+            return ssm.key.getValue();
+        else
+            return null;
+	}
+
+	private static boolean actionInTag(Identifier pattern, TagKey<ActionRegistryEntry> tag) {
+		return HexUtils.isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), pattern, tag);
+	}
+	public static boolean exemptFromMediaConsumptionDecrease(Identifier pattern) {
+		return actionInTag(pattern, CANNOT_MODIFY_COST_TAG)
+			|| actionInTag(pattern, GRAND_RITUAL_BLACKLIST_TAG);
+	}
+
+	public static void makeParticlesInSpiralGoUp(
+		World world,
+		Vec3d centerBottom,
+		Vec3d up,
+		double radiusX,
+		double radiusY,
+		int color,
+		Function<Integer, Double> speedLossPerParticleFunction,
+		boolean goInReverse
+	) {
+		for (int i = 0; i < 1080; i += 3) {
+			double rads = Math.toRadians(i);
+
+			double x = radiusX*(goInReverse ? -Math.sin(rads) : Math.cos(rads));
+			double y = radiusY*(goInReverse ? Math.cos(rads) : Math.sin(rads));
+			Vec3d vel = up.multiply(speedLossPerParticleFunction.apply(i / 3));
+
+			Vec3d pos = switch (
+				Direction.getFacing(
+					Math.abs(up.x),
+					Math.abs(up.y),
+					Math.abs(up.z)
+				)
+			) {
+				case UP -> new Vec3d(centerBottom.x+x, centerBottom.y, centerBottom.z+y);
+				case EAST -> new Vec3d(centerBottom.x, centerBottom.y+y, centerBottom.z+x);
+				case SOUTH -> new Vec3d(centerBottom.x+x, centerBottom.y+y, centerBottom.z);
+				default -> centerBottom;
+			};
+
+			world.addParticle(
+				new ConjureParticleOptions(color),
+				pos.x, pos.y, pos.z,
+				vel.x, vel.y, vel.z
+			);
+		}
+	}
+
+	public static <Any extends Object> ArrayList<Any> mapMulti(
+		Stream<? extends Object> stream,
+		BiConsumer<Object, Consumer<Any>> mapper
+	) {
+		ArrayList<Any> buffer = new ArrayList<>();
+		stream.forEach(obj -> mapper.accept(obj, buffer::add));
+		return buffer;
+	}
+
+	public static CastingImage CastingImgWithStack(CastingImage img, List<Iota> stack) {
+		return img.copy(
+			stack,
+			img.getParenCount(),
+			img.getParenthesized(),
+			img.getEscapeNext(),
+			img.getOpsConsumed(),
+			img.getUserData()
+		);
+	}
+
+	public static boolean equalStacks(ItemStack a, ItemStack b) {
+		return a.getItem() == b.getItem() && a.getCount() == b.getCount();
+	}
+
+	public static boolean isInCradle(ItemStack stack) {
+		return NBTHelper.getBoolean(stack, IS_IN_CRADLE);
+	}
+	public static void removeFromCradle(ItemStack stack) {
+		if (NBTHelper.contains(stack, IS_IN_CRADLE))
+			NBTHelper.remove(stack, IS_IN_CRADLE);
+	}
+	public static void putInCradle(ItemStack stack) {
+		NBTHelper.putBoolean(stack, IS_IN_CRADLE, true);
+	}
+
+	public static NbtCompound nbtCompoundOf(Stream<Pair<String, ? extends NbtElement>> stream) {
+		NbtCompound nbt = new NbtCompound();
+		stream.forEach(entry -> nbt.put(entry.getLeft(), entry.getRight()));
+		return nbt;
+	}
+
+	public static <KEY extends Object, VALUE extends Object> HashMap<KEY, VALUE> hashMapof(
+		NbtCompound nbt,
+		Function<String, KEY> keyFunction,
+		Function<NbtElement, VALUE> valueFunction
+	) {
+		HashMap<KEY, VALUE> map = new HashMap<>();
+		for (String key : nbt.getKeys()) {
+			map.put(keyFunction.apply(key), valueFunction.apply(nbt.get(key)));
+		}
+		return map;
+	}
+
+	public static boolean equalsStack(ItemStack stackA, ItemStack stackB) {
+		return stackA == stackB ||
+			(stackA.isOf(stackB.getItem()) && stackA.getCount() == stackB.getCount()) ||
+			stackA.isEmpty() && stackB.isEmpty();
 	}
 }

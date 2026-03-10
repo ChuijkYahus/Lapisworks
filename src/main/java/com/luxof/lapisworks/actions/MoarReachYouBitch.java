@@ -15,16 +15,15 @@ import com.google.common.collect.ImmutableMultimap;
 
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 
-import com.luxof.lapisworks.MishapThrowerJava;
 import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.init.Mutables.Mutables;
-import com.luxof.lapisworks.mishaps.MishapNotEnoughItems;
 import com.luxof.lapisworks.mixinsupport.GetVAULT;
 
 import static com.luxof.lapisworks.LapisworksIDs.AMEL;
 import static com.luxof.lapisworks.LapisworksIDs.ATK_RANGE_ENHANCEMENT_UUID;
 import static com.luxof.lapisworks.LapisworksIDs.REACH_ENHANCEMENT_UUID;
+import static com.luxof.lapisworks.MishapThrowerJava.assertItemAmount;
 
 import java.util.List;
 
@@ -59,31 +58,34 @@ public class MoarReachYouBitch implements SpellAction {
     );
 
     public int getArgc() {
-        return 1;
+        return 2;
     }
 
     @Override
     public SpellAction.Result execute(List<? extends Iota> args, CastingEnvironment ctx) {
         LivingEntity entity = OperatorUtils.getPlayer(args, 0, getArgc());
+        boolean enableIt = OperatorUtils.getBool(args, 1, getArgc());
 
         boolean expendShit = !entity.getAttributes().hasModifierForAttribute(
             ReachEntityAttributes.REACH,
             REACH_ENHANCEMENT_UUID
         );
+        expendShit = enableIt ? expendShit : !expendShit;
+
+        if (!expendShit)
+            return new SpellAction.Result(
+                new DoNothing.DoNothingSpell(),
+                0L,
+                List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 2, 25)),
+                1
+            );
 
         VAULT vault = ((GetVAULT)ctx).grabVAULT();
-        int availableAmel = vault.fetch(Mutables::isAmel, Flags.PRESET_Stacks_InvItem_UpToHotbar);
-        if (availableAmel < (expendShit ? amelCost : 0)) {
-            MishapThrowerJava.throwMishap(new MishapNotEnoughItems(
-                AMEL,
-                availableAmel,
-                amelCost
-            ));
-        }
+        assertItemAmount(ctx, Mutables::isAmel, AMEL, amelCost);
 
         return new SpellAction.Result(
-            new Spell(entity, vault),
-            Math.max(MediaConstants.SHARD_UNIT * (expendShit ? 4 : 0), 0),
+            new Spell(entity, enableIt, vault),
+            MediaConstants.SHARD_UNIT * 4,
             List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 2, 25)),
             1
         );
@@ -91,17 +93,19 @@ public class MoarReachYouBitch implements SpellAction {
 
     public class Spell implements RenderedSpell {
         public final LivingEntity entity;
+        public final boolean enableIt;
         public final VAULT vault;
 
         public Spell(
             LivingEntity entity,
+            boolean enableIt,
             VAULT vault
         ) {
             this.entity = entity;
+            this.enableIt = enableIt;
             this.vault = vault;
         }
 
-		@SuppressWarnings("null")
         @Override
 		public void cast(CastingEnvironment ctx) {
             AttributeContainer attrs = entity.getAttributes();
@@ -110,9 +114,13 @@ public class MoarReachYouBitch implements SpellAction {
             vault.drain(
                 Mutables::isAmel,
                 amelCost,
-                Flags.PRESET_Stacks_InvItem_UpToHotbar
+                false,
+                Flags.PRESET_UpToHotbar
             );
-            entity.getAttributes().addTemporaryModifiers(modifiers);
+            if (enableIt)
+                entity.getAttributes().addTemporaryModifiers(modifiers);
+            else
+                entity.getAttributes().removeModifiers(modifiers);
 		}
 
         @Override

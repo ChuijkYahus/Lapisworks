@@ -13,7 +13,7 @@ public class BrewingRecSerializer implements RecipeSerializer<BrewingRec> {
     private BrewingRecSerializer() {}
     public static final BrewingRecSerializer INSTANCE = new BrewingRecSerializer();
 
-    // sorry.
+    // i'm just a chill guy.
     @Override
     public BrewingRec read(Identifier id, JsonObject json) {
         List<IngredientWithCount> input = JsonHelper.getArray(json, "input").asList()

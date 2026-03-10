@@ -4,15 +4,15 @@ import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
+import net.minecraft.util.Identifier;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.err;
+import static com.luxof.lapisworks.Lapisworks.getIdOf;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 import static com.luxof.lapisworks.init.ThemConfigFlags.allPerWorldShapePatterns;
-
-import java.util.List;
 
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -28,25 +28,28 @@ public abstract class PatternRegistryManifestMixin {
     ) {
         PatternShapeMatch shapeMatch = og.call(pat, environment, checkForAlternateStrokeOrders);
 
-        // i only have to invalidate the ones that aren't chosen
-        // because hex will automatically validate the one that is chosen if this is it.
-        if (!chosenFlags.values().contains(null)) {
-            String sig = pat.anglesSignature();
+        Identifier _id = getIdOf(shapeMatch);
+        String id = _id == null ? null : _id.toString();
+        String sig = pat.anglesSignature();
+        if (id == null) return shapeMatch;
 
-            for (String patId : allPerWorldShapePatterns.keySet()) {
-                List<String> pats = allPerWorldShapePatterns.get(patId);
+        if (chosenFlags.values().contains(null)) {
+            err("Why the fuck have the flags not been chosen yet?!");
+            return shapeMatch;
+        }
 
-                int idx = pats.indexOf(sig);
-                if (idx == -1) continue;
-
-                else if (idx != chosenFlags.get(patId)) shapeMatch = new PatternShapeMatch.Nothing();
-                else break;
-            }
-            for (List<String> pats : allPerWorldShapePatterns.values()) {
-                if (!pats.contains(sig)) { continue; }
-            }
-        } else {
-            LOGGER.error("Why the fuck have the flags not been chosen yet?!");
+        for (String genericId : chosenFlags.keySet()) {
+            if (!id.startsWith(genericId)) continue;
+            int chosenIdx = chosenFlags.get(genericId);
+            if (
+                // rust method, anyone?
+                !allPerWorldShapePatterns
+                    .get(genericId)
+                    .get(chosenIdx)
+                    .equals(sig)
+            )
+                return new PatternShapeMatch.Nothing();
+            break;
         }
 
         return shapeMatch;

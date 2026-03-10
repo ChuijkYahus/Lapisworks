@@ -1,78 +1,130 @@
 package com.luxof.lapisworks.actions.interact;
 
-import at.petrak.hexcasting.api.casting.OperatorUtils;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
-import at.petrak.hexcasting.api.casting.RenderedSpell;
 import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
-import at.petrak.hexcasting.api.casting.eval.OperationResult;
-import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
-import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
-import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv;
+import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughMedia;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.google.common.collect.ImmutableSet;
 
+import com.luxof.lapisworks.media.LinkableMediaBlock;
+import com.luxof.lapisworks.media.MediaTransferInterface;
+import com.luxof.lapisworks.mixin.PlayerBasedCastEnvAccessor;
+import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
+import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
+
+import static com.luxof.lapisworks.Lapisworks.ONEIRONAUT_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.fullLinkableMediaBlocksInteraction;
 import static com.luxof.lapisworks.Lapisworks.interactWithLinkableMediaBlocks;
-import static com.luxof.lapisworks.MishapThrowerJava.assertInRange;
-import static com.luxof.lapisworks.MishapThrowerJava.assertLinkableThere;
+import static com.luxof.lapisworks.Lapisworks.log;
+import static com.luxof.lapisworks.interop.oneironaut.FuckingInexhaustiblePhials.getBottomlessContrib;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 
-public class Deposit implements SpellAction {
-    public int getArgc() {
-        return 2;
+public class Deposit extends SpellActionNCT {
+    public int argc = 2;
+
+    private void assertNoFunnyMedia(long cost) {
+        if (!(ctx instanceof PlayerBasedCastEnv pbcenv)) return;
+
+        ServerPlayerEntity player = pbcenv.getCaster();
+        if (player.isCreative()) return;
+
+        cost -= ((PlayerBasedCastEnvAccessor)pbcenv).lapisworks$invokeCanOvercast()
+            ? 20L*MediaConstants.DUST_UNIT : 0;
+        cost -= ONEIRONAUT_INTEROP ? getBottomlessContrib(pbcenv) : 0L;
+
+        if (ctx.extractMedia(-1, true) < cost)
+            throw new MishapNotEnoughMedia(cost);
     }
 
     @Override
-    public Result execute(List<? extends Iota> stack, CastingEnvironment ctx) {
-        BlockPos pos = OperatorUtils.getBlockPos(stack, 0, getArgc());
-        long amount = OperatorUtils.getPositiveInt(stack, 1, getArgc()) * MediaConstants.DUST_UNIT;
-
-        assertInRange(ctx, pos);
-        assertLinkableThere(pos, ctx);
-
-        Pair<Long, Set<BlockPos>> interactSimResult = fullLinkableMediaBlocksInteraction(
-            ctx.getWorld(),
-            Set.of(pos),
-            amount,
-            true,
-            true
-        );
-        long realAmount = interactSimResult.getLeft();
+    public Result execute(HexIotaStack stack, CastingEnvironment ctx) {
+        MediaTransferInterface MTI = stack.getMediaTransferInterface(0);
+        long amount = (long)(stack.getPositiveDouble(1) * MediaConstants.DUST_UNIT);
 
         List<ParticleSpray> particles = new ArrayList<>(List.of(
             ParticleSpray.cloud(ctx.mishapSprayPos(), 3, 20)
         ));
-        particles.addAll(interactSimResult.getRight().stream().map(
-            position -> ParticleSpray.cloud(position.toCenterPos(), 3, 10)
-        ).toList());
+
+        if (MTI instanceof LinkableMediaBlock lmb) {
+
+            BlockPos pos = lmb.getThisPos();
+            Pair<Long, Set<BlockPos>> interactSimResult = fullLinkableMediaBlocksInteraction(
+                ctx.getWorld(),
+                Set.of(pos),
+                amount,
+                true,
+                true
+            );
+            long realAmount = interactSimResult.getLeft();
+
+
+            particles.addAll(interactSimResult.getRight().stream().map(
+                position -> ParticleSpray.cloud(position.toCenterPos(), 3, 10)
+            ).toList());
+
+
+            long cost = (long)(1.1*realAmount);
+            assertNoFunnyMedia(cost);
+
+            return new SpellAction.Result(
+                new LMBSpell(pos, realAmount),
+                cost,
+                particles,
+                1
+            );
+        }
+
+        long realAmount = Math.min(
+            amount,
+            MTI.getMaxMedia() - MTI.getMediaHere()
+        );
+
+        long cost = (long)(1.1*realAmount);
+        assertNoFunnyMedia(cost);
 
         return new SpellAction.Result(
-            new Spell(pos, realAmount),
-            realAmount + (long)(realAmount * 0.1),
+            new MTISpell(MTI, realAmount),
+            cost,
             particles,
             1
         );
     }
 
-    public class Spell implements RenderedSpell {
+    public class MTISpell implements RenderedSpellNCT {
+        public final MediaTransferInterface MTI;
+        public final long amount;
+
+        public MTISpell(MediaTransferInterface MTI, long amount) {
+            this.MTI = MTI;
+            this.amount = amount;
+        }
+
+        @Override
+        public void cast(CastingEnvironment ctx) {
+            MTI.depositMedia(amount);
+        }
+    }
+
+    public class LMBSpell implements RenderedSpellNCT {
         public final BlockPos pos;
         public final long amount;
 
-        public Spell(BlockPos pos, long amount) {
+        public LMBSpell(BlockPos pos, long amount) {
             this.pos = pos;
             this.amount = amount;
         }
 
-		@Override
+        @Override
 		public void cast(CastingEnvironment ctx) {
             interactWithLinkableMediaBlocks(
                 ctx.getWorld(),
@@ -81,30 +133,5 @@ public class Deposit implements SpellAction {
                 true
             );
 		}
-
-        @Override
-        public CastingImage cast(CastingEnvironment arg0, CastingImage arg1) {
-            return RenderedSpell.DefaultImpls.cast(this, arg0, arg1);
-        }
-    }
-
-    @Override
-    public boolean awardsCastingStat(CastingEnvironment ctx) {
-        return SpellAction.DefaultImpls.awardsCastingStat(this, ctx);
-    }
-
-    @Override
-    public Result executeWithUserdata(List<? extends Iota> args, CastingEnvironment env, NbtCompound userData) {
-        return SpellAction.DefaultImpls.executeWithUserdata(this, args, env, userData);
-    }
-
-    @Override
-    public boolean hasCastingSound(CastingEnvironment ctx) {
-        return SpellAction.DefaultImpls.hasCastingSound(this, ctx);
-    }
-
-    @Override
-    public OperationResult operate(CastingEnvironment arg0, CastingImage arg1, SpellContinuation arg2) {
-        return SpellAction.DefaultImpls.operate(this, arg0, arg1, arg2);
     }
 }

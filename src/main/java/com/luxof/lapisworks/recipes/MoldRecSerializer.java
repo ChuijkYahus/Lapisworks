@@ -6,8 +6,6 @@ import com.google.gson.JsonSyntaxException;
 
 import com.luxof.lapisworks.recipes.MoldRec.MoldRecJsonFormat;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
-
 import java.util.List;
 
 import net.fabricmc.loader.api.FabricLoader;
@@ -39,8 +37,6 @@ public class MoldRecSerializer implements RecipeSerializer<MoldRec> {
         }
         if (recipeJson.requiredmod != null &&
             !modsLoaded(recipeJson.requiredmod)) {
-            LOGGER.info("Disabling the Mold Amel recipe.");
-            LOGGER.info(recipeJson.requiredmod.toString());
             return new MoldRec(
                 id,
                 Ingredient.ofItems(Items.AIR),

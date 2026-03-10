@@ -2,13 +2,12 @@ package com.luxof.lapisworks.items;
 
 import at.petrak.hexcasting.api.utils.NBTHelper;
 
-import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.init.ModItems;
-import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.items.shit.InventoryItem;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
+import static com.luxof.lapisworks.Lapisworks.either;
 import static com.luxof.lapisworks.Lapisworks.getAllHands;
+import static com.luxof.lapisworks.init.Mutables.Mutables.isAmel;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -38,31 +37,25 @@ public class AmelJar extends Item implements InventoryItem {
         PlayerEntity user,
         Hand hand,
         ItemStack stack,
-        List<Hand> otherHands
+        Hand otherHand
     ) {
-        Hand amelHand = null;
-        ItemStack amelStack = ItemStack.EMPTY.copy();
-        for (Hand selectedHand : otherHands) {
-            ItemStack possiblyAmel = user.getStackInHand(selectedHand);
-            if (!Mutables.isAmel(possiblyAmel)) continue;
-            amelHand = selectedHand;
-            amelStack = possiblyAmel.copy();
-        }
-        if (amelHand == null) return TypedActionResult.fail(stack);
-        int currentlyStored = this.getStored(stack);
-        int currentLimit = this.maxAmel - currentlyStored;
-        int amelWillBeLeft = Math.max(0, amelStack.getCount() - currentLimit);
-        user.setStackInHand(
-            amelHand,
-            // <= just to be safe
-            amelWillBeLeft <= 0 ?
-                ItemStack.EMPTY.copy() :
-                new ItemStack(
-                    amelStack.getItem(),
-                    amelWillBeLeft
-                )
+        ItemStack amelStack = user.getStackInHand(otherHand);
+
+        if (!isAmel(amelStack) || amelStack.isEmpty())
+            return TypedActionResult.fail(stack);
+
+        int wouldBeStoredNow = getStored(stack) + amelStack.getCount();
+        int shouldBeStoredNow = Math.min(maxAmel, wouldBeStoredNow);
+
+        int difference = wouldBeStoredNow - shouldBeStoredNow;
+        if (difference == 0) amelStack.copyAndEmpty();
+        else amelStack.setCount(difference);
+
+        setStored(
+            stack,
+            shouldBeStoredNow
         );
-        this.setStored(stack, Math.min(this.maxAmel, currentlyStored + amelStack.getCount()));
+
         return TypedActionResult.success(stack, true);
     }
 
@@ -70,36 +63,35 @@ public class AmelJar extends Item implements InventoryItem {
         PlayerEntity user,
         Hand hand,
         ItemStack stack,
-        List<Hand> otherHands
+        Hand otherHand
     ) {
-        Hand depositHand = null;
-        ItemStack depositStack = null;
-        for (Hand selectedHand : otherHands) {
-            ItemStack possiblyDeposit = user.getStackInHand(selectedHand);
-            if (!(Mutables.isAmel(possiblyDeposit) || possiblyDeposit.isEmpty())) continue;
-            depositHand = selectedHand;
-        }
-        if (depositHand == null) return TypedActionResult.fail(stack);
-        depositStack = user.getStackInHand(depositHand);
-        int withdrawAmel = Math.min(
-            64 - depositStack.getCount(),
-            this.getStored(stack)
+        ItemStack amelStack = user.getStackInHand(otherHand);
+
+        if (!isAmel(amelStack) && !amelStack.isEmpty())
+            return TypedActionResult.fail(stack);
+
+        int wouldBeWithdrawn = amelStack.isEmpty() ? 64 : amelStack.getMaxCount() - amelStack.getCount();
+        int shouldBeWithdrawn = Math.min(getStored(stack), wouldBeWithdrawn);
+
+        user.setStackInHand(otherHand, new ItemStack(
+            amelStack.isEmpty() ? ModItems.AMEL_ITEM : amelStack.getItem(),
+            (amelStack.isEmpty() ? 0 : amelStack.getCount()) + shouldBeWithdrawn
+        ));
+
+        setStored(
+            stack,
+            getStored(stack) - shouldBeWithdrawn
         );
-        user.setStackInHand(
-            depositHand,
-            withdrawAmel == 0 ?
-                ItemStack.EMPTY.copy() :
-                new ItemStack(ModItems.AMEL_ITEM, depositStack.getCount() + withdrawAmel)
-        );
-        this.setStored(stack, this.getStored(stack) - withdrawAmel);
+
         return TypedActionResult.success(stack, true);
     }
-    
+
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         List<Hand> hands = getAllHands();
         hands.remove(hand);
+        Hand otherHand = hands.get(0);
         ItemStack stack = user.getStackInHand(hand);
-        return user.isSneaking() ? withdraw(user, hand, stack, hands) : deposit(user, hand, stack, hands);
+        return user.isSneaking() ? withdraw(user, hand, stack, otherHand) : deposit(user, hand, stack, otherHand);
     }
 
     public int getStored(ItemStack stack) { return NBTHelper.getInt(stack, STORED_AMEL); }
@@ -120,36 +112,37 @@ public class AmelJar extends Item implements InventoryItem {
     }
 
     @Override
-    public boolean canAccess(Flags flags) {
-        return this.worksInHotbar ? true : !flags.canWorkIn(Flags.INVITEM, Flags.HOTBAR) &&
-                !flags.canWorkIn(Flags.INVITEM, Flags.INVENTORY);
+    public int drain(ItemStack stack, Predicate<ItemStack> predicate, int amount, boolean simulate) {
+        if (!this.predicateMatchesAmel(predicate)) return 0;
+
+        int stored = this.getStored(stack);
+        int taken = amount < 0 ? stored : Math.min(stored, amount);
+
+        int remainingInStore = this.getStored(stack) - taken;
+        if (!simulate) this.setStored(stack, remainingInStore);
+
+        return taken;
     }
     @Override
-    public int fetch(ItemStack stack, Predicate<Item> item) {
-        if (!item.test(ModItems.AMEL_ITEM)) return 0;
-        return this.getStored(stack);
+    public int give(ItemStack stack, Predicate<ItemStack> predicate, int amount, boolean simulate) {
+        if (!this.predicateMatchesAmel(predicate)) return 0;
+
+        int leftUntilMax = this.maxAmel - this.getStored(stack);
+        int given = amount < 0 ? leftUntilMax : Math.min(leftUntilMax, amount);
+
+        int hasNow = this.getStored(stack) + given;
+        if (!simulate) this.setStored(stack, hasNow);
+
+        return given;
     }
-    @Override
-    public int drain(ItemStack stack, Predicate<Item> item, int count) {
-        LOGGER.info("Testing.. " + item.test(ModItems.AMEL_ITEM));
-        if (!item.test(ModItems.AMEL_ITEM)) return count;
-        int takeAway = Math.min(this.getStored(stack), count);
-        int remainingInStore = this.getStored(stack) - takeAway;
-        int remainingToTake = count - takeAway;
-        this.setStored(stack, remainingInStore);
-        LOGGER.info("they are requesting " + count + " from us.");
-        LOGGER.info("we have " + remainingInStore + " left.");
-        LOGGER.info("we have given " + takeAway + ".");
-        LOGGER.info("they need " + remainingToTake + " more.");
-        return remainingToTake;
-    }
-    @Override
-    public int give(ItemStack stack, Predicate<Item> item, int count) {
-        if (!item.test(ModItems.AMEL_ITEM)) return count;
-        // by the power of the lord above my math will work
-        int give = Math.min(this.maxAmel - this.getStored(stack), count);
-        int remaining = Math.max(this.getStored(stack) + count - this.maxAmel, 0);
-        this.setStored(stack, this.getStored(stack) + give);
-        return remaining;
+
+    private boolean predicateMatchesAmel(Predicate<ItemStack> predicate) {
+        return either(
+            predicate,
+            new ItemStack(ModItems.AMEL_ITEM),
+            new ItemStack(ModItems.AMEL2_ITEM),
+            new ItemStack(ModItems.AMEL3_ITEM),
+            new ItemStack(ModItems.AMEL4_ITEM)
+        );
     }
 }

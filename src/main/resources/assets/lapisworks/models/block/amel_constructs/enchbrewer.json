@@ -1,6 +1,6 @@
 {
-	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
+	"parent": "block/block",
 	"textures": {
 		"base": "lapisworks:block/amel_constructs/enchbrewer/base",
 		"particle": "lapisworks:block/amel_constructs/enchbrewer/stand",

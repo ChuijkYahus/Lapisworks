@@ -32,6 +32,7 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -231,5 +232,16 @@ public class Holder extends BlockCircleComponent implements BlockEntityProvider 
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onStateReplaced(
+        BlockState state, World world, BlockPos pos, BlockState newState, boolean moved
+    ) {
+        if (state.getBlock() == newState.getBlock()) return;
+        if (!(world.getBlockEntity(pos) instanceof HolderEntity bE)) return;
+        ItemScatterer.spawn(world, pos, bE);
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 }

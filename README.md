@@ -1,10 +1,11 @@
+# Lapisworks
+[![powered by hexdoc](https://img.shields.io/endpoint?url=https://hexxy.media/api/v0/badge/hexdoc?label=1)](https://github.com/hexdoc-dev/hexdoc)
+
 The cool idea for Hex Casting was fun to bring into reality.  
 
 ### FOR CODE READERS:  
 - "What's the VAULT?"  
-    `Very Ass and Unnecessary but not use-Less Terminal (for items)`.  
     I use it to fetch, drain and give items. You don't need to use it at all.  
-    You can look at `VAULT.java`, but you shouldn't look at it's implementations like `PlayerVAULT.java` or `CastEnvVAULT.java` (cursed code that will reap your soul) unless you're trying to implement it for whatever cursed ass reason.  
     Prime example of usage in BeegInfusions.
 - "What's `Flags.java`?"  
     Part of the VAULT. It's used to filter where to search for items. Just trust that the formulae'll work lmao.  

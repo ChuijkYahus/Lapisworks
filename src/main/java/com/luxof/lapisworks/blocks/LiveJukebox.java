@@ -3,8 +3,6 @@ package com.luxof.lapisworks.blocks;
 import com.luxof.lapisworks.blocks.entities.LiveJukeboxEntity;
 import com.luxof.lapisworks.init.ModBlocks;
 
-import static com.luxof.lapisworks.Lapisworks.LOGGER;
-
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -43,7 +41,6 @@ public class LiveJukebox extends BlockWithEntity {
         BlockHitResult hit
     ) {
         LiveJukeboxEntity blockEntity = (LiveJukeboxEntity)world.getBlockEntity(pos);
-        LOGGER.info("trying to call startPlaying()!");
         blockEntity.startPlaying();
         return ActionResult.SUCCESS;
     }

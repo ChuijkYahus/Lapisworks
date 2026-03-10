@@ -140,6 +140,73 @@
             "input": "num, [pattern]",
             "output": "",
             "text": "pages.lapisworks.lapisworks_misc.execute_many_times.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:hadamard",
+            "anchor": "lapisworks:hadamard",
+            "input": "vec, vec",
+            "output": "vec",
+            "text": "pages.lapisworks.lapisworks_misc.hadamard.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "flag": "lapisworks:robbie_exalt0",
+            "op_id": "lapisworks:robbie_exalt0",
+            "anchor": "lapisworks:robbie_exalt0",
+            "input": "[any], int, any",
+            "output": "[any]",
+            "text": "pages.lapisworks.lapisworks_misc.robbie_exalt.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "flag": "lapisworks:robbie_exalt1",
+            "op_id": "lapisworks:robbie_exalt1",
+            "anchor": "lapisworks:robbie_exalt1",
+            "input": "[any], int, any",
+            "output": "[any]",
+            "text": "pages.lapisworks.lapisworks_misc.robbie_exalt.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "flag": "mod:hexdoc:web_only",
+            "op_id": "lapisworks:robbie_exalt",
+            "anchor": "lapisworks:robbie_exalt",
+            "input": "[any], int, any",
+            "output": "[any]",
+            "text": "pages.lapisworks.lapisworks_misc.robbie_exalt.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:thewhattropy",
+            "anchor": "lapisworks:thewhattropy",
+            "input": "[any]",
+            "output": "any",
+            "text": "pages.lapisworks.lapisworks_misc.thewhattropy.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:min",
+            "anchor": "lapisworks:min",
+            "input": "num, num",
+            "output": "num",
+            "text": "pages.lapisworks.lapisworks_misc.min.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:max",
+            "anchor": "lapisworks:max",
+            "input": "num, num",
+            "output": "num",
+            "text": "pages.lapisworks.lapisworks_misc.max.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:pull",
+            "anchor": "lapisworks:pull",
+            "input": "entity, vec, num",
+            "output": "",
+            "text": "pages.lapisworks.lapisworks_misc.pull.summary"
         }
     ]
 }

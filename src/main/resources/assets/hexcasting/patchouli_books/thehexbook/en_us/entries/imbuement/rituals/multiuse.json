@@ -1,0 +1,30 @@
+{
+    "name": "pages.lapisworks.imbuement.rituals.multiuse.title",
+    "icon": "lapisworks:textures/entries/multiuserituals.png",
+    "advancement": "lapisworks:got_lapis",
+    "category": "hexcasting:lapisworks/imbuement/rituals",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.rituals.multiuse.howto"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "lapisworks:base/ritus",
+            "text": "pages.lapisworks.imbuement.rituals.multiuse.ritus_recipe.text"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.rituals.multiuse.manual"
+        },
+        {
+            "type": "patchouli:image",
+            "images": [
+                "lapisworks:textures/entries/multiuseritualexample.png"
+            ],
+            "border": true,
+            "text": "pages.lapisworks.imbuement.rituals.multiuse.img_description"
+        }
+    ]
+}

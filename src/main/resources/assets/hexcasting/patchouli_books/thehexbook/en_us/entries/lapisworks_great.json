@@ -1,17 +1,17 @@
 {
     "name": "pages.lapisworks.lapisworks_great.title",
     "icon": "lapisworks:amel3",
-    "advancement": "hexcasting:enlightenment",
+    "advancement": "lapisworks:enlightened",
     "category": "hexcasting:lapisworks",
     "sortnum": 4,
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "pages.lapisworks.lapisworks_great.aahhhhelp"
+            "text": "pages.lapisworks.lapisworks_great.wtf"
         },
         {
             "type": "patchouli:text",
-            "text": "pages.lapisworks.lapisworks_great.explanation"
+            "text": "pages.lapisworks.lapisworks_great.butitrefused_alsodidtheyjusttrytokillme"
         },
         {
             "type": "hexcasting:pattern",
@@ -64,10 +64,6 @@
             "input": "entity",
             "output": "",
             "text": "pages.lapisworks.lapisworks_great.fireresist.summary"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "pages.lapisworks.lapisworks_great.imgonnagoliedownnow"
         }
     ]
 }

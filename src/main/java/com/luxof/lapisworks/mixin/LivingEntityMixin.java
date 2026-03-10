@@ -1,15 +1,22 @@
 package com.luxof.lapisworks.mixin;
 
+import com.google.common.collect.ImmutableMultimap;
+
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 
+import static com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes.ATTACK_RANGE;
+import static com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes.REACH;
 import static com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes.getAttackRange;
 import static com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes.getReachDistance;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
- 
+
+import com.luxof.lapisworks.actions.MoarReachYouBitch;
 import com.luxof.lapisworks.mixinsupport.DamageSupportInterface;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
+
+import static com.luxof.lapisworks.LapisworksIDs.REACH_ENHANCEMENT_UUID;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +31,7 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
@@ -75,7 +83,17 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 
 	@Unique @Override
 	public void setAmountOfAttrJuicedUpByAmel(EntityAttribute attribute, double value) {
-		this.juicedUpVals.getCustomInstance(attribute).setBaseValue(value);
+		EntityAttributeInstance juicedAttrInst = this.juicedUpVals.getCustomInstance(attribute);
+		EntityAttributeInstance attrInst = attributes.getCustomInstance(attribute);
+
+		if (attrInst != null) {
+			attrInst.setBaseValue(attrInst.getBaseValue() - juicedAttrInst.getBaseValue() + value);
+		}
+		juicedAttrInst.setBaseValue(value);
+	}
+	@Override @Unique
+    public void setJuicedAttrSpecifically(EntityAttribute attribute, double value) {
+		juicedUpVals.getCustomInstance(attribute).setBaseValue(value);
 	}
 
 	@Unique @Override
@@ -90,7 +108,32 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	@Unique @Override
 	public AttributeContainer getLapisworksAttributes() { return this.juicedUpVals; }
 	@Unique @Override
-	public void setLapisworksAttributes(AttributeContainer attributes) { this.juicedUpVals = attributes; }
+	public void setLapisworksAttributes(AttributeContainer toAttributes) {
+		setAmountOfAttrJuicedUpByAmel(
+			EntityAttributes.GENERIC_ATTACK_DAMAGE,
+			toAttributes.getBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)
+		);
+		setAmountOfAttrJuicedUpByAmel(
+			EntityAttributes.GENERIC_MAX_HEALTH,
+			toAttributes.getBaseValue(EntityAttributes.GENERIC_MAX_HEALTH)
+		);
+		setAmountOfAttrJuicedUpByAmel(
+			EntityAttributes.GENERIC_MOVEMENT_SPEED,
+			toAttributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)
+		);
+	}
+	/** on world load ragh */
+	@Unique
+	public void setJuiceOnWorldLoad(AttributeContainer toAttributes) {
+		juicedUpVals.getCustomInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE)
+			.setBaseValue(toAttributes.getBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
+
+		juicedUpVals.getCustomInstance(EntityAttributes.GENERIC_MAX_HEALTH)
+			.setBaseValue(toAttributes.getBaseValue(EntityAttributes.GENERIC_MAX_HEALTH));
+
+		juicedUpVals.getCustomInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)
+			.setBaseValue(toAttributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
+	}
 
 	@Unique @Override
 	public int getEnchant(int whatEnchant) {
@@ -141,7 +184,7 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 		for (int i = 0; i < this.enchantments.size(); i++) { this.enchantments.set(i, 0); }
 	}
 
-	// may be changed in the future, i think??
+	// may be changed in the future, idk.
 	@Unique @Override
 	public void copyCrossDeath(ServerPlayerEntity oldplr) {}
 
@@ -153,6 +196,42 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	}
 
 
+	@Inject(at = @At("TAIL"), method = "readCustomDataFromNbt")
+	public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
+		if (attributes != null && this.getWorld() != null && !this.getWorld().isClient) {
+
+			setJuiceOnWorldLoad(
+				new AttributeContainer(DefaultAttributeContainer.builder()
+					.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, nbt.getDouble("LAPISWORKS_JUICED_FISTS"))
+					.add(EntityAttributes.GENERIC_MAX_HEALTH, nbt.getDouble("LAPISWORKS_JUICED_SKIN"))
+					.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, nbt.getDouble("LAPISWORKS_JUICED_FEET"))
+					.build())
+			);
+
+			attributes.addTemporaryModifiers(
+				nbt.getBoolean("LAPISWORKS_JUICED_REACH") ?
+					ImmutableMultimap.of(
+						REACH, MoarReachYouBitch.REACH_MODIFIER,
+						ATTACK_RANGE, MoarReachYouBitch.ATTACK_REACH_MODIFIER
+					) : ImmutableMultimap.of()
+			);
+
+		}
+		setEnchantments(nbt.getIntArray("LAPISWORKS_ENCHANTMENTS"));
+	}
+
+	@Inject(at = @At("TAIL"), method = "writeCustomDataToNbt")
+	public void writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
+		AttributeContainer attrs = juicedUpVals;
+		nbt.putDouble("LAPISWORKS_JUICED_FISTS", attrs.getBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
+		nbt.putDouble("LAPISWORKS_JUICED_SKIN", attrs.getBaseValue(EntityAttributes.GENERIC_MAX_HEALTH));
+		nbt.putDouble("LAPISWORKS_JUICED_FEET", attrs.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
+		nbt.putIntArray("LAPISWORKS_ENCHANTMENTS", getEnchantments());
+		nbt.putBoolean(
+			"LAPISWORKS_JUICED_REACH",
+			attributes.hasModifierForAttribute(REACH, REACH_ENHANCEMENT_UUID)
+		);
+	}
 
 	// not sure i even need this
 	@Inject(at = @At("HEAD"), method = "onDeath")
@@ -188,7 +267,7 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	public int computeFallDamage(float fallDistance, float damageMultiplier, Operation<Integer> og) {
 		return og.call(
 			Math.max(
-				fallDistance - 10 * this.getEnchant(AllEnchantments.fallDmgRes),
+				fallDistance - 20 * this.getEnchant(AllEnchantments.fallDmgRes),
 				0
 			),
 			damageMultiplier

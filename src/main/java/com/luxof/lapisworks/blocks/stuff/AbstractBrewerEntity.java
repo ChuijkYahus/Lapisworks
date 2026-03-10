@@ -117,7 +117,8 @@ public abstract class AbstractBrewerEntity extends BlockEntity implements NamedS
         if (currentRecipes.size() <= 0) return;
 
         if (brewTime >= 0) brewTime -= 1;
-        markDirty();
+
+        this.markDirty();
     }
 
     @Override
