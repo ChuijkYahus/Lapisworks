@@ -11,7 +11,10 @@ import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import com.llamalad7.mixinextras.sugar.Local;
 
 import com.luxof.lapisworks.interop.hierophantics.data.Amalgamation;
+import com.luxof.lapisworks.interop.valkyrienskies.ValkyrienUtils;
 import com.luxof.lapisworks.mixinsupport.ChariotServerPlayer;
+
+import static com.luxof.lapisworks.Lapisworks.VALKYRIEN_SKIES_INTEROP;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,7 +118,12 @@ public class PatternIotaMixin2 {
             int usedAmalgams = sp.getUsedAmalgamsThisTick();
 
             for (Amalgamation amalgam : amalgams.subList(usedAmalgams, amalgams.size())) {
-                if (!thisPos.isInRange(spe.getPos(), amalgam.range))
+
+                double distance = VALKYRIEN_SKIES_INTEROP
+                    ? ValkyrienUtils.distance(comingFromWorld, thisPos, spe.getPos())
+                    : thisPos.distanceTo(spe.getPos());
+
+                if (distance > amalgam.range)
                     continue;
                 else if (amalgam.willCast())
                     amalgam.cast(spe, thisPos);

@@ -1,5 +1,42 @@
 package com.luxof.lapisworks;
 
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.PatternShapeMatch;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.math.HexCoord;
+import at.petrak.hexcasting.api.casting.math.HexDir;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
+import com.google.gson.JsonPrimitive;
+
+import com.luxof.lapisworks.init.LapisConfig;
+import com.luxof.lapisworks.init.LapisParticles;
+import com.luxof.lapisworks.init.LapisworksLoot;
+import com.luxof.lapisworks.init.ModBlocks;
+import com.luxof.lapisworks.init.ModEntities;
+import com.luxof.lapisworks.init.ModItems;
+import com.luxof.lapisworks.init.ModPOIs;
+import com.luxof.lapisworks.init.ModRecipes;
+import com.luxof.lapisworks.init.ModScreens;
+import com.luxof.lapisworks.init.Patterns;
+import com.luxof.lapisworks.init.ThemConfigFlags;
+import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.interop.hexal.Lapisal;
+import com.luxof.lapisworks.interop.hexical.Lapixical;
+import com.luxof.lapisworks.interop.hextended.Lapixtended;
+import com.luxof.lapisworks.interop.hierophantics.Chariot;
+import com.luxof.lapisworks.media.LinkableMediaBlock;
+import com.luxof.lapisworks.mixinsupport.GetStacks;
+
 import static com.luxof.lapisworks.LapisworksIDs.CANNOT_MODIFY_COST_TAG;
 import static com.luxof.lapisworks.LapisworksIDs.GRAND_RITUAL_BLACKLIST_TAG;
 import static com.luxof.lapisworks.LapisworksIDs.INFUSED_AMEL;
@@ -8,6 +45,12 @@ import static com.luxof.lapisworks.LapisworksIDs.MAINHAND;
 import static com.luxof.lapisworks.LapisworksIDs.OFFHAND;
 import static com.luxof.lapisworks.init.ThemConfigFlags.allPerWorldShapePatterns;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
+
+import dev.emi.emi.api.stack.EmiIngredient;
+import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.TrinketComponent;
+import dev.emi.trinkets.api.TrinketsApi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,50 +71,10 @@ import org.joml.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.JsonPrimitive;
-import com.luxof.lapisworks.init.LapisConfig;
-import com.luxof.lapisworks.init.LapisParticles;
-import com.luxof.lapisworks.init.LapisworksLoot;
-import com.luxof.lapisworks.init.ModBlocks;
-import com.luxof.lapisworks.init.ModEntities;
-import com.luxof.lapisworks.init.ModItems;
-import com.luxof.lapisworks.init.ModPOIs;
-import com.luxof.lapisworks.init.ModRecipes;
-import com.luxof.lapisworks.init.ModScreens;
-import com.luxof.lapisworks.init.Patterns;
-import com.luxof.lapisworks.init.ThemConfigFlags;
-import com.luxof.lapisworks.init.Mutables.Mutables;
-import com.luxof.lapisworks.interop.hexal.Lapisal;
-import com.luxof.lapisworks.interop.hexical.Lapixical;
-import com.luxof.lapisworks.interop.hextended.Lapixtended;
-import com.luxof.lapisworks.interop.hierophantics.Chariot;
-import com.luxof.lapisworks.media.LinkableMediaBlock;
-import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
-import com.luxof.lapisworks.mixinsupport.GetStacks;
-
-import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
-import at.petrak.hexcasting.api.casting.PatternShapeMatch;
-import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
-import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
-import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
-import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.math.HexCoord;
-import at.petrak.hexcasting.api.casting.math.HexDir;
-import at.petrak.hexcasting.api.casting.math.HexPattern;
-import at.petrak.hexcasting.api.pigment.FrozenPigment;
-import at.petrak.hexcasting.api.utils.HexUtils;
-import at.petrak.hexcasting.api.utils.NBTHelper;
-import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
-import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import dev.emi.emi.api.stack.EmiIngredient;
-import dev.emi.emi.api.stack.EmiStack;
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.TrinketComponent;
-import dev.emi.trinkets.api.TrinketsApi;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -92,6 +95,7 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+
 import vazkii.patchouli.api.PatchouliAPI;
 
 // why is this project actually big?
@@ -122,6 +126,7 @@ public class Lapisworks implements ModInitializer {
 	public static boolean HEXAL_INTEROP = false;
 	public static boolean HIEROPHANTICS_INTEROP = false;
 	public static boolean ONEIRONAUT_INTEROP = false;
+	public static boolean VALKYRIEN_SKIES_INTEROP = false;
 
 	public static void log(String text, Object... args) {
 		LOGGER.info(String.format(text, args));
@@ -173,7 +178,11 @@ public class Lapisworks implements ModInitializer {
 		}
 		if (isModLoaded("oneironaut")) {
 			ONEIRONAUT_INTEROP = true;
-			anyInterop = true;
+			//anyInterop = true;
+		}
+		if (isModLoaded("valkyrienskies")) {
+			VALKYRIEN_SKIES_INTEROP = true;
+			//anyInterop = true;
 		}
 
 		LapisConfig.renewCurrentConfig();
@@ -643,13 +652,6 @@ public class Lapisworks implements ModInitializer {
 
 	public static double getDistance(BlockPos pos1, BlockPos pos2) {
 		return Math.sqrt(pos2.getSquaredDistance(pos1));
-	}
-
-	public static boolean _shouldBreakSent(LivingEntity plr) {
-		EnchSentInterface eSentInterface = (EnchSentInterface)plr;
-		return eSentInterface.getEnchantedSentinel() == null ?
-			false :
-			plr.getPos().squaredDistanceTo(eSentInterface.getEnchantedSentinel()) > 32.0*32.0;
 	}
 
 	public static boolean testEmiIngredient(EmiIngredient ingredient, Item item) {

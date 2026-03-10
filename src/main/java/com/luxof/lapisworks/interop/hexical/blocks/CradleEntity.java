@@ -4,17 +4,15 @@ import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
 
 import com.luxof.lapisworks.interop.hexical.Lapixical;
 import com.luxof.lapisworks.interop.valkyrienskies.ValkyrienUtils;
-import com.luxof.lapisworks.mixinsupport.GetServerStatus;
 import com.luxof.lapisworks.media.MediaTransferInterface;
 import com.luxof.lapisworks.mixinsupport.ItemEntityMinterface;
 
+import static com.luxof.lapisworks.Lapisworks.VALKYRIEN_SKIES_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.isInCradle;
 import static com.luxof.lapisworks.Lapisworks.putInCradle;
 import static com.luxof.lapisworks.Lapisworks.removeFromCradle;
 
 import java.util.UUID;
-
-import net.fabricmc.loader.api.FabricLoader;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -119,7 +117,7 @@ public class CradleEntity extends BlockEntity implements Inventory, MediaTransfe
         if (heldEntity == null) return;
         Vec3d pos = this.pos.toCenterPos();
         heldEntity.setPosition(pos);
-        if (FabricLoader.getInstance().isModLoaded("valkyrienskies"))
+        if (VALKYRIEN_SKIES_INTEROP)
             ValkyrienUtils.setEntityToShipyard(heldEntity, pos);
         heldEntity.noClip = true;
         heldEntity.setNeverDespawn();

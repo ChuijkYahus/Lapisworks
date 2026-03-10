@@ -206,6 +206,7 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
       with Oneironaut
     - Simple Minds, when infused into the air, produce a wandering wisp
 # 1.5.8
+huge thanks to the folks over at Hexwoven for somehow putting with my BS and testing this mod :sob: (@oceanicdisturbance @teal_wolf_25 @meepoffaith @moss134 @rose.sylvanis)
 (put that one image here:)
 I'm delaying this update to the next level.  
 Only the devs who can keep up with me...   
@@ -241,9 +242,9 @@ Only the devs who can keep up with me...
   - alternative name: Noetic Lapidary
   - costs one amethyst shard in media, and at least two lapis in item form in your other hand
   - converts the two lapis into one amethyst (overflow of 1 lapis is consumed)
-- Minimum and Maximum Distillations (it's just `min(n1, n2)` and `max(n1, n2)`)
+- Minimum and Maximum Distillations (it's just `min(n1, n2)` and `max(n1, n2)`) (i'm aware of the name :troll:)
 - Mintiest and Kitkat's Gambits (`for i in range(n):`)
-- Negentropy Reflection (Entropy Reflection but 0 inclusive to 1 exclusive)
+- Dealer's Purification (pick random, cool name)
 - Pull (spell)
   - Impulse constantly for X ticks after Y ticks
   - Ever wanted to do a curve shot?
@@ -251,12 +252,11 @@ Only the devs who can keep up with me...
 - Scrying patterns for blocks added by the mod.
 - Scrying lens overlays
 - Simple Mind Infusions now have (basic) datapacking support.
-- Slate Imprinter
 ## Changes:
 - 3D models of some blocks (and maybe an item or two?) look a little better
 - Book reformatting and extra documentation and shit
   - e.g. Villager un-flaying is actually documented now
-  - also thanks to @pool.critter and @rose.sylvanis
+  - also thanks to @pool.critter and @rose.sylvanis for correcting a lot of my mistakes
 - Deposit Media and Withdraw Media work conveniently now
 - Enchanted Sentinels actually use your base ambit instead of a flat 32 blocks around you
 - Enchanted Slipways got changed to have nearly precisely 2x slipway wisp spawn rate  
@@ -266,26 +266,26 @@ Only the devs who can keep up with me...
   buff has also been removed
 - May have done some funkies with the media spells (relocated and added entity support etc.)
 - Mishap messages n shit
-- Pattern name changes (particularly in the necklace RW patterns)
+- Pattern name changes (particularly in the necklace RW patterns and also Inner Media Purification)
 - Wizard lore is a lil diff (they are no longer outright evil as fuck)
 - You can now disenchant yourself with the Enchant X patterns
 - You can't read an Ancient Tome before you have gotten Lapisworks Research now
-- You don't need Amel if in creative now
+- You don't need any item required in your inv by a spell if in creative now
 ## Fixes:
 - Amel Jar bug
 - Ancient Tomes giving you the advancement anyway despite showing the message if you dont have lapis yet
-- Attributes no longer compound when you log
+- Attributes no longer compound when you relog (kys ingame to reset)
 - "Bug in the mod" mishaps
 - Cradle is fixed now (no dupes, no bugs on world load etc.)
-- Enhancements stacking on world join (you need to kys ingame to reset tho)
 - Deposit Media and Withdraw Media actually take doubles now, not just integers
 - Deposit Media can no longer be healthcasted, nor can it draw from Inexhaustible Phials or Trinkets!
 - Enchanted Slipways having a tendency to move 0.01f more in +XYZ than -XYZ (lmao)
 - Enchantments not carrying across dimensions (:broken_heart:)
 - Enchantment & Enhancement Purification's order of arguments being flipped
 - Enhancement Purification actually trying to check the react attribute of a non-player
+  - hey past me what the fuck is a react attribute
 - Geode Dowser takes no media if you're in creative
-- Handed Prison didn't drop blocks wtf
+- Handed Prison didn't drop its items wtf
 - Imbue Amel prioritizes your left hand always instead of following whichever recipe came first  
   (was a bug where Imbue Amel would rather imbue a staff over a jar)
 - Live Jukebox top texture good again
@@ -293,8 +293,7 @@ Only the devs who can keep up with me...
 - Media Condensing Units not dropping sometimes (e.g. with Break Block) and Empty Units not dropping in general
 - Raycasting (Empty or Visible Distillation) would sometimes freeze your server (for alexyzer at least)
 - Rebound Slate simple mind infusion recipe exists again
-- Rifts (Enchanted Slipways) should not change rotations since birth now
-- Shit should actually tell you when you don't have Fabric now
+- Shit should actually tell you when you don't have Trinkets now
 - Sieve Thoughts not working on a spell circle
 - Sieve Thoughts not working sometimes (I think I fixed that)
 - Simple Impetus recipe in EMI not showing it required some amel to do
@@ -315,16 +314,18 @@ Only the devs who can keep up with me...
     - they're called "Jacks" because they're jacks of all trades
 - EMI
   - You can now see Imbue Amel, Mold Amel and (most) Simple Mind Infusion recipes in EMI
-  - You can also see BeegInfusion recipes in EMI
 - Hexical
   - the Cradle's item actually has a big hitbox now
   - the Media Jar and the Cradle are targets for Deposit Media, Withdraw Media and
-    Condensed Media Prfn.
+    Inner Media Prfn.
 - Hexal
   - Wisps work with the media patterns
   - Wisps can hold an item now
+- Valkyrien Skies
+  - basically shit works
 # 1.5.9
 ### Free me
+- Slate Imprinter
 - Amethyst Piano
 - Enchant stack size (+64 every upgrade)
 - Heal your mind after breaking it. (Jacked O' Lantern finale)

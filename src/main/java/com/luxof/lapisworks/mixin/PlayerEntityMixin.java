@@ -1,12 +1,11 @@
 package com.luxof.lapisworks.mixin;
 
+import at.petrak.hexcasting.common.lib.HexAttributes;
 
 import com.luxof.lapisworks.interop.valkyrienskies.ValkyrienUtils;
 
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
-
-import net.fabricmc.loader.api.FabricLoader;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -15,6 +14,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import static com.luxof.lapisworks.Lapisworks.VALKYRIEN_SKIES_INTEROP;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -43,11 +44,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements EnchSent
     @Unique @Override
     public boolean shouldBreakSent() {
         double casterAmbit = ((LivingEntity)this).getAttributeValue(HexAttributes.AMBIT_RADIUS);
-        return this.getEnchantedSentinel() == null ?
-            false :
-                (FabricLoader.getInstance().isModLoaded("valkyrienskies") ?
-                        ValkyrienUtils.distance(getWorld(), this.getPos(), this.getEnchantedSentinel()) :
-                        this.getPos().distanceTo(this.getEnchantedSentinel())) > casterAmbit;
+        return this.getEnchantedSentinel() == null
+            ? false
+            : (VALKYRIEN_SKIES_INTEROP
+                ? ValkyrienUtils.distance(getWorld(), this.getPos(), this.getEnchantedSentinel())
+                : this.getPos().distanceTo(this.getEnchantedSentinel()))
+                    > casterAmbit;
     }
     @Unique @Override
     public void breakSent() {
