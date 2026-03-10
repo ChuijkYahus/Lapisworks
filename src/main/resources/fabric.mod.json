@@ -10,7 +10,7 @@
 	"contact": {
 		"sources": "https://github.com/Real-Luxof/Lapisworks"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/lapisworks/icon.png",
 	"environment": "*",
 	"entrypoints": {
