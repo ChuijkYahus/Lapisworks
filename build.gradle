@@ -60,13 +60,16 @@ repositories {
 	maven { url "https://maven.jamieswhiteshirt.com/libs-release" }
 	maven { url "https://mvn.devos.one/snapshots/" }
 	maven { url "https://maven.architectury.dev/" }
-	maven {
-		name = "Valkyrien Skies Internal"
-		url = 'https://maven.valkyrienskies.org'
-	}
 	maven { url "https://pool.net.eu.org/" } // blamejared WHAT THE FUCK
 	maven { url "https://maven.blamejared.com" }
 	maven { url "https://jitpack.io" }
+	maven {
+		name "Valkyrien Skies Internal"
+		url 'https://maven.valkyrienskies.org'
+		content {
+			excludeGroup("org.jetbrains")
+		}
+	}
 }
 
 loom {

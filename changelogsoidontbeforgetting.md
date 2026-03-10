@@ -206,11 +206,12 @@ Was I fucking LAZY before and after??? (Note from future me: yes.)
       with Oneironaut
     - Simple Minds, when infused into the air, produce a wandering wisp
 # 1.5.8
-huge thanks to the folks over at Hexwoven for somehow putting with my BS and testing this mod :sob: (@oceanicdisturbance @teal_wolf_25 @meepoffaith @moss134 @rose.sylvanis)
-(put that one image here:)
+huge thanks to the folks over at [Hexwoven](https://modrinth.com/server/hexwoven-server) for somehow putting with my BS and testing this mod :sob: (@oceanicdisturbance @teal_wolf_25 @meepoffaith @moss134 @rose.sylvanis)  
+
 I'm delaying this update to the next level.  
 Only the devs who can keep up with me...   
-...Will get to see their 2000 emerald paycheck.
+...Will get to see their 2000 emerald paycheck.  
+
 ## Additions:
 - Amethyst/Chalk Rituals (pre-enlightenment)  
   - same-plane-only (no wall-to-floor or wall-to-ceiling etc.)
@@ -232,6 +233,8 @@ Only the devs who can keep up with me...
   - onetimeritual_burn_blacklist: blacklists blocks from being burned by one time rituals when stepped over.
 - chalk_connectable block tag (all chalk attempts to connect to blocks in this tag)
 - Config! See your `.minecraft/config/lapisworks.json`.
+- Disenchant
+- Dealer's Purification (pick random, added because it has a cool name)
 - Enchanted Brewery
   - Imbue 10 Amel into a Brewing Stand
   - 1.5x blaze usage for 2x speed
@@ -242,9 +245,8 @@ Only the devs who can keep up with me...
   - alternative name: Noetic Lapidary
   - costs one amethyst shard in media, and at least two lapis in item form in your other hand
   - converts the two lapis into one amethyst (overflow of 1 lapis is consumed)
-- Minimum and Maximum Distillations (it's just `min(n1, n2)` and `max(n1, n2)`) (i'm aware of the name :troll:)
+- Minimum and Maximum Distillations (it's just `min(n1, n2)` and `max(n1, n2)`) (i'm aware of the names :troll:)
 - Mintiest and Kitkat's Gambits (`for i in range(n):`)
-- Dealer's Purification (pick random, cool name)
 - Pull (spell)
   - Impulse constantly for X ticks after Y ticks
   - Ever wanted to do a curve shot?
@@ -296,7 +298,6 @@ Only the devs who can keep up with me...
 - Shit should actually tell you when you don't have Trinkets now
 - Sieve Thoughts not working on a spell circle
 - Sieve Thoughts not working sometimes (I think I fixed that)
-- Simple Impetus recipe in EMI not showing it required some amel to do
 - Villager un-flaying does not preserve levels anymore
 - Visible Distillation and Empty Distillation should be a lot more optimized now (not that you'll notice it lmao)
 - Withdraw Media bug
