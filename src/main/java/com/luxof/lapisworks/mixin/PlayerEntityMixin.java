@@ -1,9 +1,12 @@
 package com.luxof.lapisworks.mixin;
 
+
+import com.luxof.lapisworks.interop.valkyrienskies.ValkyrienUtils;
+
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 
-import static com.luxof.lapisworks.Lapisworks._shouldBreakSent;
+import net.fabricmc.loader.api.FabricLoader;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -39,7 +42,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements EnchSent
     }
     @Unique @Override
     public boolean shouldBreakSent() {
-        return _shouldBreakSent((LivingEntity)this);
+        double casterAmbit = ((LivingEntity)this).getAttributeValue(HexAttributes.AMBIT_RADIUS);
+        return this.getEnchantedSentinel() == null ?
+            false :
+                (FabricLoader.getInstance().isModLoaded("valkyrienskies") ?
+                        ValkyrienUtils.distance(getWorld(), this.getPos(), this.getEnchantedSentinel()) :
+                        this.getPos().distanceTo(this.getEnchantedSentinel())) > casterAmbit;
     }
     @Unique @Override
     public void breakSent() {

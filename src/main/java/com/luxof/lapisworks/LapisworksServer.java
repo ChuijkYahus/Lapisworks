@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import io.netty.buffer.Unpooled;
 import kotlin.Pair;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -55,9 +56,11 @@ public class LapisworksServer {
         Vec3d sentPos = ((EnchSentInterface)player).getEnchantedSentinel();
         Double sentAmbit = ((EnchSentInterface)player).getEnchantedSentinelAmbit();
         if (sentPos == null) { return; }
-        PacketByteBuf buf = PacketByteBufs.create();
+        PacketByteBuf buf = PacketByteBufs.copy(Unpooled.buffer());
         buf.writeBoolean(false);
-        buf.writeVector3f(sentPos.toVector3f());
+        buf.writeDouble(sentPos.x);
+        buf.writeDouble(sentPos.y);
+        buf.writeDouble(sentPos.z);
         buf.writeDouble(sentAmbit);
         ServerPlayNetworking.send(player, SEND_SENT, buf);
     }

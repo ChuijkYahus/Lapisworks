@@ -2,12 +2,17 @@ package com.luxof.lapisworks.client;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
 
+import com.luxof.lapisworks.interop.valkyrienskies.ValkyrienUtils;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import java.util.List;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-import com.mojang.blaze3d.systems.RenderSystem;
+import net.fabricmc.loader.api.FabricLoader;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
@@ -17,14 +22,17 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat.DrawMode;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 
+import net.minecraft.util.math.Vec3i;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Matrix4d;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.valkyrienskies.mod.common.util.VectorConversionsMCKt;
 
 public class THEGRANDROTATER {
     public static Matrix4f makeMatrix4f(
@@ -131,16 +139,30 @@ public class THEGRANDROTATER {
         MinecraftClient mc = MinecraftClient.getInstance();
         Camera cam = mc.gameRenderer.getCamera();
         Vec3d camPos = cam.getPos();
-        ms.translate(
-            sentinel.x - camPos.x,
-            sentinel.y - camPos.y,
-            sentinel.z - camPos.z
-        ); 
+        if (FabricLoader.getInstance().isModLoaded("valkyrienskies")) {
+            Vec3d worldspace = ValkyrienUtils.toWorldspace(mc.world, sentinel);
+            ms.translate(
+                    worldspace.x - camPos.x,
+                    worldspace.y - camPos.y,
+                    worldspace.z - camPos.z
+            );
+        } else {
+            ms.translate(
+                    sentinel.x - camPos.x,
+                    sentinel.y - camPos.y,
+                    sentinel.z - camPos.z
+            );
+        }
 
         float time = ClientTickCounter.getTotal() / 2; // why not? it's perfectly useable
         Matrix4f rotationMatrix = COMPUTETHEGRANDMATRIX(time);
 
+        if (FabricLoader.getInstance().isModLoaded("valkyrienskies")) {
+            Vec3d shipScale = ValkyrienUtils.getShipScale(mc.world, sentinel);
+            ms.scale((float) shipScale.x, (float) shipScale.y, (float) shipScale.z);
+        }
         ms.scale(2.0f, 2.0f, 2.0f);
+
 
         Matrix4f matrix = ms.peek().getPositionMatrix();
         Matrix3f normalMatrix = ms.peek().getNormalMatrix();

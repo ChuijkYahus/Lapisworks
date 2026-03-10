@@ -15,14 +15,20 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapUnenlightened;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.common.lib.HexAttributes;
 
+import com.luxof.lapisworks.interop.valkyrienskies.ValkyrienUtils;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 
 import static com.luxof.lapisworks.LapisworksIDs.SEND_SENT;
 
 import java.util.List;
 
+import io.netty.buffer.Unpooled;
+
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
+
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -42,8 +48,13 @@ public class CreateEnchSent implements SpellAction {
             throw new MishapUnenlightened();
 
         Vec3d pos = OperatorUtils.getVec3(args, 0, getArgc());
+        double distance;
+        if (FabricLoader.getInstance().isModLoaded("valkyrienskies"))
+            distance = ValkyrienUtils.distance(ctx.getWorld(), caster.getPos(), pos);
+        else
+            distance = caster.getPos().distanceTo(pos);
         double casterAmbit = caster.getAttributeValue(HexAttributes.AMBIT_RADIUS);
-        if (caster.getPos().squaredDistanceTo(pos) > casterAmbit*casterAmbit) {
+        if (distance > casterAmbit*casterAmbit) {
             // you will NOT fuck with this to do better sent walk!
             throw new MishapBadLocation(pos, "too_far");
         }
@@ -73,9 +84,12 @@ public class CreateEnchSent implements SpellAction {
 		public void cast(CastingEnvironment ctx) {
             ((EnchSentInterface)this.caster).setEnchantedSentinel(this.pos, this.ambit);
             // can you tell i have no clue what the fuck i'm doing?
-            PacketByteBuf buf = PacketByteBufs.create();
+            PacketByteBuf buf = PacketByteBufs.copy(Unpooled.buffer());
             buf.writeBoolean(false);
-            buf.writeVector3f(this.pos.toVector3f());
+            buf.writeDouble(this.pos.x);
+            buf.writeDouble(this.pos.y);
+            buf.writeDouble(this.pos.z);
+            //buf.writeVector3f(this.pos.toVector3f());
             buf.writeDouble(this.ambit);
             // "this code runs on the server, so the caster must be a ServerPlayerEntity"
             //   -my dumbass praying this code doesn't explode in my face
