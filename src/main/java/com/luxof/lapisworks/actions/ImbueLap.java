@@ -42,13 +42,13 @@ public class ImbueLap extends SpellActionNCT {
         if (LapisConfig.getCurrentConfig().getSpellSettings().allow_reclaim_amethyst()) {
 
             int got = ((GetVAULT)ctx).grabVAULT().drain(
-                Mutables::isAmel,
+                ImbueLap::isLapis,
                 count,
                 true,
                 Flags.PRESET_EVERYTHING
             );
             if (got < count)
-                throw new MishapNotEnoughItems(AMEL, got, count);
+                throw new MishapNotEnoughItems(Items.LAPIS_LAZULI.getName(), got, count);
 
         }
 

@@ -324,6 +324,9 @@ Only the devs who can keep up with me...
   - Wisps can hold an item now
 - Valkyrien Skies
   - basically shit works
+# 1.5.8.1-HOTFIX
+- Change $(item)Diamond$() to just Diamond in that one title (zh_cn too)  
+- Imbue Lapis takes lapis again (how this shit appears out of thin air will forever elude me)  
 # 1.5.9
 ### Free me
 - Slate Imprinter
