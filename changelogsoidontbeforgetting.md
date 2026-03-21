@@ -327,15 +327,37 @@ Only the devs who can keep up with me...
 # 1.5.8.1-HOTFIX
 - Change $(item)Diamond$() to just Diamond in that one title (zh_cn too)  
 - Imbue Lapis takes lapis again (how this shit appears out of thin air will forever elude me)  
+# 1.5.8.2
+- fixed Deposit Media crashing on wisps
+- fixed Withdraw Media *depositing into* blocks instead of *withdrawing from* them. (mfw one word typo)
+- Slate Imprinter
+- Start one-time rituals with Deposit Media
+- Impeti can refuel from Media Condenser networks even with Heimdall's Gambit
+- Hexcessible shows neither the per world shape patterns* nor the Archon of Meaninglessness  
+  \*: until learned
+- Imbue Lapis II which takes item entities instead of Lapis and Amethyst from your inventory
+- hexdoc doesn't show the wrong shit for Robbie's Exaltation
+# 1.5.8.3
+- Make Amalgamations more convenient to work with
+- Totem necklace
+  - imbue one with amel
+  - heals you back to only half a heart
+  - casts a pre-defined hex upon activation
+- item that erases the patterns around you
+  - "chain" item that may be worn on both necklace and ring slots
+  - they're chokers (thanks sylvanis)
+  - conceals the invis particle fx
 # 1.5.9
 ### Free me
-- Slate Imprinter
+- Hexical interop
+  - every key is telepathy-able
 - Amethyst Piano
-- Enchant stack size (+64 every upgrade)
+- Enchant item stack size (+64 every upgrade)
 - Heal your mind after breaking it. (Jacked O' Lantern finale)
 - Alchemy/potion-brewing overhaul (I'm deadass)  
   herb stuff that leads to discovering Alchemy?  
   cauldron brewing! (definitely probably a part of herb stuff!)
+  "imbue amel into flowers to get seeds for special lapis herbs or something?" -Ragna
 - Destroy Mind spell, reverts a simple mind infusion
 - Oneironaut interop (you will shit your pants playing Lapisworks and you will like it)  
   so you like Subnautica?  
@@ -361,10 +383,6 @@ Only the devs who can keep up with me...
 - Reroll enchantment selection in the table!
   - costs 1 charged am + 1 per previous cast
   - reset the additional cost by manually enchanting with an enchantment table
-- Start one-time rituals with Deposit Media
-- Hierophantics interop
-  - new amalgamation to inject a FrameEval when your iota is used in the arguments of a pattern (and it doesn't mishap)
-  - pushes the pattern used to the top
 # 1.6.0
 ### And Alexander wept, for there were no more worlds to conquer.
 - You can have four arms now (procrastination slain)
@@ -458,6 +476,7 @@ port twokai's ideal condition
 Ra's Gambit
 - think up something motherfucker
 - this name is way too fucking cool not to use!  
+- oh, makes embedding extremely easy!
 Gene Editing (as an extension of the 4-arm-getting system) and Entity Creation
 - making yourself a vampire is possible  
 

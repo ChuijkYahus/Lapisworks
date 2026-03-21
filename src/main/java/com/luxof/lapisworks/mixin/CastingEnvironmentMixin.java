@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -71,13 +72,12 @@ public abstract class CastingEnvironmentMixin implements GetStacks, GetVAULT {
         if (!((Object)this instanceof CircleCastEnv)) return cost;
         CircleCastEnv env = (CircleCastEnv)(Object)this;
         long interactAmount = interactWithLinkableMediaBlocks(
-            env.getWorld(),
+            (ServerWorld)env.getImpetus().getWorld(),
             Set.of(env.circleState().impetusPos),
             cost,
             false,
             simulate
         );
-        //LOGGER.info("cost, interactAmount: " + cost + ", " + interactAmount);
         cost -= interactAmount;
         return cost;
     }
