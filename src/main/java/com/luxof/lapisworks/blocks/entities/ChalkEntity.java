@@ -3,6 +3,7 @@ package com.luxof.lapisworks.blocks.entities;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 
 import com.luxof.lapisworks.blocks.stuff.AttachedBE;
+import com.luxof.lapisworks.blocks.stuff.IChalkBE;
 import com.luxof.lapisworks.chalk.RitualCastEnv;
 import com.luxof.lapisworks.chalk.RitualComponent;
 import com.luxof.lapisworks.init.ModBlocks;
@@ -22,7 +23,7 @@ import net.minecraft.util.math.Direction;
 
 import org.jetbrains.annotations.Nullable;
 
-public class ChalkEntity extends BlockEntity implements AttachedBE, RitualComponent {
+public class ChalkEntity extends BlockEntity implements AttachedBE, RitualComponent, IChalkBE {
     public ChalkEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.CHALK_ENTITY_TYPE, pos, state);
     }

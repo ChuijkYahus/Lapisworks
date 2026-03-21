@@ -135,7 +135,7 @@ public class Withdraw extends SpellActionNCT {
                     ctx.getWorld(),
                     ImmutableSet.of(pos),
                     amount,
-                    true,
+                    false,
                     false
                 )
             );

@@ -151,7 +151,7 @@
         },
         {
             "type": "hexcasting:pattern",
-            "flag": "lapisworks:robbie_exalt0",
+            "flag": "&lapisworks:robbie_exalt0,!mod:hexdoc:web_only",
             "op_id": "lapisworks:robbie_exalt0",
             "anchor": "lapisworks:robbie_exalt0",
             "input": "[any], int, any",
@@ -160,7 +160,7 @@
         },
         {
             "type": "hexcasting:pattern",
-            "flag": "lapisworks:robbie_exalt1",
+            "flag": "&lapisworks:robbie_exalt1,!mod:hexdoc:web_only",
             "op_id": "lapisworks:robbie_exalt1",
             "anchor": "lapisworks:robbie_exalt1",
             "input": "[any], int, any",

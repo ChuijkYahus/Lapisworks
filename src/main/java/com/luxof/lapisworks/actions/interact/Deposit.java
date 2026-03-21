@@ -4,11 +4,12 @@ import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv;
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster;
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughMedia;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.google.common.collect.ImmutableSet;
-
+import com.luxof.lapisworks.blocks.stuff.IChalkBE;
 import com.luxof.lapisworks.media.LinkableMediaBlock;
 import com.luxof.lapisworks.media.MediaTransferInterface;
 import com.luxof.lapisworks.mixin.PlayerBasedCastEnvAccessor;
@@ -18,7 +19,6 @@ import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 import static com.luxof.lapisworks.Lapisworks.ONEIRONAUT_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.fullLinkableMediaBlocksInteraction;
 import static com.luxof.lapisworks.Lapisworks.interactWithLinkableMediaBlocks;
-import static com.luxof.lapisworks.Lapisworks.log;
 import static com.luxof.lapisworks.interop.oneironaut.FuckingInexhaustiblePhials.getBottomlessContrib;
 
 import java.util.ArrayList;
@@ -75,6 +75,18 @@ public class Deposit extends SpellActionNCT {
 
             long cost = (long)(1.1*realAmount);
             assertNoFunnyMedia(cost);
+
+            if (lmb instanceof IChalkBE chalk) {
+                if (!(ctx instanceof PlayerBasedCastEnv))
+                    throw new MishapBadCaster();
+
+                return new SpellAction.Result(
+                    new StartOneTimeRitualSpell(chalk, realAmount),
+                    cost,
+                    particles,
+                    1
+                );
+            }
 
             return new SpellAction.Result(
                 new LMBSpell(pos, realAmount),
@@ -133,5 +145,20 @@ public class Deposit extends SpellActionNCT {
                 true
             );
 		}
+    }
+
+    public class StartOneTimeRitualSpell implements RenderedSpellNCT {
+        public final IChalkBE chalk;
+        public final long amount;
+
+        public StartOneTimeRitualSpell(IChalkBE chalk, long amount) {
+            this.chalk = chalk;
+            this.amount = amount;
+        }
+
+        @Override
+        public void cast(CastingEnvironment ctx) {
+            chalk.startCast(amount, (PlayerBasedCastEnv)ctx);
+        }
     }
 }
