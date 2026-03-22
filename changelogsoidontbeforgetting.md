@@ -328,15 +328,16 @@ Only the devs who can keep up with me...
 - Change $(item)Diamond$() to just Diamond in that one title (zh_cn too)  
 - Imbue Lapis takes lapis again (how this shit appears out of thin air will forever elude me)  
 # 1.5.8.2
+- book.
 - fixed Deposit Media crashing on wisps
 - fixed Withdraw Media *depositing into* blocks instead of *withdrawing from* them. (mfw one word typo)
-- Slate Imprinter
-- Start one-time rituals with Deposit Media
-- Impeti can refuel from Media Condenser networks even with Heimdall's Gambit
-- Hexcessible shows neither the per world shape patterns* nor the Archon of Meaninglessness  
+- Deposit Media can start one-time rituals if used on chalk now
+- Hexcessible shows neither the per world shape patterns* nor unintended stuff  
   \*: until learned
-- Imbue Lapis II which takes item entities instead of Lapis and Amethyst from your inventory
 - hexdoc doesn't show the wrong shit for Robbie's Exaltation
+- Impeti can refuel from Media Condenser networks even with Heimdall's Gambit
+- Imbue Lapis II (takes item entities instead of Lapis and Amethyst from your inventory)
+- Slate Imprinter
 # 1.5.8.3
 - Make Amalgamations more convenient to work with
 - Totem necklace
@@ -347,6 +348,10 @@ Only the devs who can keep up with me...
   - "chain" item that may be worn on both necklace and ring slots
   - they're chokers (thanks sylvanis)
   - conceals the invis particle fx
+ - focus necklaces can be on dogs, cats, foxes, or allays
+  - putting a vector in it = animal wanna go there
+  - put entity in it = dog attack
+    - item entity = fox or allay pick up
 # 1.5.9
 ### Free me
 - Hexical interop

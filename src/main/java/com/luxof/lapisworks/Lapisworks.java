@@ -127,6 +127,7 @@ public class Lapisworks implements ModInitializer {
 	public static boolean HIEROPHANTICS_INTEROP = false;
 	public static boolean ONEIRONAUT_INTEROP = false;
 	public static boolean VALKYRIEN_SKIES_INTEROP = false;
+	public static boolean HEXCESSIBLE_INTEROP = false;
 
 	public static void log(String text, Object... args) {
 		LOGGER.info(String.format(text, args));
@@ -182,6 +183,10 @@ public class Lapisworks implements ModInitializer {
 		}
 		if (isModLoaded("valkyrienskies")) {
 			VALKYRIEN_SKIES_INTEROP = true;
+			//anyInterop = true;
+		}
+		if (isModLoaded("hexcessible")) {
+			HEXCESSIBLE_INTEROP = true;
 			//anyInterop = true;
 		}
 

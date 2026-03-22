@@ -17,15 +17,10 @@ import com.luxof.lapisworks.recipes.SMindInfusionRec;
 
 import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.LapisworksIDs.AMEL_TAG;
-import static com.luxof.lapisworks.LapisworksIDs.ENCHSENT_ADVANCEMENT;
-import static com.luxof.lapisworks.LapisworksIDs.FLAY_ARTMIND_ADVANCEMENT;
-import static com.luxof.lapisworks.LapisworksIDs.HASTENATURE_ADVANCEMENT;
 import static com.luxof.lapisworks.LapisworksIDs.POTION_TAG;
-import static com.luxof.lapisworks.LapisworksIDs.QUENCHED_INDIGO_ADVANCEMENT;
 
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +38,8 @@ public class Mutables {
     /** hello, modifying this value without registering the arms in CastingEnvironment#getPrimaryStacks
      * may cause crashes */
     public static int maxHands = 2;
-    public static List<Identifier> wizardDiariesGainableAdvancements = new ArrayList<>();
+    /** maps advancement ID to pwshape pattern generic ID. */
+    public static HashMap<Identifier, String> wizardDiariesGainableAdvancements = new HashMap<>();
 
     public static boolean isAmel(ItemStack stack) { return stack.isEmpty() ? false : stack.isIn(AMEL_TAG); }
     public static boolean isAmel(Item item) { return isAmel(new ItemStack(item)); }
@@ -179,10 +175,18 @@ public class Mutables {
 
     public static void innitBruv() {
         // i wonder if i could move this and make it be almost completely data-driven?
-        wizardDiariesGainableAdvancements.add(ENCHSENT_ADVANCEMENT);
-        wizardDiariesGainableAdvancements.add(FLAY_ARTMIND_ADVANCEMENT);
-        wizardDiariesGainableAdvancements.add(HASTENATURE_ADVANCEMENT);
-        wizardDiariesGainableAdvancements.add(QUENCHED_INDIGO_ADVANCEMENT);
+        wizardDiariesGainableAdvancements.put(
+            id("rediscover_enchsent"), "lapisworks:create_enchsent"
+        );
+        wizardDiariesGainableAdvancements.put(
+            id("rediscover_flay_artmind"), "lapisworks:flay_artmind"
+        );
+        wizardDiariesGainableAdvancements.put(
+            id("rediscover_hastenature"), "lapisworks:hastenature"
+        );
+        wizardDiariesGainableAdvancements.put(
+            id("rediscover_quenched_indigo"), "lapisworks:quenched_indigo"
+        );
 
         SMindInfusions.put(id("base/mind_infusion/simple_impetus"), new MakeSimpleImpetus());
         SMindInfusions.put(id("base/mind_infusion/deflay_villager"), new UnflayVillager());

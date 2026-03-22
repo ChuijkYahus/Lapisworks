@@ -59,10 +59,6 @@ public class LapisworksIDs {
     public static final TagKey<ActionRegistryEntry> CANNOT_MODIFY_COST_TAG = TagKey.of(HexRegistries.ACTION, CANNOT_MODIFY_COST_TAG_ID); // futureproof
 
     // advancements
-    public static final Identifier ENCHSENT_ADVANCEMENT = id("rediscover_enchsent");
-    public static final Identifier FLAY_ARTMIND_ADVANCEMENT = id("rediscover_flay_artmind");
-    public static final Identifier HASTENATURE_ADVANCEMENT = id("rediscover_hastenature");
-    public static final Identifier QUENCHED_INDIGO_ADVANCEMENT = id("rediscover_quenched_indigo");
     public static final Identifier GOT_LAPIS = id("got_lapis");
     public static final Identifier CLUEDIN_ADVANCEMENT = id("cluedin");
 
