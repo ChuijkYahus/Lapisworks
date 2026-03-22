@@ -5,6 +5,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -19,9 +20,15 @@ import vazkii.patchouli.api.PatchouliAPI;
 // i guess you could also make the excuse for originality too, afaik no one has done
 // per-world shape patterns
 public class ThemConfigFlags {
-    /** A generic ID */
-    public static HashMap<String, Integer> chosenFlags = new HashMap<String, Integer>();
-    public static HashMap<String, List<String>> allPerWorldShapePatterns = new HashMap<String, List<String>>();
+
+    public static HashMap<String, Integer> chosenFlags = new HashMap<>();
+    public static HashMap<String, String> specificToGenericId = new HashMap<>();
+    public static HashMap<String, List<String>> allPerWorldShapePatterns = new HashMap<>();
+    public static HashSet<String> pwShapePatterns = new HashSet<>();
+
+    public static boolean isPWShapePattern(String nonGenericId) {
+        return pwShapePatterns.contains(nonGenericId);
+    }
 
     public static NbtCompound turnChosenIntoNbt() {
         NbtCompound nbt = new NbtCompound();
@@ -31,6 +38,7 @@ public class ThemConfigFlags {
 
     /** Call after you register the variant patterns.
      * <p>Grabs all patterns with the id <code>{genericId}{X}</code> where X is an int.
+     * Well it technically grabs all patterns prefixed
      * <p>There needn't be a range of patterns with X between 0 and (amount prefixed with genericId).
      * <p>Yes, you may use this during registration to add variants to existing PW Shape Patterns. */
     public static void registerPWShapePattern(String genericId) {
@@ -40,11 +48,16 @@ public class ThemConfigFlags {
         Map<String, String> unsorted = new HashMap<>();
 
         Registry<ActionRegistryEntry> registry = IXplatAbstractions.INSTANCE.getActionRegistry();
+        int genericIdLen = genericId.length();
+
         for (var key : registry.getKeys()) {
 
             String id = key.getValue().toString();
-            if (id.startsWith(genericId))
+            if (id.startsWith(genericId) && isInt(id.substring(genericIdLen))) {
+                specificToGenericId.put(id, genericId);
                 unsorted.put(id, registry.get(key).prototype().anglesSignature());
+                pwShapePatterns.add(id);
+            }
 
         }
 
@@ -55,6 +68,11 @@ public class ThemConfigFlags {
         }
 
         allPerWorldShapePatterns.put(genericId, sigs);
+    }
+
+    private static boolean isInt(String str) {
+        try { Integer.parseInt(str); return true; }
+        catch (NumberFormatException e) { return false; }
     }
 
     /** Call after initializing your PW Shape Patterns.

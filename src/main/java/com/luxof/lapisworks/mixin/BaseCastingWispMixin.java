@@ -49,6 +49,9 @@ public abstract class BaseCastingWispMixin extends Entity implements MediaTransf
     }
 
     @Override @Unique public Vec3d getPosIfPossible() { return getPos(); }
+    @Override @Unique public void setMediaHere(long media) {
+        ((BaseWisp)(Object)this).setMedia(media);
+    }
     @Override @Unique public long getMaxMedia() { return 9_000_000_000L; }
     @Override @Unique public long getMediaHere() { return ((BaseWisp)(Object)this).getMedia(); }
     @Override @Unique public long withdrawMedia(long amount, boolean simulate) {

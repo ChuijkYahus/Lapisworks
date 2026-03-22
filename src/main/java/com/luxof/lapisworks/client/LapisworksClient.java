@@ -5,6 +5,7 @@ import com.luxof.lapisworks.blocks.bers.*;
 import com.luxof.lapisworks.blocks.bigchalk.BigChalkCenterRenderer;
 import com.luxof.lapisworks.blocks.bigchalk.BigChalkPart;
 import com.luxof.lapisworks.init.*;
+import com.luxof.lapisworks.interop.hexcessible.LapiscessibleInterface;
 import com.luxof.lapisworks.interop.hextended.items.AmelOrb;
 import com.luxof.lapisworks.mixinsupport.AcceleratableEntity;
 import com.luxof.lapisworks.mixinsupport.BlockDowser;
@@ -12,6 +13,7 @@ import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 
 import static com.luxof.lapisworks.Lapisworks.FULL_HEXICAL_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.HEXAL_INTEROP;
+import static com.luxof.lapisworks.Lapisworks.HEXCESSIBLE_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.HIEROPHANTICS_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.err;
 import static com.luxof.lapisworks.Lapisworks.id;
@@ -186,6 +188,9 @@ public class LapisworksClient implements ClientModInitializer {
                         true
                     );
                 }
+
+                if (HEXCESSIBLE_INTEROP)
+                    client.execute(LapiscessibleInterface::recalibratePWShapeUnlocksInHexcessible);
             }
         );
 

@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 
 import com.luxof.lapisworks.blocks.stuff.AttachedBE;
+import com.luxof.lapisworks.blocks.stuff.IChalkBE;
 import com.luxof.lapisworks.blocks.stuff.StampableBE;
 import com.luxof.lapisworks.chalk.RitualCastEnv;
 import com.luxof.lapisworks.chalk.RitualComponent;
@@ -41,7 +42,7 @@ import net.minecraft.util.math.Direction;
 
 import org.jetbrains.annotations.Nullable;
 
-public class ChalkWithPatternEntity extends BlockEntity implements ExtendedScreenHandlerFactory, AttachedBE, RitualComponent, StampableBE {
+public class ChalkWithPatternEntity extends BlockEntity implements ExtendedScreenHandlerFactory, AttachedBE, RitualComponent, StampableBE, IChalkBE {
     public ChalkWithPatternEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.CHALK_WITH_PATTERN_ENTITY_TYPE, pos, state);
     }

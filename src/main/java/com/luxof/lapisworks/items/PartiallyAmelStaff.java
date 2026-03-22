@@ -38,10 +38,11 @@ public class PartiallyAmelStaff extends ItemStaff implements DurabilityPartAmel 
 
     @Override
     public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
-        HashMultimap<EntityAttribute, EntityAttributeModifier> out = HashMultimap.create(super.getAttributeModifiers(slot));
-        if (slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND) {
+        HashMultimap<EntityAttribute, EntityAttributeModifier> out = HashMultimap.create(
+            super.getAttributeModifiers(slot)
+        );
+        if (slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND)
             out.put(HexAttributes.GRID_ZOOM, this._getGridZoom());
-        }
         return out;
     }
 

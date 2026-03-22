@@ -151,25 +151,6 @@
         },
         {
             "type": "hexcasting:pattern",
-            "flag": "lapisworks:robbie_exalt0",
-            "op_id": "lapisworks:robbie_exalt0",
-            "anchor": "lapisworks:robbie_exalt0",
-            "input": "[any], int, any",
-            "output": "[any]",
-            "text": "pages.lapisworks.lapisworks_misc.robbie_exalt.summary"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "flag": "lapisworks:robbie_exalt1",
-            "op_id": "lapisworks:robbie_exalt1",
-            "anchor": "lapisworks:robbie_exalt1",
-            "input": "[any], int, any",
-            "output": "[any]",
-            "text": "pages.lapisworks.lapisworks_misc.robbie_exalt.summary"
-        },
-        {
-            "type": "hexcasting:pattern",
-            "flag": "mod:hexdoc:web_only",
             "op_id": "lapisworks:robbie_exalt",
             "anchor": "lapisworks:robbie_exalt",
             "input": "[any], int, any",

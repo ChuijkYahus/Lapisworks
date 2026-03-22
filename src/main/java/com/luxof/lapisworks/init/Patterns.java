@@ -195,9 +195,6 @@ public class Patterns {
         // dirty hacks (there's gotta be a better way right)
         registerButSneaky("robbie_exalt0", "qaeaqaweaqa", HexDir.NORTH_WEST, new EstrogenExalt());
         registerButSneaky("robbie_exalt1", "qaeaqaweaqa", HexDir.NORTH_WEST, new EstrogenExalt());
-        // archon of meaningless but with w and ww at the end respectively
-        registerOnlyForHexdoc("robbie_exalt0", "eedqaqddadwddwaeaeadaeqaddwedwqdadedaqqwwqqewwwaeaedqqwwwqwawaedwqqdwwaqweeeqeeewawdwqew", HexDir.NORTH_WEST);
-        registerOnlyForHexdoc("robbie_exalt1", "eedqaqddadwddwaeaeadaeqaddwedwqdadedaqqwwqqewwwaeaedqqwwwqwawaedwqqdwwaqweeeqeeewawdwqeww", HexDir.NORTH_WEST);
         registerOnlyForHexdoc("robbie_exalt", "qaeaqaweaqa", HexDir.NORTH_WEST);
         registerPWShapePattern("lapisworks:robbie_exalt");
 

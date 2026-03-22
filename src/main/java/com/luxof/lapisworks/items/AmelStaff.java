@@ -36,10 +36,11 @@ public class AmelStaff extends ItemStaff {
 
     @Override
     public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
-        HashMultimap<EntityAttribute, EntityAttributeModifier> out = HashMultimap.create(super.getAttributeModifiers(slot));
-        if (slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND) {
+        HashMultimap<EntityAttribute, EntityAttributeModifier> out = HashMultimap.create(
+            super.getAttributeModifiers(slot)
+        );
+        if (slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND)
             out.put(HexAttributes.GRID_ZOOM, this.getGridZoom());
-        }
         return out;
     }
 }
