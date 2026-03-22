@@ -7,13 +7,17 @@ import com.luxof.lapisworks.nocarpaltunnel.LapisBlockEntity;
 import java.util.List;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 
-public class ChariotMindEntity extends LapisBlockEntity {
+public class ChariotMindEntity extends BlockEntity {
     public NbtCompound storedAmalgamationNbt;
     public ChariotMindEntity(BlockPos pos, BlockState state) {
         super(Chariot.CHARIOT_MIND_ENTITY_TYPE, pos, state);
@@ -38,15 +42,24 @@ public class ChariotMindEntity extends LapisBlockEntity {
     }
 
     @Override
-    public void save(NbtCompound nbt) {
+    public void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
         nbt.put("amalgam", storedAmalgamationNbt);
     }
 
     @Override
-    public void load(NbtCompound nbt) {
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
         storedAmalgamationNbt = nbt.getCompound("amalgam");
     }
 
+    @Override @Nullable
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
+    }
+
     @Override
-    public void tick(BlockState state) {}
+    public NbtCompound toInitialChunkDataNbt() {
+        return createNbt();
+    }
 }

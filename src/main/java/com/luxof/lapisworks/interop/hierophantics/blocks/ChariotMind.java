@@ -6,6 +6,7 @@ import com.luxof.lapisworks.nocarpaltunnel.LapisBlockWithEntity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -19,7 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-public class ChariotMind extends LapisBlockWithEntity {
+public class ChariotMind extends BlockWithEntity {
     public ChariotMind() {
         super(
             Settings.copy(ModBlocks.MIND_BLOCK).mapColor(DyeColor.LIGHT_GRAY)
@@ -58,13 +59,7 @@ public class ChariotMind extends LapisBlockWithEntity {
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
-        World world,
-        BlockState state,
-        BlockEntityType<T> type
-    ) {
-        return type == Chariot.CHARIOT_MIND_ENTITY_TYPE
-            ? (_1, _2, inState, ent) -> { ((ChariotMindEntity)ent).tick(state); }
-            : null;
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 }
