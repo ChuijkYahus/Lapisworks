@@ -68,15 +68,13 @@ public class MoarAttr extends SpellActionNCT {
             limit
         );
 
-        int expendedAmel = (int)Math.max(
-            Math.ceil((setTo - currentJuiced) * this.expendedAmelModifier),
-            0
-        );
+        int diff = (int)Math.abs(Math.ceil((setTo - currentJuiced) * this.expendedAmelModifier));
+        int expendedAmel = Math.max(diff, 0);
         assertItemAmount(ctx, Mutables::isAmel, AMEL, expendedAmel);
 
         return new SpellAction.Result(
             new Spell(entity, setTo, expendedAmel),
-            Math.max(MediaConstants.SHARD_UNIT * expendedAmel, 0),
+            MediaConstants.SHARD_UNIT * diff,
             List.of(ParticleSpray.burst(ctx.mishapSprayPos(), 2, 25)),
             1
         );
