@@ -331,6 +331,7 @@ Only the devs who can keep up with me...
 - book.
 - fixed Deposit Media crashing on wisps
 - fixed Withdraw Media *depositing into* blocks instead of *withdrawing from* them. (mfw one word typo)
+- Enchant X spells didn't take media when you disenchanted with them
 - Deposit Media can start one-time rituals if used on chalk now
 - Hexcessible shows neither the per world shape patterns* nor unintended stuff  
   \*: until learned

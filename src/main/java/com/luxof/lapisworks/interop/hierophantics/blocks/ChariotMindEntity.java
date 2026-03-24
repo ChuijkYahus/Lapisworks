@@ -2,10 +2,10 @@ package com.luxof.lapisworks.interop.hierophantics.blocks;
 
 import com.luxof.lapisworks.interop.hierophantics.Chariot;
 import com.luxof.lapisworks.interop.hierophantics.data.Amalgamation;
-import com.luxof.lapisworks.nocarpaltunnel.LapisBlockEntity;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -16,6 +16,8 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+
+import org.jetbrains.annotations.Nullable;
 
 public class ChariotMindEntity extends BlockEntity {
     public NbtCompound storedAmalgamationNbt;
@@ -39,6 +41,11 @@ public class ChariotMindEntity extends BlockEntity {
     }
     public NbtList getHexClient() {
         return storedAmalgamationNbt.getList("hex", NbtElement.COMPOUND_TYPE);
+    }
+
+    public void save() {
+        markDirty();
+        world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
     }
 
     @Override
