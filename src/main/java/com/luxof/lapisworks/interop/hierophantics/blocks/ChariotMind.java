@@ -2,9 +2,9 @@ package com.luxof.lapisworks.interop.hierophantics.blocks;
 
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.interop.hierophantics.Chariot;
-import com.luxof.lapisworks.nocarpaltunnel.LapisBlockWithEntity;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
