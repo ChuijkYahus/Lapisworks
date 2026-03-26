@@ -7,7 +7,6 @@ import at.petrak.hexcasting.api.casting.math.HexDir;
 import com.luxof.lapisworks.mixinsupport.AccessPWBookEntries;
 import com.luxof.lapisworks.mixinsupport.HexcessiblePWShapeSupport;
 
-import static com.luxof.lapisworks.Lapisworks.log;
 import static com.luxof.lapisworks.init.Mutables.Mutables.wizardDiariesGainableAdvancements;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 import static com.luxof.lapisworks.init.ThemConfigFlags.isPWShapePattern;
@@ -75,17 +74,9 @@ public class PatternEntriesMixin implements HexcessiblePWShapeSupport {
         String genericId = specificToGenericId.get(specificId);
         if (genericId == null) return;
         if (genericId.equals("lapisworks:hastenature"))
-            log("WE HAVE HASTENATURE");
 
         if (isPWShapePattern(specificId)) {
             List<BookEntries.Entry> bookEntries = getEntriesForPWShapePattern(genericId);
-
-            // if it's not something that's locked by an advancement hide it if not chosen
-            // useful for Robbie's Exaltation
-            int chosen = chosenFlags.get(genericId);
-            int specificIdSuffix = Integer.parseInt(specificId.substring(genericId.length()));
-            if (chosen == specificIdSuffix)
-                log("%s is the correct one!", specificId);
 
             pwShapePatterns.put(
                 specificId,
@@ -105,11 +96,8 @@ public class PatternEntriesMixin implements HexcessiblePWShapeSupport {
 
     @Override
     public void unlockPWShapeByAdvancement(Identifier advancementId) {
-        log("ADVANCEMENT UNLOCKING! %s", advancementId.toString());
         String genericId = wizardDiariesGainableAdvancements.get(advancementId);
-        log("is this genericID null? %B", genericId == null);
         if (genericId == null) return;
-        log("what is this genericID? %s", genericId);
         int chosen = chosenFlags.get(genericId);
 
         PatternEntries.Entry entry = pwShapePatterns.get(genericId + String.valueOf(chosen));

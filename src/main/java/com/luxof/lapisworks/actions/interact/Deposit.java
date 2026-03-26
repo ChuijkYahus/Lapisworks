@@ -21,7 +21,6 @@ import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 
 import static com.luxof.lapisworks.Lapisworks.ONEIRONAUT_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.interactWithLinkableMediaBlocks;
-import static com.luxof.lapisworks.Lapisworks.log;
 import static com.luxof.lapisworks.interop.oneironaut.FuckingInexhaustiblePhials.getBottomlessContrib;
 
 import java.util.ArrayList;
@@ -53,7 +52,6 @@ public class Deposit extends SpellActionNCT {
             : 0;
         cost -= ONEIRONAUT_INTEROP ? getBottomlessContrib(pbcenv) : 0L;
 
-        log("hello! cost: %d, media: %d", cost, ctx.extractMedia(-1, true));
         if (ctx.extractMedia(-1, true) < cost)
             throw new MishapNotEnoughMedia(cost);
     }
