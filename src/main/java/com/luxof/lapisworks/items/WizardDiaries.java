@@ -11,11 +11,15 @@ import static com.luxof.lapisworks.LapisworksIDs.DIARIES_TOOLTIP_3;
 import static com.luxof.lapisworks.LapisworksIDs.DIARIES_TOOLTIP_4;
 import static com.luxof.lapisworks.LapisworksIDs.DIARY_UNREADABLE;
 import static com.luxof.lapisworks.LapisworksIDs.GOT_ALL_DIARIES;
+import static com.luxof.lapisworks.LapisworksIDs.UNLOCK_SHIT_FOR_HEXCESSIBLE;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
+
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.PlayerAdvancementTracker;
@@ -25,6 +29,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.ServerAdvancementLoader;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
@@ -65,7 +70,7 @@ public class WizardDiaries extends Item {
 
         if (!advDonePred.test(id("got_lapis"))) {
             user.sendMessage(DIARY_UNREADABLE);
-            return TypedActionResult.success(handStack);
+            return TypedActionResult.fail(handStack);
         }
 
         List<Identifier> shuffled = new ArrayList<>(Mutables.wizardDiariesGainableAdvancements.keySet());
@@ -92,10 +97,15 @@ public class WizardDiaries extends Item {
         ServerPlayerEntity suser = (ServerPlayerEntity)user;
         ServerAdvancementLoader advLoader = suser.getServer().getAdvancementLoader();
 
-        suser.getAdvancementTracker().grantCriterion(advLoader.get(chosenAdvancement), "grant");
+        if (chosenAdvancement != null)
+            suser.getAdvancementTracker().grantCriterion(advLoader.get(chosenAdvancement), "grant");
         Criteria.CONSUME_ITEM.trigger(suser, handStack);
         suser.getStatHandler().increaseStat(suser, Stats.USED.getOrCreateStat(this), 1);
         handStack.decrement(1);
+
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeIdentifier(chosenAdvancement);
+        ServerPlayNetworking.send(suser, UNLOCK_SHIT_FOR_HEXCESSIBLE, buf);
 
         return TypedActionResult.success(handStack);
     }

@@ -122,6 +122,7 @@ public class Patterns {
         register("min", "waqqwqddqwqqaw", HexDir.WEST, new MinMax(true));
         register("max", "wdeeweaaeweedw", HexDir.WEST, new MinMax(false));
         register("pull", "awwqqqwwaqww", HexDir.SOUTH_WEST, new Pull());
+        register("robbie_exalt", "qaeaqaweaqa", HexDir.NORTH_WEST, new EstrogenExalt());
 
         register("thought_sieve", "qadaadadqaqdadqaq", HexDir.WEST, new HexResearchYoink());
         register("absorb_mind", "aawqqwqqqaede", HexDir.WEST, new MindLiquefaction());
@@ -191,12 +192,6 @@ public class Patterns {
         register("quenched_indigo4", "qawwqeaeqwwaqqqaqeqdaadqwedeeawdwa", HexDir.NORTH_WEST, new QuenchedIndigo());
         register("quenched_indigo5", "qawwqwwqwwaqaedewwwawweqaqdawdwa", HexDir.NORTH_WEST, new QuenchedIndigo());
         registerPWShapePattern("lapisworks:quenched_indigo");
-
-        // dirty hacks (there's gotta be a better way right)
-        registerButSneaky("robbie_exalt0", "qaeaqaweaqa", HexDir.NORTH_WEST, new EstrogenExalt());
-        registerButSneaky("robbie_exalt1", "qaeaqaweaqa", HexDir.NORTH_WEST, new EstrogenExalt());
-        registerOnlyForHexdoc("robbie_exalt", "qaeaqaweaqa", HexDir.NORTH_WEST);
-        registerPWShapePattern("lapisworks:robbie_exalt");
 
         // i register these here instead of their respective interop initializers
         // because hexdoc needs to see them
