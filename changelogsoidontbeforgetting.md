@@ -330,6 +330,7 @@ Only the devs who can keep up with me...
 # 1.5.8.2
 - book.
 - fixed Deposit Media crashing on wisps
+- fixed Deposit Media mishapping unnecessarily
 - fixed Withdraw Media *depositing into* blocks instead of *withdrawing from* them. (mfw one word typo)
 - Enchant X spells didn't take media when you disenchanted with them
 - Deposit Media can start one-time rituals if used on chalk now
@@ -339,6 +340,12 @@ Only the devs who can keep up with me...
 - Impeti can refuel from Media Condenser networks even with Heimdall's Gambit
 - Imbue Lapis II (takes item entities instead of Lapis and Amethyst from your inventory)
 - Slate Imprinter
+- Enchantments carry across dimensions now
+  - mfw one line fix
+- Mintiest Gambit putting the base stack in its output
+- Pattern that forces iota embedding
+  - every non-pattern iota after it gets pushed to the stack instead of mishapping
+  - there's also a pattern to disable that
 # 1.5.8.3
 - Make Amalgamations more convenient to work with
 - Totem necklace
@@ -355,6 +362,8 @@ Only the devs who can keep up with me...
     - item entity = fox or allay pick up
 # 1.5.9
 ### Free me
+- [This](https://discord.com/channels/936370934292549712/950847275549229086/1479043488183095317)
+- Overenchanting?
 - Hexical interop
   - every key is telepathy-able
 - Amethyst Piano

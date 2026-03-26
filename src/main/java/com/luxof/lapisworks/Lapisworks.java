@@ -607,16 +607,17 @@ public class Lapisworks implements ModInitializer {
 
 	/** takes links into account.
 	 * <br>returns what was deposited/withdrawn first, and a set of all involved linkables second. */
-	public static Pair<Long, Set<BlockPos>> fullLinkableMediaBlocksInteraction(
+	public static Pair<Long, Set<BlockPos>> interactWithLinkableMediaBlocks(
 		ServerWorld world,
 		Set<BlockPos> first,
 		long amountToInteract,
 		boolean deposit,
+		boolean viaSpell,
 		boolean simulate
 	) {
 		long interactionLeft = amountToInteract;
 		Stack<BlockPos> todo = new Stack<>();
-		
+
 		HashSet<BlockPos> seen = new HashSet<>();
 
 		seen.addAll(first);
@@ -626,35 +627,20 @@ public class Lapisworks implements ModInitializer {
 			BlockPos currPos = todo.pop();
 			LinkableMediaBlock curr = (LinkableMediaBlock)world.getBlockEntity(currPos);
 
-			if (deposit) interactionLeft -= curr.depositMedia(interactionLeft, simulate);
-			else interactionLeft -= curr.withdrawMedia(interactionLeft, simulate);
+			if (deposit) interactionLeft -= viaSpell
+				? curr.depositMediaViaSpell(interactionLeft, simulate)
+				: curr.depositMedia(interactionLeft, simulate);
+
+			else interactionLeft -= viaSpell
+				? curr.withdrawMediaViaSpell(interactionLeft, simulate)
+				: curr.withdrawMedia(interactionLeft, simulate);
+
 			if (interactionLeft == 0) return new Pair<>(amountToInteract, seen);
 
 			for (BlockPos linked : curr.getLinks()) { if (seen.add(linked)) todo.add(linked); }
 		}
 
 		return new Pair<>(amountToInteract - interactionLeft, seen);
-	}
-
-	/** does not simulate. */
-	public static long interactWithLinkableMediaBlocks(
-		ServerWorld world,
-		Set<BlockPos> first,
-		long amountToInteract,
-		boolean deposit
-	) {
-		return interactWithLinkableMediaBlocks(world, first, amountToInteract, deposit, false);
-	}
-	/** takes into account links. returns what was deposited/withdrawn. */
-	public static long interactWithLinkableMediaBlocks(
-		ServerWorld world,
-		Set<BlockPos> first,
-		long amountToInteract,
-		boolean deposit,
-		boolean simulate
-	) {
-		return fullLinkableMediaBlocksInteraction(world, first, amountToInteract, deposit, simulate)
-			.getLeft();
 	}
 
 	public static double getDistance(BlockPos pos1, BlockPos pos2) {
