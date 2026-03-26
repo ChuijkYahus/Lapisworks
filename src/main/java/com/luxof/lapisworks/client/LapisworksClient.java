@@ -23,8 +23,10 @@ import static com.luxof.lapisworks.LapisworksIDs.APPLY_PULL_FOR_TIME;
 import static com.luxof.lapisworks.LapisworksIDs.DOWSE_RESULT;
 import static com.luxof.lapisworks.LapisworksIDs.DOWSE_TS;
 import static com.luxof.lapisworks.LapisworksIDs.GIB_DUST;
+import static com.luxof.lapisworks.LapisworksIDs.ROBBIES_EXALT_PACKET;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_PWSHAPE_PATS;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_SENT;
+import static com.luxof.lapisworks.LapisworksIDs.UNLOCK_SHIT_FOR_HEXCESSIBLE;
 import static com.luxof.lapisworks.init.ModItems.AMEL_JAR;
 import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE;
 import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE2;
@@ -195,6 +197,13 @@ public class LapisworksClient implements ClientModInitializer {
         );
 
         ClientPlayNetworking.registerGlobalReceiver(
+            ROBBIES_EXALT_PACKET,
+            (client, handler, buf, responseSender) -> {
+                ROBBIES_EXALT_VARIANT_CLIENT = buf.readInt();
+            }
+        );
+
+        ClientPlayNetworking.registerGlobalReceiver(
             DOWSE_TS,
             (client, handler, buf, responseSender) -> {
                 PacketByteBuf sendBuf = PacketByteBufs.create();
@@ -241,6 +250,14 @@ public class LapisworksClient implements ClientModInitializer {
             }
         );
 
+        ClientPlayNetworking.registerGlobalReceiver(
+            UNLOCK_SHIT_FOR_HEXCESSIBLE,
+            (client, handler, buf, responseSender) -> {
+                if (HEXCESSIBLE_INTEROP)
+                    LapiscessibleInterface.unlockPWShapeInHexcessibleByAdvancement(buf.readIdentifier());
+            }
+        );
+
         ClientPlayConnectionEvents.JOIN.register((
             handler,
             sender,
@@ -264,4 +281,6 @@ public class LapisworksClient implements ClientModInitializer {
             nullConfigFlags();
         });
     }
+
+    public static int ROBBIES_EXALT_VARIANT_CLIENT = 0;
 }

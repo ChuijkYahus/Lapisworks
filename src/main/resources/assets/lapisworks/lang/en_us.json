@@ -101,7 +101,7 @@
     "advancements.lapisworks.gotlapis.name": "Lapisworks Research",
     "advancements.lapisworks.gotlapis.description": "A deep blue, precious mineral. Just as they wrote..",
     "advancements.lapisworks.enlightened.name": "Hallucination-encrypted",
-    "advancements.lapisworks.enlightened.description": "The bright patterns at the edges of my vision are gathering on some texts and making me see text.",
+    "advancements.lapisworks.enlightened.description": "The brightness at the edges of my vision is gathering on some texts... I can see!",
     "advancements.lapisworks.rediscover_enchsent.name": "Enchanted Sentinel",
     "advancements.lapisworks.rediscover_enchsent.description": "A Great Spell forcefully and violently changed and twisted into something else.",
     "advancements.lapisworks.rediscover_flay_artmind.name": "Imbue Mind",
@@ -658,7 +658,7 @@
     "pages.lapisworks.great.hastenature.summary": "Takes a block position and a positive number, and ages the block (or how I call it, induces a random tick) there that many times. Costs 1 shard per age-up, but 3.5 if the target is Budding Amethyst.",
 
     "pages.lapisworks.great.quenched_indigo.title": "Indigan Lapidary",
-    "pages.lapisworks.great.quenched_indigo.lore": "There is not much written here, besides the following:$(br2)$(o)  \"He flayed himself into it.\"",
+    "pages.lapisworks.great.quenched_indigo.lore": "There is not much written here, besides the following:$(br2)$(o)  \"They flayed themselves into it.\"",
     "pages.lapisworks.great.quenched_indigo.summary": "Given at least two pieces of $(item)Lapis Lazuli$() in the other hand, converts $(item)Lapis Lazuli$() to $(item)Amethyst Shards$() at a conversion rate of 2:1. Overflow of $(item)Lapis$() is wasted.",
     "pages.lapisworks.great.quenched_indigo.explanation": "This spell apparently uses the $(item)Lapis Lazuli$() provided to punch a hole through space. This hole leads to a $(thing)dimension of pure, congested thought$() that is dangerous to exist in. It then takes two $(item)Amethyst Shard$() worth in media from the dimension, crystallizing one while using the other to replenish it's cost. Strangely, $(thing)Nature$() refuses to make this pattern cost anything.",
 
