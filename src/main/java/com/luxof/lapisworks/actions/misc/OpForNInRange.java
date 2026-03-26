@@ -59,7 +59,7 @@ public class OpForNInRange implements Action {
             }
             SpellList datum = new ListIota(data).getList();
 
-            newFrame = new FrameForEach(datum, instrs, stack, new ArrayList<>());
+            newFrame = new FrameForEach(datum, instrs, null, new ArrayList<>());
         }
 
         return new OperationResult(
