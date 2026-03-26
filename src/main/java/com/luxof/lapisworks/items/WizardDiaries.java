@@ -101,7 +101,8 @@ public class WizardDiaries extends Item {
             suser.getAdvancementTracker().grantCriterion(advLoader.get(chosenAdvancement), "grant");
         Criteria.CONSUME_ITEM.trigger(suser, handStack);
         suser.getStatHandler().increaseStat(suser, Stats.USED.getOrCreateStat(this), 1);
-        handStack.decrement(1);
+        if (!suser.isCreative())
+            handStack.decrement(1);
 
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeIdentifier(chosenAdvancement);
