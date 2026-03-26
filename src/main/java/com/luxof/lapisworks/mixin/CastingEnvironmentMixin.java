@@ -76,7 +76,6 @@ public abstract class CastingEnvironmentMixin implements GetStacks, GetVAULT {
             Set.of(env.circleState().impetusPos),
             cost,
             false,
-            false,
             simulate
         ).getLeft();
 

@@ -612,7 +612,6 @@ public class Lapisworks implements ModInitializer {
 		Set<BlockPos> first,
 		long amountToInteract,
 		boolean deposit,
-		boolean viaSpell,
 		boolean simulate
 	) {
 		long interactionLeft = amountToInteract;
@@ -627,12 +626,8 @@ public class Lapisworks implements ModInitializer {
 			BlockPos currPos = todo.pop();
 			LinkableMediaBlock curr = (LinkableMediaBlock)world.getBlockEntity(currPos);
 
-			if (deposit) interactionLeft -= viaSpell
-				? curr.depositMediaViaSpell(interactionLeft, simulate)
-				: curr.depositMedia(interactionLeft, simulate);
-
-			else interactionLeft -= viaSpell
-				? curr.withdrawMediaViaSpell(interactionLeft, simulate)
+			interactionLeft -= deposit
+				? curr.depositMedia(interactionLeft, simulate)
 				: curr.withdrawMedia(interactionLeft, simulate);
 
 			if (interactionLeft == 0) return new Pair<>(amountToInteract, seen);

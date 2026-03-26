@@ -1,6 +1,6 @@
 package com.luxof.lapisworks.mixin;
 
-import com.luxof.lapisworks.media.MediaTransferInterface;
+import com.luxof.lapisworks.blocks.stuff.UnlinkableMediaBlock;
 
 import miyucomics.hexical.features.media_jar.MediaJarBlock;
 import miyucomics.hexical.features.media_jar.MediaJarBlockEntity;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(value = MediaJarBlockEntity.class, remap = false)
-public abstract class MediaJarBlockEntityMixin extends BlockEntity implements MediaTransferInterface {
+public abstract class MediaJarBlockEntityMixin extends BlockEntity implements UnlinkableMediaBlock {
     public MediaJarBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
@@ -27,4 +27,5 @@ public abstract class MediaJarBlockEntityMixin extends BlockEntity implements Me
     @Override @Unique public void setMediaHere(long media) { setMedia(media); }
     @Override @Unique public long getMaxMedia() { return MediaJarBlock.MAX_CAPACITY; }
     @Override @Unique public long getMediaHere() { return getMedia(); }
+    @Override @Unique public BlockPos getThisPos() { return this.pos; }
 }

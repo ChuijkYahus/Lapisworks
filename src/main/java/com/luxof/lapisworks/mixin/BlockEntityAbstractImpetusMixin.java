@@ -16,6 +16,7 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -31,6 +32,9 @@ public abstract class BlockEntityAbstractImpetusMixin extends HexBlockEntity imp
     private HashSet<BlockPos> linked = new HashSet<>();
     @Shadow
     protected long media;
+    @Shadow
+    @Final
+    private static long MAX_CAPACITY;
 
     @Unique @Override public void addLink(BlockPos pos) { removeDeadLinks(world); linked.add(pos); }
     @Unique @Override public void removeLink(BlockPos pos) { linked.remove(pos); }
@@ -41,11 +45,9 @@ public abstract class BlockEntityAbstractImpetusMixin extends HexBlockEntity imp
     @Unique @Override public int getMaxNumberOfLinks() { return 1; }
     @Unique @Override public BlockPos getThisPos() { return getPos(); }
 
-    // I do this to make sure the impetus is not interactable with by the network
-    @Unique @Override public long depositMedia(long amount, boolean simulate) { return 0; }
-    @Unique @Override public long withdrawMedia(long amount, boolean simulate) { return 0; }
-
     @Unique @Override public long getMediaHere() { return media; }
+    @Unique @Override public long getMaxMedia() { return Math.max(getMediaHere(), 10000_0000L); }
+    @Unique @Override public void setMediaHere(long to) { media = to; sync(); }
 
 
     @Unique

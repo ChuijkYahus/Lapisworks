@@ -41,24 +41,4 @@ public interface MediaTransferInterface {
         }
         return toWithdraw;
     }
-
-    /** returns the amount that was deposited. For use in spells. */
-    default public long depositMediaViaSpell(long amount, boolean simulate) {
-        long mediaHere = getMediaHere();
-        long spaceLeft = getMaxMedia() - mediaHere;
-        long toDeposit = Math.min(spaceLeft, amount);
-        if (!simulate) {
-            setMediaHere(mediaHere + toDeposit);
-        }
-        return toDeposit;
-    }
-    /** returns the amount that was withdrawn. For use in spells. */
-    default public long withdrawMediaViaSpell(long amount, boolean simulate) {
-        long mediaHere = getMediaHere();
-        long toWithdraw = Math.min(amount, mediaHere);
-        if (!simulate) {
-            setMediaHere(mediaHere - toWithdraw);
-        }
-        return toWithdraw;
-    }
 }

@@ -69,7 +69,6 @@ public class Withdraw extends SpellActionNCT {
                 Set.of(pos),
                 amount,
                 false,
-                true,
                 true
             );
             long realAmount = interactSimResult.getLeft();
@@ -80,7 +79,7 @@ public class Withdraw extends SpellActionNCT {
 
             return new SpellAction.Result(
                 new LMBSpell(pos, realAmount, into),
-                realAmount + (long)(realAmount * 0.1),
+                (long)(realAmount * 0.1),
                 particles,
                 1
             );
@@ -113,8 +112,8 @@ public class Withdraw extends SpellActionNCT {
 
         @Override
         public void cast(CastingEnvironment ctx) {
-            into.depositMediaViaSpell(
-                from.withdrawMediaViaSpell(amount, false),
+            into.depositMedia(
+                from.withdrawMedia(amount, false),
                 false
             );
         }
@@ -133,13 +132,12 @@ public class Withdraw extends SpellActionNCT {
 
         @Override
 		public void cast(CastingEnvironment ctx) {
-            into.depositMediaViaSpell(
+            into.depositMedia(
                 interactWithLinkableMediaBlocks(
                     ctx.getWorld(),
                     ImmutableSet.of(pos),
                     amount,
                     false,
-                    true,
                     false
                 ).getLeft(),
                 false

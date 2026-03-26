@@ -37,9 +37,7 @@ public interface IChalkBE extends UnlinkableMediaBlock {
     public BlockPos getPos();
     default public BlockPos getThisPos() { return getPos(); }
     default public long depositMedia(long amount, boolean simulate) { return amount; }
-    default public long depositMediaViaSpell(long amount, boolean simulate) { return amount; }
     default public long withdrawMedia(long amount, boolean simulate) { return 0L; }
-    default public long withdrawMediaViaSpell(long amount, boolean simulate) { return 0L; }
     default public void setMediaHere(long media) {}
     default public long getMediaHere() { return 0L; }
 }

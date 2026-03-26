@@ -1,5 +1,6 @@
 package com.luxof.lapisworks.init;
 
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.ItemStaff;
 
 import com.luxof.lapisworks.items.*;
@@ -10,17 +11,19 @@ import static com.luxof.lapisworks.LapisworksIDs.LAPISMAGICSHITGROUPTEXT;
 import static com.luxof.lapisworks.LapisworksIDs.LAPIS_MAGIC_SHIT_GROUP;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.world.World;
 
 public class ModItems {
     private static FabricItemSettings fullStack = new FabricItemSettings().maxCount(64);
@@ -69,7 +72,7 @@ public class ModItems {
     public static final FocusNecklace FOCUS_NECKLACE_WORN = new FocusNecklace(unstackable);
     public static final FocusNecklace FOCUS_NECKLACE2_WORN = new FocusNecklace(unstackable);
     public static final BlockItem ENCH_BREWER = new BlockItem(ModBlocks.ENCH_BREWER, fullStack);
-    public static final BlockItem MEDIA_CONDENSER = new BlockItem(ModBlocks.MEDIA_CONDENSER, unstackable);
+    public static final BlockItem MEDIA_CONDENSER = new MediaCondenserItem(unstackable);
     public static final BlockItem UNCRAFTED_CONDENSER = new BlockItem(ModBlocks.UNCRAFTED_CONDENSER, fullStack);
     public static final BlockItem CHALK = new ChalkItem();
     public static final BlockItem TUNEABLE_AMETHYST = new BlockItem(ModBlocks.TUNEABLE_AMETHYST, fullStack);
