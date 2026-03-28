@@ -86,9 +86,17 @@ public abstract class AbstractBrewerEntity extends BlockEntity implements NamedS
     }
 
     protected List<BreweryRecipe> updateRecipes(BrewerInv inv) {
-        return new ArrayList<>(
+        var recs = new ArrayList<>(
             world.getRecipeManager().getAllMatches(BreweryRecipe.Type.INSTANCE, inv, world)
         );
+
+        // what could possibly go wrong
+        // the mfs making five hundred enchanted breweries:
+        var generic = BreweryRecipe.findBrewingRecipeRegistryRecipe(inv, world);
+        if (generic != null)
+            recs.add(generic);
+
+        return recs;
     }
 
     /** returns the amount of catalyst that recipe required. */

@@ -40,12 +40,6 @@ public class BrewItemRec implements BreweryRecipe {
         return validInput && atLeastOneValidBrewingInto;
     }
 
-    /** <code>craft</code>, but it targets the leftmost brewingInto. */
-    @Override
-    public ItemStack craft(BrewerInv inventory, DynamicRegistryManager registryManager) {
-        return this.getOutput(registryManager);
-    }
-
     @Override
     public ItemStack getOutput(DynamicRegistryManager registryManager) { return out.copy(); }
 
