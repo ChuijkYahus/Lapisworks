@@ -69,7 +69,7 @@ public class EnhanceEnchantedBook extends BeegInfusion {
                 stack,
                 ENCHBOOK_WITH_ONE_ENCH,
                 ENCHBOOK_WITH_NOTONE_ENCH,
-                hand
+                null
             );
         else if (
             levelOfEnchantment >= LapisConfig.getCurrentConfig().getOverenchantLimitFor(enchantment)
@@ -86,7 +86,7 @@ public class EnhanceEnchantedBook extends BeegInfusion {
                     enchantment.getName(levelOfEnchantment)
                         .copy().styled(s -> s.withColor(ItemMediaHolder.HEX_COLOR))
                 ),
-                hand
+                null
             );
         else if (infusing < requiredAmel)
             throw new MishapNotEnoughItems(AMEL, infusing, requiredAmel);

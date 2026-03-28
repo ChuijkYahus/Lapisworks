@@ -31,18 +31,18 @@ public class MishapBadHandItem extends Mishap {
         return stack == null ? ItemStack.EMPTY : stack;
     }
 
-    public MishapBadHandItem(@Nullable ItemStack item, Text wanted, Hand hand) {
+    public MishapBadHandItem(@Nullable ItemStack item, Text wanted, @Nullable Hand hand) {
         this.item = emptyIfNull(item);
         this.wanted = wanted;
         this.hand = hand;
     }
-    public MishapBadHandItem(@Nullable ItemStack item, Item wanted, Hand hand) {
+    public MishapBadHandItem(@Nullable ItemStack item, Item wanted, @Nullable Hand hand) {
         this.item = emptyIfNull(item);
         this.wanted = wanted.getName();
         this.hand = hand;
     }
     /** Replaces the period usually at the end of bad_item (not no_item) with gotItemDesc. */
-    public MishapBadHandItem(@Nullable ItemStack item, Text wanted, Text gotItemDesc, Hand hand) {
+    public MishapBadHandItem(@Nullable ItemStack item, Text wanted, Text gotItemDesc, @Nullable Hand hand) {
         this.item = emptyIfNull(item);
         this.wanted = wanted;
         this.hand = hand;

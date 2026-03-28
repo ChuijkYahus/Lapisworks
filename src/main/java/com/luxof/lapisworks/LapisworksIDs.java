@@ -112,7 +112,7 @@ public class LapisworksIDs {
     public static final String NOT_ENOUGH = "mishaps.lapisworks.not_enough_items";
     public static final String ALREADY_ENCHANTED = "mishaps.lapisworks.already_enchanted";
     public static final String SPECHAND_NOITEM = "mishaps.lapisworks.some_hand.no_item";
-    public static final String SPECHAND_BADITEM = "mishaps.lapisworks.some_hand.no_item";
+    public static final String SPECHAND_BADITEM = "mishaps.lapisworks.some_hand.bad_item";
     public static final String NOT_EQUIPPED = "mishaps.lapisworks.equipped.not";
     public static final String WRONG_EQUIPPED = "mishaps.lapisworks.equipped.bad";
 

@@ -443,19 +443,22 @@ public class Lapisworks implements ModInitializer {
 	/** returns null if resulting Hand can't be MAIN_HAND or OFF_HAND (MORE WILL COME, THEE SHALL KNOW) */
 	@Nullable
 	public static Hand intToHand(int hand) {
-		switch (hand) {
-			case 0: return Hand.MAIN_HAND;
-			case 1: return Hand.OFF_HAND;
-			default: return null;
-		}
+		return switch(hand) {
+			case 0 -> Hand.MAIN_HAND;
+			case 1 -> Hand.OFF_HAND;
+			default -> null;
+		};
 	}
 
 	/** Returns stuff like Text.translateable("hands.lapisworks.43") (43rd hand)
 	 * if it doesn't know wtf that Hand is */
-	public static Text handToString(Hand hand) {
-		if (hand == Hand.MAIN_HAND) { return MAINHAND; }
-		else if (hand == Hand.OFF_HAND) { return OFFHAND; }
-		return Text.translatable("hands.lapisworks." + hand.ordinal());
+	public static Text handToString(@Nullable Hand hand) {
+		if (hand == null) return Text.translatable("hands.lapisworks.none");
+		return switch (hand) {
+			case MAIN_HAND -> MAINHAND;
+			case OFF_HAND -> OFFHAND;
+			default -> Text.translatable("hands.lapisworks." + hand.ordinal());
+		};
 	}
 
 	/** Will update when the third and fourth hands expansion comes out fr */

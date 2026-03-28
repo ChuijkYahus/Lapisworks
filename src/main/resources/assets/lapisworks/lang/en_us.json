@@ -366,13 +366,14 @@
 
     "mishaps.lapisworks.not_enough_items": "At least %dx %s required, but only %dx %s was found on the user.",
     "mishaps.lapisworks.already_enchanted": "Cannot enchant %s with %s, as it is already enchanted with the maximum level of %s it can have right now (%d).",
-    "mishaps.lapisworks.some_hand.no_item": "Expected %s in the %s, but found nothing.",
+    "mishaps.lapisworks.some_hand.no_item": "Expected %s in %s, but found nothing.",
+    "mishaps.lapisworks.some_hand.bad_item": "Expected %s in %s, but found %s.",
 
-    "mishaps.lapisworks.some_hand.bad_item": "Expected %s in the %s, but found (%s) %dx %s",
-    "hands.lapisworks.main": "main-hand",
-    "hands.lapisworks.off": "off-hand",
-    "hands.lapisworks.3": "third-hand",
-    "hands.lapisworks.4": "fourth-hand",
+    "hands.lapisworks.none": "hand",
+    "hands.lapisworks.main": "the main-hand",
+    "hands.lapisworks.off": "the off-hand",
+    "hands.lapisworks.3": "the third-hand",
+    "hands.lapisworks.4": "the fourth-hand",
 
     "mishaps.lapisworks.some_hand.bad_item.generic": "an incorrect item",
     "mishaps.lapisworks.bad_block.full_mind": "FULL Simple Mind Container",
