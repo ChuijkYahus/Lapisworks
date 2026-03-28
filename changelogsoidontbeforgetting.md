@@ -340,7 +340,7 @@ Only the devs who can keep up with me...
 - Also changed the description for the Hallucination-Encrypted advancement
 - Gave Media Condenser Units a tooltip
 - Wands are called sceptres now
-- Upgrading enchanted books' cost formula is now `20level^2`
+- Upgrading enchanted books has an actual limit now (decided by the config!)
 ## Fixes
 - Deposit Media
 - Withdraw Media
@@ -353,6 +353,7 @@ Only the devs who can keep up with me...
 - Enchanted Brewery wouldn't work with modded brewing recipes :tasque_waaanager:
 - Catastrophic VAULT failure (took and gave more items than it should've)
 - Enchanted Brewery looked like it still had the same potion pre-brewing on the client
+- Some shit related to mixin mishap messages
 # 1.5.8.3
 - Totem Necklace
   - yeah

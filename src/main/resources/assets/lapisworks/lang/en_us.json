@@ -397,6 +397,8 @@
     "mishaps.lapisworks.descs.scroll_with_gs": "a scroll with a pattern on it that resembles a Great Spell but does not necessarily have the correct stroke order",
     "mishaps.lapisworks.descs.oneench_enchbook": "an enchanted book with only ONE enchantment",
     "mishaps.lapisworks.descs.moreench_enchbook": "an enchanted book with MORE (or less) than one enchantment",
+    "mishaps.lapisworks.descs.not_too_overenchanted_book": "an enchanted book with less than %s",
+    "mishaps.lapisworks.descs.too_overenchanted_book": "an enchanted book with %s",
     "mishaps.lapisworks.descs.moldable": "a moldable object (e.g. Amethyst Lazuli, an Amel Ring, etc.)",
     "mishaps.lapisworks.descs.linkable_media_block": "a media-containing block/phiangleable (e.g. a Media Condensing Unit)",
     "mishaps.lapisworks.descs.linked_linkable": "a media-containing block/phiangleable linked to %d, %d, %d",

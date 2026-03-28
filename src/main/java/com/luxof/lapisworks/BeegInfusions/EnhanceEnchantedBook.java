@@ -3,8 +3,10 @@ package com.luxof.lapisworks.BeegInfusions;
 import at.petrak.hexcasting.api.casting.OperatorUtils;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
 import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.common.items.magic.ItemMediaHolder;
 
 import com.luxof.lapisworks.VAULT.Flags;
+import com.luxof.lapisworks.init.LapisConfig;
 import com.luxof.lapisworks.init.Mutables.BeegInfusion;
 import com.luxof.lapisworks.init.Mutables.Mutables;
 import com.luxof.lapisworks.mishaps.MishapBadHandItem;
@@ -21,6 +23,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 
 public class EnhanceEnchantedBook extends BeegInfusion {
@@ -28,6 +31,9 @@ public class EnhanceEnchantedBook extends BeegInfusion {
     private ItemStack stack = null;
     private Hand hand = null;
     private int infusing = 0;
+    private Map<Enchantment, Integer> enchantments;
+    private Enchantment enchantment;
+    private int levelOfEnchantment;
 
     @Override
     public boolean test() {
@@ -41,7 +47,12 @@ public class EnhanceEnchantedBook extends BeegInfusion {
             }
         }
         if (!ret) return false;
-        requiredAmel = 20 * EnchantmentHelper.get(stack).values().iterator().next();
+
+        enchantments = EnchantmentHelper.get(stack);
+        enchantment = enchantments.keySet().iterator().next();
+        levelOfEnchantment = enchantments.get(enchantment);
+
+        requiredAmel = 20 * levelOfEnchantment;
         infusing = Math.min(
             OperatorUtils.getPositiveInt(this.hexStack, 0, this.hexStack.size()),
             requiredAmel
@@ -53,14 +64,31 @@ public class EnhanceEnchantedBook extends BeegInfusion {
     public void mishapIfNeeded() {
         // this seems a bit problematic for any other enchanted book handlers..
         // open an issue or something if you don't want this first mishap here
-        if (EnchantmentHelper.get(stack).values().size() != 1) {
+        if (enchantments.values().size() != 1)
             throw new MishapBadHandItem(
                 stack,
                 ENCHBOOK_WITH_ONE_ENCH,
                 ENCHBOOK_WITH_NOTONE_ENCH,
                 hand
             );
-        } else if (infusing < requiredAmel)
+        else if (
+            levelOfEnchantment >= LapisConfig.getCurrentConfig().getOverenchantLimitFor(enchantment)
+        )
+            throw new MishapBadHandItem(
+                stack,
+                Text.translatable(
+                    "mishaps.lapisworks.descs.not_too_overenchanted_book",
+                    enchantment.getName(levelOfEnchantment)
+                        .copy().styled(s -> s.withColor(ItemMediaHolder.HEX_COLOR))
+                ),
+                Text.translatable(
+                    "mishaps.lapisworks.descs.too_overenchanted_book",
+                    enchantment.getName(levelOfEnchantment)
+                        .copy().styled(s -> s.withColor(ItemMediaHolder.HEX_COLOR))
+                ),
+                hand
+            );
+        else if (infusing < requiredAmel)
             throw new MishapNotEnoughItems(AMEL, infusing, requiredAmel);
         assertItemAmount(ctx, Mutables::isAmel, AMEL, requiredAmel);
     }

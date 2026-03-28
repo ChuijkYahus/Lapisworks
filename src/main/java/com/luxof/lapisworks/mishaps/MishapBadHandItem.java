@@ -28,8 +28,7 @@ public class MishapBadHandItem extends Mishap {
     public Text gotItemDesc;
     
     private ItemStack emptyIfNull(ItemStack stack) {
-        if (stack == null) { return ItemStack.EMPTY.copy(); }
-        return stack;
+        return stack == null ? ItemStack.EMPTY : stack;
     }
 
     public MishapBadHandItem(@Nullable ItemStack item, Text wanted, Hand hand) {
