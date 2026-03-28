@@ -3,7 +3,6 @@ package com.luxof.lapisworks.BeegInfusions;
 import at.petrak.hexcasting.api.casting.OperatorUtils;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
 import at.petrak.hexcasting.api.misc.MediaConstants;
-import at.petrak.hexcasting.common.items.magic.ItemMediaHolder;
 
 import com.luxof.lapisworks.VAULT.Flags;
 import com.luxof.lapisworks.init.LapisConfig;
@@ -24,6 +23,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 
 public class EnhanceEnchantedBook extends BeegInfusion {
@@ -79,12 +79,12 @@ public class EnhanceEnchantedBook extends BeegInfusion {
                 Text.translatable(
                     "mishaps.lapisworks.descs.not_too_overenchanted_book",
                     enchantment.getName(levelOfEnchantment)
-                        .copy().styled(s -> s.withColor(ItemMediaHolder.HEX_COLOR))
+                        .copy().formatted(Formatting.DARK_PURPLE)
                 ),
                 Text.translatable(
                     "mishaps.lapisworks.descs.too_overenchanted_book",
                     enchantment.getName(levelOfEnchantment)
-                        .copy().styled(s -> s.withColor(ItemMediaHolder.HEX_COLOR))
+                        .copy().formatted(Formatting.DARK_PURPLE)
                 ),
                 null
             );

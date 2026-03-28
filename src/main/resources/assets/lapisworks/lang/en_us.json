@@ -398,7 +398,7 @@
     "mishaps.lapisworks.descs.scroll_with_gs": "a scroll with a pattern on it that resembles a Great Spell but does not necessarily have the correct stroke order",
     "mishaps.lapisworks.descs.oneench_enchbook": "an enchanted book with only ONE enchantment",
     "mishaps.lapisworks.descs.moreench_enchbook": "an enchanted book with MORE (or less) than one enchantment",
-    "mishaps.lapisworks.descs.not_too_overenchanted_book": "an enchanted book with less than %s",
+    "mishaps.lapisworks.descs.not_too_overenchanted_book": "an enchanted book with less levels than %s",
     "mishaps.lapisworks.descs.too_overenchanted_book": "an enchanted book with %s",
     "mishaps.lapisworks.descs.moldable": "a moldable object (e.g. Amethyst Lazuli, an Amel Ring, etc.)",
     "mishaps.lapisworks.descs.linkable_media_block": "a media-containing block/phiangleable (e.g. a Media Condensing Unit)",
@@ -508,7 +508,7 @@
     "pages.lapisworks.imbuement_spell.title": "Imbue Amel",
     "pages.lapisworks.imbuement_spell.summary": "The ancient \"$(#00c)Lapisworkers$()\" would use this often. Imbue the item in my hand with the specified amount of Amel, with no waste like the Enchant X spells. Costs 2x the amount of $(item)Amel$() being infused, in dust.",
     "pages.lapisworks.imbuement_spell.howitcostsamel": "It draws $(item)Amel$() firstly from anything I have equipped, then from my hands and then from my hotbar. The number argument I provide limits it from being able to find or draw any more $(item)Amel$() than that.",
-    "pages.lapisworks.imbuement_spell.specialhandlers": "Besides turning one item into another, this spell can also be used to enchant some things instead. For example: one use I've found is to enchant Enchanted Books that have only one enchantment. It increases the level of the lone enchantment on the book by $(thing)1$() for $(thing)20 x (previous level)$() $(item)Amel$() and about five charged crystals of Amethyst.",
+    "pages.lapisworks.imbuement_spell.specialhandlers": "Besides turning one item into another, this spell can also be used to enchant some things instead. For example: one use I've found is to enchant Enchanted Books that have only one enchantment. It increases the level of the lone enchantment on the book by $(thing)1$() for $(thing)20 x (previous level)$() $(item)Amel$() and about five charged crystals of Amethyst (albeit it has a per-enchantment maximum level).",
     "pages.lapisworks.imbuement_spell.disimbuement_spell.summary": "For one dust, tries to disenchant the infused item in my hand. If the item has multiple methods to make it then it the Amel has corroded it's original essence, so this spell disintegrates the item into the least $(item)Amel$() that makes it up.",
 
     "pages.lapisworks.imbuement_rings.title": "Casting Rings",
