@@ -206,8 +206,7 @@ public class Lapisworks implements ModInitializer {
 		LapisParticles.pawtickle();
 		ModEvents.finallyBeUsed();
 
-        log("Luxof's pet Lapisworks is getting a bit hyperactive.");
-		log("\"Lapisworks! Lapis Lapis!\"");
+        TheSillySayer.sayNormal();
 		if (anyInterop) {
 			// yknow, i would love to make the Interop category/entries unavailable until the mods
 			// required exist but what if i keep it right there to garner curiosity and get people
@@ -218,8 +217,8 @@ public class Lapisworks implements ModInitializer {
 			//	"lapisworks:any_interop",
 			//	true
 			//)
-			log("You have an addon that has interop with Lapisworks loaded?! Oh NOO, it's overstimulated, it's gonna throw up a bunch of content! Look what you've done!");
-		} else log("Feed it redstone.");
+			TheSillySayer.sayInterop();
+		} else TheSillySayer.sayNoInterop();
 	}
 
 	public static Identifier id(String string) {
@@ -231,6 +230,12 @@ public class Lapisworks implements ModInitializer {
 	}
 	public static JsonPrimitive primitive(Boolean bool) {
 		return new JsonPrimitive(bool);
+	}
+	public static JsonPrimitive primitive(String string) {
+		return new JsonPrimitive(string);
+	}
+	public static <T1 extends Object, T2 extends Object> Pair<T1, T2> pair(T1 one, T2 two) {
+		return new Pair<>(one, two);
 	}
 
 	public static boolean trinketEquipped(LivingEntity entity, Item item) {
