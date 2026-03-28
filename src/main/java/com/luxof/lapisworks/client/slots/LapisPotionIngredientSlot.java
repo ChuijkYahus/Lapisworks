@@ -4,6 +4,7 @@ import com.luxof.lapisworks.recipes.BreweryRecipe;
 
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.BrewingRecipeRegistry;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.world.World;
 
@@ -24,6 +25,6 @@ public class LapisPotionIngredientSlot extends Slot {
         for (BreweryRecipe rec : world.getRecipeManager().listAllOfType(BreweryRecipe.Type.INSTANCE)) {
             if (rec.catalystMatches(stack)) return true;
         }
-        return false;
+        return BrewingRecipeRegistry.isValidIngredient(stack);
     }
 }

@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import static com.luxof.lapisworks.Lapisworks.err;
+import static com.luxof.lapisworks.Lapisworks.pair;
 import static com.luxof.lapisworks.Lapisworks.primitive;
 
 import java.io.File;
@@ -15,7 +16,9 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 
 import net.fabricmc.loader.api.FabricLoader;
-
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 
 import org.jetbrains.annotations.Nullable;
@@ -64,6 +67,7 @@ public class LapisConfig {
     private static final String MaxErr = "max_err";
     private static final String Spells = "spells";
     private static final String AllowReclaimAmethyst = "allow_reclaim_amethyst_but_imbue_lapis_takes_items_instead_of_raw_media";
+    private static final String OverenchantLimit = "overenchant_limit_in_imbue_amel";
     private static final String defaultConfig = """
     {
       "onetime_ritual": {
@@ -93,6 +97,19 @@ public class LapisConfig {
 
       "spells": {
         "allow_reclaim_amethyst_but_imbue_lapis_takes_items_instead_of_raw_media": true
+      },
+
+      "overenchant_limit_in_imbue_amel": {
+        "comment": "0 = 32-bit integer limit, not present = 3*usual max level limit",
+        "minecraft:channeling": 1,
+        "minecraft:mending": 1,
+        "minecraft:infinity": 1,
+        "minecraft:binding_curse": 1,
+        "minecraft:vanishing_curse": 1,
+        "minecraft:flame": 1,
+        "minecraft:multishot": 1,
+        "minecraft:piercing": 10,
+        "minecraft:silk_touch": 1
       }
     }
     """;
@@ -108,6 +125,13 @@ public class LapisConfig {
         if (fallBackTo.isBoolean()) {
             try {
                 obj.get(key).getAsBoolean();
+            } catch (Exception e) {
+                obj.add(key, fallBackTo);
+                return false;
+            }
+        } else if (fallBackTo.isString()) {
+            try {
+                obj.get(key).getAsString();
             } catch (Exception e) {
                 obj.add(key, fallBackTo);
                 return false;
@@ -196,40 +220,55 @@ public class LapisConfig {
         fileIsPerfect = fileIsPerfect && defaultIfInvalid(
             obj,
             OneTime_R,
-            new Pair<>(PlayerAmbitMult, primitive(0.5)),
-            new Pair<>(TuneableAmbitMult, primitive(1.0)),
-            new Pair<>(PoweredTrailLength, primitive(1))
+            pair(PlayerAmbitMult, primitive(0.5)),
+            pair(TuneableAmbitMult, primitive(1.0)),
+            pair(PoweredTrailLength, primitive(1))
         );
 
         fileIsPerfect = fileIsPerfect && defaultIfInvalid(
             obj,
             MultiUse_R,
-            new Pair<>(TuneableAmbitMult, primitive(1.0)),
-            new Pair<>(PoweredTrailLength, primitive(5))
+            pair(TuneableAmbitMult, primitive(1.0)),
+            pair(PoweredTrailLength, primitive(5))
         );
 
         fileIsPerfect = fileIsPerfect && defaultIfInvalid(
             obj,
             Grand_R,
-            new Pair<>(DoAnimation, primitive(true)),
-            new Pair<>(CostMultiplier, primitive(0.5))
+            pair(DoAnimation, primitive(true)),
+            pair(CostMultiplier, primitive(0.5))
         );
 
         fileIsPerfect = fileIsPerfect && defaultIfInvalid(
             obj,
             Chariot,
-            new Pair<>(MaxFusedAmalgams, primitive(1)),
-            new Pair<>(MaxSiARange, primitive(48.0)),
-            new Pair<>(MaxCARange, primitive(96.0)),
-            new Pair<>(SiAErrMult, primitive(0.125)),
-            new Pair<>(CAErrMult, primitive(0.25)),
-            new Pair<>(MaxErr, primitive(32.0))
+            pair(MaxFusedAmalgams, primitive(1)),
+            pair(MaxSiARange, primitive(48.0)),
+            pair(MaxCARange, primitive(96.0)),
+            pair(SiAErrMult, primitive(0.125)),
+            pair(CAErrMult, primitive(0.25)),
+            pair(MaxErr, primitive(32.0))
         );
 
         fileIsPerfect = fileIsPerfect && defaultIfInvalid(
             obj,
             Spells,
-            new Pair<>(AllowReclaimAmethyst, primitive(true))
+            pair(AllowReclaimAmethyst, primitive(true))
+        );
+
+        fileIsPerfect = fileIsPerfect && defaultIfInvalid(
+            obj,
+            OverenchantLimit,
+            pair("comment", primitive("0 = no limit, not present = 3*usual max level limit")),
+            pair("minecraft:channeling", primitive(1)),
+            pair("minecraft:mending", primitive(1)),
+            pair("minecraft:infinity", primitive(1)),
+            pair("minecraft:binding_curse", primitive(1)),
+            pair("minecraft:vanishing_curse", primitive(1)),
+            pair("minecraft:flame", primitive(1)),
+            pair("minecraft:multishot", primitive(1)),
+            pair("minecraft:piercing", primitive(10)),
+            pair("minecraft:silk_touch", primitive(1))
         );
 
         if (!fileIsPerfect) {
@@ -325,5 +364,19 @@ public class LapisConfig {
         return new SpellSettings(
             settings.get(AllowReclaimAmethyst).getAsBoolean()
         );
+    }
+
+
+    public int getOverenchantLimitFor(Enchantment enchantment) {
+        return getOverenchantLimitFor(Registries.ENCHANTMENT.getId(enchantment).toString());
+    }
+    public int getOverenchantLimitFor(String enchantmentId) {
+        JsonObject limits = obj.getAsJsonObject(OverenchantLimit);
+
+        return limits.has(enchantmentId)
+            ? limits.get(enchantmentId).getAsInt() == 0
+                ? Integer.MAX_VALUE // you can't even get it this high...
+                : limits.get(enchantmentId).getAsInt()
+            : Registries.ENCHANTMENT.get(new Identifier(enchantmentId)).getMaxLevel()*3;
     }
 }

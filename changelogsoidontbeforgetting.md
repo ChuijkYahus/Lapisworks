@@ -328,33 +328,56 @@ Only the devs who can keep up with me...
 - Change $(item)Diamond$() to just Diamond in that one title (zh_cn too)  
 - Imbue Lapis takes lapis again (how this shit appears out of thin air will forever elude me)  
 # 1.5.8.2
-- book.
-- fixed Deposit Media crashing on wisps
-- fixed Withdraw Media *depositing into* blocks instead of *withdrawing from* them. (mfw one word typo)
+- Chinese translations by @chujik.ide
+## Additions
+- Deposit Media can start one-time rituals if used on chalk
+- Impeti fully work normally with the media patterns now (but they can only store a maximum of 10000 dust according to the network)
+- Ra's Gambit
+  - every non-pattern iota henceforth gets pushed to the stack instead of mishapping
+  - there's also a pattern to disable that
+## Changes
+- Book.
+  - e.g. person who flayed themselves in the entry for Indigan Lapidary now no longer has specified pronouns
+- Also changed the description for the Hallucination-Encrypted advancement
+- Gave Media Condenser Units a tooltip
+- Wands are called sceptres now
+- Upgrading enchanted books has an actual limit now (decided by the config!)
+## Fixes
+- Deposit Media
+- Withdraw Media
+- Mintiest Gambit
 - Enchant X spells didn't take media when you disenchanted with them
-- Deposit Media can start one-time rituals if used on chalk now
-- Hexcessible shows neither the per world shape patterns* nor unintended stuff  
-  \*: until learned
-- hexdoc doesn't show the wrong shit for Robbie's Exaltation
-- Impeti can refuel from Media Condenser networks even with Heimdall's Gambit
-- Imbue Lapis II (takes item entities instead of Lapis and Amethyst from your inventory)
-- Slate Imprinter
+- Hexcessible showing unintended stuff (e.g. per world shape patterns before learning them)
+- Robbie's Exaltation in HexBug (just gotta wait for that to update)
+- Impeti mishapping when pulling from Condenser networks during Heimdall's Gambit (Oneironaut)
+- Enchantments STILL wouldn't carry across dimensions (mfw one line fix)
+- Enchanted Brewery wouldn't work with modded brewing recipes :tasque_waaanager:
+- Catastrophic VAULT failure (took and gave more items than it should've)
+- Enchanted Brewery looked like it still had the same potion pre-brewing on the client
+- Some shit related to mixin mishap messages
 # 1.5.8.3
-- Make Amalgamations more convenient to work with
-- Totem necklace
-  - imbue one with amel
+- Totem Necklace
+  - yeah
+- Enchanted Totem Necklace
+  - imbue a totem necklace with ten pieces of Amel
   - heals you back to only half a heart
   - casts a pre-defined hex upon activation
 - item that erases the patterns around you
   - "chain" item that may be worn on both necklace and ring slots
-  - they're chokers (thanks sylvanis)
+  - they're chokers (thank sylvanis for that idea)
   - conceals the invis particle fx
- - focus necklaces can be on dogs, cats, foxes, or allays
-  - putting a vector in it = animal wanna go there
+  - sealing them completely disables their effects and makes them purely cosmetic
+- focus necklaces can be on dogs, cats, foxes, or allays (right click)
+- enchanted focus necklaces
+  - can be put on the same animals as before (right click)
+  - imbue a focus necklace with five pieces of Amel
+  - put a vector in it = animal wanna go there
   - put entity in it = dog attack
     - item entity = fox or allay pick up
 # 1.5.9
 ### Free me
+- [This](https://discord.com/channels/936370934292549712/950847275549229086/1479043488183095317)
+- Overenchanting?
 - Hexical interop
   - every key is telepathy-able
 - Amethyst Piano
@@ -631,4 +654,6 @@ FUCKING UNICORNS
   - see that one convo i had with Miyu (search up Tulpa on TechTastic)
 
 wearable cypher/trinket/artifact trinket  
-enchanted flowers?
+enchanted flowers?  
+
+Slate Imprinter? Kind of obsolete since you can make it with foci neckli but uh why not?  

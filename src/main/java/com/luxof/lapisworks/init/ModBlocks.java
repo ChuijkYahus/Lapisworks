@@ -15,6 +15,9 @@ import net.minecraft.block.entity.BlockEntityType.BlockEntityFactory;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 
+/** Hey! oh what'd you say? oh what'd you just say just now?
+ * Watch what you say, 'cause baby you'll break my heart!
+ * Oh, what'd you say? But baby know if you look inside, you'll find a heart of glass! */
 public class ModBlocks {
     public static ConjuredColorable CONJURED_COLORABLE = new ConjuredColorable();
     public static Mind MIND_BLOCK = new Mind();

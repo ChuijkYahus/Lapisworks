@@ -23,6 +23,7 @@ import com.luxof.lapisworks.init.LapisParticles;
 import com.luxof.lapisworks.init.LapisworksLoot;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.ModEntities;
+import com.luxof.lapisworks.init.ModEvents;
 import com.luxof.lapisworks.init.ModItems;
 import com.luxof.lapisworks.init.ModPOIs;
 import com.luxof.lapisworks.init.ModRecipes;
@@ -203,9 +204,9 @@ public class Lapisworks implements ModInitializer {
 		ModRecipes.apologizeForWarcrimes();
 		ModScreens.whatWasThatTF2CommentAboutMakingBadGUICodeSoYouDontHaveToTouchItAgain();
 		LapisParticles.pawtickle();
+		ModEvents.finallyBeUsed();
 
-        log("Luxof's pet Lapisworks is getting a bit hyperactive.");
-		log("\"Lapisworks! Lapis Lapis!\"");
+        TheSillySayer.sayNormal();
 		if (anyInterop) {
 			// yknow, i would love to make the Interop category/entries unavailable until the mods
 			// required exist but what if i keep it right there to garner curiosity and get people
@@ -216,8 +217,8 @@ public class Lapisworks implements ModInitializer {
 			//	"lapisworks:any_interop",
 			//	true
 			//)
-			log("You have an addon that has interop with Lapisworks loaded?! Oh NOO, it's overstimulated, it's gonna throw up a bunch of content! Look what you've done!");
-		} else log("Feed it redstone.");
+			TheSillySayer.sayInterop();
+		} else TheSillySayer.sayNoInterop();
 	}
 
 	public static Identifier id(String string) {
@@ -229,6 +230,12 @@ public class Lapisworks implements ModInitializer {
 	}
 	public static JsonPrimitive primitive(Boolean bool) {
 		return new JsonPrimitive(bool);
+	}
+	public static JsonPrimitive primitive(String string) {
+		return new JsonPrimitive(string);
+	}
+	public static <T1 extends Object, T2 extends Object> Pair<T1, T2> pair(T1 one, T2 two) {
+		return new Pair<>(one, two);
 	}
 
 	public static boolean trinketEquipped(LivingEntity entity, Item item) {
@@ -436,19 +443,22 @@ public class Lapisworks implements ModInitializer {
 	/** returns null if resulting Hand can't be MAIN_HAND or OFF_HAND (MORE WILL COME, THEE SHALL KNOW) */
 	@Nullable
 	public static Hand intToHand(int hand) {
-		switch (hand) {
-			case 0: return Hand.MAIN_HAND;
-			case 1: return Hand.OFF_HAND;
-			default: return null;
-		}
+		return switch(hand) {
+			case 0 -> Hand.MAIN_HAND;
+			case 1 -> Hand.OFF_HAND;
+			default -> null;
+		};
 	}
 
 	/** Returns stuff like Text.translateable("hands.lapisworks.43") (43rd hand)
 	 * if it doesn't know wtf that Hand is */
-	public static Text handToString(Hand hand) {
-		if (hand == Hand.MAIN_HAND) { return MAINHAND; }
-		else if (hand == Hand.OFF_HAND) { return OFFHAND; }
-		return Text.translatable("hands.lapisworks." + hand.ordinal());
+	public static Text handToString(@Nullable Hand hand) {
+		if (hand == null) return Text.translatable("hands.lapisworks.none");
+		return switch (hand) {
+			case MAIN_HAND -> MAINHAND;
+			case OFF_HAND -> OFFHAND;
+			default -> Text.translatable("hands.lapisworks." + hand.ordinal());
+		};
 	}
 
 	/** Will update when the third and fourth hands expansion comes out fr */
@@ -605,7 +615,7 @@ public class Lapisworks implements ModInitializer {
 
 	/** takes links into account.
 	 * <br>returns what was deposited/withdrawn first, and a set of all involved linkables second. */
-	public static Pair<Long, Set<BlockPos>> fullLinkableMediaBlocksInteraction(
+	public static Pair<Long, Set<BlockPos>> interactWithLinkableMediaBlocks(
 		ServerWorld world,
 		Set<BlockPos> first,
 		long amountToInteract,
@@ -614,7 +624,7 @@ public class Lapisworks implements ModInitializer {
 	) {
 		long interactionLeft = amountToInteract;
 		Stack<BlockPos> todo = new Stack<>();
-		
+
 		HashSet<BlockPos> seen = new HashSet<>();
 
 		seen.addAll(first);
@@ -624,35 +634,16 @@ public class Lapisworks implements ModInitializer {
 			BlockPos currPos = todo.pop();
 			LinkableMediaBlock curr = (LinkableMediaBlock)world.getBlockEntity(currPos);
 
-			if (deposit) interactionLeft -= curr.depositMedia(interactionLeft, simulate);
-			else interactionLeft -= curr.withdrawMedia(interactionLeft, simulate);
+			interactionLeft -= deposit
+				? curr.depositMedia(interactionLeft, simulate)
+				: curr.withdrawMedia(interactionLeft, simulate);
+
 			if (interactionLeft == 0) return new Pair<>(amountToInteract, seen);
 
 			for (BlockPos linked : curr.getLinks()) { if (seen.add(linked)) todo.add(linked); }
 		}
 
 		return new Pair<>(amountToInteract - interactionLeft, seen);
-	}
-
-	/** does not simulate. */
-	public static long interactWithLinkableMediaBlocks(
-		ServerWorld world,
-		Set<BlockPos> first,
-		long amountToInteract,
-		boolean deposit
-	) {
-		return interactWithLinkableMediaBlocks(world, first, amountToInteract, deposit, false);
-	}
-	/** takes into account links. returns what was deposited/withdrawn. */
-	public static long interactWithLinkableMediaBlocks(
-		ServerWorld world,
-		Set<BlockPos> first,
-		long amountToInteract,
-		boolean deposit,
-		boolean simulate
-	) {
-		return fullLinkableMediaBlocksInteraction(world, first, amountToInteract, deposit, simulate)
-			.getLeft();
 	}
 
 	public static double getDistance(BlockPos pos1, BlockPos pos2) {

@@ -81,7 +81,7 @@ public abstract class VAULT {
                 left -= handleDrain(
                     stack,
                     itemPred,
-                    amount,
+                    left,
                     sim,
                     canEqTrinkets,
                     canEqTrinketsInvItems
@@ -97,7 +97,7 @@ public abstract class VAULT {
                 left -= handleDrain(
                     stack,
                     itemPred,
-                    amount,
+                    left,
                     sim,
                     canHands,
                     canHandsInvItems
@@ -113,7 +113,7 @@ public abstract class VAULT {
                 left -= handleDrain(
                     stack,
                     itemPred,
-                    amount,
+                    left,
                     sim,
                     canHotbar,
                     canHotbarInvItems
@@ -129,7 +129,7 @@ public abstract class VAULT {
                 left -= handleDrain(
                     stack,
                     itemPred,
-                    amount,
+                    left,
                     sim,
                     canInventory,
                     canInventoryInvItems
@@ -157,7 +157,7 @@ public abstract class VAULT {
                 left -= handleGive(
                     stack,
                     itemPred,
-                    amount,
+                    left,
                     sim,
                     flags.has(Flags.EQ_TRINKETS),
                     flags.has(Flags.EQ_TRINKETS_INVITEM)
@@ -173,7 +173,7 @@ public abstract class VAULT {
                 left -= handleGive(
                     stack,
                     itemPred,
-                    amount,
+                    left,
                     sim,
                     canHands,
                     canHandsInvItems
@@ -189,7 +189,7 @@ public abstract class VAULT {
                 left -= handleGive(
                     stack,
                     itemPred,
-                    amount,
+                    left,
                     sim,
                     canHotbar,
                     canHotbarInvItems
@@ -205,7 +205,7 @@ public abstract class VAULT {
                 left -= handleGive(
                     stack,
                     itemPred,
-                    amount,
+                    left,
                     sim,
                     canInventory,
                     canInventoryInvItems

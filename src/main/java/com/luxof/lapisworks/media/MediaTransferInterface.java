@@ -41,9 +41,4 @@ public interface MediaTransferInterface {
         }
         return toWithdraw;
     }
-    // don't override these :pray:
-    /** does not simulate. */
-    default public long depositMedia(long amount) { return depositMedia(amount, false); }
-    /** does not simulate. */
-    default public long withdrawMedia(long amount) { return withdrawMedia(amount, false); }
 }

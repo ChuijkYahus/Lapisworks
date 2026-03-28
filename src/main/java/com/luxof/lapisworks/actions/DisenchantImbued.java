@@ -12,7 +12,6 @@ import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 import com.luxof.lapisworks.recipes.ImbuementRec;
 
 import static com.luxof.lapisworks.Lapisworks.getInfusedAmel;
-import static com.luxof.lapisworks.Lapisworks.log;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,10 +32,8 @@ public class DisenchantImbued extends SpellActionNCT {
 
         CastingEnvironment.HeldItemInfo performOn = ctx.getHeldItemToOperateOn(
             itemstack -> {
-                log("hey, tryna get a disimbuement.");
                 Optional<ItemStack> possible = getDisimbuementFor(world, itemstack);
                 if (possible.isEmpty()) return false;
-                log("found one.");
                 disimbuement[0] = possible.get();
                 return true;
             }
@@ -86,11 +83,8 @@ public class DisenchantImbued extends SpellActionNCT {
 
         Ingredient ing = recipe.getNormal();
 
-        log("checking ingredient entries length");
         if (ing.entries.length > 1) return Optional.empty();
-        log("success. checking if that shit's a stack");
         if (!(ing.entries[0] instanceof StackEntry entry)) return Optional.empty();
-        log("wow");
 
         return Optional.of(entry.stack.copyWithCount(stack.getCount()));
     }

@@ -18,7 +18,6 @@ import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
 import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 
 import static com.luxof.lapisworks.Lapisworks.HEXAL_INTEROP;
-import static com.luxof.lapisworks.Lapisworks.fullLinkableMediaBlocksInteraction;
 import static com.luxof.lapisworks.Lapisworks.interactWithLinkableMediaBlocks;
 
 import java.util.ArrayList;
@@ -65,7 +64,7 @@ public class Withdraw extends SpellActionNCT {
 
         if (from instanceof LinkableMediaBlock lmb) {
             BlockPos pos = lmb.getThisPos();
-            Pair<Long, Set<BlockPos>> interactSimResult = fullLinkableMediaBlocksInteraction(
+            Pair<Long, Set<BlockPos>> interactSimResult = interactWithLinkableMediaBlocks(
                 ctx.getWorld(),
                 Set.of(pos),
                 amount,
@@ -80,7 +79,7 @@ public class Withdraw extends SpellActionNCT {
 
             return new SpellAction.Result(
                 new LMBSpell(pos, realAmount, into),
-                realAmount + (long)(realAmount * 0.1),
+                (long)(realAmount * 0.1),
                 particles,
                 1
             );
@@ -113,7 +112,10 @@ public class Withdraw extends SpellActionNCT {
 
         @Override
         public void cast(CastingEnvironment ctx) {
-            into.depositMedia(from.withdrawMedia(amount));
+            into.depositMedia(
+                from.withdrawMedia(amount, false),
+                false
+            );
         }
     }
 
@@ -137,7 +139,8 @@ public class Withdraw extends SpellActionNCT {
                     amount,
                     false,
                     false
-                )
+                ).getLeft(),
+                false
             );
 		}
     }

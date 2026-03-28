@@ -69,16 +69,16 @@ public abstract class CastingEnvironmentMixin implements GetStacks, GetVAULT {
         Operation<Long> og
     ) {
         cost = og.call(cost, simulate);
-        if (!((Object)this instanceof CircleCastEnv)) return cost;
-        CircleCastEnv env = (CircleCastEnv)(Object)this;
-        long interactAmount = interactWithLinkableMediaBlocks(
+        if (!((Object)this instanceof CircleCastEnv env)) return cost;
+
+        cost -= interactWithLinkableMediaBlocks(
             (ServerWorld)env.getImpetus().getWorld(),
             Set.of(env.circleState().impetusPos),
             cost,
             false,
             simulate
-        );
-        cost -= interactAmount;
+        ).getLeft();
+
         return cost;
     }
 }

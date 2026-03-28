@@ -3,12 +3,15 @@ package com.luxof.lapisworks.actions.interact;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.eval.env.PackagedItemCastEnv;
 import at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster;
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughMedia;
 import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
 import com.google.common.collect.ImmutableSet;
+
 import com.luxof.lapisworks.blocks.stuff.IChalkBE;
 import com.luxof.lapisworks.media.LinkableMediaBlock;
 import com.luxof.lapisworks.media.MediaTransferInterface;
@@ -17,8 +20,8 @@ import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
 import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 
 import static com.luxof.lapisworks.Lapisworks.ONEIRONAUT_INTEROP;
-import static com.luxof.lapisworks.Lapisworks.fullLinkableMediaBlocksInteraction;
 import static com.luxof.lapisworks.Lapisworks.interactWithLinkableMediaBlocks;
+import static com.luxof.lapisworks.Lapisworks.log;
 import static com.luxof.lapisworks.interop.oneironaut.FuckingInexhaustiblePhials.getBottomlessContrib;
 
 import java.util.ArrayList;
@@ -32,18 +35,31 @@ import net.minecraft.util.math.BlockPos;
 public class Deposit extends SpellActionNCT {
     public int argc = 2;
 
-    private void assertNoFunnyMedia(long cost) {
+    private void assertNoFunnyMedia(long mediaCost) {
+        long availableMedia = -ctx.extractMedia(-1, true);
         if (!(ctx instanceof PlayerBasedCastEnv pbcenv)) return;
 
         ServerPlayerEntity player = pbcenv.getCaster();
         if (player.isCreative()) return;
 
-        cost -= ((PlayerBasedCastEnvAccessor)pbcenv).lapisworks$invokeCanOvercast()
-            ? 20L*MediaConstants.DUST_UNIT : 0;
-        cost -= ONEIRONAUT_INTEROP ? getBottomlessContrib(pbcenv) : 0L;
+        log("hey you cost is %d", mediaCost);
+        log("hi can player overcast %b", ((PlayerBasedCastEnvAccessor)pbcenv).lapisworks$invokeCanOvercast());
+        log("available %d dust", availableMedia);
+        availableMedia -= ((PlayerBasedCastEnvAccessor)pbcenv).lapisworks$invokeCanOvercast()
+            && (
+                !(ctx instanceof PackagedItemCastEnv pice) ||
+                IXplatAbstractions.INSTANCE.findHexHolder(
+                    player.getStackInHand(pice.getCastingHand())
+                ).canDrawMediaFromInventory()
+            )
+            ? 20L*MediaConstants.DUST_UNIT
+            : 0;
+        log("available %d dust", availableMedia);
+        availableMedia -= ONEIRONAUT_INTEROP ? getBottomlessContrib(pbcenv) : 0L;
+        log("oneironaut make available %d dust", availableMedia);
 
-        if (ctx.extractMedia(-1, true) < cost)
-            throw new MishapNotEnoughMedia(cost);
+        if (availableMedia < mediaCost)
+            throw new MishapNotEnoughMedia(mediaCost);
     }
 
     @Override
@@ -58,7 +74,7 @@ public class Deposit extends SpellActionNCT {
         if (MTI instanceof LinkableMediaBlock lmb) {
 
             BlockPos pos = lmb.getThisPos();
-            Pair<Long, Set<BlockPos>> interactSimResult = fullLinkableMediaBlocksInteraction(
+            Pair<Long, Set<BlockPos>> interactSimResult = interactWithLinkableMediaBlocks(
                 ctx.getWorld(),
                 Set.of(pos),
                 amount,
@@ -123,7 +139,7 @@ public class Deposit extends SpellActionNCT {
 
         @Override
         public void cast(CastingEnvironment ctx) {
-            MTI.depositMedia(amount);
+            MTI.depositMedia(amount, false);
         }
     }
 
@@ -142,7 +158,8 @@ public class Deposit extends SpellActionNCT {
                 ctx.getWorld(),
                 ImmutableSet.of(pos),
                 amount,
-                true
+                true,
+                false
             );
 		}
     }

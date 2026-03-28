@@ -62,15 +62,6 @@ public class BrewingRec implements BreweryRecipe {
         return PotionUtil.setPotion(new ItemStack(Items.POTION), potionOut);
     }
 
-    /** <code>craft</code> but it selects the leftmost brewingInto. */
-    @Override
-    public ItemStack craft(BrewerInv inventory, DynamicRegistryManager registryManager) {
-        return PotionUtil.setPotion(
-            inventory.brewingInto.get(0).copy(),
-            potionOut
-        );
-    }
-
     @Override
     public boolean matches(BrewerInv inventory, World world) {
         ItemStack catalystStack = inventory.input;

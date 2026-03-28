@@ -8,7 +8,6 @@ import com.luxof.lapisworks.inv.HandsInv;
 import com.luxof.lapisworks.items.shit.BasePartAmel;
 
 import static com.luxof.lapisworks.Lapisworks.getInfusedAmel;
-import static com.luxof.lapisworks.Lapisworks.log;
 import static com.luxof.lapisworks.Lapisworks.setInfusedAmel;
 
 import java.util.List;
@@ -156,14 +155,9 @@ public class ImbuementRec implements Recipe<HandsInv> {
 
         if (inventory instanceof DisimbuementInv) {
             boolean ret = false;
-            log(id.toString());
             for (ItemStack stack : inventory.getHands()) {
-                log("hey. " + stack.getItem().toString() + " and " + fullAmel.toString() + " and " + (partAmel != null ? partAmel.toString() : "null"));
-                log("%B %B %B", ret, stack.getItem() == fullAmel, stack.getItem() == partAmel);
                 ret = ret || stack.getItem() == fullAmel || stack.getItem() == partAmel;
             }
-            if (ret)
-                log(id.toString() + " says true!");
             return ret;
         }
 

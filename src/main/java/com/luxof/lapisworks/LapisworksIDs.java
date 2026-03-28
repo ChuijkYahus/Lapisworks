@@ -31,6 +31,8 @@ public class LapisworksIDs {
     public static final Identifier SET_PATTERNS_ON_CHALK = id("set_patterns_on_chalk");
     public static final Identifier GIB_DUST = id("gib_dust");
     public static final Identifier APPLY_PULL_FOR_TIME = id("apply_lingering_accel");
+    public static final Identifier ROBBIES_EXALT_PACKET = id("do_robbies_exalt");
+    public static final Identifier UNLOCK_SHIT_FOR_HEXCESSIBLE = id("unlock_pwshape_hexcessible");
 
     // items and shit
     public static final Identifier LAPIS_MAGIC_SHIT_GROUP = id("lapismagicshitgroup");
@@ -110,7 +112,7 @@ public class LapisworksIDs {
     public static final String NOT_ENOUGH = "mishaps.lapisworks.not_enough_items";
     public static final String ALREADY_ENCHANTED = "mishaps.lapisworks.already_enchanted";
     public static final String SPECHAND_NOITEM = "mishaps.lapisworks.some_hand.no_item";
-    public static final String SPECHAND_BADITEM = "mishaps.lapisworks.some_hand.no_item";
+    public static final String SPECHAND_BADITEM = "mishaps.lapisworks.some_hand.bad_item";
     public static final String NOT_EQUIPPED = "mishaps.lapisworks.equipped.not";
     public static final String WRONG_EQUIPPED = "mishaps.lapisworks.equipped.bad";
 

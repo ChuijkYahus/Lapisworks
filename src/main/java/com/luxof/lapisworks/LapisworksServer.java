@@ -14,6 +14,7 @@ import static com.luxof.lapisworks.Lapisworks.pickUsingSeed;
 import static com.luxof.lapisworks.Lapisworks.pickConfigFlags;
 import static com.luxof.lapisworks.Lapisworks.nullConfigFlags;
 import static com.luxof.lapisworks.LapisworksIDs.GEODE_DOWSER_REQUEST;
+import static com.luxof.lapisworks.LapisworksIDs.ROBBIES_EXALT_PACKET;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_PWSHAPE_PATS;
 import static com.luxof.lapisworks.LapisworksIDs.SEND_SENT;
 import static com.luxof.lapisworks.LapisworksIDs.SET_PATTERNS_ON_CHALK;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.BiConsumer;
 
 import io.netty.buffer.Unpooled;
@@ -48,9 +50,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class LapisworksServer {
     public static void onJoinEnchSentStuff(
-        ServerPlayNetworkHandler handler,
-        PacketSender sender,
-        MinecraftServer server
+        ServerPlayNetworkHandler handler
     ) {
         ServerPlayerEntity player = handler.getPlayer();
         Vec3d sentPos = ((EnchSentInterface)player).getEnchantedSentinel();
@@ -66,15 +66,22 @@ public class LapisworksServer {
     }
 
     public static void onJoinPWShapeStuff(
-        ServerPlayNetworkHandler handler,
-        PacketSender sender,
-        MinecraftServer server
+        ServerPlayNetworkHandler handler
     ) {
         ServerPlayerEntity player = handler.getPlayer();
         PacketByteBuf patsBuf = PacketByteBufs.create();
         // hell naw i'm not dealing with the two extra args to writeMap() (i dunno wtf those are)
         patsBuf.writeNbt(turnChosenIntoNbt());
         ServerPlayNetworking.send(player, SEND_PWSHAPE_PATS, patsBuf);
+    }
+
+    public static void onJoinRobbiesStuff(
+        ServerPlayNetworkHandler handler
+    ) {
+        ServerPlayerEntity player = handler.getPlayer();
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeInt(ROBBIES_EXALT_VARIANT);
+        ServerPlayNetworking.send(player, ROBBIES_EXALT_PACKET, buf);
     }
 
     public static void handleCastingGridPacket(
@@ -167,12 +174,16 @@ public class LapisworksServer {
         );
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            onJoinEnchSentStuff(handler, sender, server);
-            onJoinPWShapeStuff(handler, sender, server);
+            onJoinEnchSentStuff(handler);
+            onJoinPWShapeStuff(handler);
+            onJoinRobbiesStuff(handler);
         });
         ServerLifecycleEvents.SERVER_STARTED.register((server) -> {
             pickConfigFlags(pickUsingSeed(server.getOverworld().getSeed()));
+            ROBBIES_EXALT_VARIANT = new Random(server.getOverworld().getSeed()).nextInt(2);
         });
         ServerLifecycleEvents.SERVER_STOPPING.register((server) -> { nullConfigFlags(); });
     }
+    
+    public static int ROBBIES_EXALT_VARIANT = 0;
 }

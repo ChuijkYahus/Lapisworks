@@ -6,6 +6,7 @@ import com.luxof.lapisworks.recipes.BreweryRecipe;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -86,9 +87,17 @@ public abstract class AbstractBrewerEntity extends BlockEntity implements NamedS
     }
 
     protected List<BreweryRecipe> updateRecipes(BrewerInv inv) {
-        return new ArrayList<>(
+        var recs = new ArrayList<>(
             world.getRecipeManager().getAllMatches(BreweryRecipe.Type.INSTANCE, inv, world)
         );
+
+        // what could possibly go wrong
+        // the mfs making five hundred enchanted breweries:
+        var generic = BreweryRecipe.findBrewingRecipeRegistryRecipe(inv, world);
+        if (generic != null)
+            recs.add(generic);
+
+        return recs;
     }
 
     /** returns the amount of catalyst that recipe required. */
@@ -108,6 +117,8 @@ public abstract class AbstractBrewerEntity extends BlockEntity implements NamedS
             ingCost = Math.max(ingCost, craft(rec, inv));
         }
         inv.input.decrement(ingCost);
+        this.markDirty();
+        world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
     }
 
     public void tick(World world, BlockPos pos, BlockState state) {
@@ -117,8 +128,6 @@ public abstract class AbstractBrewerEntity extends BlockEntity implements NamedS
         if (currentRecipes.size() <= 0) return;
 
         if (brewTime >= 0) brewTime -= 1;
-
-        this.markDirty();
     }
 
     @Override

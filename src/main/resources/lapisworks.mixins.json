@@ -24,7 +24,10 @@
 		"LoseJobOnSiteLossTaskMixin",
 		"IotaAccessor",
 		"ItemEntityMixin",
-		"PlayerBasedCastEnvAccessor"
+		"PlayerBasedCastEnvAccessor",
+		"PatternProcessorMixin",
+		"MishapDisallowedSpellMixin",
+		"HexAPIMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
