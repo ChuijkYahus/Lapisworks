@@ -329,17 +329,18 @@ Only the devs who can keep up with me...
 - Imbue Lapis takes lapis again (how this shit appears out of thin air will forever elude me)  
 # 1.5.8.2
 ## Additions
-- Amalgamations can be worked with while they're in your head (Hierophantics interop)
 - Deposit Media can start one-time rituals if used on chalk
 - Impeti fully work normally with the media patterns now (but they can only store a maximum of 10000 dust according to the network)
 - Ra's Gambit
   - every non-pattern iota henceforth gets pushed to the stack instead of mishapping
   - there's also a pattern to disable that
 ## Changes
-- book.
+- Book.
   - e.g. person who flayed themselves in the entry for Indigan Lapidary now no longer has specified pronouns
-- also changed the description for the Hallucination-Encrypted advancement
+- Also changed the description for the Hallucination-Encrypted advancement
 - Gave Media Condenser Units a tooltip
+- Wands are called sceptres now
+- Upgrading enchanted books' cost formula is now `20level^2`
 ## Fixes
 - Deposit Media
 - Withdraw Media
@@ -349,6 +350,9 @@ Only the devs who can keep up with me...
 - Robbie's Exaltation in HexBug (just gotta wait for that to update)
 - Impeti mishapping when pulling from Condenser networks during Heimdall's Gambit (Oneironaut)
 - Enchantments STILL wouldn't carry across dimensions (mfw one line fix)
+- Enchanted Brewery wouldn't work with modded brewing recipes :tasque_waaanager:
+- Catastrophic VAULT failure (took and gave more items than it should've)
+- Enchanted Brewery looked like it still had the same potion pre-brewing on the client
 # 1.5.8.3
 - Totem Necklace
   - yeah
