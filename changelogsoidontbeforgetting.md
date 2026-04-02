@@ -356,8 +356,13 @@ Only the devs who can keep up with me...
 - Enchanted Brewery looked like it still had the same potion pre-brewing on the client
 - Some shit related to mixin mishap messages
 # 1.5.8.3
-- Jumpslate drops and is breakable
+- Jumpslates and Rebound Slates are breakable and drop their item
 - Enchanted Anvil?
+  - Lets you enchant beyond the maximum.
+    - lets you combine beyond the usual maximum too.
+    - maximum decided by the same max for Imbue Amel's enchantment effect.
+  - Lets you enchant items with other items.
+  - has a scrollable menu on the right to select the enchantments you wanna move over.
 - Totem Necklace
   - yeah
 - Enchanted Totem Necklace
@@ -659,3 +664,14 @@ wearable cypher/trinket/artifact trinket
 enchanted flowers?  
 
 Slate Imprinter? Kind of obsolete since you can make it with foci neckli but uh why not?  
+
+Lightningbending rework
+- Hold a stance
+- In this stance you are very likely to get hit by lightning
+- Enchantment levels:
+  - 1 = very likely to get hit by lightning in thunderstorms
+  - 2 = instant hit in thunderstorms, likely in rain
+  - 3 = instant hit in rain, likely in clear weather
+  - 4 = instant hit always
+- If you are hit with any lightning you redirect it where you're looking
+- Yes, sideways lightning.  
