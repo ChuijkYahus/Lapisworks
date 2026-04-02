@@ -570,7 +570,7 @@
     "pages.lapisworks.imbuement.trinkets.necklace.write_necklace.summary": "Writes the iota to the necklace I'm wearing. Mishaps if there is no writable necklace available. (Drawing aid: the pattern is a line into almost a triangle, then a clockwise circle much like $(l:patterns/readwrite#hexcasting:write)Scribe's Gambit$().)",
     "pages.lapisworks.imbuement.trinkets.necklace.readable_necklace.summary": "Pushes if attempting to read from my necklace will succeed.",
     "pages.lapisworks.imbuement.trinkets.necklace.writeable_necklace.summary": "Pushes if attempting to write to my necklace will succeed.",
-    "pages.lapisworks.imbuement.trinkets.necklace.recipe.desc": "$(o)I believe the Amel is put there to allow the easy access to the focus by attracting media towards it.$()",
+    "pages.lapisworks.imbuement.trinkets.necklace.recipe.desc": "$(o)I believe the Amel is put there to attract media and allow easy access to the focus.$()",
     "pages.lapisworks.imbuement.trinkets.necklace.img.desc": "$(o)I should note that Mold Amel destroys the iota contained within.$()",
 
     "pages.lapisworks.imbuement.condenser.title": "Media Condensing Unit",

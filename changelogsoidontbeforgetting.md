@@ -328,7 +328,7 @@ Only the devs who can keep up with me...
 - Change $(item)Diamond$() to just Diamond in that one title (zh_cn too)  
 - Imbue Lapis takes lapis again (how this shit appears out of thin air will forever elude me)  
 # 1.5.8.2
-- Chinese translations by @chujik.ide
+- Chinese translations by @chujik_ide
 ## Additions
 - Deposit Media can start one-time rituals if used on chalk
 - Impeti fully work normally with the media patterns now (but they can only store a maximum of 10000 dust according to the network)
@@ -356,6 +356,8 @@ Only the devs who can keep up with me...
 - Enchanted Brewery looked like it still had the same potion pre-brewing on the client
 - Some shit related to mixin mishap messages
 # 1.5.8.3
+- Jumpslate drops and is breakable
+- Enchanted Anvil?
 - Totem Necklace
   - yeah
 - Enchanted Totem Necklace

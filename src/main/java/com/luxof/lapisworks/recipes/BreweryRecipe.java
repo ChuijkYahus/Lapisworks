@@ -3,7 +3,6 @@ package com.luxof.lapisworks.recipes;
 import com.luxof.lapisworks.inv.BrewerInv;
 
 import static com.luxof.lapisworks.Lapisworks.id;
-import static com.luxof.lapisworks.Lapisworks.log;
 
 import java.util.List;
 import java.util.Optional;

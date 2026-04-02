@@ -7,6 +7,10 @@
     "lapisworks:amel_constructs/simple_impetus",
     "lapisworks:media_condenser_unit",
     "lapisworks:uncrafted_condenser",
-    "lapisworks:tuneable_amethyst"
+    "lapisworks:tuneable_amethyst",
+    "lapisworks:amel_constructs/jumpslate/am1",
+    "lapisworks:amel_constructs/jumpslate/am2",
+    "lapisworks:amel_constructs/jumpslate/ameth",
+    "lapisworks:amel_constructs/jumpslate/lapis"
   ]
 }

@@ -21,6 +21,8 @@ import static com.luxof.lapisworks.LapisworksIDs.SET_PATTERNS_ON_CHALK;
 import static com.luxof.lapisworks.init.ModItems.GEODE_DOWSER;
 import static com.luxof.lapisworks.init.ThemConfigFlags.turnChosenIntoNbt;
 
+import io.netty.buffer.Unpooled;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +30,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.function.BiConsumer;
 
-import io.netty.buffer.Unpooled;
 import kotlin.Pair;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;

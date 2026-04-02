@@ -1,6 +1,5 @@
 package com.luxof.lapisworks.init;
 
-import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.ItemStaff;
 
 import com.luxof.lapisworks.items.*;
@@ -11,19 +10,16 @@ import static com.luxof.lapisworks.LapisworksIDs.LAPISMAGICSHITGROUPTEXT;
 import static com.luxof.lapisworks.LapisworksIDs.LAPIS_MAGIC_SHIT_GROUP;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.world.World;
 
 public class ModItems {
     private static FabricItemSettings fullStack = new FabricItemSettings().maxCount(64);

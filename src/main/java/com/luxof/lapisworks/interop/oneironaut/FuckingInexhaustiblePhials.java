@@ -5,8 +5,6 @@ import at.petrak.hexcasting.api.casting.eval.env.PackagedItemCastEnv;
 import at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
-import static com.luxof.lapisworks.Lapisworks.log;
-
 import java.util.ArrayList;
 import java.util.List;
 
