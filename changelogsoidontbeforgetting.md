@@ -356,7 +356,7 @@ Only the devs who can keep up with me...
 - Enchanted Brewery looked like it still had the same potion pre-brewing on the client
 - Some shit related to mixin mishap messages
 # 1.5.8.3
-- Jumpslates and Rebound Slates are breakable and drop their item
+### Additions
 - Enchanted Anvil?
   - Lets you enchant beyond the maximum.
     - lets you combine beyond the usual maximum too.
@@ -381,12 +381,16 @@ Only the devs who can keep up with me...
   - put a vector in it = animal wanna go there
   - put entity in it = dog attack
     - item entity = fox or allay pick up
+### Fixes
+- Jumpslates and Rebound Slates are breakable and drop their item
+- bug in the mod mishap (Dealer's Prfn)
 # 1.5.9
 ### Free me
 - [This](https://discord.com/channels/936370934292549712/950847275549229086/1479043488183095317)
+  - what if custom gui (kindly kys me)
 - Overenchanting?
-- Hexical interop
-  - every key is telepathy-able
+- ~~Hexical interop~~ Taken by HexKeys with a cooler mechanism
+  ~~- every key is telepathy-able~~
 - Amethyst Piano
 - Enchant item stack size (+64 every upgrade)
 - Heal your mind after breaking it. (Jacked O' Lantern finale)

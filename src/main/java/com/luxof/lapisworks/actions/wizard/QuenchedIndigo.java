@@ -1,4 +1,4 @@
-package com.luxof.lapisworks.actions.great;
+package com.luxof.lapisworks.actions.wizard;
 
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;

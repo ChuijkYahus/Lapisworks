@@ -406,6 +406,7 @@
     "mishaps.lapisworks.descs.unlinked_linkable": "a media-containing block/phiangleable not linked to %d, %d, %d",
     "mishaps.lapisworks.descs.nottoomanylinks_linkable": "a media-containing block/phiangleable without too many links",
     "mishaps.lapisworks.descs.imbued": "any item already imbued with Amethyst Lazuli (e.g. a partially infused staff, an Amel Ring, etc.)",
+    "mishaps.lapisworks.descs.list_with_one": "a list with at least one element",
 
     "notif.lapisworks.wizard_diaries.all_gotten": "It seems I have rediscovered all the surviving ancient tomes.",
     "notif.lapisworks.wizard_diaries.unreadable_diary": "Blank. Perhaps this has the same encryption as every other text? I suppose I'll unlock it in time, then.",

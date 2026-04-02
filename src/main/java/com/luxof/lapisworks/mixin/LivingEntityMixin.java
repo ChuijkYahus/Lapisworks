@@ -208,13 +208,13 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 					.build())
 			);
 
-			attributes.addTemporaryModifiers(
-				nbt.getBoolean("LAPISWORKS_JUICED_REACH") ?
+			if (nbt.getBoolean("LAPISWORKS_JUICED_REACH"))
+				attributes.addTemporaryModifiers(
 					ImmutableMultimap.of(
 						REACH, MoarReachYouBitch.REACH_MODIFIER,
 						ATTACK_RANGE, MoarReachYouBitch.ATTACK_REACH_MODIFIER
-					) : ImmutableMultimap.of()
-			);
+					)
+				);
 
 		}
 		setEnchantments(nbt.getIntArray("LAPISWORKS_ENCHANTMENTS"));

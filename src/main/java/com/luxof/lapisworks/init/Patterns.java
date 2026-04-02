@@ -11,11 +11,13 @@ import at.petrak.hexcasting.common.lib.hex.HexActions;
 import static at.petrak.hexcasting.api.misc.MediaConstants.CRYSTAL_UNIT;
 
 import com.luxof.lapisworks.actions.*;
-import com.luxof.lapisworks.actions.great.*;
+import com.luxof.lapisworks.actions.great.GenericEnchant;
 import com.luxof.lapisworks.actions.interact.*;
 import com.luxof.lapisworks.actions.misc.*;
 import com.luxof.lapisworks.actions.ritual.*;
 import com.luxof.lapisworks.actions.scry.*;
+import com.luxof.lapisworks.actions.wizard.*;
+import com.luxof.lapisworks.actions.wizard.enchsent.*;
 import com.luxof.lapisworks.interop.hexal.actions.*;
 // REF the JVM is doing lazy imports LOOK AT THIS CODE it feels like a
 // bomb blast begging to happen :sob::sob::sob:
@@ -222,18 +224,5 @@ public class Patterns {
         Action action
     ) {
         return Registry.register(HexActions.REGISTRY, id(name), new ActionRegistryEntry(HexPattern.fromAngles(signature, startDir), action));
-    }
-    private static void registerOnlyForHexdoc(
-        String name,
-        String signature,
-        HexDir startDir
-    ) {}
-    private static ActionRegistryEntry registerButSneaky(
-        String name,
-        String signature,
-        HexDir startDir,
-        Action action
-    ) {
-        return register(name, signature, startDir, action);
     }
 }
