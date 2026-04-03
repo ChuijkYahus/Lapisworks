@@ -24,7 +24,6 @@ import java.util.function.Supplier;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -35,7 +34,6 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import vazkii.patchouli.client.base.ClientAdvancements;
 
-@Debug(export = true)
 @Mixin(value = PatternEntries.class, remap = false)
 public class PatternEntriesMixin implements HexcessiblePWShapeSupport {
 

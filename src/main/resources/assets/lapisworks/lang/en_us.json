@@ -292,6 +292,8 @@
     "hexcasting.action.book.lapisworks:banish_my_enchsent": "Banish Own",
     "hexcasting.action.lapisworks:banish_other_enchsent": "Banish Other's Enchanted Sentinel",
     "hexcasting.action.book.lapisworks:banish_other_enchsent": "Banish Other's",
+    "hexcasting.action.lapisworks:find_my_enchsent": "Locate Own Enchanted Sentinel",
+    "hexcasting.action.book.lapisworks:find_my_enchsent": "Locate Own",
     "hexcasting.action.lapisworks:flay_artmind0": "Imbue Mind",
     "hexcasting.action.lapisworks:flay_artmind1": "Imbue Mind",
     "hexcasting.action.lapisworks:flay_artmind2": "Imbue Mind",
@@ -643,6 +645,7 @@
     "pages.lapisworks.great.create_enchsent.lore": "The wizard wrote it was created by forcing $(item)Amel$() into the original pattern and molding it violently, shaping the media within to their will. The result is a \"4-dimensional spinning hypercube projected as a tesseract!\" (what does that even mean??) which has some form of feeling and awareness. It knows it's chained to it's user, forced to follow their whims due to being dependent on their media.",
     "pages.lapisworks.great.banish_my_enchsent.summary": "Peacefully put my Enchanted Sentinel to rest for a negligible amount of media, letting it rest for a time. Perhaps the ethical option, considering \"falling apart\" may not be the most painless.",
     "pages.lapisworks.great.banish_other_enchsent.summary": "Banish another's Enchanted Sentinel if it's at that block for 5 dust.",
+    "pages.lapisworks.great.find_my_enchsent.summary": "Returns the location of my Enchanted Sentinel or null if I do not have one summoned.",
 
     "pages.lapisworks.great.flay_artmind.title": "Imbue Mind",
     "pages.lapisworks.great.flay_artmind.lore": "Most of the pages are burned, and only the pattern with it's documentation and it's uses remain. Any questions like \"they had their own form of $(l:imbuement/artificial_mind)$(item)Simple Mind Containers$()?\", \"Why?\", etc. will probably have to be speculated about by me. Unfortunate.. In any case, I've documented the pattern on the next page and then it's uses on the pages after it.",

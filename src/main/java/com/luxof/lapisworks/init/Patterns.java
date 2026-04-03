@@ -171,6 +171,7 @@ public class Patterns {
         registerPWShapePattern("lapisworks:create_enchsent");
         register("banish_my_enchsent", "wdwewdwdwqwawwwawewawwwaw", HexDir.NORTH_EAST, new BanishMySent());
         register("banish_other_enchsent", "eeeeedwqwawwwawewawwwaw", HexDir.NORTH_EAST, new BanishOtherSent());
+        register("find_my_enchsent", "wdwwwdwqwdwwwdweeqqqq", HexDir.NORTH_WEST, new LocateMySent());
         
         register("flay_artmind0", "ewewedwqwqqwqwqaeqe", HexDir.SOUTH_EAST, new FlayArtMind());
         register("flay_artmind1", "ewewedwqwaqaedqdeaqdewewe", HexDir.SOUTH_EAST, new FlayArtMind());

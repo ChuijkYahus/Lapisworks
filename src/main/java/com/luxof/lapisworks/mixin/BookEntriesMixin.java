@@ -16,7 +16,6 @@ import java.util.function.Supplier;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,7 +24,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import vazkii.patchouli.client.book.BookEntry;
 import vazkii.patchouli.client.book.BookPage;
 
-@Debug(export = true)
 @Mixin(value = BookEntries.class, remap = false)
 public class BookEntriesMixin implements AccessPWBookEntries {
 
