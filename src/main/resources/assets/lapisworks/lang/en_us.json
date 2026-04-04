@@ -410,6 +410,8 @@
     "mishaps.lapisworks.descs.nottoomanylinks_linkable": "a media-containing block/phiangleable without too many links",
     "mishaps.lapisworks.descs.imbued": "any item already imbued with Amethyst Lazuli (e.g. a partially infused staff, an Amel Ring, etc.)",
     "mishaps.lapisworks.descs.list_with_one": "a list with at least one element",
+    "mishaps.lapisworks.descs.repairable_totem": "a Necklace of Undying with less than three available uses",
+    "mishaps.lapisworks.descs.unrepairable_totem": "a Nekclace of Undying with three available uses",
 
     "notif.lapisworks.wizard_diaries.all_gotten": "It seems I have rediscovered all the surviving ancient tomes.",
     "notif.lapisworks.wizard_diaries.unreadable_diary": "Blank. Perhaps this has the same encryption as every other text? I suppose I'll unlock it in time, then.",
@@ -576,8 +578,8 @@
     "pages.lapisworks.imbuement.trinkets.necklace.writeable_necklace.summary": "Pushes if attempting to write to my necklace will succeed.",
     "pages.lapisworks.imbuement.trinkets.necklace.recipe.desc": "$(o)I believe the Amel is put there to attract media and allow easy access to the focus.$()",
     "pages.lapisworks.imbuement.trinkets.necklace.img.desc": "$(o)I should note that Mold Amel destroys the iota contained within.$()",
-    "pages.lapisworks.imbuement.trinkets.totem.text": "$(item)Totems of Undying$() are extremely useful artifacts, talismen of unimaginable power treasured and protected by the $(thing)Illagers$() in their mansions. It seems making them was an art some deciphered, but for mysterious reasons the method has been entirely lost to time. All I have recovered is the method to making a $(#00c)Necklace of Undying$(), which functions as a three-use, wearable, and rechargeable $(item)Totem of Undying$().",
-    "pages.lapisworks.imbuement.trinkets.totem.recipe.text": "$(o)To imbue a single use costs 64 $(item)Amel$()$(o) and 20 $(item)Charged Amethyst$()$(o).$()",
+    "pages.lapisworks.imbuement.trinkets.totem.text": "$(item)Totems of Undying$() are extremely useful artifacts, talismen of unimaginable power that allows one to survive death. No wonder they are so treasured and so heavily protected by the $(thing)Illagers$() in their mansions. My studies reveal making them was an art some deciphered, but for mysterious reasons the method has been entirely lost to time. All I have recovered is the method to making a $(#00c)Necklace of Undying$(), which functions as a three-use, wearable, and rechargeable $(item)Totem of Undying$() -- with the caveat that it does not grant me regeneration or anything after saving me.",
+    "pages.lapisworks.imbuement.trinkets.totem.recipe.text": "$(o)To repair a single use costs 64 $(item)Amel$()$(o) and 20 $(item)Charged Amethyst$()$(o).$()",
 
     "pages.lapisworks.imbuement.condenser.title": "Media Condensing Unit",
     "pages.lapisworks.imbuement.condenser.text": "My options for storing media are rather... Untidy and insufficient. Any media not in $(l:patterns/great_spells/make_battery)$(item)Phials$() must be stored in chests, in items. These items cannot be transported easily either, so I cannot have more than one base of operations lest I set up a convoluted system. Therefore $(l)I$(), one chosen, have invented the $(#00c)Media Condensing Unit$(). I must use $(l:patterns/great_spells/make_battery)$(thing)Craft Phial$() on it's base to construct it.",
@@ -652,7 +654,7 @@
 
     "pages.lapisworks.great.flay_artmind.title": "Imbue Mind",
     "pages.lapisworks.great.flay_artmind.lore": "Most of the pages are burned, and only the pattern with it's documentation and it's uses remain. Any questions like \"they had their own form of $(l:imbuement/artificial_mind)$(item)Simple Mind Containers$()?\", \"Why?\", etc. will probably have to be speculated about by me. Unfortunate.. In any case, I've documented the pattern on the next page and then it's uses on the pages after it.",
-    "pages.lapisworks.great.flay_artmind.summary": "Takes the location of a block and then the location of a full $(item)Simple Mind Container$(), and imbues the mind into it for five $(item)Charged Amethyst$().$(br2)$(o)Great minds do not think alike. Ideas simply wish to be thought.$()",
+    "pages.lapisworks.great.flay_artmind.summary": "Takes the location of a block and then the location of a full $(item)Simple Mind Container$(), and imbues the mind into it for five $(item)Charged Amethyst$().$(br)$(o)Great minds do not think alike. Ideas simply wish to be thought.$()",
     "pages.lapisworks.great.flay_artmind.budding_amethyst": "An Amethyst Block, when imbued with a simple mind, turns into a Budding Amethyst block. Nothing too special, really. But I do wonder, if minds can be put into these blocks to make more amethyst, where did all the amethyst that's already here come from?",
     "pages.lapisworks.great.flay_artmind.live_jukebox": "\"A mind so simple can be imbued into functional blocks with great ease and without stripping away unnecessary parts.\" I believe this line refers to the $(item)Jukebox$() on the same page (and others on other pages), which can be turned into a $(thing)Live Jukebox$(). A $(thing)Live Jukebox$() can be taught to play notes at a frequency, and then hit to play those notes.",
     "pages.lapisworks.great.flay_artmind.teach_song.summary": "Teach the $(thing)Live Jukebox$() at that location (which must be within ambit) these notes (a list of nums 0-24) at this frequency (0-20) for a shard of media. After being hit via $(thing)Use$(), it plays the notes like an automatic Note Block.",

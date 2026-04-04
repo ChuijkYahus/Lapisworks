@@ -433,17 +433,17 @@ Only the devs who can keep up with me...
   - They can also do macro-work for you
   - bro tip for luxof: manningham mills lets you fuck with enums
 - End overhaul
-  - the ender dragon bossfight is fun now (nathan adding this to his pack is a secondary motivation)
+  - the ender dragon bossfight is fun now (pool adding this to its pack is a secondary motivation)
   - there are new structures
   - lore
 - Entity Construction
   - make a vessel
   - flay entities into it to get their AI
   - customize it's body and mind
-- If not already done, EVERY PLAUSIBLE LAPISWORKS THING from "hm"
+- If not already done, EVERY PLAUSIBLY LAPISWORKS-Y THING from "hm"
 
 # 1.7.0
-LAPISWORKS IS ON BOTH FORGE AND FABRIC NOW.
+LAPISWORKS IS ON BOTH FORGE AND FABRIC NOW. (is this even required?) (i mean Dryym should be able to play the mod right)
 
 
 # hm

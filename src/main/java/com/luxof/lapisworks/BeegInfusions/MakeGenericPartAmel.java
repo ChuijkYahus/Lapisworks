@@ -58,7 +58,7 @@ public class MakeGenericPartAmel extends BeegInfusion {
     }
 
     @Override
-    public Long getCost() { return MediaConstants.SHARD_UNIT * 2 * infusing; }
+    public long getCost() { return MediaConstants.SHARD_UNIT * 2 * infusing; }
 
     @Override
     public void accept() {

@@ -7,6 +7,7 @@ import at.petrak.hexcasting.common.items.ItemStaff;
 
 import com.luxof.lapisworks.BeegInfusions.EnhanceEnchantedBook;
 import com.luxof.lapisworks.BeegInfusions.MakeGenericPartAmel;
+import com.luxof.lapisworks.BeegInfusions.RepairTotemNecklace;
 import com.luxof.lapisworks.VAULT.VAULT;
 import com.luxof.lapisworks.interop.hextended.LapixtendedInterface;
 import com.luxof.lapisworks.inv.HandsInv;
@@ -194,5 +195,6 @@ public class Mutables {
 
         BeegInfusions.put(id("enhance_enchanted_book"), new EnhanceEnchantedBook());
         BeegInfusions.put(id("make_generic_partamel"), new MakeGenericPartAmel());
+        BeegInfusions.put(id("repair_totem_necklace"), new RepairTotemNecklace());
     }
 }

@@ -15,7 +15,7 @@ public interface ITotem {
     /** <code>slot</code> may be null if the item was found in the hands instead of a
      * trinket slot.
      * <p>item stack damage/decrement as well as sending a status update to the client is on you.
-     * <p>view default implementation for details. */
+     * <p>view default implementation for an example. (it's how vanilla totems do this.) */
     default void revive(
         LivingEntity entity,
         ItemStack stack,

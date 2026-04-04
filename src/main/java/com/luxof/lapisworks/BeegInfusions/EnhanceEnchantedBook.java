@@ -94,7 +94,7 @@ public class EnhanceEnchantedBook extends BeegInfusion {
     }
 
     @Override
-    public Long getCost() {
+    public long getCost() {
         return MediaConstants.CRYSTAL_UNIT * 5;
     }
 

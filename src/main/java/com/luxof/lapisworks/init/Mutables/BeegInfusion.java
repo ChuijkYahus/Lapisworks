@@ -33,6 +33,6 @@ public class BeegInfusion {
 
     public boolean test() { return false; }
     public void mishapIfNeeded() {}
-    public Long getCost() { return 0L; }
+    public long getCost() { return 0L; }
     public void accept() {}
 }
