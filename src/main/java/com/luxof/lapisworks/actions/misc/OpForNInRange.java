@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.OperationResult;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame;
+import at.petrak.hexcasting.api.casting.eval.vm.FrameFinishEval;
 import at.petrak.hexcasting.api.casting.eval.vm.FrameForEach;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
@@ -71,10 +72,15 @@ public class OpForNInRange implements Action {
             newFrame = new FrameForEach(datum, instrs, null, new ArrayList<>());
         }
 
+        SpellContinuation newCont = cont instanceof SpellContinuation.NotDone notDone &&
+            notDone.getFrame() instanceof FrameFinishEval
+            ? cont
+            : cont.pushFrame(FrameFinishEval.INSTANCE);
+
         return new OperationResult(
             CastingImgWithStack(img.withUsedOp(), stack),
             List.of(),
-            cont.pushFrame(newFrame),
+            newCont.pushFrame(newFrame),
             HexEvalSounds.THOTH
         );
     }

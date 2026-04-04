@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.castables.Action;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.OperationResult;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.eval.vm.FrameFinishEval;
 import at.petrak.hexcasting.api.casting.eval.vm.FrameForEach;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
@@ -57,7 +58,12 @@ public class CubeExalt implements Action {
             img.getUserData()
         );
 
-        return new OperationResult(img2, List.of(), cont.pushFrame(frame), HexEvalSounds.THOTH);
+        SpellContinuation newCont = cont instanceof SpellContinuation.NotDone notDone &&
+            notDone.getFrame() instanceof FrameFinishEval
+            ? cont
+            : cont.pushFrame(FrameFinishEval.INSTANCE);
+
+        return new OperationResult(img2, List.of(), newCont.pushFrame(frame), HexEvalSounds.THOTH);
     }
     
     public static SpellList generatePointsInFilledCube(Vec3d pointA, Vec3d pointB) {

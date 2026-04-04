@@ -377,11 +377,12 @@ Only the devs who can keep up with me...
   - put a vector in it = animal wanna go there
   - put entity in it = dog attack
     - item entity = fox or allay pick up
-- Cubic Exaltation, Spherical Exaltation, Mintiest Gambit, and Kitkat's Gambit can take singular patterns now.
+- the meta-eval patterns can take patterns on top of [pattern]s too now.
 ### Fixes
 - Jumpslates and Rebound Slates are breakable and drop their item
 - bug in the mod mishap (Dealer's Prfn)
 - creative mode category no longer looks like it got hit by a tornado
+- a Charon in the meta-eval patterns won't exit the layer outside of them
 # 1.5.9
 ### Free me
 - [This](https://discord.com/channels/936370934292549712/950847275549229086/1479043488183095317)
