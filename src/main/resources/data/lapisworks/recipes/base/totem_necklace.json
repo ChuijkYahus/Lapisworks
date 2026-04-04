@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "G G",
+        "ATA",
+        "AAA"
+    ],
+    "key": {
+        "A": {
+            "tag": "lapisworks:amel"
+        },
+        "G": {
+            "item": "minecraft:gold_nugget"
+        },
+        "T": {
+            "item": "minecraft:totem_of_undying"
+        }
+    },
+    "result": {
+        "item": "lapisworks:totem_necklace",
+        "nbt": "{\"Damage\": 2}"
+    }
+}

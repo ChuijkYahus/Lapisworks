@@ -9,17 +9,19 @@ import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.LapisworksIDs.LAPISMAGICSHITGROUPTEXT;
 import static com.luxof.lapisworks.LapisworksIDs.LAPIS_MAGIC_SHIT_GROUP;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.util.Pair;
 
 public class ModItems {
     private static FabricItemSettings fullStack = new FabricItemSettings().maxCount(64);
@@ -64,7 +66,10 @@ public class ModItems {
     public static final BlockItem SIMPLE_IMPETUS = new BlockItem(ModBlocks.SIMPLE_IMPETUS, fullStack);
     public static final FocusNecklace FOCUS_NECKLACE = new FocusNecklace(unstackable);
     public static final FocusNecklace FOCUS_NECKLACE2 = new FocusNecklace(unstackable);
-    // 2 dummies i use for trinket rendering (model predicate providers don't work for no reason)
+    public static final TotemNecklace TOTEM_NECKLACE = new TotemNecklace();
+    public static final Item TOTEM_NECKLACE_FLOATY_DISPLAY = new Item(unstackable);
+    // dummies i use for trinket rendering (model predicate providers don't work for no reason)
+    public static final Item TOTEM_NECKLACE_WORN = new Item(unstackable);
     public static final FocusNecklace FOCUS_NECKLACE_WORN = new FocusNecklace(unstackable);
     public static final FocusNecklace FOCUS_NECKLACE2_WORN = new FocusNecklace(unstackable);
     public static final BlockItem ENCH_BREWER = new BlockItem(ModBlocks.ENCH_BREWER, fullStack);
@@ -75,9 +80,11 @@ public class ModItems {
     public static final Stamp STAMP = new Stamp();
     public static final BlockItem RITUS = new BlockItem(ModBlocks.RITUS, fullStack);
 
-    private static <ANY extends Object> Map<String, Item> mapOf(@SuppressWarnings("unchecked") ANY... stuff) {
-        // no err check required, this method is used once
-        Map<String, Item> map = new HashMap<>();
+    private static <ANY extends Object> List<Pair<String, Item>> mapOf(
+        @SuppressWarnings("unchecked") ANY... stuff
+    ) {
+        // no err checking.
+        List<Pair<String, Item>> map = new ArrayList<>();
 
         boolean item = false;
         String id = "";
@@ -86,14 +93,14 @@ public class ModItems {
                 id = (String)thing;
                 item = true;
             } else {
-                map.put(id, (Item)thing);
+                map.add(new Pair<>(id, (Item)thing));
                 item = false;
             }
         }
 
         return map;
     }
-    private static Map<String, Item> ITEMS = mapOf(
+    private static List<Pair<String, Item>> ITEMS = mapOf(
         "amel", AMEL_ITEM,
         "amel2", AMEL2_ITEM,
         "amel3", AMEL3_ITEM,
@@ -133,15 +140,20 @@ public class ModItems {
         "amel_constructs/simple_impetus", SIMPLE_IMPETUS,
         "amel_constructs/focus_necklace/1", FOCUS_NECKLACE,
         "amel_constructs/focus_necklace/2", FOCUS_NECKLACE2,
-        "amel_constructs/focus_necklace/1_worn", FOCUS_NECKLACE_WORN,
-        "amel_constructs/focus_necklace/2_worn", FOCUS_NECKLACE2_WORN,
+        "totem_necklace", TOTEM_NECKLACE,
         "amel_constructs/enchbrewer", ENCH_BREWER,
         "media_condenser_unit", MEDIA_CONDENSER,
         "uncrafted_condenser", UNCRAFTED_CONDENSER,
         "chalk", CHALK,
         "tuneable_amethyst", TUNEABLE_AMETHYST,
         "amethyst_stamp", STAMP,
-        "ritus", RITUS
+        "ritus", RITUS,
+
+        // register these misc ones at the end to remove confusion
+        "totem_necklace_floaty_display", TOTEM_NECKLACE_FLOATY_DISPLAY,
+        "totem_necklace_worn", TOTEM_NECKLACE_WORN,
+        "amel_constructs/focus_necklace/1_worn", FOCUS_NECKLACE_WORN,
+        "amel_constructs/focus_necklace/2_worn", FOCUS_NECKLACE2_WORN
     );
 
     public static ItemGroup LapisMagicShitGroup;
@@ -151,25 +163,23 @@ public class ModItems {
             .icon(() -> new ItemStack(AMEL_ITEM))
             .displayName(LAPISMAGICSHITGROUPTEXT)
             .entries((context, entries) -> {
-                ITEMS.values().forEach(entries::add);
+                ITEMS.forEach(pair -> entries.add(pair.getRight()));
             })
-        .build();
+            .build();
         Registry.register(
             Registries.ITEM_GROUP,
             LAPIS_MAGIC_SHIT_GROUP,
             LapisMagicShitGroup
         );
-        for (var entry : ITEMS.entrySet()) {
-            register(entry.getKey(), entry.getValue());
-        }
+        ITEMS.forEach(ModItems::register);
     }
 
-    private static void register(String name, Item item) {
-        Registry.register(Registries.ITEM, id(name), item);
+    private static void register(Pair<String, Item> item) {
+        Registry.register(Registries.ITEM, id(item.getLeft()), item.getRight());
     }
 
     public static <ITEM extends Item> ITEM registerItem(String name, ITEM item) {
-        ITEMS.put(name, item);
+        ITEMS.add(new Pair<>(name, item));
         return item;
     }
 }

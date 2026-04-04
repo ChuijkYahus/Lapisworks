@@ -58,7 +58,11 @@ public class HexIotaStack {
         List<? extends Iota> stack,
         int argc,
         CastingEnvironment ctx
-    ) { this.stack = stack; this.argc = argc; this.ctx = ctx; }
+    ) {
+        this.stack = stack; this.argc = argc; this.ctx = ctx;
+        if (stack.size() < this.argc)
+            throw new MishapNotEnoughArgs(argc, stack.size());
+    }
 
     public BlockPos getBlockPos(int idx) { return OperatorUtils.getBlockPos(stack, idx, argc); }
     public boolean getBool(int idx) { return OperatorUtils.getBool(stack, idx, argc); }
@@ -112,12 +116,8 @@ public class HexIotaStack {
         ctx.assertVecInRange(ret);
         return ret;
     }
-    public ArrayList<Iota> getJUSTAList(int idx) {
-        // is handrolling your own List really necessary bro
-        // regular Lists can ALREADY convert to iterators, can't they
-        // this shit doesn't even have it's own .add() :broken_heart:
-        SpellList list = getList(idx);
 
+    private ArrayList<Iota> convertToJUSTAList(SpellList list) {
         ArrayList<Iota> theFuckingList = new ArrayList<>();
 
         for (int i = 0; i < list.size(); i++) {
@@ -125,6 +125,12 @@ public class HexIotaStack {
         }
 
         return theFuckingList;
+    }
+    public ArrayList<Iota> getJUSTAList(int idx) {
+        // is handrolling your own List really necessary bro
+        // regular Lists can ALREADY convert to iterators, can't they
+        // this shit doesn't even have it's own .add() :broken_heart:
+        return convertToJUSTAList(getList(idx));
     }
 
     public Amalgamation getAmalgamation(int idx) {
@@ -203,5 +209,13 @@ public class HexIotaStack {
             );
 
         return (int)Math.round(dub.getDouble());
+    }
+
+    /** grabs a pattern or a pattern list for you. */
+    public ArrayList<Iota> getEvaluatable(int idx) {
+        return OperatorUtils.evaluatable(get(idx), argc).map(
+            iota -> new ArrayList<>(List.of(iota)),
+            this::convertToJUSTAList
+        );
     }
 }

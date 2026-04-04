@@ -27,7 +27,8 @@
 		"PlayerBasedCastEnvAccessor",
 		"PatternProcessorMixin",
 		"MishapDisallowedSpellMixin",
-		"HexAPIMixin"
+		"HexAPIMixin",
+		"ClientPlayNetworkHandlerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

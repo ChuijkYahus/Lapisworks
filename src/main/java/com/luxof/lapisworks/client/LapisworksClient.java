@@ -30,7 +30,11 @@ import static com.luxof.lapisworks.LapisworksIDs.UNLOCK_SHIT_FOR_HEXCESSIBLE;
 import static com.luxof.lapisworks.init.ModItems.AMEL_JAR;
 import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE;
 import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE2;
+import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE2_WORN;
+import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE_WORN;
 import static com.luxof.lapisworks.init.ModItems.IRON_SWORD;
+import static com.luxof.lapisworks.init.ModItems.TOTEM_NECKLACE;
+import static com.luxof.lapisworks.init.ModItems.TOTEM_NECKLACE_WORN;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 
 import com.mojang.datafixers.util.Pair;
@@ -53,6 +57,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registries;
@@ -126,8 +131,18 @@ public class LapisworksClient implements ClientModInitializer {
         initInterop();
 
         TrinketRendererRegistry.registerRenderer(AMEL_JAR, new JarTrinketRenderer());
-        TrinketRendererRegistry.registerRenderer(FOCUS_NECKLACE, new NecklaceTrinketRenderer());
-        TrinketRendererRegistry.registerRenderer(FOCUS_NECKLACE2, new NecklaceTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(
+            FOCUS_NECKLACE,
+            new NecklaceTrinketRenderer(new ItemStack(FOCUS_NECKLACE_WORN))
+        );
+        TrinketRendererRegistry.registerRenderer(
+            FOCUS_NECKLACE2,
+            new NecklaceTrinketRenderer(new ItemStack(FOCUS_NECKLACE2_WORN))
+        );
+        TrinketRendererRegistry.registerRenderer(
+            TOTEM_NECKLACE,
+            new NecklaceTrinketRenderer(new ItemStack(TOTEM_NECKLACE_WORN))
+        );
 
         BlockEntityRendererFactories.register(
             ModBlocks.ENCH_BREWER_ENTITY_TYPE,

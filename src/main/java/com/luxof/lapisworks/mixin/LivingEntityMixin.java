@@ -13,14 +13,19 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 
 import com.luxof.lapisworks.actions.MoarReachYouBitch;
+import com.luxof.lapisworks.items.shit.ITotem;
 import com.luxof.lapisworks.mixinsupport.DamageSupportInterface;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 
+import dev.emi.trinkets.api.SlotReference;
+
+import static com.luxof.lapisworks.Lapisworks.tryGetTotem;
 import static com.luxof.lapisworks.LapisworksIDs.REACH_ENHANCEMENT_UUID;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
@@ -31,9 +36,14 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.stat.Stats;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -285,6 +295,8 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	)
 	private int getLongBreathEffectUnderwater(int original) {
 		// TODO: according to logging, getEnchant sometimes returns 0 here. investigate, maybe?????
+		// ^ this message looks like i was on the 'caine but i think i meant when longBreath was >0
+		//   it still said 0. probably some unimportant networking bullshit tbh
 		return original + this.getEnchant(AllEnchantments.longBreath) * 2;
 	}
 
@@ -298,5 +310,41 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 		if (!this.damageHelper(source, amount, (LivingEntity)(Object)this, this.getEnchantments())) {
 			cir.setReturnValue(false);
 		}
+	}
+
+
+	@Inject(at = @At("HEAD"), method = "tryUseTotem", cancellable = true)
+	public void lapisworks$useMyTotemIfYouDontHaveOne(
+		DamageSource source,
+		CallbackInfoReturnable<Boolean> cir
+	) {
+		if (source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) return;
+
+		LivingEntity thisLE = (LivingEntity)(Object)this;
+
+		var totemAndSlot = tryGetTotem(thisLE);
+		if (totemAndSlot == null) return;
+
+		ItemStack totem = totemAndSlot.getLeft();
+		SlotReference slot = totemAndSlot.getRight();
+
+		if ((Object)this instanceof ServerPlayerEntity sp) {
+			sp.incrementStat(Stats.USED.getOrCreateStat(totem.getItem()));
+			Criteria.USED_TOTEM.trigger(sp, totem);
+		}
+
+		if (totem.getItem() instanceof ITotem iTotem)
+			iTotem.revive(thisLE, totem, slot);
+		else {
+			thisLE.setHealth(1.0f);
+			thisLE.clearStatusEffects();
+			thisLE.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 900, 1));
+			thisLE.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 100, 1));
+			thisLE.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 800, 0));
+			this.getWorld().sendEntityStatus(this, (byte)35);
+			totem.decrement(1);
+		}
+
+		cir.setReturnValue(true);
 	}
 }

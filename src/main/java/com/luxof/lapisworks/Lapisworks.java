@@ -31,6 +31,7 @@ import com.luxof.lapisworks.init.ModScreens;
 import com.luxof.lapisworks.init.Patterns;
 import com.luxof.lapisworks.init.ThemConfigFlags;
 import com.luxof.lapisworks.init.Mutables.Mutables;
+import com.luxof.lapisworks.items.shit.ITotem;
 import com.luxof.lapisworks.interop.hexal.Lapisal;
 import com.luxof.lapisworks.interop.hexical.Lapixical;
 import com.luxof.lapisworks.interop.hextended.Lapixtended;
@@ -44,6 +45,7 @@ import static com.luxof.lapisworks.LapisworksIDs.INFUSED_AMEL;
 import static com.luxof.lapisworks.LapisworksIDs.IS_IN_CRADLE;
 import static com.luxof.lapisworks.LapisworksIDs.MAINHAND;
 import static com.luxof.lapisworks.LapisworksIDs.OFFHAND;
+import static com.luxof.lapisworks.LapisworksIDs.TOTEM_TAG;
 import static com.luxof.lapisworks.init.ThemConfigFlags.allPerWorldShapePatterns;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 
@@ -913,5 +915,39 @@ public class Lapisworks implements ModInitializer {
 		return stackA == stackB ||
 			(stackA.isOf(stackB.getItem()) && stackA.getCount() == stackB.getCount()) ||
 			stackA.isEmpty() && stackB.isEmpty();
+	}
+
+	/** the slot reference is for Trinkets. it may be null. */
+	@Nullable
+	public static Pair<ItemStack, @Nullable SlotReference> tryGetTotem(LivingEntity entity) {
+        for (Hand hand : Hand.values()) {
+            ItemStack stack = entity.getStackInHand(hand);
+            if (
+				stack.isIn(TOTEM_TAG) &&
+				(
+					!(stack.getItem() instanceof ITotem totem) ||
+					totem.canWork(entity, stack, null)
+				)
+			)
+                return new Pair<>(stack, null);
+        }
+
+        var _trinketsOpt = TrinketsApi.getTrinketComponent(entity);
+        if (_trinketsOpt.isEmpty()) return null;
+        TrinketComponent trinkets = _trinketsOpt.get();
+
+        for (var equipped : trinkets.getAllEquipped()) {
+			ItemStack stack = equipped.getRight();
+            if (
+				stack.isIn(TOTEM_TAG) &&
+				(
+					!(stack.getItem() instanceof ITotem totem) ||
+					totem.canWork(entity, stack, null)
+				)
+			)
+                return new Pair<>(stack, equipped.getLeft());
+        }
+
+		return null;
 	}
 }

@@ -178,6 +178,8 @@ dependencies {
 	// Lapiscessible
 	//modCompileOnly "maven.modrinth:hexcessible:${hexcessible_version}-fabric,1.20.1"
 	//modLocalRuntime "maven.modrinth:hexcessible:${hexcessible_version}-fabric,1.20.1"
+	// i'm importing it this way because i want to see the mixin error.
+	// it's not fucking appearing for whatever reason.
 	modCompileOnly files("${rootProject.rootDir}\\libs\\hexcessible-0.3.1.jar")
 	modLocalRuntime files("${rootProject.rootDir}\\libs\\hexcessible-0.3.1.jar")
 
