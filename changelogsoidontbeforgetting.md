@@ -379,10 +379,11 @@ Only the devs who can keep up with me...
     - item entity = fox or allay pick up
 - the meta-eval patterns can take patterns on top of [pattern]s too now.
 ### Fixes
+- A Charon in the meta-eval patterns won't exit the layer outside of them
+- Dealer's Prfn didn't work
+- Creative mode category no longer looks like it got hit by a tornado
 - Jumpslates and Rebound Slates are breakable and drop their item
-- bug in the mod mishap (Dealer's Prfn)
-- creative mode category no longer looks like it got hit by a tornado
-- a Charon in the meta-eval patterns won't exit the layer outside of them
+- Necklaces stick to your character better
 # 1.5.9
 ### Free me
 - [This](https://discord.com/channels/936370934292549712/950847275549229086/1479043488183095317)

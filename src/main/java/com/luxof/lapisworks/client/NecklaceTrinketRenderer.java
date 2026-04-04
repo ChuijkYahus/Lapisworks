@@ -36,7 +36,7 @@ public class NecklaceTrinketRenderer implements TrinketRenderer {
         TrinketRenderer.followBodyRotations(entity, playerModel);
         TrinketRenderer.translateToFace(matrices, playerModel, player, 0f, 0f);
 
-        matrices.translate(0.0, 10.0/24.0, 0.5);
+        matrices.translate(0.0, 9.2/16.0, 0.5);
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0f));
         matrices.scale(0.7f, 0.7f, 0.7f);
 
