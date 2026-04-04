@@ -12,6 +12,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.ListIota;
+import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 
 import com.luxof.lapisworks.frames.FrameExecuteManyTimes;
@@ -23,14 +24,22 @@ import java.util.List;
 
 public class OpForNInRange implements Action {
     private final boolean isThisKitkat;
+    private final int argc;
     public OpForNInRange(boolean isThisKitkat) {
         this.isThisKitkat = isThisKitkat;
+        this.argc = isThisKitkat ? 2 : 3;
     }
 
     @Override
     public OperationResult operate(CastingEnvironment ctx, CastingImage img, SpellContinuation cont) {
         List<Iota> stack = img.getStack();
-        SpellList instrs = OperatorUtils.getList(stack, stack.size() - 1, stack.size());
+        if (stack.size() < argc)
+            throw new MishapNotEnoughArgs(argc, stack.size());
+
+        SpellList instrs = OperatorUtils.evaluatable(
+            stack.get(stack.size() - 1),
+            stack.size() - 1
+        ).map(iota -> new SpellList.LList(List.of(iota)), list -> list);
         stack.remove(stack.size() - 1);
 
         ContinuationFrame newFrame;

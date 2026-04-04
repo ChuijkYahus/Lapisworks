@@ -357,33 +357,31 @@ Only the devs who can keep up with me...
 - Some shit related to mixin mishap messages
 # 1.5.8.3
 ### Additions
+- Locate Own Enchanted Sentinel (pattern)
 - Enchanted Anvil?
   - Lets you enchant beyond the maximum.
     - lets you combine beyond the usual maximum too.
     - maximum decided by the same max for Imbue Amel's enchantment effect.
   - Lets you enchant items with other items.
   - has a scrollable menu on the right to select the enchantments you wanna move over.
-- Totem Necklace
-  - yeah
-- Enchanted Totem Necklace
-  - imbue a totem necklace with ten pieces of Amel
-  - heals you back to only half a heart
-  - casts a pre-defined hex upon activation
 - item that erases the patterns around you
-  - "chain" item that may be worn on both necklace and ring slots
   - they're chokers (thank sylvanis for that idea)
   - conceals the invis particle fx
-  - sealing them completely disables their effects and makes them purely cosmetic
-- focus necklaces can be on dogs, cats, foxes, or allays (right click)
-- enchanted focus necklaces
-  - can be put on the same animals as before (right click)
+  - conceals the floating patterns around you when you cast
+  - invisible when you're invisible
+- necklaces can be on dogs, cats, foxes, or allays (right click)
+- Totem Necklace
+- Charm of Command
   - imbue a focus necklace with five pieces of Amel
+  - only people who can write to it
   - put a vector in it = animal wanna go there
   - put entity in it = dog attack
     - item entity = fox or allay pick up
+- Cubic Exaltation, Spherical Exaltation, Mintiest Gambit, and Kitkat's Gambit can take singular patterns now.
 ### Fixes
 - Jumpslates and Rebound Slates are breakable and drop their item
 - bug in the mod mishap (Dealer's Prfn)
+- creative mode category no longer looks like it got hit by a tornado
 # 1.5.9
 ### Free me
 - [This](https://discord.com/channels/936370934292549712/950847275549229086/1479043488183095317)

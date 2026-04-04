@@ -30,7 +30,12 @@ public class SphereDst implements Action {
             throw new MishapNotEnoughArgs(3, stack.size());
 
         int lastIdx = stack.size() - 1;
-        SpellList intrs = OperatorUtils.getList(stack, lastIdx - 2, getArgc());
+
+        SpellList instrs = OperatorUtils.evaluatable(
+            stack.get(stack.size() - 1),
+            stack.size() - 1
+        ).map(iota -> new SpellList.LList(List.of(iota)), list -> list);
+
         Vec3d pos = OperatorUtils.getVec3(stack, lastIdx - 1, getArgc());
         int radius = OperatorUtils.getIntBetween(stack, lastIdx, 1, 64, getArgc());
         stack.remove(lastIdx);
@@ -46,7 +51,7 @@ public class SphereDst implements Action {
             img.getUserData()
         );
         SpellList datum = generatePointsOnHollowSphere(pos, radius);
-        FrameForEach frame = new FrameForEach(datum, intrs, null, new ArrayList<Iota>());
+        FrameForEach frame = new FrameForEach(datum, instrs, null, new ArrayList<Iota>());
 
         return new OperationResult(img2, List.of(), cont.pushFrame(frame), HexEvalSounds.THOTH);
     }

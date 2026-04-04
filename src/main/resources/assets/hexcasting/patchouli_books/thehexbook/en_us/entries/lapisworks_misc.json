@@ -29,7 +29,7 @@
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:spherical_dstl",
             "anchor": "lapisworks:spherical_dstl",
-            "input": "[pattern], vec, num",
+            "input": "[pattern] | pattern, vec, num",
             "output": "[any]",
             "text": "pages.lapisworks.lapisworks_misc.spherical_dstl.summary"
         },
@@ -37,7 +37,7 @@
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:cubic_exalt",
             "anchor": "lapisworks:cubic_exalt",
-            "input": "[pattern], vec, vec, bool",
+            "input": "[pattern] | pattern, vec, vec, bool",
             "output": "[any]",
             "text": "pages.lapisworks.lapisworks_misc.cubic_exalt.summary"
         },
@@ -129,7 +129,7 @@
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:for_n_in_range",
             "anchor": "lapisworks:for_n_in_range",
-            "input": "num, num, [pattern]",
+            "input": "num, num, [pattern] | pattern",
             "output": "[any]",
             "text": "pages.lapisworks.lapisworks_misc.for_n_in_range.summary"
         },
@@ -137,7 +137,7 @@
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:execute_many_times",
             "anchor": "lapisworks:execute_many_times",
-            "input": "num, [pattern]",
+            "input": "num, [pattern] | pattern",
             "output": "",
             "text": "pages.lapisworks.lapisworks_misc.execute_many_times.summary"
         },

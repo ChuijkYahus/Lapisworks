@@ -29,14 +29,19 @@ public class CubeExalt implements Action {
         if (stack.size() < getArgc()) throw new MishapNotEnoughArgs(4, stack.size());
 
         int lastIdx = stack.size() - 1;
-        SpellList intrs = OperatorUtils.getList(stack, lastIdx - 3, getArgc());
+
+        SpellList instrs = OperatorUtils.evaluatable(
+            stack.get(lastIdx - 3),
+            lastIdx - 3
+        ).map(iota -> new SpellList.LList(List.of(iota)), list -> list);
+
         Vec3d pointA = OperatorUtils.getVec3(stack, lastIdx - 2, getArgc());
         Vec3d pointB = OperatorUtils.getVec3(stack, lastIdx - 1, getArgc());
 
         SpellList datum = OperatorUtils.getBool(stack, lastIdx, getArgc()) ?
             generatePointsInHollowCube(pointA, pointB) :
             generatePointsInFilledCube(pointA, pointB);
-        FrameForEach frame = new FrameForEach(datum, intrs, null, new ArrayList<Iota>());
+        FrameForEach frame = new FrameForEach(datum, instrs, null, new ArrayList<Iota>());
 
         stack.remove(lastIdx);
         stack.remove(lastIdx - 1);
