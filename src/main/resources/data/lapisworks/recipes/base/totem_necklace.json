@@ -17,7 +17,6 @@
         }
     },
     "result": {
-        "item": "lapisworks:totem_necklace",
-        "nbt": "{\"Damage\": 2}"
+        "item": "lapisworks:totem_necklace"
     }
 }

@@ -1,7 +1,5 @@
 package com.luxof.lapisworks.items;
 
-import static com.luxof.lapisworks.Lapisworks.log;
-
 import com.luxof.lapisworks.init.ModItems;
 import com.luxof.lapisworks.items.shit.ITotem;
 
@@ -10,8 +8,10 @@ import dev.emi.trinkets.api.SlotReference;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class TotemNecklace extends Item implements ITotem {
     public TotemNecklace() {
@@ -20,6 +20,11 @@ public class TotemNecklace extends Item implements ITotem {
                 .maxCount(1)
                 .maxDamage(3)
         );
+    }
+
+    @Override
+    public void onCraft(ItemStack stack, World world, PlayerEntity player) {
+        stack.setDamage(2);
     }
 
     @Override

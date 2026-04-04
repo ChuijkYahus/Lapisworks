@@ -384,6 +384,7 @@ Only the devs who can keep up with me...
 - Creative mode category no longer looks like it got hit by a tornado
 - Jumpslates and Rebound Slates are breakable and drop their item
 - Necklaces stick to your character better
+- Stopped Imbue Amel from taking a fuckton of Amel no matter what
 # 1.5.9
 ### Free me
 - [This](https://discord.com/channels/936370934292549712/950847275549229086/1479043488183095317)
