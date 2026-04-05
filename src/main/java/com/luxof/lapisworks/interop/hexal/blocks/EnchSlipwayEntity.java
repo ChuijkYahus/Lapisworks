@@ -51,8 +51,7 @@ public class EnchSlipwayEntity extends BlockEntity {
             (any) -> true
         ).size() < 40) {
             Random random = bE.getWorld().random;
-            // the spawn rate is now precisely double!
-            bE.nextSpawnTick = tick + (int)Math.round(40 * random.nextGaussian());
+            bE.nextSpawnTick = tick + (int)Math.round(40 * (1 + random.nextGaussian()));
             WanderingWisp wisp = new WanderingWisp(sw, bp.toCenterPos());
             wisp.addVelocity(
                 new Vec3d(0.5-random.nextDouble(), 0.5-random.nextDouble(), 0.5-random.nextDouble())
