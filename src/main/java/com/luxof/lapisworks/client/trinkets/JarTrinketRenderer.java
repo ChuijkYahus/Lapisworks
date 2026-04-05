@@ -1,4 +1,6 @@
-package com.luxof.lapisworks.client;
+package com.luxof.lapisworks.client.trinkets;
+
+import com.luxof.lapisworks.init.ModItems;
 
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.client.TrinketRenderer;
@@ -15,36 +17,37 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RotationAxis;
 
-public class NecklaceTrinketRenderer implements TrinketRenderer {
-    private final ItemStack DISPLAY;
-
-    public NecklaceTrinketRenderer(ItemStack displayNecklace) {
-        this.DISPLAY = displayNecklace;
-    }
-
+/**
+ * @author WireSegal
+ * Created at 9:50 AM on 7/25/22.
+ * <p>(added because LensTrinketRenderer also has it even though the code is different)
+ */
+public class JarTrinketRenderer implements TrinketRenderer {
+    // if i unravelled this many arguments it'd be even worse to read bruh wtf
     @Override
     @SuppressWarnings("unchecked")
     public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel,
             MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, LivingEntity entity,
             float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw,
             float headPitch) {
-
-        if (!(contextModel instanceof PlayerEntityModel playerModel &&
+        if (!(stack.isOf(ModItems.AMEL_JAR) &&
+                contextModel instanceof PlayerEntityModel playerModel &&
                 entity instanceof AbstractClientPlayerEntity player)) return;
-
         matrices.push();
         TrinketRenderer.followBodyRotations(entity, playerModel);
-        TrinketRenderer.translateToFace(matrices, playerModel, player, 0f, 0f);
+        // PRAYING this translates to the belt
+        // this does NOT translate to the belt :sob: :pray:
+        //TrinketRenderer.translateToRightLeg(matrices, playerModel, player);
+        TrinketRenderer.translateToChest(matrices, playerModel, player);
 
-        matrices.translate(0.0, 9.2/16.0, 0.5);
+        matrices.translate(-0.2, 0.1, 0.0275);
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0f));
-        matrices.scale(0.7f, 0.7f, 0.7f);
+        matrices.scale(0.35f, 0.35f, 0.35f);
 
         MinecraftClient instance = MinecraftClient.getInstance();
-        instance.getItemRenderer().renderItem(
-            DISPLAY,
-            ModelTransformationMode.FIXED, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers,
-            instance.world, 0);
+        // this ItemRenderer shit seems EXTREMELY! useful for my 4-armed project
+        instance.getItemRenderer().renderItem(stack, ModelTransformationMode.FIXED, light,
+            OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, instance.world, 0);
         matrices.pop();
     }
 }
