@@ -369,22 +369,41 @@ Only the devs who can keep up with me...
   - conceals the invis particle fx
   - conceals the floating patterns around you when you cast
   - invisible when you're invisible
-- necklaces can be on dogs, cats, foxes, or allays (right click)
+- necklaces and collars can be on dogs, cats, foxes, or allays (right click)
+  - Foci Necklaces make the NPC wearing them a target for Chronicler's Prfn and Gambit
+  - Totem Necklaces DO in fact save your pets from death
 - Totem Necklace
-- Charm of Command
-  - imbue a focus necklace with five pieces of Amel
-  - only people who can write to it
-  - put a vector in it = animal wanna go there
-  - put entity in it = dog attack
-    - item entity = fox or allay pick up
+- Added collars
+    - dyeable (you can also apply a pigment with a new spell)
+    - these have special interactions when an animal wears them
+      - only the owner can write to them via two new patterns
+      - put a vector in it = animal wanna go there
+      - put entity in it = dog attack
+      - item entity = fox or allay pick up
 - the meta-eval patterns can take patterns on top of [pattern]s too now.
 ### Fixes
 - A Charon in the meta-eval patterns won't exit the layer outside of them
 - Dealer's Prfn didn't work
 - Creative mode category no longer looks like it got hit by a tornado
+- Enchanted Slipway spawn rate being 1x, not 2x a slipway's
+- Placing a Ritus with the same data elsewhere in the world won't brick your world now
 - Jumpslates and Rebound Slates are breakable and drop their item
 - Necklaces stick to your character better
 - Stopped Imbue Amel from taking a fuckton of Amel no matter what
+# 1.5.8.4
+### Additions
+- added stuff to collars
+  - craft a collar and an iron ingot to put spikes on
+  - craft a collar and a bell to add a bell
+    - which has full physics with itself and movement
+    - even rings on the internal bell's collisions
+### Interop
+- hexic
+  - craft a collar and a nametag to make a collartag
+    - changes your UUID
+    - basically all entity iotas that point to your previous UUID 
+  - craft a collar and a mediaweave to weave the cloth around it
+    - nothing special, just acts as a mediaweave on top of being a collar
 # 1.5.9
 ### Free me
 - [This](https://discord.com/channels/936370934292549712/950847275549229086/1479043488183095317)
