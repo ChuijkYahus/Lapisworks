@@ -950,4 +950,17 @@ public class Lapisworks implements ModInitializer {
 
 		return null;
 	}
+
+	public static int dim(int color) {
+		return Math.max(
+				(color & (int)(Math.pow(2, 24) - 1 - (Math.pow(2, 16) - 1))) - 0x800000,
+				0
+			) + Math.max(
+				(color & (int)(Math.pow(2, 16) - 1 - (Math.pow(2, 8) - 1))) - 0x8000,
+				0
+			) + Math.max(
+				(color * (int)(Math.pow(2, 8) - 1)) - 0x80,
+				0
+			);
+	}
 }

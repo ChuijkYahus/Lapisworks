@@ -112,6 +112,8 @@ public class MultiUseRitualExecutionState extends RitualExecutionState {
     @Override
     public boolean tick(ServerWorld world) {
         RitusEntity ritus = (RitusEntity)world.getBlockEntity(startingPos);
+        if (ritus == null)
+            return false;
         tunedFrequency = ritus.getTunedFrequency(world);
 
         RitualCastEnv env = new RitualCastEnv(world, this);
