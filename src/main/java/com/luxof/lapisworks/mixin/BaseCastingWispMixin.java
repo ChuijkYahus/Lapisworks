@@ -5,8 +5,6 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import com.luxof.lapisworks.media.MediaTransferInterface;
 import com.luxof.lapisworks.mixinsupport.WispCanIntoItem;
 
-import static com.luxof.lapisworks.Lapisworks.err;
-
 import java.util.UUID;
 
 import net.minecraft.entity.Entity;
@@ -88,7 +86,7 @@ public abstract class BaseCastingWispMixin extends Entity implements MediaTransf
         try {
             return getDataTracker().get(heldStack);
         } catch (NullPointerException e) {
-            err("uh oh! there was an oopsy woopsy!! Lapisworks' mixin did a fuhhcky wucky!!! a wittle fucko boingo!!!!");
+            //err("uh oh! there was an oopsy woopsy!! Lapisworks' mixin did a fuhhcky wucky!!! a wittle fucko boingo!!!!");
             TRACKMYFUCKINGITEMSTACKYOUSLOBFUCKINGSHITGARGLINGSLABOFSHITIWILLFUCKINGMURDEREVERYFUCKINGLASTONEOFYOURFUCKINGFAMILYMEMBERSBECAUSEOFTHISFUCKINGASSFUCKINGSHITFUCKINGBITCHBUGBULLSHIT();
             return getDataTracker().get(heldStack);
         }
