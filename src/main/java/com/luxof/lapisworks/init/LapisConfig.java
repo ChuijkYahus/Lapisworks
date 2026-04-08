@@ -6,7 +6,9 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import static com.luxof.lapisworks.Lapisworks.err;
+import static com.luxof.lapisworks.Lapisworks.last;
 import static com.luxof.lapisworks.Lapisworks.pair;
+import static com.luxof.lapisworks.Lapisworks.pop;
 import static com.luxof.lapisworks.Lapisworks.primitive;
 
 import java.io.File;
@@ -14,8 +16,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import net.fabricmc.loader.api.FabricLoader;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
@@ -100,7 +107,8 @@ public class LapisConfig {
       },
 
       "overenchant_limit_in_imbue_amel": {
-        "comment": "0 = 32-bit integer limit, not present = 3*usual max level limit",
+        "comment": "0 equals 32-bit integer limit. behaviour_when_not_present rules: only functions are log, sqrt, max, and min. 0 as a result doesn't equal the 32-bit integer limit. Operators are +-*/^. x = default maximum for the enchantment (and NO OTHER VARIABLE IS ALLOWED). No implicit shit. Results will be rounded and clamped to 0 if below 0.",
+        "behaviour_when_not_present": "3*x",
         "minecraft:channeling": 1,
         "minecraft:mending": 1,
         "minecraft:infinity": 1,
@@ -132,6 +140,13 @@ public class LapisConfig {
         } else if (fallBackTo.isString()) {
             try {
                 obj.get(key).getAsString();
+                if (
+                    key.startsWith("comment") &&
+                    !obj.get(key).getAsString().equals(fallBackTo.getAsString())
+                ) {
+                    obj.add(key, fallBackTo);
+                    return false;
+                }
             } catch (Exception e) {
                 obj.add(key, fallBackTo);
                 return false;
@@ -194,7 +209,7 @@ public class LapisConfig {
             this.obj = JsonParser.parseReader(new FileReader(configFile)).getAsJsonObject();
         } catch (Exception e1) {
             if (canIYell) {
-                err("Apparently, the Lapisworks config file is such horseshit it doesn't parse.");
+                err("Apparently, the Lapisworks config file is such horseshit it doesn't parse as valid JSON.");
                 err("Trying to fix that right now...");
             }
             this.obj = defaultConfigObject;
@@ -259,7 +274,8 @@ public class LapisConfig {
         fileIsPerfect = fileIsPerfect && defaultIfInvalid(
             obj,
             OverenchantLimit,
-            pair("comment", primitive("0 = no limit, not present = 3*usual max level limit")),
+            pair("comment", primitive("0 equals 32-bit integer limit. behaviour_when_not_present rules: only functions are log, sqrt, max, and min. 0 as a result doesn't equal the 32-bit integer limit. Operators are +-*/^. x = default maximum for the enchantment (and NO OTHER VARIABLE IS ALLOWED). No implicit shit. Results will be rounded and clamped to 0 if below 0.")),
+            pair("behaviour_when_not_present", primitive("3*x")),
             pair("minecraft:channeling", primitive(1)),
             pair("minecraft:mending", primitive(1)),
             pair("minecraft:infinity", primitive(1)),
@@ -377,6 +393,140 @@ public class LapisConfig {
             ? limits.get(enchantmentId).getAsInt() == 0
                 ? Integer.MAX_VALUE // you can't even get it this high...
                 : limits.get(enchantmentId).getAsInt()
-            : Registries.ENCHANTMENT.get(new Identifier(enchantmentId)).getMaxLevel()*3;
+            : parseMath(
+                limits.get("behaviour_when_not_present").getAsString(),
+                Registries.ENCHANTMENT.get(new Identifier(enchantmentId)).getMaxLevel()
+            );
+    }
+
+    private HashMap<String, List<String>> mathEquationCache = new HashMap<>();
+    private Map<String, Integer> precedence = Map.of(
+        "max", 5,
+        "min", 5,
+        "log", 5,
+        "sqrt", 5,
+        "^", 4,
+        "*", 3,
+        "/", 3,
+        "+", 2,
+        "-", 2
+    );
+    private Map<String, Integer> associative = Map.of(
+        "^", 1,
+        "*", 0,
+        "/", 0,
+        "+", 2,
+        "-", 2
+    );
+    private int errMath(String raw, int x, String reason) {
+        err("Lapisworks: \"%s\" is not a valid equation: %s", raw, reason);
+        err("Reverting to 3x. (%d)", 3*x);
+        return 3*x;
+    }
+    private int parseMath(String raw, int x) {
+        if (mathEquationCache.containsKey(raw))
+            return doMath(mathEquationCache.get(raw));
+
+        String noSpaces = raw.replaceAll(" ", "");
+        if (!noSpaces.matches("((?<!\\d)-)?\\d+(\\.\\d+)?|[+\\-*\\/^(),x]|(min|max)(?=\\(.+,.+\\))|(log|sqrt)(?=\\(.+\\))"))
+            return errMath(raw, x, "unknown symbols, unknown functions, or fucked usage of functions.");
+
+        String[] math = noSpaces
+            .split("((?<!\\d)-)?\\d+(\\.\\d+)?|[+\\-*\\/^(),x]|(min|max)(?=\\(.+,.+\\))|(log|sqrt)(?=\\(.+\\))");
+
+        List<String> rpn = new ArrayList<>();
+        List<String> opStack = new ArrayList<>();
+        for (String token : math) {
+
+            if (token.matches("-?\\d+(\\.\\d+)?"))
+                rpn.add(token);
+
+            else if (token.equals("x"))
+                rpn.add(String.valueOf(x));
+
+            else if (token.matches("[+\\-*\\/^]")) {
+                String topOp = opStack.size() > 0 ? pop(opStack) : null;
+                while (
+                    topOp != null && !topOp.equals("(") &&
+                    //topOp.matches("[+\\\\-*\\\\/^]") &&
+                    (
+                        precedence.get(topOp) > precedence.get(token) ||
+                        precedence.get(topOp) == precedence.get(token) && associative.get(token) == 0
+                    )
+                ) {
+                    rpn.add(pop(opStack));
+                    topOp = opStack.size() > 0 ? last(opStack) : null;
+                }
+                opStack.add(token);
+            }
+
+            else if (token.equals(",")) {
+                String topOp = opStack.size() > 0 ? last(opStack) : null;
+                while (topOp != null && !topOp.equals("(")) {
+                    rpn.add(pop(opStack));
+                    topOp = opStack.size() > 0 ? last(opStack) : null;
+                }
+            }
+
+            else if (token.equals("("))
+                opStack.add(token);
+
+            else if (token.equals(")")) {
+
+                if (opStack.size() == 0)
+                    return errMath(raw, x, "mismatched parenthesis.");
+
+                String topOp = last(opStack);
+                while (!topOp.equals("(")) {
+                    rpn.add(topOp);
+                    if (opStack.size() == 0)
+                        return errMath(raw, x, "mismatched parenthesis.");
+                    topOp = pop(opStack);
+                }
+                if (opStack.size() == 0)
+                    continue;
+                topOp = last(opStack);
+
+                if (topOp.matches("max|min|log|sqrt"))
+                    rpn.add(pop(opStack));
+            }
+
+            else
+                // function
+                opStack.add(token);
+        }
+
+        for (String operator : opStack) {
+            if (operator.equals("("))
+                errMath(raw, x, "mismatched parenthesis.");
+            rpn.add(operator);
+        }
+
+        mathEquationCache.put(raw, rpn);
+        return doMath(rpn);
+    }
+
+    private int doMath(List<String> rpn) {
+        List<Double> nums = new ArrayList<>();
+        for (String token : rpn) {
+            if (token.matches("-?\\d+(\\.\\d+)?")) {
+                nums.add(Double.parseDouble(token));
+                continue;
+            }
+
+            switch (token) {
+                case "+" -> nums.add(pop(nums) + pop(nums));
+                case "-" -> nums.add(pop(nums) - pop(nums));
+                case "*" -> nums.add(pop(nums) * pop(nums));
+                case "/" -> nums.add(pop(nums) / pop(nums));
+                case "^" -> nums.add(Math.pow(pop(nums), pop(nums)));
+                case "log" -> nums.add(Math.log(pop(nums)));
+                case "sqrt" -> nums.add(Math.sqrt(pop(nums)));
+                case "max" -> nums.add(Math.max(pop(nums), pop(nums)));
+                case "min" -> nums.add(Math.min(pop(nums), pop(nums)));
+            }
+        }
+
+        return (int)Math.round(nums.get(0));
     }
 }

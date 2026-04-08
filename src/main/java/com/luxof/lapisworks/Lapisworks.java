@@ -963,4 +963,11 @@ public class Lapisworks implements ModInitializer {
 				0
 			);
 	}
+
+	public static <T extends Object> T pop(List<T> list) {
+		return list.remove(list.size() - 1);
+	}
+	public static <T extends Object> T last(List<T> list) {
+		return list.get(list.size() - 1);
+	}
 }
