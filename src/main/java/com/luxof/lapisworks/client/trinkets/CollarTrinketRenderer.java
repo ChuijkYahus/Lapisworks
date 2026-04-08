@@ -15,12 +15,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RotationAxis;
 
-public class NecklaceTrinketRenderer implements TrinketRenderer {
-    private final ItemStack DISPLAY;
-
-    public NecklaceTrinketRenderer(ItemStack displayNecklace) {
-        this.DISPLAY = displayNecklace;
-    }
+public class CollarTrinketRenderer implements TrinketRenderer {
 
     @Override
     @SuppressWarnings("unchecked")
@@ -34,16 +29,16 @@ public class NecklaceTrinketRenderer implements TrinketRenderer {
 
         matrices.push();
         TrinketRenderer.followBodyRotations(entity, playerModel);
-        TrinketRenderer.translateToFace(matrices, playerModel, player, 0f, 0f);
+        TrinketRenderer.translateToFace(matrices, playerModel, player, 0, 0);
 
-        matrices.translate(0.0, -0.1/16.0, 0.31);
-        matrices.scale(0.7f, 0.7f, 0.7f);
+        matrices.translate(0.0, -0.05/16.0, 0.31);
+        matrices.scale(0.6f, 0.6f, 0.6f);
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0f));
 
         MinecraftClient instance = MinecraftClient.getInstance();
         instance.getItemRenderer().renderItem(
             entity,
-            DISPLAY,
+            stack,
             ModelTransformationMode.HEAD,
             false,
             matrices,

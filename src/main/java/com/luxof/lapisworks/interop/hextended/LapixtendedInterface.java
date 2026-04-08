@@ -10,11 +10,13 @@ import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.init.ModItems;
 import com.luxof.lapisworks.items.shit.DurabilityPartAmel;
 
+import static com.luxof.lapisworks.Lapisworks.getInfusedAmel;
+import static com.luxof.lapisworks.init.ModItems.AMEL_STAFF;
+import static com.luxof.lapisworks.init.ModItems.PARTAMEL_STAFF;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
-
-import static com.luxof.lapisworks.Lapisworks.getInfusedAmel;
 
 import java.util.Optional;
 
@@ -43,7 +45,7 @@ public class LapixtendedInterface {
                 return (DurabilityPartAmel)(Lapixtended.PARTAMEL_WAND);
             }
         }
-        return forItem instanceof ItemStaff ? ModItems.PARTAMEL_STAFF : null;
+        return forItem instanceof ItemStaff ? PARTAMEL_STAFF : null;
     }
 
     /** if it's an extended staff, gives you an amel wand. else, amel staff. */
@@ -54,7 +56,7 @@ public class LapixtendedInterface {
                 return Lapixtended.AMEL_WAND;
             }
         }
-        return ofItem instanceof ItemStaff ? ModItems.AMEL_STAFF : null;
+        return ofItem instanceof ItemStaff ? AMEL_STAFF : null;
     }
 
     // what is this code's purpose?

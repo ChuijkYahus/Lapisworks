@@ -7,6 +7,7 @@ import com.google.gson.JsonPrimitive;
 
 import static com.luxof.lapisworks.Lapisworks.err;
 import static com.luxof.lapisworks.Lapisworks.last;
+import static com.luxof.lapisworks.Lapisworks.log;
 import static com.luxof.lapisworks.Lapisworks.pair;
 import static com.luxof.lapisworks.Lapisworks.pop;
 import static com.luxof.lapisworks.Lapisworks.primitive;
@@ -507,6 +508,7 @@ public class LapisConfig {
     }
 
     private int doMath(List<String> rpn) {
+        log("doing math! %s", rpn.toString());
         List<Double> nums = new ArrayList<>();
         for (String token : rpn) {
             if (token.matches("-?\\d+(\\.\\d+)?")) {

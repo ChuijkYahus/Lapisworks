@@ -7,6 +7,7 @@ import com.luxof.lapisworks.items.shit.InventoryItem;
 
 import static com.luxof.lapisworks.Lapisworks.either;
 import static com.luxof.lapisworks.Lapisworks.getAllHands;
+import static com.luxof.lapisworks.init.ModItems.AMEL_ITEM;
 import static com.luxof.lapisworks.init.Mutables.Mutables.isAmel;
 
 import java.util.List;
@@ -74,7 +75,7 @@ public class AmelJar extends Item implements InventoryItem {
         int shouldBeWithdrawn = Math.min(getStored(stack), wouldBeWithdrawn);
 
         user.setStackInHand(otherHand, new ItemStack(
-            amelStack.isEmpty() ? ModItems.AMEL_ITEM : amelStack.getItem(),
+            amelStack.isEmpty() ? AMEL_ITEM : amelStack.getItem(),
             (amelStack.isEmpty() ? 0 : amelStack.getCount()) + shouldBeWithdrawn
         ));
 
