@@ -77,6 +77,28 @@
 
     "tooltips.lapisworks.condenser.media": "Contains: %d/%d dust (%d%% filled)",
 
+    "tooltips.lapisworks.collar.color": "Approximate color: %s",
+    "tooltips.lapisworks.collar.color.white": "White",
+    "tooltips.lapisworks.collar.color.orange": "Orange",
+    "tooltips.lapisworks.collar.color.magenta": "Magenta",
+    "tooltips.lapisworks.collar.color.light_blue": "Light Blue",
+    "tooltips.lapisworks.collar.color.yellow": "Yellow",
+    "tooltips.lapisworks.collar.color.lime": "Lime",
+    "tooltips.lapisworks.collar.color.pink": ":3",
+    "tooltips.lapisworks.collar.color.gray": "Gray",
+    "tooltips.lapisworks.collar.color.light_gray": "Light Gray",
+    "tooltips.lapisworks.collar.color.cyan": "Cyan",
+    "tooltips.lapisworks.collar.color.yo_bro_y_u_urple": "Red",
+    "tooltips.lapisworks.collar.color.blue": "Blue",
+    "tooltips.lapisworks.collar.color.brown": "Brown",
+    "tooltips.lapisworks.collar.color.green": "Green",
+    "tooltips.lapisworks.collar.color.red": "Red",
+    "tooltips.lapisworks.collar.color.black": "Black",
+    "tooltips.lapisworks.collar.color.idunno": "no matching known dye",
+    "tooltips.lapisworks.collar.no_added_items": "No additions.",
+    "tooltips.lapisworks.collar.added_items_list_pre": "Additions:",
+    "tooltips.lapisworks.collar.added_items_list_point": "- %s",
+
 
     "block.lapisworks.conjureable": "Conjured Solid Color",
     "block.lapisworks.mind": "Simple Mind Container",

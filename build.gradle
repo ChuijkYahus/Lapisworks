@@ -70,6 +70,9 @@ repositories {
 			excludeGroup("org.jetbrains")
 		}
 	}
+
+	// STANDING HERE, I REALIZE
+	maven { url = "https://maven.minecraftforge.net/" }
 }
 
 loom {
@@ -186,6 +189,9 @@ dependencies {
 	/*testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.0'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.0'*/
+
+	// Metal Gear Rising: Revengeance OST It Has To Be This Way Extended
+	modCompileOnly "net.minecraftforge:forge:1.20.1-47.0.0"
 }
 
 /*test {

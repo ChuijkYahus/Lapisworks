@@ -64,14 +64,6 @@ public class ModItems {
     public static final AmelJar ENERGY_CONTAINER = new AmelJar(unstackable, 1024, true);
     public static final GeodeDowser GEODE_DOWSER = new GeodeDowser(unstackable);
     public static final BlockItem SIMPLE_IMPETUS = new BlockItem(ModBlocks.SIMPLE_IMPETUS, fullStack);
-    public static final FocusNecklace FOCUS_NECKLACE = new FocusNecklace(unstackable);
-    public static final FocusNecklace FOCUS_NECKLACE2 = new FocusNecklace(unstackable);
-    public static final TotemNecklace TOTEM_NECKLACE = new TotemNecklace();
-    public static final Item TOTEM_NECKLACE_FLOATY_DISPLAY = new Item(unstackable);
-    // dummies i use for trinket rendering (model predicate providers don't work for no reason)
-    public static final Item TOTEM_NECKLACE_WORN = new Item(unstackable);
-    public static final FocusNecklace FOCUS_NECKLACE_WORN = new FocusNecklace(unstackable);
-    public static final FocusNecklace FOCUS_NECKLACE2_WORN = new FocusNecklace(unstackable);
     public static final BlockItem ENCH_BREWER = new BlockItem(ModBlocks.ENCH_BREWER, fullStack);
     public static final BlockItem MEDIA_CONDENSER = new MediaCondenserItem(unstackable);
     public static final BlockItem UNCRAFTED_CONDENSER = new BlockItem(ModBlocks.UNCRAFTED_CONDENSER, fullStack);
@@ -79,6 +71,16 @@ public class ModItems {
     public static final BlockItem TUNEABLE_AMETHYST = new BlockItem(ModBlocks.TUNEABLE_AMETHYST, fullStack);
     public static final Stamp STAMP = new Stamp();
     public static final BlockItem RITUS = new BlockItem(ModBlocks.RITUS, fullStack);
+    public static final FocusNecklace FOCUS_NECKLACE = new FocusNecklace(unstackable);
+    public static final FocusNecklace FOCUS_NECKLACE2 = new FocusNecklace(unstackable);
+    public static final TotemNecklace TOTEM_NECKLACE = new TotemNecklace();
+    public static final Collar COLLAR = new Collar();
+    public static final Item COLLAR_WITH_MODEL = new Item(unstackable);
+
+    public static final Item TOTEM_NECKLACE_FLOATY_DISPLAY = new Item(unstackable);
+    public static final Item TOTEM_NECKLACE_WORN = new Item(unstackable);
+    public static final FocusNecklace FOCUS_NECKLACE_WORN = new FocusNecklace(unstackable);
+    public static final FocusNecklace FOCUS_NECKLACE2_WORN = new FocusNecklace(unstackable);
 
     private static <ANY extends Object> List<Pair<String, Item>> mapOf(
         @SuppressWarnings("unchecked") ANY... stuff
@@ -138,9 +140,6 @@ public class ModItems {
         "energy_container", ENERGY_CONTAINER,
         "amel_constructs/geode_dowser", GEODE_DOWSER,
         "amel_constructs/simple_impetus", SIMPLE_IMPETUS,
-        "amel_constructs/focus_necklace/1", FOCUS_NECKLACE,
-        "amel_constructs/focus_necklace/2", FOCUS_NECKLACE2,
-        "totem_necklace", TOTEM_NECKLACE,
         "amel_constructs/enchbrewer", ENCH_BREWER,
         "media_condenser_unit", MEDIA_CONDENSER,
         "uncrafted_condenser", UNCRAFTED_CONDENSER,
@@ -149,11 +148,17 @@ public class ModItems {
         "amethyst_stamp", STAMP,
         "ritus", RITUS,
 
+        "collar", COLLAR,
+        "amel_constructs/focus_necklace/1", FOCUS_NECKLACE,
+        "amel_constructs/focus_necklace/2", FOCUS_NECKLACE2,
+        "totem_necklace", TOTEM_NECKLACE,
+
         // register these misc ones at the end to remove confusion
         "totem_necklace_floaty_display", TOTEM_NECKLACE_FLOATY_DISPLAY,
         "totem_necklace_worn", TOTEM_NECKLACE_WORN,
         "amel_constructs/focus_necklace/1_worn", FOCUS_NECKLACE_WORN,
-        "amel_constructs/focus_necklace/2_worn", FOCUS_NECKLACE2_WORN
+        "amel_constructs/focus_necklace/2_worn", FOCUS_NECKLACE2_WORN,
+        "collar_with_model", COLLAR_WITH_MODEL
     );
 
     public static ItemGroup LapisMagicShitGroup;

@@ -373,23 +373,37 @@ Only the devs who can keep up with me...
   - Foci Necklaces make the NPC wearing them a target for Chronicler's Prfn and Gambit
   - Totem Necklaces DO in fact save your pets from death
 - Totem Necklace
+  - no regen, fire prot, or anything. just effect clearing.
+  - still revives you
+  - rechargeable
 - Added collars
-    - dyeable (you can also apply a pigment with a new spell)
-    - these have special interactions when an animal wears them
-      - only the owner can write to them via two new patterns
-      - put a vector in it = animal wanna go there
-      - put entity in it = dog attack
-      - item entity = fox or allay pick up
-- the meta-eval patterns can take patterns on top of [pattern]s too now.
+  - dyeable (you can also apply a pigment with a new spell)
+  - you can add a bell by crafting it with a bell
+  - you can add spikes by crafting it with an iron ingot
+  - these have special interactions when an animal wears them
+    - only the owner can write to them via two new patterns
+    - put a vector in it = animal wanna go there
+    - put entity in it = dog attack
+    - item entity = fox or allay pick up
+- The meta-eval patterns can take patterns on top of [pattern]s too now.
+- Made the default enchantment limit in the config customizeable. You can math now.
+  - the comment in the config updates on its own when you run the game to reflect this
 ### Fixes
 - A Charon in the meta-eval patterns won't exit the layer outside of them
 - Dealer's Prfn didn't work
 - Creative mode category no longer looks like it got hit by a tornado
 - Enchanted Slipway spawn rate being 1x, not 2x a slipway's
 - Placing a Ritus with the same data elsewhere in the world won't brick your world now
+  - basically Carryon works with the Ritus again
 - Jumpslates and Rebound Slates are breakable and drop their item
 - Necklaces stick to your character better
+- "Oopsy woopsy" logspam BEGONE!
 - Stopped Imbue Amel from taking a fuckton of Amel no matter what
+### Interop
+- HexConnect
+  It's easier to fix issues with Sinytra than it is to port the mod to both platforms
+  - Apotheosis no longer prevents you from casting patterns when Lapisworks is in the pack
+  - Fixed un-flaying villagers not un-flaying them
 # 1.5.8.4
 ### Additions
 - added stuff to collars
