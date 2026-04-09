@@ -28,7 +28,9 @@
 		"PatternProcessorMixin",
 		"MishapDisallowedSpellMixin",
 		"HexAPIMixin",
-		"ClientPlayNetworkHandlerMixin"
+		"ClientPlayNetworkHandlerMixin",
+
+		"FabricXplatImplMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
