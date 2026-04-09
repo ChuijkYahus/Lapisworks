@@ -23,6 +23,7 @@ import static com.luxof.lapisworks.Lapisworks.tryGetTotem;
 import static com.luxof.lapisworks.LapisworksIDs.REACH_ENHANCEMENT_UUID;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,11 +69,11 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	private AttributeContainer attributes;
 
 	@Unique
-	private Map<EntityAttribute, Double> juicedUpVals = Map.of(
+	private Map<EntityAttribute, Double> juicedUpVals = new HashMap<>(Map.of(
 		EntityAttributes.GENERIC_ATTACK_DAMAGE, 0.0,
 		EntityAttributes.GENERIC_MAX_HEALTH, 0.0,
 		EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.0
-	);
+	));
 	@Unique private List<Integer> enchantments = new ArrayList<Integer>(List.of(0, 0, 0, 0, 0));
 
 	@Unique
