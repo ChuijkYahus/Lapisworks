@@ -395,6 +395,7 @@ Only the devs who can keep up with me...
 - Enchanted Slipway spawn rate being 1x, not 2x a slipway's
 - Placing a Ritus with the same data elsewhere in the world won't brick your world now
   - basically Carryon works with the Ritus again
+- Potential Crash with Inner Media Prfn.
 - Jumpslates and Rebound Slates are breakable and drop their item
 - Necklaces stick to your character better
 - "Oopsy woopsy" logspam BEGONE!
@@ -411,6 +412,7 @@ Only the devs who can keep up with me...
   - craft a collar and a bell to add a bell
     - which has full physics with itself and movement
     - even rings on the internal bell's collisions
+- shaders to make simple minds and amalgamations look better
 ### Interop
 - hexic
   - craft a collar and a nametag to make a collartag
@@ -506,7 +508,8 @@ possible interop:
   - "i got 47 more rounds in this 6 barrel shotgun" ahh idea search
 - slate works
   - make a loci that enhances cleric ambit around player to chalk circle levels!
-  - costs amel
+    - costs amel
+  - Gemini Directrix
 - ephemera
 - hexdeco
 - heartxxy
