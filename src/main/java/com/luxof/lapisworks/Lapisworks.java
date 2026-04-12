@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.math.HexAngle;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
@@ -20,6 +21,7 @@ import com.google.gson.JsonPrimitive;
 
 import com.luxof.lapisworks.init.LapisConfig;
 import com.luxof.lapisworks.init.LapisParticles;
+import com.luxof.lapisworks.init.LapisSounds;
 import com.luxof.lapisworks.init.LapisworksLoot;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.ModEntities;
@@ -194,6 +196,7 @@ public class Lapisworks implements ModInitializer {
 		}
 
 		LapisConfig.renewCurrentConfig();
+		LapisSounds.imagineArfingCouldntBeMe();
 		ThemConfigFlags.declareEm();
 		ModEntities.doSomethingFun();
 		Patterns.init();
@@ -368,14 +371,14 @@ public class Lapisworks implements ModInitializer {
 		);
 	}
 
-	// TODO: fix this
+	// TODO: fix this. it doesn't follow the spec of recording how many times a position is drawn over
 	public static boolean matchShape(HexPattern pat1, HexPattern pat2) {
 		// rat said that if you record how many times a position is drawn over then it's fine
-		// they waren't too sure, but i pray they're right because nothing else i've done has worked
-		List<HexCoord> pat2Positions = pat2.positions();
+		// they weren't too sure, but i pray they're right because nothing else i've done has worked
+		List<HexCoord> pat2Positions = getPosesDrawnOver(pat2);
 		for (HexDir dir : HexDir.values()) {
 			if (equalsButUnordered(
-				setTopLeftOrigin(new HexPattern(dir, pat1.getAngles()).positions()),
+				setTopLeftOrigin(getPosesDrawnOver(new HexPattern(dir, pat1.getAngles()))),
 				setTopLeftOrigin(pat2Positions)
 			)) return true;
 		}
@@ -383,7 +386,16 @@ public class Lapisworks implements ModInitializer {
 	}
 
 	public static List<HexCoord> getPosesDrawnOver(HexPattern pat) {
-		return null;
+		HexCoord cursor = new HexCoord(0, 0);
+		List<HexCoord> positions = new ArrayList<>();
+
+		for (HexDir dir : pat.directions()) {
+			positions.add(cursor);
+			cursor = cursor.plus(dir);
+			positions.add(cursor);
+		}
+
+		return positions;
 	}
 
 	public static List<HexCoord> setTopLeftOrigin(List<HexCoord> pat) {
