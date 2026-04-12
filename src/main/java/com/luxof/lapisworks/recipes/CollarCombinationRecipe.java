@@ -52,7 +52,7 @@ public class CollarCombinationRecipe extends SpecialCraftingRecipe {
                 LapisCollarAddition testAddy = entry.getValue();
                 if (
                     !testAddy.testItem(stack.getItem()) || !testAddy.canAdd(base, existingAdditions, id)
-                ) continue;
+                ) return ItemStack.EMPTY;
 
                 additionId = entry.getKey();
                 addition = entry.getValue();
