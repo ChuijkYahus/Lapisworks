@@ -11,14 +11,15 @@ import com.luxof.lapisworks.mishaps.MishapNotWearingTrinket;
 import com.luxof.lapisworks.nocarpaltunnel.ConstMediaActionNCT;
 import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
 
-import static com.luxof.lapisworks.Lapisworks.getFirstTrinketIfEquipped;
+import static com.luxof.lapisworks.Lapisworks.getEquippedTrinketsIn;
 import static com.luxof.lapisworks.LapisworksIDs.READABLE;
 import static com.luxof.lapisworks.MishapThrowerJava.throwIfNull;
-import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 
 public class ReadNecklace extends ConstMediaActionNCT {
     public int argc = 0;
@@ -28,17 +29,27 @@ public class ReadNecklace extends ConstMediaActionNCT {
     public List<? extends Iota> execute(HexIotaStack args, CastingEnvironment ctx) {
         LivingEntity ent = throwIfNull(ctx.getCastingEntity(), new MishapBadCaster());
 
-        ADIotaHolder iotaHolder = IXplatAbstractions.INSTANCE.findDataHolder(throwIfNull(
-            getFirstTrinketIfEquipped(ent, FOCUS_NECKLACE),
-            new MishapNotWearingTrinket(FOCUS_NECKLACE)
-        ).getRight());
+        List<ItemStack> trinkets = getEquippedTrinketsIn(ent, "chest", "necklace");
+        ADIotaHolder iotaHolder = trinkets.size() == 1
+            ? IXplatAbstractions.INSTANCE.findDataHolder(trinkets.get(0))
+            : trinkets.stream().flatMap((ItemStack stack) -> {
+
+                ADIotaHolder holder = IXplatAbstractions.INSTANCE.findDataHolder(stack);
+
+                return holder != null && (
+                            holder.readIota(world) != null ||
+                            holder.emptyIota() != null
+                        ) ? Stream.of(holder) : Stream.of();
+                })
+                .findFirst()
+                .orElseThrow(() -> new MishapNotWearingTrinket(READABLE));
 
         if (
             iotaHolder == null ||
             (iotaHolder.readIota(ctx.getWorld()) == null & iotaHolder.emptyIota() == null)
         )
             throw new MishapBadTrinket(
-                FOCUS_NECKLACE,
+                trinkets.get(0).getItem(),
                 READABLE
             );
 
