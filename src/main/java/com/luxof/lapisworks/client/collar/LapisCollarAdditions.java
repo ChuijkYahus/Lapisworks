@@ -63,10 +63,12 @@ public class LapisCollarAdditions {
         }
     }
 
-    public static void comeOnNowMeowForMe() {
+    public static void meowForMe() {
         // shhh my urge...
         // i will add a bell with full physics and ringing NEXT UPDATE!
         // i need to get this one out quickly.
-        register(id("collar/base"), new DyeCollarAddition());
+        register(DyeCollarAddition.ID, new DyeCollarAddition());
+        register(BellCollarAddition.ID, new BellCollarAddition());
+        register(FocusCollarAddition.ID, new FocusCollarAddition());
     }
 }

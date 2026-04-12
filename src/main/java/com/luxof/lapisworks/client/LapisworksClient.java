@@ -33,6 +33,7 @@ import static com.luxof.lapisworks.LapisworksIDs.SEND_SENT;
 import static com.luxof.lapisworks.LapisworksIDs.UNLOCK_SHIT_FOR_HEXCESSIBLE;
 import static com.luxof.lapisworks.init.ModItems.AMEL_JAR;
 import static com.luxof.lapisworks.init.ModItems.COLLAR;
+import static com.luxof.lapisworks.init.ModItems.COLLAR_WITH_MODEL;
 import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE;
 import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE2;
 import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE2_WORN;
@@ -133,8 +134,9 @@ public class LapisworksClient implements ClientModInitializer {
         log("Does NONE of that sound fun? Well, that's because it isn't. So let's get started, shall we?");
 
         LapisParticles.clientTicklesPaw();
-        LapisCollarAdditions.comeOnNowMeowForMe();
+        LapisCollarAdditions.meowForMe();
         ModScreens.registerOnClient();
+        LapisSounds.imagineArfingCouldntBeMe();
 
         initInterop();
 
@@ -316,7 +318,7 @@ public class LapisworksClient implements ClientModInitializer {
                 case 1 -> dim(COLLAR.getColor(stack));
                 default -> 0x808080;
             },
-            COLLAR
+            COLLAR_WITH_MODEL
         );
     }
 

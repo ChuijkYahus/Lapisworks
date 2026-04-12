@@ -4,7 +4,7 @@ import com.luxof.lapisworks.mixin.plugins.ModSpecificMCP;
 
 public class HexConnectMCP extends ModSpecificMCP {
 
-    protected HexConnectMCP() {
+    public HexConnectMCP() {
         super("hexconnect", null);
     }
     

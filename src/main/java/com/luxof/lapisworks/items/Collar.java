@@ -5,8 +5,6 @@ import at.petrak.hexcasting.api.utils.NBTHelper;
 import com.luxof.lapisworks.client.collar.LapisCollarAddition;
 import com.luxof.lapisworks.client.collar.LapisCollarAdditions;
 
-import static com.luxof.lapisworks.Lapisworks.log;
-
 import java.util.List;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -102,8 +100,8 @@ public class Collar extends Item implements DyeableItem {
     }*/
 
     private static double linearize(int cnotnormal) {
-        double c = cnotnormal / 255.0;
-        return c <= 0.04045 ? c / 12.92 : (c+0.055)/1.055;
+        double c = (double)cnotnormal / 255.0;
+        return c <= 0.04045 ? c / 12.92 : Math.pow((c+0.055)/1.055, 2.4);
     }
     private static double[] toLMS(double r, double g, double b) {
         return new double[] {
@@ -114,32 +112,24 @@ public class Collar extends Item implements DyeableItem {
     }
     private static double[] toOkLab(double[] lmscomp) {
         return new double[] {
-            lmscomp[0]*0.2104542553 + lmscomp[1]*0.7936177850 + lmscomp[2]*-0.0040720468,
-            lmscomp[0]*1.9779984951 + lmscomp[1]*-2.4285922050 + lmscomp[2]*0.4505937099,
-            lmscomp[0]*0.0259040371 + lmscomp[1]*0.7827717662 + lmscomp[2]*-0.8086757660
+            lmscomp[0]*0.2104542553 + lmscomp[1]*0.7936177850 - lmscomp[2]*0.0040720468,
+            lmscomp[0]*1.9779984951 - lmscomp[1]*2.4285922050 + lmscomp[2]*0.4505937099,
+            lmscomp[0]*0.0259040371 + lmscomp[1]*0.7827717662 - lmscomp[2]*0.8086757660
         };
     }
     private static double distanceBetween(int color1, int color2) {
         double[] lms1 = toLMS(
             linearize(color1 >> 16),
-            linearize(color1 & 0xff00 >> 8),
+            linearize((color1 & 0xff00) >> 8),
             linearize(color1 & 0xff)
         );
         double[] lms2 = toLMS(
             linearize(color2 >> 16),
-            linearize(color2 & 0xff00 >> 8),
+            linearize((color2 & 0xff00) >> 8),
             linearize(color2 & 0xff)
         );
-        double[] lms1comp = {
-            Math.pow(lms1[0], 1.0/3.0),
-            Math.pow(lms1[1], 1.0/3.0),
-            Math.pow(lms1[2], 1.0/3.0)
-        };
-        double[] lms2comp = {
-            Math.pow(lms2[0], 1.0/3.0),
-            Math.pow(lms2[1], 1.0/3.0),
-            Math.pow(lms2[2], 1.0/3.0)
-        };
+        double[] lms1comp = { Math.cbrt(lms1[0]), Math.cbrt(lms1[1]), Math.cbrt(lms1[2]) };
+        double[] lms2comp = { Math.cbrt(lms2[0]), Math.cbrt(lms2[1]), Math.cbrt(lms2[2]) };
         double[] oklab1 = toOkLab(lms1comp);
         double[] oklab2 = toOkLab(lms2comp);
         return Math.pow(oklab2[0]-oklab1[0], 2)
@@ -174,7 +164,6 @@ public class Collar extends Item implements DyeableItem {
         double closestScore = Integer.MAX_VALUE;
         for (var pair : colors) {
             double score = distanceBetween(color, pair.getLeft());
-            log("distance between %s and %s (%s): %d", Integer.toHexString(color), Integer.toHexString(pair.getLeft()), DyeColor.byFireworkColor(pair.getLeft()).asString(), score);
 
             if (score < closestScore) {
                 closest = pair.getRight();
@@ -202,9 +191,10 @@ public class Collar extends Item implements DyeableItem {
                 ? Text.translatable("tooltips.lapisworks.collar.added_items_list_pre")
                 : Text.translatable("tooltips.lapisworks.collar.no_added_items")
         );
-        added.forEach(
-            id -> tooltip.add(LapisCollarAdditions.get(id).getName(stack))
-        );
+        added.forEach(id -> tooltip.add(Text.translatable(
+            "tooltips.lapisworks.collar.added_items_list_point",
+            LapisCollarAdditions.get(id).getName(stack)
+        )));
     }
 
     public List<Identifier> getAdditions(ItemStack stack) {
@@ -225,10 +215,9 @@ public class Collar extends Item implements DyeableItem {
         NBTHelper.putList(stack, "additions", added);
     }
 
-    @SuppressWarnings("unlikely-arg-type")
     public void removeAddition(ItemStack stack, Identifier id) {
         NbtList added = NBTHelper.getList(stack, "additions", NbtElement.STRING_TYPE);
-        added.remove(id.toString());
+        added.remove(NbtString.of(id.toString()));
         NBTHelper.putList(stack, "additions", added);
     }
 }

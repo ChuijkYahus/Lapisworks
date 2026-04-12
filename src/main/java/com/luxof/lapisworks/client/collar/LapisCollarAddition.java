@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -18,6 +19,7 @@ public interface LapisCollarAddition {
     public Text getName(ItemStack collarStack);
     /** No <code>ItemStack</code> usage so I can *eventually* put this stuff in EMI.  */
     public boolean testItem(Item item);
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected);
 
     public boolean canAdd(
         ItemStack collarStack,

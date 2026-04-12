@@ -38,7 +38,8 @@ public class CollarCombinationRecipe extends SpecialCraftingRecipe {
             break;
         }
 
-        if (base == null) return ItemStack.EMPTY;
+        if (base == null)
+            return ItemStack.EMPTY;
 
         List<Identifier> existingAdditions = COLLAR.getAdditions(base);
 
@@ -58,9 +59,10 @@ public class CollarCombinationRecipe extends SpecialCraftingRecipe {
                 break;
             }
 
-            if (additionId == null || addition == null) continue;
+            if (additionId == null || addition == null || existingAdditions.contains(additionId))
+                continue;
 
-            addition.craft(base, existingAdditions, stack, additionId);
+            base = addition.craft(base, existingAdditions, stack, additionId);
             existingAdditions = COLLAR.getAdditions(base);
         }
 

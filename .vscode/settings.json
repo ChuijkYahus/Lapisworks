@@ -35,6 +35,7 @@
     "java.compile.nullAnalysis.mode": "automatic",
     "java.completion.favoriteStaticMembers": [
         "com.luxof.lapisworks.Lapisworks.*",
+        "com.luxof.lapisworks.init.ModItems.*",
         "com.luxof.lapisworks.LapisworksIDs.*",
         "com.luxof.lapisworks.MishapThrowerJava.*",
         "com.luxof.lapisworks.init.Mutables.Mutables.*"

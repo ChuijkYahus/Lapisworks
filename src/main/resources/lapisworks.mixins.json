@@ -29,6 +29,8 @@
 		"MishapDisallowedSpellMixin",
 		"HexAPIMixin",
 		"ClientPlayNetworkHandlerMixin",
+		"CatEntityMixin",
+		"MobEntityRendererMixin",
 
 		"FabricXplatImplMixin"
 	],

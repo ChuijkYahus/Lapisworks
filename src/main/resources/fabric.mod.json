@@ -22,6 +22,9 @@
 		],
 		"emi": [
 			"com.luxof.lapisworks.interop.emi.LapisworksEmiPlugin"
+		],
+		"cardinal-components": [
+			"com.luxof.lapisworks.init.LapisCardinalComponents"
 		]
 	},
 	"mixins": [

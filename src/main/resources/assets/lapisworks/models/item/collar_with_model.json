@@ -236,12 +236,12 @@
 			"translation": [0, 2, 2]
 		},
 		"gui": {
-			"rotation": [35, 0, 20],
+			"rotation": [35, -180, -20],
 			"scale": [1.2, 1, 1.2]
 		},
 		"head": {
-			"translation": [0, -7, 0],
-			"scale": [1.5, 1.5, 1.2]
+			"translation": [0, -7.75, 0],
+			"scale": [1.5, 1.5, 1.5]
 		},
 		"fixed": {
 			"rotation": [90, 0, 0]

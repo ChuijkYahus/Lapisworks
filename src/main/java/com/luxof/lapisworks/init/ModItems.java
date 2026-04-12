@@ -75,7 +75,9 @@ public class ModItems {
     public static final FocusNecklace FOCUS_NECKLACE2 = new FocusNecklace(unstackable);
     public static final TotemNecklace TOTEM_NECKLACE = new TotemNecklace();
     public static final Collar COLLAR = new Collar();
+
     public static final Item COLLAR_WITH_MODEL = new Item(unstackable);
+    public static final Item COLLAR_BELL = new Item(unstackable);
 
     public static final Item TOTEM_NECKLACE_FLOATY_DISPLAY = new Item(unstackable);
     public static final Item TOTEM_NECKLACE_WORN = new Item(unstackable);
@@ -153,12 +155,13 @@ public class ModItems {
         "amel_constructs/focus_necklace/2", FOCUS_NECKLACE2,
         "totem_necklace", TOTEM_NECKLACE,
 
-        // register these misc ones at the end to remove confusion
+        // register these misc ones at the end to organize
+        "collar_with_model", COLLAR_WITH_MODEL,
+        "collar_bell", COLLAR_BELL,
         "totem_necklace_floaty_display", TOTEM_NECKLACE_FLOATY_DISPLAY,
         "totem_necklace_worn", TOTEM_NECKLACE_WORN,
         "amel_constructs/focus_necklace/1_worn", FOCUS_NECKLACE_WORN,
-        "amel_constructs/focus_necklace/2_worn", FOCUS_NECKLACE2_WORN,
-        "collar_with_model", COLLAR_WITH_MODEL
+        "amel_constructs/focus_necklace/2_worn", FOCUS_NECKLACE2_WORN
     );
 
     public static ItemGroup LapisMagicShitGroup;

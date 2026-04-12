@@ -378,12 +378,11 @@ Only the devs who can keep up with me...
   - rechargeable
 - Added collars
   - dyeable (you can also apply a pigment with a new spell)
-  - you can add a bell by crafting it with a bell
-  - you can add spikes by crafting it with an iron ingot
-  - these have special interactions when an animal wears them
-    - only the owner can write to them via two new patterns
+  - craft with a gold ingot to add a bell
+  - craft with a focus to add iota holding functionality
+    - these have special interactions when an animal wears them while they hold iotas
     - put a vector in it = animal wanna go there
-    - put entity in it = dog attack
+    - put entity in it = animal attack
     - item entity = fox or allay pick up
 - The meta-eval patterns can take patterns on top of [pattern]s too now.
 - Made the default enchantment limit in the config customizeable. You can math now.
@@ -408,10 +407,11 @@ Only the devs who can keep up with me...
 # 1.5.8.4
 ### Additions
 - added stuff to collars
-  - craft a collar and an iron ingot to put spikes on
-  - craft a collar and a bell to add a bell
+  - craft with an iron ingot to add spikes
+  - the bell now supports full physics
     - which has full physics with itself and movement
     - even rings on the internal bell's collisions
+  - phianglement and media-containing functionality, maybe?
 - shaders to make simple minds and amalgamations look better
 ### Interop
 - hexic

@@ -2,7 +2,9 @@ package com.luxof.lapisworks.client.collar.additions;
 
 import com.luxof.lapisworks.client.collar.LapisCollarAddition;
 
+import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.init.ModItems.COLLAR;
+import static com.luxof.lapisworks.init.ModItems.COLLAR_WITH_MODEL;
 
 import java.util.List;
 
@@ -19,7 +21,10 @@ import net.minecraft.util.Identifier;
 
 import org.jetbrains.annotations.Nullable;
 
+// i don't think this class even gets used by virtue of implements DyeableItem
+// not sure though
 public class DyeCollarAddition implements LapisCollarAddition {
+    public static final Identifier ID = id("collar/base");
 
     @Override
     public Text getName() { return Text.literal(""); }
@@ -54,7 +59,7 @@ public class DyeCollarAddition implements LapisCollarAddition {
     public ItemStack craft(ItemStack collarStack, List<Identifier> existingAdditions, ItemStack yourStack,
             Identifier yourId) {
         ItemStack stack = collarStack.copy();
-        int dyeColor = COLLAR.getColorFrom(((DyeItem)stack.getItem()).getColor());
+        int dyeColor = COLLAR.getColorFrom(((DyeItem)yourStack.getItem()).getColor());
 
         COLLAR.setColor(
             stack,
@@ -68,14 +73,25 @@ public class DyeCollarAddition implements LapisCollarAddition {
     public void render(ItemStack collarStack, Identifier yourId, @Nullable LivingEntity entity,
             ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
             int overlay) {
+        DyeCollarAddition.renderStatic(
+            collarStack, yourId, entity, mode, matrices, vertexConsumers, light, overlay
+        );
+    }
+
+    public static void renderStatic(ItemStack collarStack, Identifier yourId, @Nullable LivingEntity entity,
+            ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
+            int overlay) {
+        // good lord i hope this isn't too taxing to do every frame
+        ItemStack colored = new ItemStack(COLLAR_WITH_MODEL);
+        COLLAR.setColor(colored, COLLAR.getColor(collarStack));
         MinecraftClient.getInstance().getItemRenderer().renderItem(
             entity,
-            collarStack,
+            colored,
             mode,
             false,
             matrices,
             vertexConsumers,
-            entity.getWorld(),
+            entity != null ? entity.getWorld() : null,
             light,
             overlay,
             0

@@ -1,15 +1,15 @@
 package com.luxof.lapisworks.client.collar;
 
-import com.luxof.lapisworks.init.ModItems;
+import com.luxof.lapisworks.client.collar.additions.DyeCollarAddition;
 
 import static com.luxof.lapisworks.Lapisworks.id;
+import static com.luxof.lapisworks.init.ModItems.COLLAR_WITH_MODEL;
 
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
@@ -18,9 +18,10 @@ import net.minecraft.util.Identifier;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.luxof.lapisworks.client.collar.additions.DyeCollarAddition;
+
 public class CollarItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
-    public static final Identifier collarModelId = id("item/collar_with_model");
-    public static final ItemStack collarWithModelStack = new ItemStack(ModItems.COLLAR_WITH_MODEL);
+    public static final ItemStack collarWithModelStack = new ItemStack(COLLAR_WITH_MODEL);
 
     @Override
     public void render(
@@ -43,11 +44,15 @@ public class CollarItemRenderer implements BuiltinItemRendererRegistry.DynamicIt
     ) {
         MinecraftClient client = MinecraftClient.getInstance();
 
-        BakedModelManager modelManager = client.getBakedModelManager();
-        BakedModel collarModel = modelManager.getModel(collarModelId);
+        BakedModel collarModel = client.getItemRenderer().getModel(
+            stack, entity != null ? entity.getWorld() : null, entity, 0
+        );
 
         matrices.push();
         matrices.translate(.5, .5, .5);
+        DyeCollarAddition.renderStatic(
+            stack, DyeCollarAddition.ID, entity, mode, matrices, vertexConsumers, light, overlay
+        );
         collarModel.getTransformation().getTransformation(mode).apply(false, matrices);
         LapisCollarAdditions.renderAll(stack, entity, mode, matrices, vertexConsumers, light, overlay);
         matrices.pop();

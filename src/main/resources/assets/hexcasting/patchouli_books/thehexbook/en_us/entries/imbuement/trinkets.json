@@ -59,13 +59,24 @@
             "text": "pages.lapisworks.imbuement.trinkets.necklace.img.desc"
         },
         {
-            "type": "patchouli:text",
+            "type": "patchouli:spotlight",
+            "item": "lapisworks:totem_necklace",
             "text": "pages.lapisworks.imbuement.trinkets.totem.text"
         },
         {
             "type": "patchouli:crafting",
             "recipe": "lapisworks:base/totem_necklace",
             "text": "pages.lapisworks.imbuement.trinkets.totem.recipe.text"
+        },
+        {
+            "type": "patchouli:text",
+            "title": "pages.lapisworks.imbuement.trinkets.collar.title",
+            "text": "pages.lapisworks.imbuement.trinkets.collar.text"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "lapisworks:base/making_collar",
+            "text": "pages.lapisworks.imbuement.trinkets.collar.recipe"
         }
     ]
 }

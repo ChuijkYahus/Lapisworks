@@ -46,13 +46,13 @@ public abstract class BaseCastingWispMixin extends Entity implements MediaTransf
         return thatCaster != null && casterUUID != null && thatCaster.getUuid().equals(casterUUID);
     }
 
-    @Override @Unique public Vec3d getPosIfPossible() { return getPos(); }
-    @Override @Unique public void setMediaHere(long media) {
+    @Override public Vec3d getPosIfPossible() { return getPos(); }
+    @Override public void setMediaHere(long media) {
         ((BaseWisp)(Object)this).setMedia(media);
     }
-    @Override @Unique public long getMaxMedia() { return 9_000_000_000L; }
-    @Override @Unique public long getMediaHere() { return ((BaseWisp)(Object)this).getMedia(); }
-    @Override @Unique public long withdrawMedia(long amount, boolean simulate) {
+    @Override public long getMaxMedia() { return 9_000_000_000L; }
+    @Override public long getMediaHere() { return ((BaseWisp)(Object)this).getMedia(); }
+    @Override public long withdrawMedia(long amount, boolean simulate) {
         long ret = MediaTransferInterface.super.withdrawMedia(amount, simulate);
         if (getMediaHere() <= 0L) {
             discard();
@@ -79,7 +79,7 @@ public abstract class BaseCastingWispMixin extends Entity implements MediaTransf
     protected void initDataTracker(CallbackInfo ci) {
         TRACKMYFUCKINGITEMSTACKYOUSLOBFUCKINGSHITGARGLINGSLABOFSHITIWILLFUCKINGMURDEREVERYFUCKINGLASTONEOFYOURFUCKINGFAMILYMEMBERSBECAUSEOFTHISFUCKINGASSFUCKINGSHITFUCKINGBITCHBUGBULLSHIT();
     }
-    @Override @Unique public ItemStack getStack() {
+    @Override public ItemStack getStack() {
         // for some reason, whenever i test outside the dev env, this errs.
         // with an NPE.
         // it errs because heldStack wasn't registered.
@@ -91,7 +91,7 @@ public abstract class BaseCastingWispMixin extends Entity implements MediaTransf
             return getDataTracker().get(heldStack);
         }
     }
-    @Override @Unique public ItemStack setStack(ItemStack stack) {
+    @Override public ItemStack setStack(ItemStack stack) {
         ItemStack old = getStack();
         getDataTracker().set(heldStack, stack);
         return old;

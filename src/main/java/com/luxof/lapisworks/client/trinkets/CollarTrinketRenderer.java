@@ -32,7 +32,7 @@ public class CollarTrinketRenderer implements TrinketRenderer {
         TrinketRenderer.translateToFace(matrices, playerModel, player, 0, 0);
 
         matrices.translate(0.0, -0.05/16.0, 0.31);
-        matrices.scale(0.6f, 0.6f, 0.6f);
+        matrices.scale(0.4f, 0.4f, 0.4f);
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0f));
 
         MinecraftClient instance = MinecraftClient.getInstance();

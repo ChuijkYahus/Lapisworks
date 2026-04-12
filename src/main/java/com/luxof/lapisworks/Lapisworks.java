@@ -368,6 +368,7 @@ public class Lapisworks implements ModInitializer {
 		);
 	}
 
+	// TODO: fix this
 	public static boolean matchShape(HexPattern pat1, HexPattern pat2) {
 		// rat said that if you record how many times a position is drawn over then it's fine
 		// they waren't too sure, but i pray they're right because nothing else i've done has worked
@@ -379,6 +380,10 @@ public class Lapisworks implements ModInitializer {
 			)) return true;
 		}
 		return false;
+	}
+
+	public static List<HexCoord> getPosesDrawnOver(HexPattern pat) {
+		return null;
 	}
 
 	public static List<HexCoord> setTopLeftOrigin(List<HexCoord> pat) {
