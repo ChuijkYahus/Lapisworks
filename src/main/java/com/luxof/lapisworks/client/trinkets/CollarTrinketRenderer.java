@@ -1,5 +1,9 @@
 package com.luxof.lapisworks.client.trinkets;
 
+import com.luxof.lapisworks.client.collar.additions.StealthCollarAddition;
+
+import static com.luxof.lapisworks.init.ModItems.COLLAR;
+
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.client.TrinketRenderer;
 
@@ -26,13 +30,14 @@ public class CollarTrinketRenderer implements TrinketRenderer {
 
         if (!(contextModel instanceof PlayerEntityModel playerModel &&
                 entity instanceof AbstractClientPlayerEntity player)) return;
+        if (player.isInvisible() && COLLAR.hasAddition(stack, StealthCollarAddition.ID)) return;
 
         matrices.push();
         TrinketRenderer.followBodyRotations(entity, playerModel);
         TrinketRenderer.translateToFace(matrices, playerModel, player, 0, 0);
 
-        matrices.translate(0.0, -0.05/16.0, 0.31);
-        matrices.scale(0.4f, 0.4f, 0.4f);
+        matrices.translate(0.0, 0.185/16.0, 0.31);
+        matrices.scale(0.6f, 0.6f, 0.6f);
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0f));
 
         MinecraftClient instance = MinecraftClient.getInstance();

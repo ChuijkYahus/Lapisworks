@@ -3,7 +3,6 @@ package com.luxof.lapisworks.mixin;
 import at.petrak.hexcasting.common.lib.HexAttributes;
 
 import com.luxof.lapisworks.interop.valkyrienskies.ValkyrienUtils;
-
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 import com.luxof.lapisworks.mixinsupport.LapisworksInterface;
 
@@ -34,14 +33,14 @@ public abstract class PlayerEntityMixin extends LivingEntity implements EnchSent
     @Unique private Vec3d enchSentPos = null;
     @Unique private Double sentRange = null;
 
-    @Unique @Override @Nullable public Vec3d getEnchantedSentinel() { return this.enchSentPos; }
-    @Unique @Override @Nullable public Double getEnchantedSentinelAmbit() { return this.sentRange; }
-    @Unique @Override
+    @Override @Nullable public Vec3d getEnchantedSentinel() { return this.enchSentPos; }
+    @Override @Nullable public Double getEnchantedSentinelAmbit() { return this.sentRange; }
+    @Override
     public void setEnchantedSentinel(Vec3d pos, Double ambit) {
         this.enchSentPos = pos;
         this.sentRange = ambit;
     }
-    @Unique @Override
+    @Override
     public boolean shouldBreakSent() {
         double casterAmbit = ((LivingEntity)this).getAttributeValue(HexAttributes.AMBIT_RADIUS);
         return this.getEnchantedSentinel() == null
@@ -51,7 +50,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements EnchSent
                 : this.getPos().distanceTo(this.getEnchantedSentinel()))
                     > casterAmbit;
     }
-    @Unique @Override
+    @Override
     public void breakSent() {
         this.setEnchantedSentinel(null, null);
     }

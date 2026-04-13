@@ -1,12 +1,15 @@
 package com.luxof.lapisworks.mixin;
 
 import com.luxof.lapisworks.mixinsupport.BlockDowser;
+import com.luxof.lapisworks.mixinsupport.SpiralPatternsClearable;
 
 import static com.luxof.lapisworks.Lapisworks.err;
 import static com.luxof.lapisworks.Lapisworks.log;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
+
+import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +34,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPlayerEntity.class)
-public abstract class ClientPlayerEntityMixin extends PlayerEntity implements BlockDowser {
+public abstract class ClientPlayerEntityMixin extends PlayerEntity implements BlockDowser, SpiralPatternsClearable {
     public ClientPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
         super(world, pos, yaw, gameProfile);
     }
@@ -117,4 +120,18 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity implements Bl
     }
     @Unique @Override @Nullable
     public Pair<BlockPos, Double> dowse(Block block) { return map.get(block); }
+
+    @Override
+    public void setSpiralPatternsClearing(boolean yesOrNo) {
+        ((SpiralPatternsClearable)(Object)IClientXplatAbstractions.INSTANCE
+            .getClientCastingStack(this))
+            .setSpiralPatternsClearing(yesOrNo);
+    }
+
+    @Override
+    public boolean getSpiralPatternsClearing() {
+        return ((SpiralPatternsClearable)(Object)IClientXplatAbstractions.INSTANCE
+            .getClientCastingStack(this))
+            .getSpiralPatternsClearing();
+    }
 }

@@ -1,11 +1,19 @@
 package com.luxof.lapisworks.client.collar;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+
+import dev.emi.trinkets.api.SlotReference;
+
 import java.util.List;
+import java.util.UUID;
 
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -19,7 +27,6 @@ public interface LapisCollarAddition {
     public Text getName(ItemStack collarStack);
     /** No <code>ItemStack</code> usage so I can *eventually* put this stuff in EMI.  */
     public boolean testItem(Item item);
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected);
 
     public boolean canAdd(
         ItemStack collarStack,
@@ -46,5 +53,34 @@ public interface LapisCollarAddition {
 
     default boolean renderingAsTrinket(ModelTransformationMode mode) {
         return mode.equals(ModelTransformationMode.GUI);
+    }
+
+
+
+    default void inventoryTick(
+        ItemStack stack, World world, LivingEntity entity, int slot, boolean selected
+    ) {}
+    default void trinketTick(
+        ItemStack stack, SlotReference slot, LivingEntity entity
+    ) {
+        generalTick(stack, entity);
+    }
+    default void generalTick(ItemStack stack, LivingEntity entity) {}
+
+    
+	default void onEquip(ItemStack stack, SlotReference slot, LivingEntity entity) {
+        onEquip(stack, entity);
+    }
+	default void onUnequip(ItemStack stack, SlotReference slot, LivingEntity entity) {
+        onUnequip(stack, entity);
+	}
+    default void onEquip(ItemStack stack, LivingEntity entity) {}
+    default void onUnequip(ItemStack stack, LivingEntity entity) {}
+
+
+    default Multimap<EntityAttribute, EntityAttributeModifier> getModifiers(
+        ItemStack stack, SlotReference slot, LivingEntity entity, UUID uuid
+    ) {
+        return ImmutableMultimap.of();
     }
 }

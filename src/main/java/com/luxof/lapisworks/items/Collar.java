@@ -125,6 +125,49 @@ public class Collar extends Item implements DyeableItem, IotaHolderItem, Trinket
         double c = (double)cnotnormal / 255.0;
         return c <= 0.04045 ? c / 12.92 : Math.pow((c+0.055)/1.055, 2.4);
     }
+    /*
+    // overkill
+    private static double[] toLMS(double r, double g, double b) {
+        return new double[] {
+            r*0.4122214708 + g*0.5363325363 + b*0.0514459929,
+            r*0.2119034982 + g*0.6806995451 + b*0.1073969566,
+            r*0.0883024619 + g*0.2817188376 + b*0.6299787005
+        };
+    }
+    private static double[] toOkLab(double[] lmscomp) {
+        return new double[] {
+            lmscomp[0]*0.2104542553 + lmscomp[1]*0.7936177850 + lmscomp[2]*-0.0040720468,
+            lmscomp[0]*1.9779984951 + lmscomp[1]*-2.4285922050 + lmscomp[2]*0.4505937099,
+            lmscomp[0]*0.0259040371 + lmscomp[1]*0.7827717662 + lmscomp[2]*-0.8086757660
+        };
+    }
+    private static double distanceBetween(int color1, int color2) {
+        double[] lms1 = toLMS(
+            linearize(color1 >> 16),
+            linearize(color1 & 0xff00 >> 8),
+            linearize(color1 & 0xff)
+        );
+        double[] lms2 = toLMS(
+            linearize(color2 >> 16),
+            linearize(color2 & 0xff00 >> 8),
+            linearize(color2 & 0xff)
+        );
+        double[] lms1comp = {
+            Math.pow(lms1[0], 1.0/3.0),
+            Math.pow(lms1[1], 1.0/3.0),
+            Math.pow(lms1[2], 1.0/3.0)
+        };
+        double[] lms2comp = {
+            Math.pow(lms2[0], 1.0/3.0),
+            Math.pow(lms2[1], 1.0/3.0),
+            Math.pow(lms2[2], 1.0/3.0)
+        };
+        double[] oklab1 = toOkLab(lms1comp);
+        double[] oklab2 = toOkLab(lms2comp);
+        return Math.pow(oklab2[0]-oklab1[0], 2)
+            + Math.pow(oklab2[1]-oklab1[1], 2)
+            + Math.pow(oklab2[2]-oklab1[2], 2);
+    }*/
     private static double distanceBetween(int color1, int color2) {
         double[] lcolor1 = {
             linearize(color1 >> 16),
@@ -158,7 +201,8 @@ public class Collar extends Item implements DyeableItem, IotaHolderItem, Trinket
         new Pair<>(getColorFrom(DyeColor.CYAN), Text.translatable("tooltips.lapisworks.collar.color.cyan")),
         new Pair<>(getColorFrom(DyeColor.PURPLE), Text.translatable("tooltips.lapisworks.collar.color.yo_bro_y_u_urple")),
         new Pair<>(getColorFrom(DyeColor.BLUE), Text.translatable("tooltips.lapisworks.collar.color.blue")),
-        new Pair<>(getColorFrom(DyeColor.BROWN), Text.translatable("tooltips.lapisworks.collar.color.brown")),
+        new Pair<>(getColorFrom(DyeColor.BROWN), Text.translatable("tooltips.lapisworks.collar.color.dark_brown")),
+        new Pair<>(0xa06540, Text.translatable("tooltips.lapisworks.collar.color.brown")),
         new Pair<>(getColorFrom(DyeColor.GREEN), Text.translatable("tooltips.lapisworks.collar.color.green")),
         new Pair<>(getColorFrom(DyeColor.RED), Text.translatable("tooltips.lapisworks.collar.color.red")),
         new Pair<>(getColorFrom(DyeColor.BLACK), Text.translatable("tooltips.lapisworks.collar.color.black"))

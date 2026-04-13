@@ -3,11 +3,11 @@ package com.luxof.lapisworks.client.collar;
 import com.luxof.lapisworks.client.collar.additions.*;
 
 import static com.luxof.lapisworks.Lapisworks.err;
-import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.init.ModItems.COLLAR;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
@@ -63,6 +63,17 @@ public class LapisCollarAdditions {
         }
     }
 
+    public static void toAllAdditions(
+        ItemStack stack,
+        BiConsumer<LapisCollarAddition, Identifier> apply
+    ) {
+        for (Identifier id : COLLAR.getAdditions(stack)) {
+            LapisCollarAddition addition = get(id);
+            if (addition != null)
+                apply.accept(addition, id);
+        }
+    }
+
     public static void meowForMe() {
         // shhh my urge...
         // i will add a bell with full physics and ringing NEXT UPDATE!
@@ -70,5 +81,6 @@ public class LapisCollarAdditions {
         register(DyeCollarAddition.ID, new DyeCollarAddition());
         register(BellCollarAddition.ID, new BellCollarAddition());
         register(FocusCollarAddition.ID, new FocusCollarAddition());
+        register(StealthCollarAddition.ID, new StealthCollarAddition());
     }
 }

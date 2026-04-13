@@ -29,8 +29,10 @@
 		"MishapDisallowedSpellMixin",
 		"HexAPIMixin",
 		"ClientPlayNetworkHandlerMixin",
-		"CatEntityMixin",
+		"CollarControllableEntityMixin",
 		"MobEntityRendererMixin",
+		"ClientCastingStackMixin",
+		"StatusEffectInstanceMixin",
 
 		"FabricXplatImplMixin"
 	],

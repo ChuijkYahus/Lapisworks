@@ -16,9 +16,12 @@ import net.minecraft.util.DyeColor;
 import org.jetbrains.annotations.NotNull;
 
 public class MishapNotWearingTrinket extends Mishap {
-    private final Item trinket;
+    private final Text trinket;
 
     public MishapNotWearingTrinket(@NotNull Item requiredTrinket) {
+        this.trinket = requiredTrinket.getName();
+    }
+    public MishapNotWearingTrinket(@NotNull Text requiredTrinket) {
         this.trinket = requiredTrinket;
     }
 
@@ -34,7 +37,7 @@ public class MishapNotWearingTrinket extends Mishap {
     protected Text errorMessage(CastingEnvironment arg0, Context arg1) {
         return Text.translatable(
             NOT_EQUIPPED,
-            this.trinket.getName()
+            this.trinket
         );
     }
 }

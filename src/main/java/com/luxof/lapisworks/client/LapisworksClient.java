@@ -136,7 +136,6 @@ public class LapisworksClient implements ClientModInitializer {
         LapisParticles.clientTicklesPaw();
         LapisCollarAdditions.meowForMe();
         ModScreens.registerOnClient();
-        LapisSounds.imagineArfingCouldntBeMe();
 
         initInterop();
 

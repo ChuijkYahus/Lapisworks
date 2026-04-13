@@ -36,8 +36,8 @@ public class NecklaceTrinketRenderer implements TrinketRenderer {
         TrinketRenderer.followBodyRotations(entity, playerModel);
         TrinketRenderer.translateToFace(matrices, playerModel, player, 0f, 0f);
 
-        matrices.translate(0.0, -0.1/16.0, 0.31);
-        matrices.scale(0.7f, 0.7f, 0.7f);
+        matrices.translate(0.0, -0.25/16.0, 0.29);
+        matrices.scale(0.6f, 0.6f, 0.6f);
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0f));
 
         MinecraftClient instance = MinecraftClient.getInstance();

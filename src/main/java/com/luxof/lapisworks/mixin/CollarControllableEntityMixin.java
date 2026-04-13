@@ -1,5 +1,6 @@
 package com.luxof.lapisworks.mixin;
 
+import com.luxof.lapisworks.client.collar.LapisCollarAdditions;
 import com.luxof.lapisworks.mixinsupport.CollarControllable;
 
 import net.minecraft.entity.EntityType;
@@ -8,6 +9,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
@@ -18,41 +20,54 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(CatEntity.class)
-public abstract class CatEntityMixin extends TameableEntity implements CollarControllable {
+@Mixin(value = {
+    CatEntity.class,
+    WolfEntity.class
+})
+public abstract class CollarControllableEntityMixin extends TameableEntity implements CollarControllable {
 
-    protected CatEntityMixin(EntityType<? extends TameableEntity> entityType, World world) {
+    protected CollarControllableEntityMixin(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
+    }
+
+    private static final TrackedData<ItemStack> COLLAR_CAT = DataTracker.registerData(
+        CatEntity.class,
+        TrackedDataHandlerRegistry.ITEM_STACK
+    );
+    private static final TrackedData<ItemStack> COLLAR_WOLF = DataTracker.registerData(
+        WolfEntity.class,
+        TrackedDataHandlerRegistry.ITEM_STACK
+    );
+    private TrackedData<ItemStack> getCOLLAR() {
+        return (Object)this instanceof CatEntity
+            ? COLLAR_CAT
+            : COLLAR_WOLF;
     }
 
     @Override
     public ItemStack getCollar() {
-        if (!getDataTracker().containsKey(COLLAR)) trackCollarInTracker();
-        return getDataTracker().get(COLLAR);
+        if (!getDataTracker().containsKey(getCOLLAR())) trackCollarInTracker();
+        return getDataTracker().get(getCOLLAR());
     }
 
     @Override
     public ItemStack setCollar(ItemStack collar) {
-        if (!getDataTracker().containsKey(COLLAR)) trackCollarInTracker();
-        ItemStack previously = getDataTracker().get(COLLAR);
-        getDataTracker().set(COLLAR, collar);
+        if (!getDataTracker().containsKey(getCOLLAR())) trackCollarInTracker();
+        ItemStack previously = getDataTracker().get(getCOLLAR());
+        getDataTracker().set(getCOLLAR(), collar);
         return previously;
     }
 
 
-    private static final TrackedData<ItemStack> COLLAR = DataTracker.registerData(
-        CatEntity.class,
-        TrackedDataHandlerRegistry.ITEM_STACK
-    );
     @Unique
-    private void trackCollarInTracker() { getDataTracker().startTracking(COLLAR, ItemStack.EMPTY); }
+    private void trackCollarInTracker() { getDataTracker().startTracking(getCOLLAR(), ItemStack.EMPTY); }
 
     @Inject(
         at = @At("HEAD"),
         method = "initDataTracker"
     )
     protected void lapisworks$addCollar(CallbackInfo ci) {
-        this.dataTracker.startTracking(COLLAR, ItemStack.EMPTY);
+        this.dataTracker.startTracking(getCOLLAR(), ItemStack.EMPTY);
     }
 
     @Inject(
@@ -71,7 +86,18 @@ public abstract class CatEntityMixin extends TameableEntity implements CollarCon
     }
 
 
-    @Injec
+    @Inject(
+        at = @At("HEAD"),
+        method = "tick"
+    )
+    public void lapisworks$collarTick(CallbackInfo ci) {
+        ItemStack collar = getCollar();
+        if (collar.isEmpty()) return;
+        LapisCollarAdditions.toAllAdditions(
+            collar,
+            (addition, id) -> addition.generalTick(collar, this)
+        );
+    }
 
 
     @Inject(

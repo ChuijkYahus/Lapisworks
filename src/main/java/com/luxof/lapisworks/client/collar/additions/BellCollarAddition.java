@@ -1,6 +1,7 @@
 package com.luxof.lapisworks.client.collar.additions;
 
 import com.luxof.lapisworks.client.collar.LapisCollarAddition;
+import com.luxof.lapisworks.init.LapisSounds;
 
 import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.init.ModItems.COLLAR;
@@ -16,6 +17,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -63,5 +65,27 @@ public class BellCollarAddition implements LapisCollarAddition {
             0
         );
     }
-    
+
+    @Override
+    public void generalTick(ItemStack stack, LivingEntity entity) {
+        if (!entity.getWorld().isClient)
+            return;
+        double speed = entity.getVelocity().add(0.0, -entity.getVelocity().getY(), 0.0).length();
+
+		if (
+            speed < 0.1 ||
+            entity.getRandom().nextDouble() < 0.25 ||
+            Math.max(0, entity.age % 20 - entity.getRandom().nextBetween(0, 10)) != 0
+        ) return;
+        entity.getWorld().playSound(
+            entity.getX(),
+            entity.getY(),
+            entity.getZ(),
+            LapisSounds.COLLAR_BELL,
+            SoundCategory.AMBIENT,
+            0.4f,
+            0.8f + (float)(speed - 0.1) * 0.5f + entity.getRandom().nextFloat() * 0.1f,
+            true
+        );
+    }
 }
