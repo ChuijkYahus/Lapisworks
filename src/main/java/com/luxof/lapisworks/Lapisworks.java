@@ -6,7 +6,6 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.math.HexAngle;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
@@ -22,6 +21,7 @@ import com.google.gson.JsonPrimitive;
 import com.luxof.lapisworks.init.LapisConfig;
 import com.luxof.lapisworks.init.LapisParticles;
 import com.luxof.lapisworks.init.LapisSounds;
+import com.luxof.lapisworks.init.LapisTrinkets;
 import com.luxof.lapisworks.init.LapisworksLoot;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.ModEntities;
@@ -55,13 +55,13 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketComponent;
+import dev.emi.trinkets.api.TrinketInventory;
 import dev.emi.trinkets.api.TrinketsApi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 import java.util.function.BiConsumer;
@@ -79,7 +79,6 @@ import org.slf4j.LoggerFactory;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -210,6 +209,7 @@ public class Lapisworks implements ModInitializer {
 		ModScreens.whatWasThatTF2CommentAboutMakingBadGUICodeSoYouDontHaveToTouchItAgain();
 		LapisParticles.pawtickle();
 		ModEvents.finallyBeUsed();
+		LapisTrinkets.startFeelingCute();
 
         TheSillySayer.sayNormal();
 		if (anyInterop) {
@@ -243,9 +243,24 @@ public class Lapisworks implements ModInitializer {
 		return new Pair<>(one, two);
 	}
 
+	public static List<ItemStack> getEquippedTrinketsIn(
+		LivingEntity entity,
+		String broad,
+		String specific
+	) {
+		TrinketComponent trinkComp = TrinketsApi.getTrinketComponent(entity).orElse(null);
+		if (trinkComp == null) return null;
+
+		TrinketInventory inv = trinkComp.getInventory().get(broad).get(specific);
+
+		List<ItemStack> trinkets = new ArrayList<>();
+		for (int i = 0; i < inv.size(); i++) { trinkets.add(inv.getStack(i)); }
+		return trinkets;
+	}
+
 	public static boolean trinketEquipped(LivingEntity entity, Item item) {
-		Optional<TrinketComponent> trinkCompOp = TrinketsApi.getTrinketComponent(entity);
-		return trinkCompOp.isEmpty() ? false : trinkCompOp.get().isEquipped(item);
+		TrinketComponent trinkComp = TrinketsApi.getTrinketComponent(entity).orElse(null);
+		return trinkComp != null && trinkComp.isEquipped(item);
 	}
 
 	@Nullable
@@ -253,9 +268,8 @@ public class Lapisworks implements ModInitializer {
 		LivingEntity entity,
 		Item item
 	) {
-		Optional<TrinketComponent> trinkCompOp = TrinketsApi.getTrinketComponent(entity);
-		if (trinkCompOp.isEmpty()) return null;
-		TrinketComponent trinkComp = trinkCompOp.get();
+		TrinketComponent trinkComp = TrinketsApi.getTrinketComponent(entity).orElse(null);
+		if (trinkComp == null) return null;
 		try { return trinkComp.getEquipped(stack -> stack.isOf(item)).get(0); }
 		catch (IndexOutOfBoundsException e) { return null; }
 	}
@@ -371,7 +385,6 @@ public class Lapisworks implements ModInitializer {
 		);
 	}
 
-	// TODO: fix this. it doesn't follow the spec of recording how many times a position is drawn over
 	public static boolean matchShape(HexPattern pat1, HexPattern pat2) {
 		// rat said that if you record how many times a position is drawn over then it's fine
 		// they weren't too sure, but i pray they're right because nothing else i've done has worked

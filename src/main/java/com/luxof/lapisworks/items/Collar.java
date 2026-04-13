@@ -1,23 +1,41 @@
 package com.luxof.lapisworks.items;
 
+import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.casting.iota.NullIota;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.Trinket;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.luxof.lapisworks.client.collar.LapisCollarAddition;
 import com.luxof.lapisworks.client.collar.LapisCollarAdditions;
+import com.luxof.lapisworks.client.collar.additions.FocusCollarAddition;
+
+import static com.luxof.lapisworks.Lapisworks.trinketEquipped;
+import static com.luxof.lapisworks.init.ModItems.COLLAR;
 
 import java.util.List;
+import java.util.UUID;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeableItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
@@ -31,7 +49,9 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
-public class Collar extends Item implements DyeableItem {
+import org.jetbrains.annotations.Nullable;
+
+public class Collar extends Item implements DyeableItem, IotaHolderItem, Trinket {
 
     public Collar() {
         super(
@@ -56,9 +76,6 @@ public class Collar extends Item implements DyeableItem {
         ItemStack stack = user.getStackInHand(hand);
         ItemStack otherStack = user.getStackInHand(otherHand);
 
-        if (otherStack.getCount() >= otherStack.getMaxCount())
-            return TypedActionResult.pass(stack);
-
         for (var id : getAdditions(stack)) {
             LapisCollarAddition addition = LapisCollarAdditions.get(id);
             if (addition.testItem(otherStack.getItem())) {
@@ -80,7 +97,12 @@ public class Collar extends Item implements DyeableItem {
             LapisCollarAddition addition = LapisCollarAdditions.get(id);
             if (addition.testItem(otherStack.getItem())) {
                 user.setCurrentHand(hand);
-                otherStack.increment(1);
+                if (otherStack.getCount() < otherStack.getMaxCount())
+                    otherStack.increment(1);
+                else
+                    world.spawnEntity(new ItemEntity(
+                        world, user.getX(), user.getY(), user.getZ(), new ItemStack(otherStack.getItem())
+                    ));
                 removeAddition(stack, id);
                 return stack;
             }
@@ -103,38 +125,20 @@ public class Collar extends Item implements DyeableItem {
         double c = (double)cnotnormal / 255.0;
         return c <= 0.04045 ? c / 12.92 : Math.pow((c+0.055)/1.055, 2.4);
     }
-    private static double[] toLMS(double r, double g, double b) {
-        return new double[] {
-            r*0.4122214708 + g*0.5363325363 + b*0.0514459929,
-            r*0.2119034982 + g*0.6806995451 + b*0.1073969566,
-            r*0.0883024619 + g*0.2817188376 + b*0.6299787005
-        };
-    }
-    private static double[] toOkLab(double[] lmscomp) {
-        return new double[] {
-            lmscomp[0]*0.2104542553 + lmscomp[1]*0.7936177850 - lmscomp[2]*0.0040720468,
-            lmscomp[0]*1.9779984951 - lmscomp[1]*2.4285922050 + lmscomp[2]*0.4505937099,
-            lmscomp[0]*0.0259040371 + lmscomp[1]*0.7827717662 - lmscomp[2]*0.8086757660
-        };
-    }
     private static double distanceBetween(int color1, int color2) {
-        double[] lms1 = toLMS(
+        double[] lcolor1 = {
             linearize(color1 >> 16),
             linearize((color1 & 0xff00) >> 8),
             linearize(color1 & 0xff)
-        );
-        double[] lms2 = toLMS(
+        };
+        double[] lcolor2 = {
             linearize(color2 >> 16),
             linearize((color2 & 0xff00) >> 8),
             linearize(color2 & 0xff)
-        );
-        double[] lms1comp = { Math.cbrt(lms1[0]), Math.cbrt(lms1[1]), Math.cbrt(lms1[2]) };
-        double[] lms2comp = { Math.cbrt(lms2[0]), Math.cbrt(lms2[1]), Math.cbrt(lms2[2]) };
-        double[] oklab1 = toOkLab(lms1comp);
-        double[] oklab2 = toOkLab(lms2comp);
-        return Math.pow(oklab2[0]-oklab1[0], 2)
-            + Math.pow(oklab2[1]-oklab1[1], 2)
-            + Math.pow(oklab2[2]-oklab1[2], 2);
+        };
+        return Math.pow(lcolor1[0] - lcolor2[0], 2)
+            + Math.pow(lcolor1[1] - lcolor2[1], 2)
+            + Math.pow(lcolor1[2] - lcolor2[2], 2);
     }
 
     public int getColorFrom(DyeColor dyeColor) {
@@ -197,6 +201,47 @@ public class Collar extends Item implements DyeableItem {
         )));
     }
 
+    @Override
+    public void inventoryTick(
+        ItemStack stack, World world, Entity entity, int slot, boolean selected
+    ) {
+        if (!(entity instanceof LivingEntity living)) return;
+        LapisCollarAdditions.toAllAdditions(
+            stack,
+            (addy, id) -> addy.inventoryTick(stack, world, living, slot, selected)
+        );
+    }
+
+    @Override
+    public void tick(ItemStack stack, SlotReference slot, LivingEntity entity) {
+        LapisCollarAdditions.toAllAdditions(stack, (addy, id) -> addy.trinketTick(stack, slot, entity));
+    }
+
+    @Override
+    public boolean canEquip(ItemStack stack, SlotReference slot, LivingEntity entity) {
+        return !trinketEquipped(entity, COLLAR);
+    }
+
+
+    @Override
+    public Multimap<EntityAttribute, EntityAttributeModifier> getModifiers(
+        ItemStack stack, SlotReference slot, LivingEntity entity, UUID uuid
+    ) {
+        HashMultimap<EntityAttribute, EntityAttributeModifier> modifiers = HashMultimap.create();
+        LapisCollarAdditions.toAllAdditions(
+            stack,
+            (addy, id) -> modifiers.putAll(addy.getModifiers(stack, slot, entity, uuid))
+        );
+        return modifiers;
+    }
+
+
+
+    public boolean hasAddition(ItemStack stack, Identifier id) {
+        NbtList added = NBTHelper.getList(stack, "additions", NbtElement.STRING_TYPE);
+        return added != null && added.contains(NbtString.of(id.toString()));
+    }
+
     public List<Identifier> getAdditions(ItemStack stack) {
         NbtList added = NBTHelper.getList(stack, "additions", NbtElement.STRING_TYPE);
         return added == null
@@ -220,4 +265,39 @@ public class Collar extends Item implements DyeableItem {
         added.remove(NbtString.of(id.toString()));
         NBTHelper.putList(stack, "additions", added);
     }
+
+
+    @Override
+    public @Nullable NbtCompound readIotaTag(ItemStack stack) {
+        if (!hasAddition(stack, FocusCollarAddition.ID)) return null;
+        if (!(
+            stack.isOf(COLLAR) &&
+            COLLAR.getAdditions(stack).contains(FocusCollarAddition.ID)
+        )) return null;
+        return NBTHelper.getCompound(stack, "stored_iota");
+    }
+
+    @Override
+    public boolean writeable(ItemStack stack) {
+        return stack.isOf(COLLAR)
+            ? COLLAR.getAdditions(stack).contains(FocusCollarAddition.ID)
+            : false;
+    }
+
+    @Override
+    public boolean canWrite(ItemStack stack, @Nullable Iota iota) { return writeable(stack); }
+
+    @Override
+    public void writeDatum(ItemStack stack, @Nullable Iota iota) {
+        if (!(
+            stack.isOf(COLLAR) &&
+            COLLAR.getAdditions(stack).contains(FocusCollarAddition.ID)
+        )) return;
+        NBTHelper.putCompound(
+            stack, "stored_iota", IotaType.serialize(iota == null ? new NullIota() : iota)
+        );
+    }
+
+    @Override
+    public int getColor(ItemStack stack) { return DyeableItem.super.getColor(stack); }
 }
