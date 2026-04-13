@@ -48,10 +48,12 @@ public class ReadNecklace extends ConstMediaActionNCT {
             iotaHolder == null ||
             (iotaHolder.readIota(ctx.getWorld()) == null & iotaHolder.emptyIota() == null)
         )
-            throw new MishapBadTrinket(
-                trinkets.get(0).getItem(),
-                READABLE
-            );
+            throw !trinkets.get(0).isEmpty()
+                ? new MishapBadTrinket(
+                    trinkets.get(0).getItem(),
+                    READABLE
+                )
+                : new MishapNotWearingTrinket(READABLE);
 
         return List.of(iotaHolder.readIota(ctx.getWorld()));
     }

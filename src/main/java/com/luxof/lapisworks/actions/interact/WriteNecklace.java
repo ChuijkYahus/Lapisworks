@@ -48,10 +48,12 @@ public class WriteNecklace extends ConstMediaActionNCT {
         if (
             iotaHolder == null || !iotaHolder.writeIota(iota, true)
         )
-            throw new MishapBadTrinket(
-                trinkets.get(0).getItem(),
-                WRITEABLE
-            );
+            throw !trinkets.get(0).isEmpty()
+                ? new MishapBadTrinket(
+                    trinkets.get(0).getItem(),
+                    WRITEABLE
+                )
+                : new MishapNotWearingTrinket(WRITEABLE);
 
         PlayerEntity truename = MishapOthersName
             .getTrueNameFromDatum(iota, (PlayerEntity)ctx.getCastingEntity());
