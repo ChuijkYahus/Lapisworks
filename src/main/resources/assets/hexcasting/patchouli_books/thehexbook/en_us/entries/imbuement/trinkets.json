@@ -77,6 +77,22 @@
             "type": "patchouli:crafting",
             "recipe": "lapisworks:base/making_collar",
             "text": "pages.lapisworks.imbuement.trinkets.collar.recipe"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.trinkets.collar.additions.bell"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.trinkets.collar.additions.iota_holder"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.trinkets.collar.additions.stealth_patterns"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.imbuement.trinkets.collar.additions.get_em_off"
         }
     ]
 }
