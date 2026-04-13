@@ -44,6 +44,7 @@ public class CollarCombinationRecipe extends SpecialCraftingRecipe {
         List<Identifier> existingAdditions = COLLAR.getAdditions(base);
 
         for (ItemStack stack : inventory.getInputStacks()) {
+            if (stack.isEmpty() || stack == base) continue;
             Identifier additionId = null;
             LapisCollarAddition addition = null;
 
@@ -52,7 +53,7 @@ public class CollarCombinationRecipe extends SpecialCraftingRecipe {
                 LapisCollarAddition testAddy = entry.getValue();
                 if (
                     !testAddy.testItem(stack.getItem()) || !testAddy.canAdd(base, existingAdditions, id)
-                ) return ItemStack.EMPTY;
+                ) continue;
 
                 additionId = entry.getKey();
                 addition = entry.getValue();
@@ -60,7 +61,7 @@ public class CollarCombinationRecipe extends SpecialCraftingRecipe {
             }
 
             if (additionId == null || addition == null || existingAdditions.contains(additionId))
-                continue;
+                return ItemStack.EMPTY;
 
             base = addition.craft(base, existingAdditions, stack, additionId);
             existingAdditions = COLLAR.getAdditions(base);
