@@ -7,13 +7,13 @@ import net.minecraft.registry.Registry;
 import net.minecraft.sound.SoundEvent;
 
 public class LapisSounds {
-    public static void imagineArfingCouldntBeMe() {
-        
-    }
+    public static final SoundEvent COLLAR_BELL = register("collar_bell");
 
-    /*public static void register(
+    public static void imagineArfingCouldntBeMe() {}
+
+    public static SoundEvent register(
         String name
     ) {
-        Registry.register(Registries.SOUND_EVENT, id(name), SoundEvent.of(null));
-    }*/
+        return Registry.register(Registries.SOUND_EVENT, id(name), SoundEvent.of(id(name)));
+    }
 }
