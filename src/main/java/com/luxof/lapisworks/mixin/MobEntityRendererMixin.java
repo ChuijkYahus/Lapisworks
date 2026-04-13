@@ -21,10 +21,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MobEntityRendererMixin {
     @Inject(
         method = "render",
-        at = @At("TAIL")
+        at = @At("HEAD")
     )
     public void lapisworks$renderCollar(
-        MobEntity mobEntity,
+        MobEntity mob,
         float f,
         float g,
         MatrixStack matrices,
@@ -32,13 +32,13 @@ public class MobEntityRendererMixin {
         int i,
         CallbackInfo ci
     ) {
-        if (!(mobEntity instanceof CollarControllable collarable)) return;
+        if (!(mob instanceof CollarControllable collarable)) return;
 
         matrices.push();
-        //matrices.translate(0.0, 0.0, 0.35);
-        //matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
-        matrices.scale(0.7f, 0.7f, 0.7f);
-        matrices.translate(0.0, 0.5, 0.0);
+        matrices.translate(0.0, 0.0, 0.35);
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
+        //matrices.scale(0.7f, 0.7f, 0.7f);
+        //matrices.translate(0.0, 0.5, 0.0);
 
         ItemStack collar = collarable.getCollar();
         MinecraftClient.getInstance().getItemRenderer().renderItem(
@@ -48,7 +48,7 @@ public class MobEntityRendererMixin {
             OverlayTexture.DEFAULT_UV,
             matrices,
             vertexConsumerProvider,
-            mobEntity.getWorld(),
+            mob.getWorld(),
             0
         );
 
