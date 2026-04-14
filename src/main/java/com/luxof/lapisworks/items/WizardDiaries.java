@@ -47,7 +47,7 @@ public class WizardDiaries extends Item {
 
 
     public Predicate<Identifier> getIsAdvDonePred(PlayerEntity player) {
-        if (player instanceof ClientPlayerEntity)
+        if (player.getWorld().isClient)
             return id -> ClientAdvancements.hasDone(id.toString());
         
         ServerPlayerEntity suser = (ServerPlayerEntity)player;

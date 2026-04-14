@@ -393,6 +393,7 @@ Only the devs who can keep up with me...
 ### Fixes
 - A Charon in the meta-eval patterns won't exit the layer outside of them
 - Dealer's Prfn didn't work
+- Crash on using Ancient Tomes
 - Creative mode category no longer looks like it got hit by a tornado
 - Enchanted Slipway spawn rate being 1x, not 2x a slipway's
 - Placing a Ritus with the same data elsewhere in the world won't brick your world now
@@ -720,3 +721,5 @@ Lightningbending rework
   - 4 = instant hit always
 - If you are hit with any lightning you redirect it where you're looking
 - Yes, sideways lightning.  
+
+[This?](https://discord.com/channels/936370934292549712/1011455473528098857/1493387681684652153)  

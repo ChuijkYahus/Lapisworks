@@ -400,6 +400,12 @@ public class LapisConfig {
             );
     }
 
+    // :)
+    // ...PREPROCESSOR ON MY EXTENSION--
+    private static final String EQUATION_REGEX = r"((?<!\d)-)?\d+(\.\d+)?|[+\-*\/^(),x]|(min|max)(?=\(.+,.+\))|(log|sqrt)(?=\(.+\))";
+    private static final String NUMBER_REGEX = r"-?\d+(\.\d+)?";
+    private static final String OPERATOR_REGEX = r"[+\-*\/^]";
+    private static final String FUNCTION_REGEX = r"min|max|log|sqrt";
     private HashMap<String, List<String>> mathEquationCache = new HashMap<>();
     private Map<String, Integer> precedence = Map.of(
         "max", 5,
@@ -429,23 +435,23 @@ public class LapisConfig {
             return doMath(mathEquationCache.get(raw));
 
         String noSpaces = raw.replaceAll(" ", "");
-        if (!noSpaces.matches("((?<!\\d)-)?\\d+(\\.\\d+)?|[+\\-*\\/^(),x]|(min|max)(?=\\(.+,.+\\))|(log|sqrt)(?=\\(.+\\))"))
+        if (!noSpaces.matches(EQUATION_REGEX))
             return errMath(raw, x, "unknown symbols, unknown functions, or fucked usage of functions.");
 
         String[] math = noSpaces
-            .split("((?<!\\d)-)?\\d+(\\.\\d+)?|[+\\-*\\/^(),x]|(min|max)(?=\\(.+,.+\\))|(log|sqrt)(?=\\(.+\\))");
+            .split(EQUATION_REGEX);
 
         List<String> rpn = new ArrayList<>();
         List<String> opStack = new ArrayList<>();
         for (String token : math) {
 
-            if (token.matches("-?\\d+(\\.\\d+)?"))
+            if (token.matches(NUMBER_REGEX))
                 rpn.add(token);
 
             else if (token.equals("x"))
                 rpn.add(String.valueOf(x));
 
-            else if (token.matches("[+\\-*\\/^]")) {
+            else if (token.matches(OPERATOR_REGEX)) {
                 String topOp = opStack.size() > 0 ? pop(opStack) : null;
                 while (
                     topOp != null && !topOp.equals("(") &&
@@ -488,7 +494,7 @@ public class LapisConfig {
                     continue;
                 topOp = last(opStack);
 
-                if (topOp.matches("max|min|log|sqrt"))
+                if (topOp.matches(FUNCTION_REGEX))
                     rpn.add(pop(opStack));
             }
 
