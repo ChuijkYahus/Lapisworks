@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -438,8 +440,11 @@ public class LapisConfig {
         if (!noSpaces.matches(EQUATION_REGEX))
             return errMath(raw, x, "unknown symbols, unknown functions, or fucked usage of functions.");
 
-        String[] math = noSpaces
-            .split(EQUATION_REGEX);
+        List<String> math = new ArrayList<>();
+        Matcher matcher = Pattern.compile(EQUATION_REGEX).matcher(noSpaces);
+        for (int i = 0; i < matcher.groupCount(); i++) {
+            math.add(matcher.group(i));
+        }
 
         List<String> rpn = new ArrayList<>();
         List<String> opStack = new ArrayList<>();
