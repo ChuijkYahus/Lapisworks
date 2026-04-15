@@ -396,7 +396,6 @@ Only the devs who can keep up with me...
 - Crash with Hexcessible
 - Creative mode category no longer looks like it got hit by a tornado
 - Dealer's Prfn didn't work
-- Deposit Media draining a player's entire media supply and doing nothing with it for blocks (?? wtf)
 - Enchanted Slipway spawn rate being 1x, not 2x a slipway's
 - Placing a Ritus with the same data elsewhere in the world won't brick your world now
   - basically Carryon works with the Ritus again
