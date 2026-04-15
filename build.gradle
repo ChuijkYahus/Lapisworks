@@ -207,7 +207,7 @@ tasks.withType(Jar).configureEach {
 
 task preprocessJava(type: Sync) {
     from 'src/main/java'
-    into 'src/main/.processed-java'
+    into 'build/.processed-java'
 	def pattern = Pattern.compile("${rootProject.raw_string_regex}")
 	filter {
 		def matcher = pattern.matcher(it)

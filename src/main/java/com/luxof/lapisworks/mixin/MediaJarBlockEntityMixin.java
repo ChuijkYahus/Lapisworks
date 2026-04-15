@@ -1,7 +1,5 @@
 package com.luxof.lapisworks.mixin;
 
-import com.luxof.lapisworks.blocks.stuff.UnlinkableMediaBlock;
-
 import miyucomics.hexical.features.media_jar.MediaJarBlock;
 import miyucomics.hexical.features.media_jar.MediaJarBlockEntity;
 
@@ -13,6 +11,8 @@ import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+
+import com.luxof.lapisworks.media.UnlinkableMediaBlock;
 
 @Mixin(value = MediaJarBlockEntity.class, remap = false)
 public abstract class MediaJarBlockEntityMixin extends BlockEntity implements UnlinkableMediaBlock {

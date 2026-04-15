@@ -79,6 +79,7 @@ import org.slf4j.LoggerFactory;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -86,7 +87,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
@@ -648,7 +648,7 @@ public class Lapisworks implements ModInitializer {
 	/** takes links into account.
 	 * <br>returns what was deposited/withdrawn first, and a set of all involved linkables second. */
 	public static Pair<Long, Set<BlockPos>> interactWithLinkableMediaBlocks(
-		ServerWorld world,
+		World world,
 		Set<BlockPos> first,
 		long amountToInteract,
 		boolean deposit,
@@ -667,8 +667,8 @@ public class Lapisworks implements ModInitializer {
 			LinkableMediaBlock curr = (LinkableMediaBlock)world.getBlockEntity(currPos);
 
 			interactionLeft -= deposit
-				? curr.depositMedia(interactionLeft, simulate)
-				: curr.withdrawMedia(interactionLeft, simulate);
+				? curr.depositMediaSingular(interactionLeft, simulate)
+				: curr.withdrawMediaSingular(interactionLeft, simulate);
 
 			if (interactionLeft == 0) return new Pair<>(amountToInteract, seen);
 

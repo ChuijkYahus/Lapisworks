@@ -101,14 +101,14 @@ public class MediaCondenserEntity extends BlockEntity implements LinkableMediaBl
 
 
 
-    @Override public void addLink(BlockPos pos) { removeDeadLinks(world); linkedCondensers.add(pos); save(); }
+    @Override public void addLink(BlockPos pos) { removeDeadLinks(); linkedCondensers.add(pos); save(); }
     @Override public void removeLink(BlockPos pos) { linkedCondensers.remove(pos); save(); }
-    @Override public boolean isLinkedTo(BlockPos pos) { removeDeadLinks(world); return linkedCondensers.contains(pos); }
-    @Override public Set<BlockPos> getLinks() { removeDeadLinks(world); return linkedCondensers; }
+    @Override public boolean isLinkedTo(BlockPos pos) { removeDeadLinks(); return linkedCondensers.contains(pos); }
+    @Override public Set<BlockPos> getLinks() { removeDeadLinks(); return linkedCondensers; }
     @Override public Set<BlockPos> getLinksNoRefresh() { return linkedCondensers; }
-    @Override public int getNumberOfLinks() { removeDeadLinks(world); return linkedCondensers.size(); }
+    @Override public int getNumberOfLinks() { removeDeadLinks(); return linkedCondensers.size(); }
     @Override public BlockPos getThisPos() { return this.getPos(); }
-    @Override public long getMediaHere() { return media; }
+    @Override public long getMediaHereSingular() { return media; }
     @Override public void setMediaHere(long media) { this.media = media; save(); }
-    @Override public long getMaxMedia() { return mediaCap; }
+    @Override public long getMaxMediaSingular() { return mediaCap; }
 }

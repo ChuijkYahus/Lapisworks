@@ -392,9 +392,11 @@ Only the devs who can keep up with me...
 - Mishap messages (removed examples like "(e.g. a staff)")
 ### Fixes
 - A Charon in the meta-eval patterns won't exit the layer outside of them
-- Dealer's Prfn didn't work
 - Crash on using Ancient Tomes
+- Crash with Hexcessible
 - Creative mode category no longer looks like it got hit by a tornado
+- Dealer's Prfn didn't work
+- Deposit Media draining a player's entire media supply and doing nothing with it for blocks (?? wtf)
 - Enchanted Slipway spawn rate being 1x, not 2x a slipway's
 - Placing a Ritus with the same data elsewhere in the world won't brick your world now
   - basically Carryon works with the Ritus again
@@ -405,7 +407,7 @@ Only the devs who can keep up with me...
 - Sieve Thoughts not detecting certain great spell pattern shapes
 - Stopped Imbue Amel from taking a fuckton of Amel no matter what
 ### Interop
-- HexConnect
+- HexConnect (Forge)
   It's easier to fix issues with Sinytra than it is to port the mod to both platforms
   - Apotheosis no longer prevents you from casting patterns when Lapisworks is in the pack
   - Fixed un-flaying villagers not un-flaying them
@@ -511,6 +513,8 @@ possible interop:
   - add qubits to hex casting (this is useless lmao)
 - hexmachina
   - "i got 47 more rounds in this 6 barrel shotgun" ahh idea search
+  - I CAN ADD FUCKING GUN TURRETS
+    - YOU HAVE TO CONTROL THEM BY HEX
 - slate works
   - make a loci that enhances cleric ambit around player to chalk circle levels!
     - costs amel

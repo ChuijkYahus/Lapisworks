@@ -5,32 +5,23 @@ import at.petrak.hexcasting.api.casting.castables.SpellAction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.env.PackagedItemCastEnv;
 import at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv;
-import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster;
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughMedia;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
-import com.google.common.collect.ImmutableSet;
-
 import com.luxof.lapisworks.blocks.stuff.IChalkBE;
-import com.luxof.lapisworks.media.LinkableMediaBlock;
 import com.luxof.lapisworks.media.MediaTransferInterface;
 import com.luxof.lapisworks.mixin.PlayerBasedCastEnvAccessor;
 import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
 import com.luxof.lapisworks.nocarpaltunnel.SpellActionNCT;
 
 import static com.luxof.lapisworks.Lapisworks.ONEIRONAUT_INTEROP;
-import static com.luxof.lapisworks.Lapisworks.interactWithLinkableMediaBlocks;
-import static com.luxof.lapisworks.Lapisworks.log;
 import static com.luxof.lapisworks.interop.oneironaut.FuckingInexhaustiblePhials.getBottomlessContrib;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Pair;
-import net.minecraft.util.math.BlockPos;
 
 public class Deposit extends SpellActionNCT {
     public int argc = 2;
@@ -42,9 +33,6 @@ public class Deposit extends SpellActionNCT {
         ServerPlayerEntity player = pbcenv.getCaster();
         if (player.isCreative()) return;
 
-        log("hey you cost is %d", mediaCost);
-        log("hi can player overcast %b", ((PlayerBasedCastEnvAccessor)pbcenv).lapisworks$invokeCanOvercast());
-        log("available %d dust", availableMedia);
         availableMedia -= ((PlayerBasedCastEnvAccessor)pbcenv).lapisworks$invokeCanOvercast()
             && (
                 !(ctx instanceof PackagedItemCastEnv pice) ||
@@ -54,9 +42,7 @@ public class Deposit extends SpellActionNCT {
             )
             ? 20L*MediaConstants.DUST_UNIT
             : 0;
-        log("available %d dust", availableMedia);
         availableMedia -= ONEIRONAUT_INTEROP ? getBottomlessContrib(pbcenv) : 0L;
-        log("oneironaut make available %d dust", availableMedia);
 
         if (availableMedia < mediaCost)
             throw new MishapNotEnoughMedia(mediaCost);
@@ -71,47 +57,6 @@ public class Deposit extends SpellActionNCT {
             ParticleSpray.cloud(ctx.mishapSprayPos(), 3, 20)
         ));
 
-        if (MTI instanceof LinkableMediaBlock lmb) {
-
-            BlockPos pos = lmb.getThisPos();
-            Pair<Long, Set<BlockPos>> interactSimResult = interactWithLinkableMediaBlocks(
-                ctx.getWorld(),
-                Set.of(pos),
-                amount,
-                true,
-                true
-            );
-            long realAmount = interactSimResult.getLeft();
-
-
-            particles.addAll(interactSimResult.getRight().stream().map(
-                position -> ParticleSpray.cloud(position.toCenterPos(), 3, 10)
-            ).toList());
-
-
-            long cost = (long)(1.1*realAmount);
-            assertNoFunnyMedia(cost);
-
-            if (lmb instanceof IChalkBE chalk) {
-                if (!(ctx instanceof PlayerBasedCastEnv))
-                    throw new MishapBadCaster();
-
-                return new SpellAction.Result(
-                    new StartOneTimeRitualSpell(chalk, realAmount),
-                    cost,
-                    particles,
-                    1
-                );
-            }
-
-            return new SpellAction.Result(
-                new LMBSpell(pos, realAmount),
-                cost,
-                particles,
-                1
-            );
-        }
-
         long realAmount = Math.min(
             amount,
             MTI.getMaxMedia() - MTI.getMediaHere()
@@ -119,6 +64,14 @@ public class Deposit extends SpellActionNCT {
 
         long cost = (long)(1.1*realAmount);
         assertNoFunnyMedia(cost);
+
+        if (MTI instanceof IChalkBE chalk)
+            return new SpellAction.Result(
+                new StartOneTimeRitualSpell(chalk, realAmount),
+                cost,
+                particles,
+                1
+            );
 
         return new SpellAction.Result(
             new MTISpell(MTI, realAmount),
@@ -141,27 +94,6 @@ public class Deposit extends SpellActionNCT {
         public void cast(CastingEnvironment ctx) {
             MTI.depositMedia(amount, false);
         }
-    }
-
-    public class LMBSpell implements RenderedSpellNCT {
-        public final BlockPos pos;
-        public final long amount;
-
-        public LMBSpell(BlockPos pos, long amount) {
-            this.pos = pos;
-            this.amount = amount;
-        }
-
-        @Override
-		public void cast(CastingEnvironment ctx) {
-            interactWithLinkableMediaBlocks(
-                ctx.getWorld(),
-                ImmutableSet.of(pos),
-                amount,
-                true,
-                false
-            );
-		}
     }
 
     public class StartOneTimeRitualSpell implements RenderedSpellNCT {
