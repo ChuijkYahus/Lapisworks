@@ -14,4 +14,6 @@ public interface UnlinkableMediaBlock extends LinkableMediaBlock {
     default int getMaxNumberOfLinks() { return 0; }
     default long getMaxMedia() { return 9_000_000_000_000_000_000L; }
     default Set<BlockPos> getLinksNoRefresh() { return Set.of(); }
+    default long getMediaHereSingular() { return getMediaHere(); }
+    default long getMaxMediaSingular() { return getMaxMedia(); }
 }

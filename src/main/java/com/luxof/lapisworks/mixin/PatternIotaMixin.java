@@ -18,13 +18,13 @@ import com.luxof.lapisworks.blocks.entities.SimpleImpetusEntity;
 import com.luxof.lapisworks.init.LapisConfig;
 import com.luxof.lapisworks.init.ModPOIs;
 import com.luxof.lapisworks.init.Patterns;
-import com.luxof.lapisworks.mixinsupport.Markable;
 
 import static com.luxof.lapisworks.Lapisworks.exemptFromMediaConsumptionDecrease;
 import static com.luxof.lapisworks.Lapisworks.getIdOf;
 
 import java.util.List;
 
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -42,13 +42,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(value = PatternIota.class, remap = false)
-public abstract class PatternIotaMixin implements Markable {
+public abstract class PatternIotaMixin {
     @Unique private static RegistryKey<ActionRegistryEntry> doNothing = null;
-    @Unique private boolean marked = false;
-    @Unique @Override public PatternIota mark() {
-        this.marked = true;
-        return (PatternIota)(Object)this;
-    }
 
     @Unique
     private static boolean triggerSimpleImpeti(
@@ -69,8 +64,10 @@ public abstract class PatternIotaMixin implements Markable {
                 OccupationStatus.ANY
             ).filter(poi -> {
                 BlockPos pos = poi.getPos();
-                if (!(sw.getBlockEntity(pos) instanceof SimpleImpetusEntity simpleImpetus)) return false;
-                return simpleImpetus.tryTrigger(
+                if (!(sw.getBlockEntity(pos) instanceof SimpleImpetusEntity simpleImpetus))
+                    return false;
+
+            return simpleImpetus.tryTrigger(
                     pat.anglesSignature(),
                     isValid,
                     // so it doesn't explode in my face one day
@@ -108,8 +105,10 @@ public abstract class PatternIotaMixin implements Markable {
             )) {
             lookupRef.set(new PatternShapeMatch.Normal(doNothing));
         }
+        NbtCompound userData = vm.getImage().getUserData();
+        boolean marked = userData.getBoolean("lapisworks:big_chalk");
         if (marked && exemptFromMediaConsumptionDecrease(getIdOf(lookupRef.get())))
-            marked = false;
+            userData.remove("lapisworks:big_chalk");
     }
 
     @Unique
@@ -131,7 +130,7 @@ public abstract class PatternIotaMixin implements Markable {
         CallbackInfoReturnable<CastResult> cir,
         @Local List<OperatorSideEffect> sideEffects
     ) {
-        if (!marked) return;
+        if (!vm.getImage().getUserData().getBoolean("lapisworks:big_chalk")) return;
         List<OperatorSideEffect> copy = List.copyOf(sideEffects);
 
         for (int i = 0; i < copy.size(); i++) {
