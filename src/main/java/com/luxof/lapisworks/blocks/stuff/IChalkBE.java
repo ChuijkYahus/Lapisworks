@@ -5,8 +5,8 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 
 import com.luxof.lapisworks.chalk.OneTimeRitualExecutionState;
+import com.luxof.lapisworks.init.PersistentStateRituals;
 import com.luxof.lapisworks.media.UnlinkableMediaBlock;
-import com.luxof.lapisworks.mixinsupport.RitualsUtil;
 
 import static com.luxof.lapisworks.Lapisworks.getFacingWithRespectToDown;
 
@@ -29,7 +29,7 @@ public interface IChalkBE extends UnlinkableMediaBlock {
         ServerPlayerEntity player = null;
         if (ctx.getCastingEntity() instanceof ServerPlayerEntity p) player = p;
 
-        ((RitualsUtil)getWorld()).addRitual(new OneTimeRitualExecutionState(
+        PersistentStateRituals.getState(ctx.getWorld()).addRitual(new OneTimeRitualExecutionState(
             getThisPos(),
             getFacingWithRespectToDown(
                 player != null

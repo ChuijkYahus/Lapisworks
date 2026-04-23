@@ -12,8 +12,6 @@ import static com.luxof.lapisworks.Lapisworks.setInfusedAmel;
 
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
@@ -24,6 +22,8 @@ import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
+
+import org.jetbrains.annotations.Nullable;
 
 public class ImbuementRec implements Recipe<HandsInv> {
     private final Identifier id;
@@ -40,14 +40,9 @@ public class ImbuementRec implements Recipe<HandsInv> {
     
     protected class ImbuementRecJsonFormat {
         JsonObject normal;
-        List<JsonObject> requiredmod;
         String partamel;
         String fullamel;
         Integer cost;
-    }
-    protected class ImbuementRecModJsonFormat {
-        String id;
-        String min;
     }
 
     public ImbuementRec(

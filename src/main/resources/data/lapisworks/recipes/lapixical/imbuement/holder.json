@@ -10,5 +10,13 @@
         "item": "hexical:pedestal"
     },
     "fullamel": "lapisworks:amel_constructs/holder",
-    "cost": 15
+    "cost": 15,
+    "fabric:load_conditions": [
+        {
+            "condition": "lapisworks:all_mods_loaded_with_specific_versions",
+            "values": [
+                "hexical@=2.0.0"
+            ]
+        }
+    ]
 }

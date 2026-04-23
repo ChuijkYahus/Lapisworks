@@ -20,6 +20,7 @@ import com.google.gson.JsonPrimitive;
 
 import com.luxof.lapisworks.init.LapisConfig;
 import com.luxof.lapisworks.init.LapisParticles;
+import com.luxof.lapisworks.init.LapisResourceCons;
 import com.luxof.lapisworks.init.LapisSounds;
 import com.luxof.lapisworks.init.LapisTrinkets;
 import com.luxof.lapisworks.init.LapisworksLoot;
@@ -194,6 +195,7 @@ public class Lapisworks implements ModInitializer {
 			//anyInterop = true;
 		}
 
+		LapisResourceCons.doBondagePlay();
 		LapisConfig.renewCurrentConfig();
 		LapisSounds.imagineArfingCouldntBeMe();
 		ThemConfigFlags.declareEm();

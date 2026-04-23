@@ -403,7 +403,7 @@ public class LapisConfig {
     }
 
     // :)
-    // ...AND FOR MY NEXT TRICK I'LL PUT A PREPROCESSOR ON MY EXTENSION--
+    // ...AND FOR MY NEXT TRICK I'LL PUT A PREPROCESSOR ON MY VS CODE EXTENSION--
     private static final String EQUATION_REGEX = r"((?<!\d)-)?\d+(\.\d+)?|[+\-*\/^(),x]|(min|max)(?=\(.+,.+\))|(log|sqrt)(?=\(.+\))";
     private static final String NUMBER_REGEX = r"-?\d+(\.\d+)?";
     private static final String OPERATOR_REGEX = r"[+\-*\/^]";

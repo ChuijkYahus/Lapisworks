@@ -82,7 +82,7 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	}
 
 	// specification details
-	@Unique @Override
+	@Override
 	public double getAmountOfAttrJuicedUpByAmel(EntityAttribute attribute) {
 		if (attribute == ReachEntityAttributes.REACH) {
 			return getReachDistance((LivingEntity)(Object)this, 0);
@@ -92,7 +92,7 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 		return juicedUpVals.get(attribute);
 	}
 
-	@Unique @Override
+	@Override
 	public void setAmountOfAttrJuicedUpByAmel(EntityAttribute attribute, double value) {
 		double juiced = juicedUpVals.get(attribute);
 		EntityAttributeInstance attrInst = attributes.getCustomInstance(attribute);
@@ -107,14 +107,14 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 		juicedUpVals.put(attribute, value);
 	}
 
-	@Unique @Override
+	@Override
 	public void setAllJuicedUpAttrsToZero() {
 		juicedUpVals.keySet().forEach(attr -> juicedUpVals.put(attr, 0.0));
 	}
 
-	@Unique @Override
+	@Override
 	public Map<EntityAttribute, Double> getLapisworksAttributes() { return juicedUpVals; }
-	@Unique @Override
+	@Override
 	public void setLapisworksAttributes(AttributeContainer toAttributes) {
 		setAmountOfAttrJuicedUpByAmel(
 			EntityAttributes.GENERIC_ATTACK_DAMAGE,
@@ -129,7 +129,7 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 			toAttributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)
 		);
 	}
-	@Unique @Override
+	@Override
 	public void setLapisworksAttributes(Map<EntityAttribute, Double> toAttributes) {
 		setAmountOfAttrJuicedUpByAmel(
 			EntityAttributes.GENERIC_ATTACK_DAMAGE,
@@ -163,60 +163,60 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 		);
 	}
 
-	@Unique @Override
+	@Override
 	public int getEnchant(int whatEnchant) {
 		expandEnchantmentsIfNeeded(whatEnchant);
 		return this.enchantments.get(whatEnchant);
 	}
 
-	@Unique @Override
+	@Override
 	public void setEnchantmentLevel(int whatEnchant, int level) {
 		this.expandEnchantmentsIfNeeded(whatEnchant);
 		this.enchantments.set(whatEnchant, level);
 	}
 
 	// still not DRYer than your dms
-	@Unique @Override
+	@Override
 	public void incrementEnchant(int whatEnchant) { this.incrementEnchant(whatEnchant, 1); }
-	@Unique @Override
+	@Override
 	public void incrementEnchant(int whatEnchant, int amount) {
 		this.setEnchantmentLevel(
 			whatEnchant,
 			this.getEnchant(whatEnchant) + amount
 		);
 	}
-	@Unique @Override
+	@Override
 	public void decrementEnchant(int whatEnchant) { this.incrementEnchant(whatEnchant, -1); }
-	@Unique @Override
+	@Override
 	public void decrementEnchant(int whatEnchant, int amount) { this.incrementEnchant(whatEnchant, -amount); }
 
-	@Unique @Override
+	@Override
 	public List<Integer> getEnchantments() {
 		return List.copyOf(this.enchantments);
 	}
 
-	@Unique @Override
+	@Override
 	public int[] getEnchantmentsArray() {
 		return this.enchantments.stream().mapToInt(Integer::intValue).toArray();
 	}
 
-	@Unique @Override
+	@Override
 	public void setEnchantments(int[] levels) {
 		for (int i = 0; i < levels.length && i < this.enchantments.size(); i++) {
 			this.enchantments.set(i, levels[i]);
 		}
 	}
 
-	@Unique @Override
+	@Override
 	public void setAllEnchantsToZero() {
 		for (int i = 0; i < this.enchantments.size(); i++) { this.enchantments.set(i, 0); }
 	}
 
 	// may be changed in the future, idk.
-	@Unique @Override
+	@Override
 	public void copyCrossDeath(ServerPlayerEntity oldplr) {}
 
-	@Unique @Override
+	@Override
 	public void copyCrossDimensional(ServerPlayerEntity oldplr) {
 		LapisworksInterface old = (LapisworksInterface)oldplr;
 		this.setLapisworksAttributes(old.getLapisworksAttributes());

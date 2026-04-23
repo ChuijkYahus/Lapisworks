@@ -19,7 +19,6 @@
 		"PatternIotaMixin",
 		"OpMakeBattery$SpellMixin",
 		"BlockEntityAbstractImpetusMixin",
-		"ServerWorldMixin",
 		"MinecraftServerMixin",
 		"LoseJobOnSiteLossTaskMixin",
 		"IotaAccessor",

@@ -19,6 +19,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+// mom i don't wanna do rendering...
+// i don't fucking wanna...
 @Mixin(MobEntityRenderer.class)
 public class MobEntityRendererMixin {
     @Inject(

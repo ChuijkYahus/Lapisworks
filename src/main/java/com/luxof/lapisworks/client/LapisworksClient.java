@@ -11,7 +11,6 @@ import com.luxof.lapisworks.init.*;
 import com.luxof.lapisworks.interop.hexcessible.LapiscessibleInterface;
 import com.luxof.lapisworks.interop.hextended.items.AmelOrb;
 import com.luxof.lapisworks.mixinsupport.AcceleratableEntity;
-import com.luxof.lapisworks.mixinsupport.BlockDowser;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 
 import static com.luxof.lapisworks.Lapisworks.FULL_HEXICAL_INTEROP;
@@ -43,8 +42,6 @@ import static com.luxof.lapisworks.init.ModItems.TOTEM_NECKLACE;
 import static com.luxof.lapisworks.init.ModItems.TOTEM_NECKLACE_WORN;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
 
-import com.mojang.datafixers.util.Pair;
-
 import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 
 import net.fabricmc.api.ClientModInitializer;
@@ -58,7 +55,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
@@ -69,6 +65,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registries;
+import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -136,6 +133,7 @@ public class LapisworksClient implements ClientModInitializer {
         LapisParticles.clientTicklesPaw();
         LapisCollarAdditions.meowForMe();
         ModScreens.registerOnClient();
+        Dowser.registerMyCuteness();
 
         initInterop();
 
@@ -238,12 +236,12 @@ public class LapisworksClient implements ClientModInitializer {
                 sendBuf.writeString(buf.readString());
 
                 Block find = Registries.BLOCK.get(buf.readIdentifier());
-                Pair<BlockPos, Double> result = ((BlockDowser)client.player).dowse(find);
+                Pair<BlockPos, Double> result = Dowser.dowse(find);
 
                 sendBuf.writeBoolean(result != null);
                 if (result != null) {
-                    sendBuf.writeBlockPos(result.getFirst());
-                    sendBuf.writeDouble(result.getSecond());
+                    sendBuf.writeBlockPos(result.getLeft());
+                    sendBuf.writeDouble(result.getRight());
                 }
                 ClientPlayNetworking.send(DOWSE_RESULT, sendBuf);
             }
@@ -291,7 +289,6 @@ public class LapisworksClient implements ClientModInitializer {
             sender,
             client
         ) -> {
-            ((BlockDowser)client.player).addTarget(Blocks.BUDDING_AMETHYST);
             this.playerHasJoined = true;
             ((EnchSentInterface)client.player).setEnchantedSentinel(
                 this.bufferSentinelPos,
