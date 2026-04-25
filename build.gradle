@@ -218,7 +218,7 @@ task preprocessJava(type: Sync) {
 
 tasks.named('compileJava', JavaCompile) {
     dependsOn preprocessJava
-	setSource file('src/main/.processed-java')
+	setSource file('build/.processed-java')
     //JavaCompile.getMethod('setSource', Object).invoke(it, file('src/main/.processed-java'))
 }
 

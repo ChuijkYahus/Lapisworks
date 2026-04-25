@@ -370,10 +370,11 @@ Only the devs who can keep up with me...
 - Totem Necklace
   - no regen, fire prot, or anything. just effect clearing.
   - still revives you
+  - 3 uses (starts with 1 when crafted)
   - rechargeable
 - Added collars
   - dyeable
-  - add a gold ingot to add a bell 
+  - add a gold ingot to add a bell
     - jingles when the wearer moves too
   - add a focus to add iota holding functionality
     - these have special interactions when an animal wears them while they hold iotas
@@ -384,12 +385,12 @@ Only the devs who can keep up with me...
     - erase the floating patterns around you
     - disable invis particles
     - make the collar invisible while you're invisible
-- The meta-eval patterns can take patterns on top of [pattern]s too now.
-- Made the default enchantment limit in the config customizeable. You can math now.
-  - the comment in the config updates on its own when you run the game to reflect this
 ### Changes
 - Buk
 - Mishap messages (removed examples like "(e.g. a staff)")
+- The meta-eval patterns can take patterns too now.
+- Made the default enchantment limit in the config customizeable. You can math now.
+  - the comment in the config updates on its own when you run the game to reflect this
 ### Fixes
 - A Charon in the meta-eval patterns won't exit the layer outside of them
 - Crash on using Ancient Tomes
@@ -398,7 +399,7 @@ Only the devs who can keep up with me...
 - Dealer's Prfn didn't work
 - Enchanted Slipway spawn rate being 1x, not 2x a slipway's
 - Placing a Ritus with the same data elsewhere in the world won't brick your world now
-  - basically Carryon works with the Ritus again
+  - basically Carryon works with the Ritus
 - Potential Crash with Inner Media Prfn.
 - Jumpslates and Rebound Slates are breakable and drop their item
 - Necklaces stick to your character better
@@ -406,7 +407,7 @@ Only the devs who can keep up with me...
 - Sieve Thoughts not detecting certain great spell pattern shapes
 - Stopped Imbue Amel from taking a fuckton of Amel no matter what
 ### Interop
-- HexConnect (Forge)
+- HexConnect (meaing Forge)
   It's easier to fix issues with Sinytra than it is to port the mod to both platforms
   - Apotheosis no longer prevents you from casting patterns when Lapisworks is in the pack
   - Fixed un-flaying villagers not un-flaying them

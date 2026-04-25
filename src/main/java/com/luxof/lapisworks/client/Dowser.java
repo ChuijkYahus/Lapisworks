@@ -94,7 +94,7 @@ public class Dowser {
     public static void registerMyCuteness() {
         addTarget(Blocks.BUDDING_AMETHYST);
 
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+        ClientTickEvents.END_WORLD_TICK.register(client -> {
             if (dowser == null || !dowser.isAlive()) {
                 dowser = new Thread(Dowser::tickDowser);
                 dowser.start();
