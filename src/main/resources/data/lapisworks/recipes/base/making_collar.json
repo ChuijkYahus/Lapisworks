@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " C ",
+        "LLL",
+        " A "
+    ],
+    "key": {
+        "C": {
+            "item": "hexcasting:charged_amethyst"
+        },
+        "L": {
+            "item": "minecraft:leather"
+        },
+        "A": {
+            "tag": "lapisworks:amel"
+        }
+    },
+    "result": {
+        "item": "lapisworks:collar"
+    }
+}

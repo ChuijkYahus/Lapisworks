@@ -22,6 +22,9 @@
 		],
 		"emi": [
 			"com.luxof.lapisworks.interop.emi.LapisworksEmiPlugin"
+		],
+		"cardinal-components": [
+			"com.luxof.lapisworks.init.LapisCardinalComponents"
 		]
 	},
 	"mixins": [
@@ -30,7 +33,8 @@
 		"lapisworks.lapixical.mixins.json",
 		"lapisworks.chariot.mixins.json",
 		"lapisworks.lapisal.mixins.json",
-		"lapisworks.lapiscessible.mixins.json"
+		"lapisworks.lapiscessible.mixins.json",
+		"lapisworks.forge.mixins.json"
 	],
 	"depends": {
 		"fabric-api": "*",

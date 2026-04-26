@@ -1,4 +1,8 @@
-package com.luxof.lapisworks.client;
+package com.luxof.lapisworks.client.trinkets;
+
+import com.luxof.lapisworks.client.collar.additions.StealthCollarAddition;
+
+import static com.luxof.lapisworks.init.ModItems.COLLAR;
 
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.client.TrinketRenderer;
@@ -15,12 +19,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RotationAxis;
 
-public class NecklaceTrinketRenderer implements TrinketRenderer {
-    private final ItemStack DISPLAY;
-
-    public NecklaceTrinketRenderer(ItemStack displayNecklace) {
-        this.DISPLAY = displayNecklace;
-    }
+public class CollarTrinketRenderer implements TrinketRenderer {
 
     @Override
     @SuppressWarnings("unchecked")
@@ -31,20 +30,29 @@ public class NecklaceTrinketRenderer implements TrinketRenderer {
 
         if (!(contextModel instanceof PlayerEntityModel playerModel &&
                 entity instanceof AbstractClientPlayerEntity player)) return;
+        if (player.isInvisible() && COLLAR.hasAddition(stack, StealthCollarAddition.ID)) return;
 
         matrices.push();
         TrinketRenderer.followBodyRotations(entity, playerModel);
-        TrinketRenderer.translateToFace(matrices, playerModel, player, 0f, 0f);
+        TrinketRenderer.translateToFace(matrices, playerModel, player, 0, 0);
 
-        matrices.translate(0.0, 9.2/16.0, 0.5);
+        matrices.translate(0.0, 0.185/16.0, 0.31);
+        matrices.scale(0.6f, 0.6f, 0.6f);
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0f));
-        matrices.scale(0.7f, 0.7f, 0.7f);
 
         MinecraftClient instance = MinecraftClient.getInstance();
         instance.getItemRenderer().renderItem(
-            DISPLAY,
-            ModelTransformationMode.FIXED, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers,
-            instance.world, 0);
+            entity,
+            stack,
+            ModelTransformationMode.HEAD,
+            false,
+            matrices,
+            vertexConsumers,
+            instance.world,
+            light,
+            OverlayTexture.DEFAULT_UV,
+            0
+        );
         matrices.pop();
     }
 }

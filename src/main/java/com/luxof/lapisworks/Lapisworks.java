@@ -20,6 +20,9 @@ import com.google.gson.JsonPrimitive;
 
 import com.luxof.lapisworks.init.LapisConfig;
 import com.luxof.lapisworks.init.LapisParticles;
+import com.luxof.lapisworks.init.LapisResourceCons;
+import com.luxof.lapisworks.init.LapisSounds;
+import com.luxof.lapisworks.init.LapisTrinkets;
 import com.luxof.lapisworks.init.LapisworksLoot;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.ModEntities;
@@ -53,13 +56,13 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketComponent;
+import dev.emi.trinkets.api.TrinketInventory;
 import dev.emi.trinkets.api.TrinketsApi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 import java.util.function.BiConsumer;
@@ -85,7 +88,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
@@ -193,7 +195,9 @@ public class Lapisworks implements ModInitializer {
 			//anyInterop = true;
 		}
 
+		LapisResourceCons.doBondagePlay();
 		LapisConfig.renewCurrentConfig();
+		LapisSounds.imagineArfingCouldntBeMe();
 		ThemConfigFlags.declareEm();
 		ModEntities.doSomethingFun();
 		Patterns.init();
@@ -207,6 +211,7 @@ public class Lapisworks implements ModInitializer {
 		ModScreens.whatWasThatTF2CommentAboutMakingBadGUICodeSoYouDontHaveToTouchItAgain();
 		LapisParticles.pawtickle();
 		ModEvents.finallyBeUsed();
+		LapisTrinkets.startFeelingCute();
 
         TheSillySayer.sayNormal();
 		if (anyInterop) {
@@ -240,9 +245,24 @@ public class Lapisworks implements ModInitializer {
 		return new Pair<>(one, two);
 	}
 
+	public static List<ItemStack> getEquippedTrinketsIn(
+		LivingEntity entity,
+		String broad,
+		String specific
+	) {
+		TrinketComponent trinkComp = TrinketsApi.getTrinketComponent(entity).orElse(null);
+		if (trinkComp == null) return null;
+
+		TrinketInventory inv = trinkComp.getInventory().get(broad).get(specific);
+
+		List<ItemStack> trinkets = new ArrayList<>();
+		for (int i = 0; i < inv.size(); i++) { trinkets.add(inv.getStack(i)); }
+		return trinkets;
+	}
+
 	public static boolean trinketEquipped(LivingEntity entity, Item item) {
-		Optional<TrinketComponent> trinkCompOp = TrinketsApi.getTrinketComponent(entity);
-		return trinkCompOp.isEmpty() ? false : trinkCompOp.get().isEquipped(item);
+		TrinketComponent trinkComp = TrinketsApi.getTrinketComponent(entity).orElse(null);
+		return trinkComp != null && trinkComp.isEquipped(item);
 	}
 
 	@Nullable
@@ -250,9 +270,8 @@ public class Lapisworks implements ModInitializer {
 		LivingEntity entity,
 		Item item
 	) {
-		Optional<TrinketComponent> trinkCompOp = TrinketsApi.getTrinketComponent(entity);
-		if (trinkCompOp.isEmpty()) return null;
-		TrinketComponent trinkComp = trinkCompOp.get();
+		TrinketComponent trinkComp = TrinketsApi.getTrinketComponent(entity).orElse(null);
+		if (trinkComp == null) return null;
 		try { return trinkComp.getEquipped(stack -> stack.isOf(item)).get(0); }
 		catch (IndexOutOfBoundsException e) { return null; }
 	}
@@ -370,15 +389,28 @@ public class Lapisworks implements ModInitializer {
 
 	public static boolean matchShape(HexPattern pat1, HexPattern pat2) {
 		// rat said that if you record how many times a position is drawn over then it's fine
-		// they waren't too sure, but i pray they're right because nothing else i've done has worked
-		List<HexCoord> pat2Positions = pat2.positions();
+		// they weren't too sure, but i pray they're right because nothing else i've done has worked
+		List<HexCoord> pat2Positions = getPosesDrawnOver(pat2);
 		for (HexDir dir : HexDir.values()) {
 			if (equalsButUnordered(
-				setTopLeftOrigin(new HexPattern(dir, pat1.getAngles()).positions()),
+				setTopLeftOrigin(getPosesDrawnOver(new HexPattern(dir, pat1.getAngles()))),
 				setTopLeftOrigin(pat2Positions)
 			)) return true;
 		}
 		return false;
+	}
+
+	public static List<HexCoord> getPosesDrawnOver(HexPattern pat) {
+		HexCoord cursor = new HexCoord(0, 0);
+		List<HexCoord> positions = new ArrayList<>();
+
+		for (HexDir dir : pat.directions()) {
+			positions.add(cursor);
+			cursor = cursor.plus(dir);
+			positions.add(cursor);
+		}
+
+		return positions;
 	}
 
 	public static List<HexCoord> setTopLeftOrigin(List<HexCoord> pat) {
@@ -618,7 +650,7 @@ public class Lapisworks implements ModInitializer {
 	/** takes links into account.
 	 * <br>returns what was deposited/withdrawn first, and a set of all involved linkables second. */
 	public static Pair<Long, Set<BlockPos>> interactWithLinkableMediaBlocks(
-		ServerWorld world,
+		World world,
 		Set<BlockPos> first,
 		long amountToInteract,
 		boolean deposit,
@@ -637,8 +669,8 @@ public class Lapisworks implements ModInitializer {
 			LinkableMediaBlock curr = (LinkableMediaBlock)world.getBlockEntity(currPos);
 
 			interactionLeft -= deposit
-				? curr.depositMedia(interactionLeft, simulate)
-				: curr.withdrawMedia(interactionLeft, simulate);
+				? curr.depositMediaSingular(interactionLeft, simulate)
+				: curr.withdrawMediaSingular(interactionLeft, simulate);
 
 			if (interactionLeft == 0) return new Pair<>(amountToInteract, seen);
 
@@ -962,5 +994,12 @@ public class Lapisworks implements ModInitializer {
 				(color * (int)(Math.pow(2, 8) - 1)) - 0x80,
 				0
 			);
+	}
+
+	public static <T extends Object> T pop(List<T> list) {
+		return list.remove(list.size() - 1);
+	}
+	public static <T extends Object> T last(List<T> list) {
+		return list.get(list.size() - 1);
 	}
 }

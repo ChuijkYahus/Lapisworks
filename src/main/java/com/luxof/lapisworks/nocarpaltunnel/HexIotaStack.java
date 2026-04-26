@@ -18,15 +18,12 @@ import com.luxof.lapisworks.media.MediaTransferInterface;
 import com.luxof.lapisworks.mixin.IotaAccessor;
 
 import static com.luxof.lapisworks.Lapisworks.HEXAL_INTEROP;
-import static com.luxof.lapisworks.Lapisworks.err;
 
 import com.mojang.datafixers.util.Either;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import net.fabricmc.loader.api.FabricLoader;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
@@ -151,9 +148,6 @@ public class HexIotaStack {
         Object iotaPayload = ((IotaAccessor)iota).lapisworks$getPayload();
         MediaTransferInterface MTI = null;
         if (iota instanceof MediaTransferInterface mti) {
-            if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-                err("Why the hell is your iota itself a MediaTransferInterface? That's what your iota's payload is supposed to be. I'm only going to say this in the dev env, but still.");
-            }
             MTI = mti;
 
         } if (iotaPayload instanceof MediaTransferInterface mti) {
@@ -163,10 +157,11 @@ public class HexIotaStack {
             iota instanceof Vec3Iota vec3Iota &&
             ctx.getWorld().getBlockEntity(BlockPos.ofFloored(vec3Iota.getVec3())) instanceof
                 MediaTransferInterface mti
+            && ctx.isVecInRange(vec3Iota.getVec3())
         ) {
             MTI = mti;
-
         }
+
         if (MTI == null || !MTI.isMTIAtThisTime(ctx)) {
             throw new MishapInvalidIota(
                 iota,

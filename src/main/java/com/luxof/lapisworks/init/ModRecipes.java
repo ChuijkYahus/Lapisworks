@@ -16,6 +16,7 @@ public class ModRecipes {
     public static final Identifier BREWING_RECIPE_ID = id("brewery");
     public static final Identifier BREWING_ITEM_RECIPE_ID = id("brewery_item");
     public static final Identifier SMINDINFUSION_RECIPE_ID = id("simple_mind_infusion");
+    public static final Identifier COLLAR_COMBINATION_RECIPE_ID = id("collar_combination");
 
     /** warcrimes will not be told */
     public static void apologizeForWarcrimes() {
@@ -33,6 +34,9 @@ public class ModRecipes {
 
         registerSerializer(SMINDINFUSION_RECIPE_ID, SMindInfusionRecSerializer.INSTANCE);
         registerType(SMINDINFUSION_RECIPE_ID, SMindInfusionRec.Type.INSTANCE);
+
+        registerSerializer(COLLAR_COMBINATION_RECIPE_ID, CollarCombinationRecipeSerializer.INSTANCE);
+        registerType(COLLAR_COMBINATION_RECIPE_ID, CollarCombinationRecipe.Type.INSTANCE);
     }
 
     public static void registerSerializer(

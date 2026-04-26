@@ -36,12 +36,12 @@ public abstract class BlockEntityAbstractImpetusMixin extends HexBlockEntity imp
     @Final
     private static long MAX_CAPACITY;
 
-    @Unique @Override public void addLink(BlockPos pos) { removeDeadLinks(world); linked.add(pos); }
+    @Unique @Override public void addLink(BlockPos pos) { removeDeadLinks(); linked.add(pos); }
     @Unique @Override public void removeLink(BlockPos pos) { linked.remove(pos); }
-    @Unique @Override public boolean isLinkedTo(BlockPos pos) { removeDeadLinks(world); return linked.contains(pos); }
-    @Unique @Override public Set<BlockPos> getLinks() { removeDeadLinks(world); return linked; }
+    @Unique @Override public boolean isLinkedTo(BlockPos pos) { removeDeadLinks(); return linked.contains(pos); }
+    @Unique @Override public Set<BlockPos> getLinks() { removeDeadLinks(); return linked; }
     @Unique @Override public Set<BlockPos> getLinksNoRefresh() { return linked; }
-    @Unique @Override public int getNumberOfLinks() { removeDeadLinks(world); return linked.size(); }
+    @Unique @Override public int getNumberOfLinks() { removeDeadLinks(); return linked.size(); }
     @Unique @Override public int getMaxNumberOfLinks() { return 1; }
     @Unique @Override public BlockPos getThisPos() { return getPos(); }
 

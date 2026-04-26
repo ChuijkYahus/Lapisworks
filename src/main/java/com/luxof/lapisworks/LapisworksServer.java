@@ -8,6 +8,7 @@ import at.petrak.hexcasting.common.msgs.MsgOpenSpellGuiS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
 import com.luxof.lapisworks.blocks.entities.ChalkWithPatternEntity;
+import com.luxof.lapisworks.init.PersistentStateRituals;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
 
 import static com.luxof.lapisworks.Lapisworks.pickUsingSeed;
@@ -33,6 +34,7 @@ import java.util.function.BiConsumer;
 import kotlin.Pair;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -179,11 +181,17 @@ public class LapisworksServer {
             onJoinPWShapeStuff(handler);
             onJoinRobbiesStuff(handler);
         });
-        ServerLifecycleEvents.SERVER_STARTED.register((server) -> {
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             pickConfigFlags(pickUsingSeed(server.getOverworld().getSeed()));
             ROBBIES_EXALT_VARIANT = new Random(server.getOverworld().getSeed()).nextInt(2);
         });
-        ServerLifecycleEvents.SERVER_STOPPING.register((server) -> { nullConfigFlags(); });
+        ServerLifecycleEvents.SERVER_STOPPING.register(server -> nullConfigFlags());
+
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            server.getWorlds().forEach(
+                world -> PersistentStateRituals.getState(world).tick(world)
+            );
+        });
     }
     
     public static int ROBBIES_EXALT_VARIANT = 0;

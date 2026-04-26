@@ -1,10 +1,10 @@
 package com.luxof.lapisworks.mindinfusions;
 
-import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
 import com.luxof.lapisworks.init.ModEntities;
 import com.luxof.lapisworks.init.Mutables.SMindInfusion;
+import com.luxof.lapisworks.mixinsupport.forge.BrainsweepSetterMinterface;
 
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.village.VillagerProfession;
@@ -20,7 +20,7 @@ public class UnflayVillager extends SMindInfusion {
     @Override
     public void accept() {
         VillagerEntity villager = (VillagerEntity)entity;
-        HexCardinalComponents.BRAINSWEPT.get(villager).setBrainswept(false);
+        ((BrainsweepSetterMinterface)IXplatAbstractions.INSTANCE).setBrainsweep(villager, false);
         villager.setExperience(0);
         // setting profession to nil makes trades regenerate too. nice.
         villager.setVillagerData(

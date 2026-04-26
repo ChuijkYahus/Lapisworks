@@ -1,6 +1,7 @@
 package com.luxof.lapisworks.interop.hexical;
 
 import com.google.common.collect.ImmutableSet;
+
 import com.luxof.lapisworks.Lapisworks;
 import com.luxof.lapisworks.init.ModBlocks;
 import com.luxof.lapisworks.init.ModItems;

@@ -7,8 +7,8 @@ import at.petrak.hexcasting.api.misc.MediaConstants;
 
 import com.luxof.lapisworks.blocks.TuneableAmethyst;
 import com.luxof.lapisworks.init.ModBlocks;
+import com.luxof.lapisworks.init.PersistentStateRituals;
 import com.luxof.lapisworks.media.MediaTransferInterface;
-import com.luxof.lapisworks.mixinsupport.RitualsUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -47,20 +47,19 @@ public class TuneableAmethystEntity extends BlockEntity implements MediaTransfer
     /** to clear, you can also pass in a NullIota.
      * <p>Server-only method. Throws if on client. */
     public void tune(@Nullable Iota frequency) {
-        // i'd do @Environment(EnvType.CLIENT) but that shit makes it disappear on the server(?!)
         if (world.isClient) throw new IllegalStateException("Server-only method.");
-        RitualsUtil ritualsUtil = (RitualsUtil)world;
+        PersistentStateRituals state = PersistentStateRituals.getState((ServerWorld)world);
 
         if (tunedFrequency != null) {
             if (frequency != null && Iota.tolerates(tunedFrequency, frequency)) return;
 
-            ritualsUtil.getTuneables(tunedFrequency).remove(pos);
+            state.getTuneables(tunedFrequency).remove(pos);
         }
 
         tunedFrequency = frequency instanceof NullIota ? null : frequency;
         tunedNbt = frequency instanceof NullIota ? null : IotaType.serialize(frequency);
         if (tunedFrequency != null)
-            ritualsUtil.addTuneable(tunedFrequency, pos);
+            state.addTuneable(tunedFrequency, pos);
         save();
     }
     public Iota getTunedFrequency() { return tunedFrequency; }

@@ -1,6 +1,7 @@
 package com.luxof.lapisworks.mixinsupport;
 
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -22,8 +23,9 @@ public interface LapisworksInterface {
     void setJuicedAttrSpecifically(EntityAttribute attribute, double value);
     void setAllJuicedUpAttrsToZero();
     
-    AttributeContainer getLapisworksAttributes();
+    Map<EntityAttribute, Double> getLapisworksAttributes();
     void setLapisworksAttributes(AttributeContainer attributes);
+    void setLapisworksAttributes(Map<EntityAttribute, Double> attributes);
 
 	/** expands list up to index if the index is out of bounds, filling the empty spots with 0. */
     int getEnchant(int whatEnchant);

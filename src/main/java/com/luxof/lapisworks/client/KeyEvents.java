@@ -2,8 +2,6 @@ package com.luxof.lapisworks.client;
 
 import at.petrak.hexcasting.common.lib.HexSounds;
 
-import org.lwjgl.glfw.GLFW;
-
 import com.luxof.lapisworks.init.ModItems;
 
 import static com.luxof.lapisworks.Lapisworks.trinketEquipped;
@@ -19,6 +17,8 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
 
+import org.lwjgl.glfw.GLFW;
+
 public class KeyEvents {
     public static KeyBinding useCastingRing = KeyBindingHelper.registerKeyBinding(new KeyBinding(
         "keys.lapisworks.use_casting_ring",
@@ -32,20 +32,18 @@ public class KeyEvents {
     }
     
     public static void onPressUseCastingRing(MinecraftClient client) {
-        if (client.player == null) { return; }
+        if (client.player == null) return;
         else if (
             !(trinketEquipped(client.player, (Item)ModItems.AMEL_RING) ||
             trinketEquipped(client.player, (Item)ModItems.AMEL_RING2))
-        ) { return; }
+        ) return;
 
         PacketByteBuf buf = PacketByteBufs.create();
-        if (client.player.isSneaking()) {
-            // clear cast grid
+
+        if (client.player.isSneaking())
             client.player.playSound(HexSounds.STAFF_RESET, 1f, 1f);
-            buf.writeBoolean(true);
-        } else {
-            buf.writeBoolean(false);
-        }
+
+        buf.writeBoolean(client.player.isSneaking());
         ClientPlayNetworking.send(OPEN_CASTING_GRID, buf);
     }
 

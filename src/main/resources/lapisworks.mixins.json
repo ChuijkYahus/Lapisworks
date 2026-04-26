@@ -19,7 +19,6 @@
 		"PatternIotaMixin",
 		"OpMakeBattery$SpellMixin",
 		"BlockEntityAbstractImpetusMixin",
-		"ServerWorldMixin",
 		"MinecraftServerMixin",
 		"LoseJobOnSiteLossTaskMixin",
 		"IotaAccessor",
@@ -28,7 +27,13 @@
 		"PatternProcessorMixin",
 		"MishapDisallowedSpellMixin",
 		"HexAPIMixin",
-		"ClientPlayNetworkHandlerMixin"
+		"ClientPlayNetworkHandlerMixin",
+		"CollarControllableEntityMixin",
+		"MobEntityRendererMixin",
+		"ClientCastingStackMixin",
+		"StatusEffectInstanceMixin",
+
+		"FabricXplatImplMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

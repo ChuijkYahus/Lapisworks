@@ -358,45 +358,68 @@ Only the devs who can keep up with me...
 # 1.5.8.3
 ### Additions
 - Locate Own Enchanted Sentinel (pattern)
-- Enchanted Anvil?
+- Enchanted Anvil? (Amvil?)
   - Lets you enchant beyond the maximum.
     - lets you combine beyond the usual maximum too.
     - maximum decided by the same max for Imbue Amel's enchantment effect.
   - Lets you enchant items with other items.
   - has a scrollable menu on the right to select the enchantments you wanna move over.
-- item that erases the patterns around you
-  - they're chokers (thank sylvanis for that idea)
-  - conceals the invis particle fx
-  - conceals the floating patterns around you when you cast
-  - invisible when you're invisible
 - necklaces and collars can be on dogs, cats, foxes, or allays (right click)
   - Foci Necklaces make the NPC wearing them a target for Chronicler's Prfn and Gambit
   - Totem Necklaces DO in fact save your pets from death
 - Totem Necklace
+  - no regen, fire prot, or anything. just effect clearing.
+  - still revives you
+  - 3 uses (starts with 1 when crafted)
+  - rechargeable
 - Added collars
-    - dyeable (you can also apply a pigment with a new spell)
-    - these have special interactions when an animal wears them
-      - only the owner can write to them via two new patterns
-      - put a vector in it = animal wanna go there
-      - put entity in it = dog attack
-      - item entity = fox or allay pick up
-- the meta-eval patterns can take patterns on top of [pattern]s too now.
+  - dyeable
+  - add a gold ingot to add a bell
+    - jingles when the wearer moves too
+  - add a focus to add iota holding functionality
+    - these have special interactions when an animal wears them while they hold iotas
+    - put a vector in it = animal wanna go there
+    - put entity in it = animal attack
+    - item entity = fox or allay pick up
+  - add a charged amethyst to:
+    - erase the floating patterns around you
+    - disable invis particles
+    - make the collar invisible while you're invisible
+### Changes
+- Buk
+- Mishap messages (removed examples like "(e.g. a staff)")
+- The meta-eval patterns can take patterns too now.
+- Made the default enchantment limit in the config customizeable. You can math now.
+  - the comment in the config updates on its own when you run the game to reflect this
 ### Fixes
 - A Charon in the meta-eval patterns won't exit the layer outside of them
-- Dealer's Prfn didn't work
+- Crash on using Ancient Tomes
+- Crash with Hexcessible
 - Creative mode category no longer looks like it got hit by a tornado
+- Dealer's Prfn didn't work
 - Enchanted Slipway spawn rate being 1x, not 2x a slipway's
 - Placing a Ritus with the same data elsewhere in the world won't brick your world now
+  - basically Carryon works with the Ritus
+- Potential Crash with Inner Media Prfn.
 - Jumpslates and Rebound Slates are breakable and drop their item
 - Necklaces stick to your character better
+- "Oopsy woopsy" logspam BEGONE!
+- Sieve Thoughts not detecting certain great spell pattern shapes
 - Stopped Imbue Amel from taking a fuckton of Amel no matter what
+### Interop
+- HexConnect (meaing Forge)
+  It's easier to fix issues with Sinytra than it is to port the mod to both platforms
+  - Apotheosis no longer prevents you from casting patterns when Lapisworks is in the pack
+  - Fixed un-flaying villagers not un-flaying them
 # 1.5.8.4
 ### Additions
 - added stuff to collars
-  - craft a collar and an iron ingot to put spikes on
-  - craft a collar and a bell to add a bell
+  - craft with an iron ingot to add spikes
+  - the bell now supports full physics
     - which has full physics with itself and movement
     - even rings on the internal bell's collisions
+  - phianglement and media-containing functionality, maybe?
+- shaders to make simple minds and amalgamations look better
 ### Interop
 - hexic
   - craft a collar and a nametag to make a collartag
@@ -490,9 +513,12 @@ possible interop:
   - add qubits to hex casting (this is useless lmao)
 - hexmachina
   - "i got 47 more rounds in this 6 barrel shotgun" ahh idea search
+  - I CAN ADD FUCKING GUN TURRETS
+    - YOU HAVE TO CONTROL THEM BY HEX
 - slate works
   - make a loci that enhances cleric ambit around player to chalk circle levels!
-  - costs amel
+    - costs amel
+  - Gemini Directrix
 - ephemera
 - hexdeco
 - heartxxy
@@ -699,3 +725,5 @@ Lightningbending rework
   - 4 = instant hit always
 - If you are hit with any lightning you redirect it where you're looking
 - Yes, sideways lightning.  
+
+[This?](https://discord.com/channels/936370934292549712/1011455473528098857/1493387681684652153)  

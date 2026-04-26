@@ -1,0 +1,33 @@
+{
+    "collar_bell": {
+        "subtitle": "sounds.lapisworks.collar_bell",
+        "sounds": [
+            "lapisworks:collar_bell/1",
+            "lapisworks:collar_bell/2",
+            "lapisworks:collar_bell/3",
+            "lapisworks:collar_bell/4",
+            "lapisworks:collar_bell/5",
+            "lapisworks:collar_bell/6",
+            "lapisworks:collar_bell/7",
+            "lapisworks:collar_bell/8",
+            "lapisworks:collar_bell/9",
+            "lapisworks:collar_bell/10",
+            "lapisworks:collar_bell/11",
+            "lapisworks:collar_bell/12",
+            "lapisworks:collar_bell/13",
+            "lapisworks:collar_bell/14",
+            "lapisworks:collar_bell/15",
+            "lapisworks:collar_bell/16",
+            "lapisworks:collar_bell/17",
+            "lapisworks:collar_bell/18",
+            "lapisworks:collar_bell/19",
+            "lapisworks:collar_bell/20",
+            "lapisworks:collar_bell/21",
+            "lapisworks:collar_bell/22",
+            "lapisworks:collar_bell/23",
+            "lapisworks:collar_bell/24",
+            "lapisworks:collar_bell/25",
+            "lapisworks:collar_bell/26"
+        ]
+    }
+}

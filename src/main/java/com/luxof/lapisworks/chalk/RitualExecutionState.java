@@ -11,8 +11,8 @@ import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.lib.HexAttributes;
 
 import com.luxof.lapisworks.blocks.entities.TuneableAmethystEntity;
+import com.luxof.lapisworks.init.PersistentStateRituals;
 import com.luxof.lapisworks.mixinsupport.EnchSentInterface;
-import com.luxof.lapisworks.mixinsupport.RitualsUtil;
 
 import java.util.UUID;
 
@@ -140,11 +140,11 @@ public abstract class RitualExecutionState {
     }
 
     public boolean isVecInAmbitOfTuneableAmethyst(Vec3d vec, ServerWorld world, double ambitMult) {
-        RitualsUtil ritualsUtil = (RitualsUtil)world;
+        PersistentStateRituals state = PersistentStateRituals.getState(world);
 
         if (tunedFrequency == null) return false;
 
-        for (BlockPos tunedPos : ritualsUtil.getTuneables(tunedFrequency)) {
+        for (BlockPos tunedPos : state.getTuneables(tunedFrequency)) {
             TuneableAmethystEntity tuned = (TuneableAmethystEntity)world.getBlockEntity(tunedPos);
 
             if (tunedPos.getSquaredDistance(vec) <= tuned.getAmbitSqr()*ambitMult)

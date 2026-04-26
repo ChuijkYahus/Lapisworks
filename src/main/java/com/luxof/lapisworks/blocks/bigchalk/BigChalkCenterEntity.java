@@ -11,7 +11,6 @@ import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import com.luxof.lapisworks.blocks.stuff.StampableBE;
 import com.luxof.lapisworks.init.LapisConfig;
 import com.luxof.lapisworks.init.ModBlocks;
-import com.luxof.lapisworks.mixinsupport.Markable;
 
 import static com.luxof.lapisworks.Lapisworks.getPigmentFromDye;
 import static com.luxof.lapisworks.Lapisworks.makeParticlesInSpiralGoUp;
@@ -123,10 +122,11 @@ public class BigChalkCenterEntity extends BlockEntity implements StampableBE {
 
         CCStaffcastImage ccStaffcastImg = HexCardinalComponents.STAFFCAST_IMAGE.get(player);
         CastingVM vm = ccStaffcastImg.getVM(handThatTouchedMe);
+        vm.getImage().getUserData().putBoolean("lapisworks:big_chalk", true);
 
         vm.queueExecuteAndWrapIota(
             // muahahahahaha
-            ((Markable)new PatternIota(pattern)).mark(),
+            new PatternIota(pattern),
             (ServerWorld)world
         );
 

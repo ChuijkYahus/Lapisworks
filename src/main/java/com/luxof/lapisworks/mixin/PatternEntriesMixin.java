@@ -1,27 +1,20 @@
 package com.luxof.lapisworks.mixin;
 
-import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
-import at.petrak.hexcasting.api.casting.math.HexAngle;
-import at.petrak.hexcasting.api.casting.math.HexDir;
-
+import com.luxof.lapisworks.init.ThemConfigFlags;
 import com.luxof.lapisworks.mixinsupport.AccessPWBookEntries;
 import com.luxof.lapisworks.mixinsupport.HexcessiblePWShapeSupport;
 
 import static com.luxof.lapisworks.init.Mutables.Mutables.wizardDiariesGainableAdvancements;
 import static com.luxof.lapisworks.init.ThemConfigFlags.chosenFlags;
-import static com.luxof.lapisworks.init.ThemConfigFlags.isPWShapePattern;
 import static com.luxof.lapisworks.init.ThemConfigFlags.specificToGenericId;
-
-import com.llamalad7.mixinextras.sugar.Local;
 
 import dev.tizu.hexcessible.entries.BookEntries;
 import dev.tizu.hexcessible.entries.PatternEntries;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Supplier;
 
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,7 +23,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import vazkii.patchouli.client.base.ClientAdvancements;
 
@@ -50,38 +42,35 @@ public class PatternEntriesMixin implements HexcessiblePWShapeSupport {
     }
 
     @Inject(
-        method = "lambda$reindex$1",
-        at = @At(
-            value = "INVOKE",
-            target = "Ldev/tizu/hexcessible/entries/BookEntries;get(Lnet/minecraft/util/Identifier;)Ljava/util/List;",
-            shift = At.Shift.AFTER
-        ),
-        locals = LocalCapture.CAPTURE_FAILHARD,
-        cancellable = true
+        method = "reindex",
+        at = @At("TAIL")
     )
-    private void lapisworks$registerPWShapePatternsDifferently(
-        RegistryKey<ActionRegistryEntry> key,
-        CallbackInfo ci,
-        @Local Identifier id,
-        @Local String name,
-        @Local Supplier<Boolean> checkLock,
-        @Local HexDir dir,
-        @Local List<List<HexAngle>> sig
-    ) {
-        String specificId = id.toString();
-        String genericId = specificToGenericId.get(specificId);
-        if (genericId == null) return;
-        if (genericId.equals("lapisworks:hastenature"))
+    private void lapisworks$removePWShapePatterns(CallbackInfo ci) {
+        List<PatternEntries.Entry> toRemove = new ArrayList<>();
+        for (PatternEntries.Entry entry : entries) {
+            String specificId = entry.id();
 
-        if (isPWShapePattern(specificId)) {
-            List<BookEntries.Entry> bookEntries = getEntriesForPWShapePattern(genericId);
+            if (ThemConfigFlags.isPWShapePattern(specificId)) {
+                String genericId = specificToGenericId.get(specificId);
+                toRemove.add(entry);
 
-            pwShapePatterns.put(
-                specificId,
-                new PatternEntries.Entry(specificId, name, checkLock, dir, sig, bookEntries, 0)
-            );
-            ci.cancel();
+                List<BookEntries.Entry> bookEntries = getEntriesForPWShapePattern(genericId);
+
+                pwShapePatterns.put(
+                    specificId,
+                    new PatternEntries.Entry(
+                        specificId,
+                        entry.name(),
+                        () -> false,
+                        entry.dir(),
+                        entry.sig(),
+                        bookEntries,
+                        0
+                    )
+                );
+            }
         }
+        entries.removeAll(toRemove);
     }
 
     @Unique

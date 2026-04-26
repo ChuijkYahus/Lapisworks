@@ -23,7 +23,9 @@ import static com.luxof.lapisworks.Lapisworks.tryGetTotem;
 import static com.luxof.lapisworks.LapisworksIDs.REACH_ENHANCEMENT_UUID;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.Entity;
@@ -66,13 +68,12 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	@Shadow @Final
 	private AttributeContainer attributes;
 
-	@Unique private AttributeContainer juicedUpVals = new AttributeContainer(
-		DefaultAttributeContainer.builder()
-			.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 0) // fists
-			.add(EntityAttributes.GENERIC_MAX_HEALTH, 0) // skin
-			.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0) // feet
-			.build()
-	);
+	@Unique
+	private Map<EntityAttribute, Double> juicedUpVals = new HashMap<>(Map.of(
+		EntityAttributes.GENERIC_ATTACK_DAMAGE, 0.0,
+		EntityAttributes.GENERIC_MAX_HEALTH, 0.0,
+		EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.0
+	));
 	@Unique private List<Integer> enchantments = new ArrayList<Integer>(List.of(0, 0, 0, 0, 0));
 
 	@Unique
@@ -81,43 +82,39 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 	}
 
 	// specification details
-	@Unique @Override
+	@Override
 	public double getAmountOfAttrJuicedUpByAmel(EntityAttribute attribute) {
 		if (attribute == ReachEntityAttributes.REACH) {
 			return getReachDistance((LivingEntity)(Object)this, 0);
 		} else if (attribute == ReachEntityAttributes.ATTACK_RANGE) {
 			return getAttackRange((LivingEntity)(Object)this, 0);
 		}
-		return this.juicedUpVals.getCustomInstance(attribute).getBaseValue();
+		return juicedUpVals.get(attribute);
 	}
 
-	@Unique @Override
+	@Override
 	public void setAmountOfAttrJuicedUpByAmel(EntityAttribute attribute, double value) {
-		EntityAttributeInstance juicedAttrInst = this.juicedUpVals.getCustomInstance(attribute);
+		double juiced = juicedUpVals.get(attribute);
 		EntityAttributeInstance attrInst = attributes.getCustomInstance(attribute);
 
 		if (attrInst != null) {
-			attrInst.setBaseValue(attrInst.getBaseValue() - juicedAttrInst.getBaseValue() + value);
+			attrInst.setBaseValue(attrInst.getBaseValue() - juiced + value);
 		}
-		juicedAttrInst.setBaseValue(value);
+		juicedUpVals.put(attribute, value);
 	}
 	@Override @Unique
     public void setJuicedAttrSpecifically(EntityAttribute attribute, double value) {
-		juicedUpVals.getCustomInstance(attribute).setBaseValue(value);
+		juicedUpVals.put(attribute, value);
 	}
 
-	@Unique @Override
+	@Override
 	public void setAllJuicedUpAttrsToZero() {
-		this.juicedUpVals.getAttributesToSend().forEach(
-			(EntityAttributeInstance inst) -> {
-				inst.setBaseValue(0);
-			}
-		);
+		juicedUpVals.keySet().forEach(attr -> juicedUpVals.put(attr, 0.0));
 	}
 
-	@Unique @Override
-	public AttributeContainer getLapisworksAttributes() { return this.juicedUpVals; }
-	@Unique @Override
+	@Override
+	public Map<EntityAttribute, Double> getLapisworksAttributes() { return juicedUpVals; }
+	@Override
 	public void setLapisworksAttributes(AttributeContainer toAttributes) {
 		setAmountOfAttrJuicedUpByAmel(
 			EntityAttributes.GENERIC_ATTACK_DAMAGE,
@@ -132,73 +129,94 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 			toAttributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)
 		);
 	}
+	@Override
+	public void setLapisworksAttributes(Map<EntityAttribute, Double> toAttributes) {
+		setAmountOfAttrJuicedUpByAmel(
+			EntityAttributes.GENERIC_ATTACK_DAMAGE,
+			toAttributes.get(EntityAttributes.GENERIC_ATTACK_DAMAGE)
+		);
+		setAmountOfAttrJuicedUpByAmel(
+			EntityAttributes.GENERIC_MAX_HEALTH,
+			toAttributes.get(EntityAttributes.GENERIC_MAX_HEALTH)
+		);
+		setAmountOfAttrJuicedUpByAmel(
+			EntityAttributes.GENERIC_MOVEMENT_SPEED,
+			toAttributes.get(EntityAttributes.GENERIC_MOVEMENT_SPEED)
+		);
+	}
 	/** on world load ragh */
 	@Unique
 	public void setJuiceOnWorldLoad(AttributeContainer toAttributes) {
-		juicedUpVals.getCustomInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE)
-			.setBaseValue(toAttributes.getBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
+		juicedUpVals.put(
+			EntityAttributes.GENERIC_ATTACK_DAMAGE,
+			toAttributes.getBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)
+		);
 
-		juicedUpVals.getCustomInstance(EntityAttributes.GENERIC_MAX_HEALTH)
-			.setBaseValue(toAttributes.getBaseValue(EntityAttributes.GENERIC_MAX_HEALTH));
+		juicedUpVals.put(
+			EntityAttributes.GENERIC_MAX_HEALTH,
+			toAttributes.getBaseValue(EntityAttributes.GENERIC_MAX_HEALTH)
+		);
 
-		juicedUpVals.getCustomInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)
-			.setBaseValue(toAttributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
+		juicedUpVals.put(
+			EntityAttributes.GENERIC_MOVEMENT_SPEED,
+			toAttributes.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)
+		);
 	}
 
-	@Unique @Override
+	@Override
 	public int getEnchant(int whatEnchant) {
 		expandEnchantmentsIfNeeded(whatEnchant);
 		return this.enchantments.get(whatEnchant);
 	}
 
-	@Unique @Override
+	@Override
 	public void setEnchantmentLevel(int whatEnchant, int level) {
 		this.expandEnchantmentsIfNeeded(whatEnchant);
 		this.enchantments.set(whatEnchant, level);
 	}
 
 	// still not DRYer than your dms
-	@Unique @Override
+	@Override
 	public void incrementEnchant(int whatEnchant) { this.incrementEnchant(whatEnchant, 1); }
-	@Unique @Override
+	@Override
 	public void incrementEnchant(int whatEnchant, int amount) {
 		this.setEnchantmentLevel(
 			whatEnchant,
 			this.getEnchant(whatEnchant) + amount
 		);
 	}
-	@Unique @Override
+	@Override
 	public void decrementEnchant(int whatEnchant) { this.incrementEnchant(whatEnchant, -1); }
-	@Unique @Override
+	@Override
 	public void decrementEnchant(int whatEnchant, int amount) { this.incrementEnchant(whatEnchant, -amount); }
 
-	@Unique @Override
+	@Override
 	public List<Integer> getEnchantments() {
 		return List.copyOf(this.enchantments);
 	}
 
-	@Unique @Override
+	@Override
 	public int[] getEnchantmentsArray() {
 		return this.enchantments.stream().mapToInt(Integer::intValue).toArray();
 	}
 
-	@Unique @Override
+	@Override
 	public void setEnchantments(int[] levels) {
 		for (int i = 0; i < levels.length && i < this.enchantments.size(); i++) {
 			this.enchantments.set(i, levels[i]);
 		}
 	}
 
-	@Unique @Override
+	@Override
 	public void setAllEnchantsToZero() {
 		for (int i = 0; i < this.enchantments.size(); i++) { this.enchantments.set(i, 0); }
 	}
 
 	// may be changed in the future, idk.
-	@Unique @Override
+	@Override
 	public void copyCrossDeath(ServerPlayerEntity oldplr) {}
 
-	@Unique @Override
+	@Override
 	public void copyCrossDimensional(ServerPlayerEntity oldplr) {
 		LapisworksInterface old = (LapisworksInterface)oldplr;
 		this.setLapisworksAttributes(old.getLapisworksAttributes());
@@ -232,10 +250,9 @@ public abstract class LivingEntityMixin extends Entity implements LapisworksInte
 
 	@Inject(at = @At("TAIL"), method = "writeCustomDataToNbt")
 	public void writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
-		AttributeContainer attrs = juicedUpVals;
-		nbt.putDouble("LAPISWORKS_JUICED_FISTS", attrs.getBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
-		nbt.putDouble("LAPISWORKS_JUICED_SKIN", attrs.getBaseValue(EntityAttributes.GENERIC_MAX_HEALTH));
-		nbt.putDouble("LAPISWORKS_JUICED_FEET", attrs.getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
+		nbt.putDouble("LAPISWORKS_JUICED_FISTS", juicedUpVals.get(EntityAttributes.GENERIC_ATTACK_DAMAGE));
+		nbt.putDouble("LAPISWORKS_JUICED_SKIN", juicedUpVals.get(EntityAttributes.GENERIC_MAX_HEALTH));
+		nbt.putDouble("LAPISWORKS_JUICED_FEET", juicedUpVals.get(EntityAttributes.GENERIC_MOVEMENT_SPEED));
 		nbt.putIntArray("LAPISWORKS_ENCHANTMENTS", getEnchantments());
 		nbt.putBoolean(
 			"LAPISWORKS_JUICED_REACH",

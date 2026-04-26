@@ -12,15 +12,16 @@ import com.luxof.lapisworks.mishaps.MishapNotWearingTrinket;
 import com.luxof.lapisworks.nocarpaltunnel.ConstMediaActionNCT;
 import com.luxof.lapisworks.nocarpaltunnel.HexIotaStack;
 
-import static com.luxof.lapisworks.Lapisworks.getFirstTrinketIfEquipped;
+import static com.luxof.lapisworks.Lapisworks.getEquippedTrinketsIn;
 import static com.luxof.lapisworks.LapisworksIDs.WRITEABLE;
 import static com.luxof.lapisworks.MishapThrowerJava.throwIfNull;
-import static com.luxof.lapisworks.init.ModItems.FOCUS_NECKLACE;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 
 public class WriteNecklace extends ConstMediaActionNCT {
     public int argc = 1;
@@ -31,14 +32,28 @@ public class WriteNecklace extends ConstMediaActionNCT {
         Iota iota = stack.get(0);
         LivingEntity ent = throwIfNull(ctx.getCastingEntity(), new MishapBadCaster());
 
-        ADIotaHolder iotaHolder = IXplatAbstractions.INSTANCE.findDataHolder(throwIfNull(
-            getFirstTrinketIfEquipped(ent, FOCUS_NECKLACE),
-            new MishapNotWearingTrinket(FOCUS_NECKLACE)
-        ).getRight());
-        // "let's make the error message more helpful!"
-        // :thumbsup:
-        if (!iotaHolder.writeIota(iota, true))
-            throw new MishapBadTrinket(FOCUS_NECKLACE, WRITEABLE);
+        List<ItemStack> trinkets = getEquippedTrinketsIn(ent, "chest", "necklace");
+        ADIotaHolder iotaHolder = trinkets.size() == 1
+            ? IXplatAbstractions.INSTANCE.findDataHolder(trinkets.get(0))
+            : trinkets.stream().flatMap((ItemStack itemStack) -> {
+
+                ADIotaHolder holder = IXplatAbstractions.INSTANCE.findDataHolder(itemStack);
+
+                return holder != null && holder.writeIota(iota, true)
+                        ? Stream.of(holder) : Stream.of();
+                })
+                .findFirst()
+                .orElseThrow(() -> new MishapNotWearingTrinket(WRITEABLE));
+
+        if (
+            iotaHolder == null || !iotaHolder.writeIota(iota, true)
+        )
+            throw !trinkets.get(0).isEmpty()
+                ? new MishapBadTrinket(
+                    trinkets.get(0).getItem(),
+                    WRITEABLE
+                )
+                : new MishapNotWearingTrinket(WRITEABLE);
 
         PlayerEntity truename = MishapOthersName
             .getTrueNameFromDatum(iota, (PlayerEntity)ctx.getCastingEntity());

@@ -20,7 +20,11 @@ public class GetThatMedia extends ConstMediaActionNCT {
         MediaTransferInterface mti = stack.getMediaTransferInterface(0);
 
         return List.of(
-            new DoubleIota(mti.getMediaHere() / (double)MediaConstants.DUST_UNIT)
+            new DoubleIota(
+                mti.isMTIAtThisTime(ctx)
+                    ? mti.getMediaHere() / (double)MediaConstants.DUST_UNIT
+                    : 0.0
+            )
         );
     }
 }

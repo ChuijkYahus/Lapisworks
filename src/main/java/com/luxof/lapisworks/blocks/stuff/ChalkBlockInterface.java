@@ -7,7 +7,7 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 
 import com.luxof.lapisworks.chalk.OneTimeRitualExecutionState;
-import com.luxof.lapisworks.mixinsupport.RitualsUtil;
+import com.luxof.lapisworks.init.PersistentStateRituals;
 
 import static com.luxof.lapisworks.Lapisworks.getFacingWithRespectToDown;
 
@@ -16,6 +16,7 @@ import java.util.List;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -42,7 +43,7 @@ public interface ChalkBlockInterface {
         ) return ActionResult.PASS;
         else if (world.isClient) return ActionResult.SUCCESS;
 
-        ((RitualsUtil)world).addRitual(new OneTimeRitualExecutionState(
+        PersistentStateRituals.getState((ServerWorld)world).addRitual(new OneTimeRitualExecutionState(
             pos,
             getFacingWithRespectToDown(player.getRotationVector(), attachedTo),
             new CastingImage(),

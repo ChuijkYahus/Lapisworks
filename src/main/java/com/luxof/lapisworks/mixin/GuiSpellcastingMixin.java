@@ -3,7 +3,9 @@ package com.luxof.lapisworks.mixin;
 import at.petrak.hexcasting.client.gui.GuiSpellcasting;
 
 import com.luxof.lapisworks.Lapisworks;
-import com.luxof.lapisworks.init.ModItems;
+
+import static com.luxof.lapisworks.init.ModItems.AMEL_RING;
+import static com.luxof.lapisworks.init.ModItems.AMEL_RING2;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,8 +22,8 @@ public class GuiSpellcastingMixin {
         PlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) ci.cancel();
 
-        if (Lapisworks.trinketEquipped(player, ModItems.AMEL_RING) ||
-            Lapisworks.trinketEquipped(player, ModItems.AMEL_RING2)) {
+        if (Lapisworks.trinketEquipped(player, AMEL_RING) ||
+            Lapisworks.trinketEquipped(player, AMEL_RING2)) {
             // PROBABLY should add a check for if the player intentionally opened the casting menu
             // but i'll let that be until it bites me in the ass
             ci.cancel();
