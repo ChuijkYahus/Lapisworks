@@ -37,6 +37,7 @@ public class Lapisal {
     public static void beCool() {
         ModBlocks.pickACropTop("amel_constructs/enchslipway", ENCH_SLIPWAY);
         ModBlocks.dontForgetStockings("ench_slipway_entity_type", ENCH_SLIPWAY_ENTITY_TYPE);
+        LapisalPatterns.imRunningOutOfMethodNames();
         Mutables.SMindInfusions.put(OPEN_DIMENSIONAL_RIFT, new OpenSlipway());
         Mutables.SMindInfusions.put(TURN_MIND_TO_WISP, new MakeWisp());
     }
