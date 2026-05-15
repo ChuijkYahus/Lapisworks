@@ -71,7 +71,6 @@ public class LapisworksEmiPlugin implements EmiPlugin {
 
         RecipeManager recipeManager = registry.getRecipeManager();
         for (ImbuementRec imbuementRec : recipeManager.listAllOfType(ImbuementRec.Type.INSTANCE)) {
-            if (!imbuementRec.getRequiredModIsLoaded()) continue;
             registry.addRecipe(new EmiImbuementRecipe(imbuementRec));
         }
         for (MoldRec moldRec : recipeManager.listAllOfType(MoldRec.Type.INSTANCE)) {

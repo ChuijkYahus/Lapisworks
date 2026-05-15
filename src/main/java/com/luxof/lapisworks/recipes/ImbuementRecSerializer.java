@@ -21,36 +21,30 @@ public class ImbuementRecSerializer implements RecipeSerializer<ImbuementRec> {
     public ImbuementRec read(Identifier id, JsonObject json) {
         ImbuementRecJsonFormat recipeJson = new Gson().fromJson(json, ImbuementRecJsonFormat.class);
         if (recipeJson.normal == null) {
-            throw new JsonSyntaxException("Specify a motherfuckin' start, cuh. (" + id + ")");
+            throw new JsonSyntaxException("Base ingredient unspecified. (" + id + ")");
         } else if (recipeJson.fullamel == null) {
-            throw new JsonSyntaxException("The journey may not always be about the destination, but this ain't no journey. Specify a fullamel. (" + id + ")");
+            throw new JsonSyntaxException("End product unspecified. (" + id + ")");
         } else if (recipeJson.cost == null) {
-            throw new JsonSyntaxException("You didn't specify a cost. (" + id + ")");
+            throw new JsonSyntaxException("Cost to transform from base to end unspecified. (" + id + ")");
         }
 
         Ingredient normal = Ingredient.fromJson(recipeJson.normal);
-        Item partAmel;
-        try {
-            partAmel = Registries.ITEM.getOrEmpty(new Identifier(recipeJson.partamel))
-                .orElseGet(() -> null);
-
-        } catch (NullPointerException e) {
-            partAmel = null;
-        }
+        Item partAmel = recipeJson.partamel != null
+            ? Registries.ITEM.get(new Identifier(recipeJson.partamel))
+            : null;
 
         Item fullAmel = Registries.ITEM.getOrEmpty(new Identifier(recipeJson.fullamel))
             .orElseThrow(
                 () -> new JsonSyntaxException("No such item (fullamel): " + recipeJson.fullamel)
             );
 
-        return new ImbuementRec(id, true, normal, partAmel, fullAmel, recipeJson.cost);
+        return new ImbuementRec(id, normal, partAmel, fullAmel, recipeJson.cost);
     }
 
     @Override
     public ImbuementRec read(Identifier id, PacketByteBuf buf) {
         return new ImbuementRec(
             id,
-            buf.readBoolean(),
             Ingredient.fromPacket(buf),
             buf.readBoolean() ? Registries.ITEM.get(buf.readIdentifier()) : null,
             Registries.ITEM.get(buf.readIdentifier()),
@@ -60,7 +54,6 @@ public class ImbuementRecSerializer implements RecipeSerializer<ImbuementRec> {
 
     @Override
     public void write(PacketByteBuf buf, ImbuementRec recipe) {
-        buf.writeBoolean(recipe.getRequiredModIsLoaded());
         recipe.getNormal().write(buf);
         buf.writeBoolean(recipe.getPartAmel() != null);
         if (recipe.getPartAmel() != null) {

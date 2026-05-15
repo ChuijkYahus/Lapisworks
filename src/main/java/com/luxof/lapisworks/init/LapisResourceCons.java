@@ -42,19 +42,23 @@ public class LapisResourceCons {
                     String constraintType;
                     Matcher matcher = constraintPattern.matcher(versionConstraint);
                     try {
+                        if (!matcher.find()) throw new IllegalStateException();
                         constraintType = matcher.group(1);
                     } catch (IllegalStateException e) {
                         throw new JsonParseException("Invalid version constraint: " + versionConstraint);
                     }
 
+                    if (!isModLoaded(modId)) return false;
+                    Integer verDiff = verDifference(modId, getVersion(matcher));
+
                     if (!switch (constraintType) {
-                        case "<=" -> verDifference(modId, getVersion(matcher)) <= 0;
-                        case ">=" -> verDifference(modId, getVersion(matcher)) >= 0;
-                        case "<" -> verDifference(modId, getVersion(matcher)) < 0;
-                        case ">" -> verDifference(modId, getVersion(matcher)) > 0;
-                        case "!=" -> verDifference(modId, getVersion(matcher)) != 0;
-                        case "=" -> verDifference(modId, getVersion(matcher)) == 0;
-                        case "*" -> isModLoaded(modId);
+                        case "<=" -> verDiff <= 0;
+                        case ">=" -> verDiff >= 0;
+                        case "<" -> verDiff < 0;
+                        case ">" -> verDiff > 0;
+                        case "!=" -> verDiff != 0;
+                        case "=" -> verDiff == 0;
+                        case "*" -> true;
                         default -> false;
                     })
                         return false;
