@@ -29,7 +29,7 @@
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:spherical_dstl",
             "anchor": "lapisworks:spherical_dstl",
-            "input": "[pattern] | pattern, vec, num",
+            "input": "[pattern], vec, num",
             "output": "[any]",
             "text": "pages.lapisworks.lapisworks_misc.spherical_dstl.summary"
         },
@@ -37,7 +37,7 @@
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:cubic_exalt",
             "anchor": "lapisworks:cubic_exalt",
-            "input": "[pattern] | pattern, vec, vec, bool",
+            "input": "[pattern], vec, vec, bool",
             "output": "[any]",
             "text": "pages.lapisworks.lapisworks_misc.cubic_exalt.summary"
         },
