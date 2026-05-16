@@ -2,6 +2,7 @@ package com.luxof.lapisworks.client.screens;
 
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.mod.HexConfig;
 
 import static com.luxof.lapisworks.Lapisworks.closeEnough;
 import static com.luxof.lapisworks.Lapisworks.id;
@@ -209,11 +210,23 @@ public class ChalkWithPatternScreen extends HandledScreen<ChalkWithPatternScreen
         RenderSystem.enableCull();
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
+
+        if (!HexConfig.client().clickingTogglesDrawing() || !drawingNewLine)
+            return;
+
+        mouseDragged(mouseX, mouseY, 0, 0, 0);
     }
+
+    private boolean drawingNewLine = false;
 
     @Override
     public boolean mouseClicked(double mX, double mY, int button) {
         if (button != 0 || patterns.size() >= patternLimit) return false;
+        if (HexConfig.client().clickingTogglesDrawing()) {
+            if (drawingNewLine)
+                return mouseReleased(mX, mY, button);
+            drawingNewLine = true;
+        }
 
         // O(1) trust (exception triggered rarely)
         // this "temporary solution" will last forever vro :broken_heart:
@@ -242,7 +255,11 @@ public class ChalkWithPatternScreen extends HandledScreen<ChalkWithPatternScreen
 
     @Override
     public boolean mouseDragged(double mX, double mY, int button, double dX, double dY) {
-        if (button != 0 || currentlyEngaged.size() == 0) return false;
+        if (
+            !(HexConfig.client().clickingTogglesDrawing() ? drawingNewLine : button == 0) ||
+            currentlyEngaged.size() == 0
+        )
+            return false;
 
         int mouseX = (int)Math.round(mX);
         int mouseY = (int)Math.round(mY);
@@ -276,14 +293,13 @@ public class ChalkWithPatternScreen extends HandledScreen<ChalkWithPatternScreen
 
     @Override
     public boolean mouseReleased(double mX, double mY, int button) {
-        if (button != 0 || currentlyEngaged.size() == 0) return false;
+        if (button != 0 || currentlyEngaged.size() < 2)
+            return false;
+        if (HexConfig.client().clickingTogglesDrawing() && drawingNewLine) {
+            drawingNewLine = false;
+        }
 
-        // exception-based control flow :weedhexxy:
-        try {
-            currentlyEngaged.get(1);
-            patterns.add(currentlyEngaged);
-        } catch (IndexOutOfBoundsException e) {}
-
+        patterns.add(currentlyEngaged);
         currentlyEngaged = new ArrayList<>();
 
         return true;

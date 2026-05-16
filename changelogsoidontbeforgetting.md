@@ -385,6 +385,10 @@ Only the devs who can keep up with me...
     - erase the floating patterns around you
     - disable invis particles
     - make the collar invisible while you're invisible
+  - add a name tag to:
+    - allow writing MoreIotas String or Hexpose Text iotas to the collar via two new patterns
+    - make the name that appears above you not be your own name but the String or Text written to the name tag.
+- Dispel Conjureable
 ### Changes
 - Buk
 - Mishap messages (removed examples like "(e.g. a staff)")
@@ -393,23 +397,27 @@ Only the devs who can keep up with me...
   - the comment in the config updates on its own when you run the game to reflect this
 ### Fixes
 - A Charon in the meta-eval patterns won't exit the layer outside of them
+- Chalk drawing screen respects Hex Casting's click to toggle drawing option
 - Crash on using Ancient Tomes
 - Crash with Hexcessible
 - Creative mode category no longer looks like it got hit by a tornado
 - Dealer's Prfn didn't work
+- Deposit Media bug??
 - Enchanted Slipway spawn rate being 1x, not 2x a slipway's
 - Placing a Ritus with the same data elsewhere in the world won't brick your world now
-  - basically Carryon works with the Ritus
+  - basically, Carryon works with the Ritus
 - Potential Crash with Inner Media Prfn.
 - Jumpslates and Rebound Slates are breakable and drop their item
 - Necklaces stick to your character better
 - "Oopsy woopsy" logspam BEGONE!
 - Sieve Thoughts not detecting certain great spell pattern shapes
+- Solid Color was not cheap to break via Break Block
 - Stopped Imbue Amel from taking a fuckton of Amel no matter what
 ### Interop
 - HexConnect (meaing Forge)
   It's easier to fix issues with Sinytra than it is to port the mod to both platforms
   - Apotheosis no longer prevents you from casting patterns when Lapisworks is in the pack
+  - Fixed chalk not connecting properly
   - Fixed un-flaying villagers not un-flaying them
 # 1.5.8.4
 ### Additions
@@ -498,6 +506,11 @@ iotic blocks interop
 possible interop:  
 - hexical
   - give conjured color the ability to take mage block effects
+  - Make AVM staff as a variant of sorts of Hexical's Lightning Rod Staff
+    - affix items to it
+    - enchant it to make the fixations permanent
+    - when enchanted, it uses the item as a power like in AVM  
+  - also add gloves with Hexical 2.0.0. they'll be two-handed charms that take half a second to clap.
 - hexcassettes? (`for i in range(n): enqueue(spell, tick_delay)`-like pattern?)
 - Hexpose interop
   - spell to remove a status effect from the entity that has it
@@ -566,10 +579,6 @@ Ra's Gambit
 Gene Editing (as an extension of the 4-arm-getting system) and Entity Creation
 - making yourself a vampire is possible  
 
-Make AVM staff as a variant of sorts of Hexical's Lightning Rod Staff
-- affix items to it
-- enchant it to make the fixations permanent
-- when enchanted, it uses the item as a power like in AVM  
 
 enchanted amethyst
 - not the first time i've thought about it, maybe see where it goes  
@@ -621,15 +630,17 @@ jumpslate across space and time
   - MASSIVE multi-block wizard towers! give you ambit + cost reduction + grid size
     (grid size toggleable)  
 
-trinket that casts upon dropped  
-right click to prime  
+trinket that casts upon dropped (so like death and shit)  
+shift right click to prime/unprime  
+right click to throw (when primed)
 
 trinket that stops GTP item spillage and makes it half as cheap  
 - "enderman's monocle"
 - rub some amethyst dust on an eye of ender, then put it in an amel-iron-diamond case  
 
-a trinket that shows a config screen for hexes it's primed to work for! it'll show
-pre-configured-for-hex iotas and let you select their values, with a default value already present  
+~~a trinket that shows a config screen for hexes it's primed to work for! it'll show~~
+~~pre-configured-for-hex iotas and let you select their values, with a default value already present  ~~
+Too late. HexIntent has that now.
 
 TODO:  
 - Hex familiar that lets you interact with the Media Condensing Network at a range.
@@ -689,10 +700,6 @@ make it rectangular like a beacon's
 make it play a cool ass sound effect  
 all that jazz  
 
-probably a library mod:  
-- Patchouli variables. You can embed them into text. They sync across client and server automatically.
-- Works with hexdoc.  
-
 put all this time shit in an addon  
 call it Hex To The Future  
 
@@ -725,5 +732,10 @@ Lightningbending rework
   - 4 = instant hit always
 - If you are hit with any lightning you redirect it where you're looking
 - Yes, sideways lightning.  
+  - past me, fuck yourself.
 
 [This?](https://discord.com/channels/936370934292549712/1011455473528098857/1493387681684652153)  
+with gloves, port the HexKinetics Swap Momentum spell and add a Swap Places and Swap Orientations spell.  
+Witch broom to sit on as you fly.  
+
+use "Apollo's Purification" somehow.  
