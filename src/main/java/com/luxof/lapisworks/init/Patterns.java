@@ -99,6 +99,7 @@ public class Patterns {
         register("imbue_amel", "wqwwawwqwwaqwewaawewa", HexDir.NORTH_EAST, new ImbueAmel());
         register("disimbue_amel", "wwaqqddqqawwewwaqqddqqaww", HexDir.SOUTH_WEST, new DisenchantImbued());
         register("conjure_color", "qqaa", HexDir.NORTH_EAST, new ConjureColor());
+        register("erase_color", "qqqaq", HexDir.NORTH_EAST, new EraseColor());
         register("spherical_dstl", "wqwqwqwqwqwaeaqaaeaqaa", HexDir.NORTH_WEST, new SphereDst());
         register("cubic_exalt", "wqwawqwqqwqwq", HexDir.NORTH_WEST, new CubeExalt());
         register("empty_prfn", "qwawqwaqwweqqqq", HexDir.NORTH_WEST, new EmptyPrfn());
