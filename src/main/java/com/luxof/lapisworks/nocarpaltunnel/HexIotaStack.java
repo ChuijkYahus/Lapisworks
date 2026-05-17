@@ -206,7 +206,7 @@ public class HexIotaStack {
         if (
             !(iota instanceof DoubleIota dub) ||
             !closeEnough(dub.getDouble(), Math.round(dub.getDouble())) ||
-            dub.getDouble() < above
+            dub.getDouble() <= above
         )
             throw new MishapInvalidIota(
                 iota,
