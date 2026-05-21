@@ -357,22 +357,7 @@ Only the devs who can keep up with me...
 - Some shit related to mixin mishap messages
 # 1.5.8.3
 ### Additions
-- Locate Own Enchanted Sentinel (pattern)
-- Enchanted Anvil? (Amvil?)
-  - Lets you enchant beyond the maximum.
-    - lets you combine beyond the usual maximum too.
-    - maximum decided by the same max for Imbue Amel's enchantment effect.
-  - Lets you enchant items with other items.
-  - has a scrollable menu on the right to select the enchantments you wanna move over.
-- necklaces and collars can be on dogs, cats, foxes, or allays (right click)
-  - Foci Necklaces make the NPC wearing them a target for Chronicler's Prfn and Gambit
-  - Totem Necklaces DO in fact save your pets from death
-- Totem Necklace
-  - no regen, fire prot, or anything. just effect clearing.
-  - still revives you
-  - 3 uses (starts with 1 when crafted)
-  - rechargeable
-- Added collars
+- Collars
   - dyeable
   - add a gold ingot to add a bell
     - jingles when the wearer moves too
@@ -389,6 +374,22 @@ Only the devs who can keep up with me...
     - allow writing MoreIotas String or Hexpose Text iotas to the collar via two new patterns
     - make the name that appears above you not be your own name but the String or Text written to the name tag.
 - Dispel Conjureable
+- Enchanted Anvil? (Amvil?)
+  - Lets you enchant beyond the maximum.
+    - lets you combine beyond the usual maximum too.
+    - maximum decided by the same max for Imbue Amel's enchantment effect.
+  - Lets you enchant items with other items.
+  - has a scrollable menu on the right to select the enchantments you wanna move over.
+- Locator's Reflection
+- Necklaces and collars can be on dogs, cats, foxes, or allays (right click)
+  - Foci Necklaces make the NPC wearing them a target for Chronicler's Prfn and Gambit
+  - Totem Necklaces DO in fact save your pets from death
+- Patterns to exercise total control over a Thoth's frame
+- Totem Necklace
+  - no regen, fire prot, or anything. just effect clearing.
+  - still revives you
+  - 3 uses (starts with 1 when crafted)
+  - rechargeable
 ### Changes
 - Buk
 - Mishap messages (removed examples like "(e.g. a staff)")
@@ -398,7 +399,7 @@ Only the devs who can keep up with me...
 ### Fixes
 - A Charon in the meta-eval patterns won't exit the layer outside of them
 - Chalk drawing screen respects Hex Casting's click to toggle drawing option
-- Crash on using Ancient Tomes
+- Crash on using Ancient Tomes in multiplayer
 - Crash with Hexcessible
 - Creative mode category no longer looks like it got hit by a tornado
 - Dealer's Prfn didn't work
@@ -407,12 +408,14 @@ Only the devs who can keep up with me...
 - Placing a Ritus with the same data elsewhere in the world won't brick your world now
   - basically, Carryon works with the Ritus
 - Potential Crash with Inner Media Prfn.
+- Pull was free if you triggered it for 0 ticks
 - Jumpslates and Rebound Slates are breakable and drop their item
 - Necklaces stick to your character better
 - "Oopsy woopsy" logspam BEGONE!
 - Sieve Thoughts not detecting certain great spell pattern shapes
 - Solid Color was not cheap to break via Break Block
-- Stopped Imbue Amel from taking a fuckton of Amel no matter what
+- Spatial meta-evals (Cubic Exaltation etc.) were tweaking about the (0, 0, 0) coordinate
+- Stopped Imbue Amel from taking a fuckton of Amel
 ### Interop
 - HexConnect (meaing Forge)
   It's easier to fix issues with Sinytra than it is to port the mod to both platforms

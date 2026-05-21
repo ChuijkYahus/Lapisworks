@@ -14,6 +14,8 @@ import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 
+import static com.luxof.lapisworks.Lapisworks.ceil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,26 +69,19 @@ public class CubeExalt implements Action {
     }
     
     public static SpellList generatePointsInFilledCube(Vec3d pointA, Vec3d pointB) {
-        List<Iota> points = new ArrayList<Iota>();
-        // naming things is hard
-        boolean a = pointA.x < pointB.x;
-        boolean b = pointA.y < pointB.y;
-        boolean c = pointA.z < pointB.z;
-        Vec3d A = new Vec3d(
-            a ? pointA.x : pointB.x,
-            b ? pointA.y : pointB.y,
-            c ? pointA.z : pointB.z
+        List<Iota> points = new ArrayList<>();
+        Vec3d difference = new Vec3d(
+            ceil(Math.abs(pointB.x - pointA.x)),
+            ceil(Math.abs(pointB.y - pointA.y)),
+            ceil(Math.abs(pointB.z - pointA.z))
         );
-        Vec3d B = new Vec3d(
-            a ? pointB.x : pointA.x,
-            b ? pointB.y : pointA.y,
-            c ? pointB.z : pointA.z
-        );
-        
-        for (double z = A.z; z < Math.ceil(B.z); z++) {
-            for (double y = A.y; y < Math.ceil(B.y); y++) {
-                for (double x = A.x; x < Math.ceil(B.x); x++) {
-                    points.add(new Vec3Iota(new Vec3d(Math.min(x, B.x), Math.min(y, B.y), Math.min(z, B.z))));
+
+        for (double z = 0; z <= difference.z; z++) {
+            for (double y = 0; y <= difference.y; y++) {
+                for (double x = 0; x <= difference.x; x++) {
+                    points.add(new Vec3Iota(new Vec3d(
+                        x + pointA.x, y + pointA.y, z + pointA.z
+                    )));
                 }
             }
         }
@@ -95,7 +90,7 @@ public class CubeExalt implements Action {
     }
 
     public static SpellList generatePointsInHollowCube(Vec3d pointA, Vec3d pointB) {
-        List<Iota> points = new ArrayList<Iota>();
+        List<Iota> points = new ArrayList<>();
 
         // my brain is too small for the other approach (tried and skill issued)
         generatePointsInFilledCube(pointA, pointB).forEach((Iota anyIota) -> {
