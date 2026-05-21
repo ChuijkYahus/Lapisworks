@@ -1,0 +1,49 @@
+{
+    "name": "pages.lapisworks.lapisworks.misc.scry.title",
+    "icon": "lapisworks:textures/entries/scry.png",
+    "advancement": "lapisworks:got_lapis",
+    "category": "hexcasting:lapisworks/misc",
+    "sortnum": 3,
+    "pages": [
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:empty_prfn",
+            "anchor": "lapisworks:empty_prfn",
+            "input": "vec",
+            "output": "bool",
+            "text": "pages.lapisworks.lapisworks.misc.scry.empty_prfn.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:empty_dstl",
+            "anchor": "lapisworks:empty_dstl",
+            "input": "vec, vec",
+            "output": "bool",
+            "text": "pages.lapisworks.lapisworks.misc.scry.empty_dstl.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:visible_dstl",
+            "anchor": "lapisworks:visible_dstl",
+            "input": "entity, vec",
+            "output": "bool",
+            "text": "pages.lapisworks.lapisworks.misc.scry.visible_dstl.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:equiv_block",
+            "anchor": "lapisworks:equiv_block",
+            "input": "vec, vec",
+            "output": "bool",
+            "text": "pages.lapisworks.lapisworks.misc.scry.equiv_block.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:equal_block",
+            "anchor": "lapisworks:equal_block",
+            "input": "vec, vec",
+            "output": "bool",
+            "text": "pages.lapisworks.lapisworks.misc.scry.equal_block.summary"
+        }
+    ]
+}

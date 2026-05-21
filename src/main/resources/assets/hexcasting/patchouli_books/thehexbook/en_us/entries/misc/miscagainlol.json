@@ -1,0 +1,49 @@
+{
+    "name": "pages.lapisworks.lapisworks.misc.misc.title",
+    "icon": "lapisworks:textures/entries/question_mark.png",
+    "advancement": "lapisworks:got_lapis",
+    "category": "hexcasting:lapisworks/misc",
+    "sortnum": 6,
+    "pages": [
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:hadamard",
+            "anchor": "lapisworks:hadamard",
+            "input": "vec, vec",
+            "output": "vec",
+            "text": "pages.lapisworks.lapisworks_misc.hadamard.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:robbie_exalt",
+            "anchor": "lapisworks:robbie_exalt",
+            "input": "[any], int, any",
+            "output": "[any]",
+            "text": "pages.lapisworks.lapisworks_misc.robbie_exalt.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:thewhattropy",
+            "anchor": "lapisworks:thewhattropy",
+            "input": "[any]",
+            "output": "any",
+            "text": "pages.lapisworks.lapisworks_misc.thewhattropy.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:min",
+            "anchor": "lapisworks:min",
+            "input": "num, num",
+            "output": "num",
+            "text": "pages.lapisworks.lapisworks_misc.min.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:max",
+            "anchor": "lapisworks:max",
+            "input": "num, num",
+            "output": "num",
+            "text": "pages.lapisworks.lapisworks_misc.max.summary"
+        }
+    ]
+}
