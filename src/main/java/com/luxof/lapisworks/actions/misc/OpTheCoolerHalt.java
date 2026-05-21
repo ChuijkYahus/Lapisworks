@@ -45,6 +45,6 @@ public class OpTheCoolerHalt implements Action {
             img.getOpsConsumed(),
             img.getUserData()
         );
-        return new OperationResult(newImage, List.of(), newCont, HexEvalSounds.SPELL);
+        return new OperationResult(newImage, List.of(), newCont, HexEvalSounds.NORMAL_EXECUTE);
     }
 }

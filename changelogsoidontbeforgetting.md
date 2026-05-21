@@ -405,6 +405,7 @@ Only the devs who can keep up with me...
 - Dealer's Prfn didn't work
 - Deposit Media bug??
 - Enchanted Slipway spawn rate being 1x, not 2x a slipway's
+- Erebus' Gambit played the spell cast sound and not the normal pattern cast sound on execute
 - Placing a Ritus with the same data elsewhere in the world won't brick your world now
   - basically, Carryon works with the Ritus
 - Potential Crash with Inner Media Prfn.
