@@ -1,0 +1,45 @@
+{
+    "name": "pages.lapisworks.lapisworks.misc.thoth.title",
+    "icon": "lapisworks:amel2",
+    "advancement": "lapisworks:got_lapis",
+    "category": "hexcasting:lapisworks/misc",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.lapisworks.misc.thoth.what"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:get_datum",
+            "anchor": "lapisworks:get_datum",
+            "input": "",
+            "output": "[any]",
+            "text": "pages.lapisworks.lapisworks.misc.thoth.get_datum.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:set_datum",
+            "anchor": "lapisworks:set_datum",
+            "input": "[any]",
+            "output": "",
+            "text": "pages.lapisworks.lapisworks.misc.thoth.set_datum.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:get_thoth_hex",
+            "anchor": "lapisworks:get_thoth_hex",
+            "input": "",
+            "output": "[pattern]",
+            "text": "pages.lapisworks.lapisworks.misc.thoth.get_hex.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:set_thoth_hex",
+            "anchor": "lapisworks:set_thoth_hex",
+            "input": "[pattern]",
+            "output": "",
+            "text": "pages.lapisworks.lapisworks.misc.thoth.set_hex.summary"
+        }
+    ]
+}

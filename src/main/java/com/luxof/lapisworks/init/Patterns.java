@@ -14,6 +14,7 @@ import com.luxof.lapisworks.actions.*;
 import com.luxof.lapisworks.actions.great.GenericEnchant;
 import com.luxof.lapisworks.actions.interact.*;
 import com.luxof.lapisworks.actions.misc.*;
+import com.luxof.lapisworks.actions.misc.thoth.*;
 import com.luxof.lapisworks.actions.ritual.*;
 import com.luxof.lapisworks.actions.scry.*;
 import com.luxof.lapisworks.actions.wizard.*;
@@ -120,6 +121,10 @@ public class Patterns {
         register("max", "wdeeweaaeweedw", HexDir.WEST, new MinMax(false));
         register("pull", "awwqqqwwaqww", HexDir.SOUTH_WEST, new Pull());
         register("robbie_exalt", "qaeaqaweaqa", HexDir.NORTH_WEST, new EstrogenExalt());
+        register("get_datum", "ewe", HexDir.NORTH_EAST, new GetDatum());
+        register("set_datum", "qwq", HexDir.SOUTH_EAST, new SetDatum());
+        register("get_thoth_hex", "eeaee", HexDir.NORTH_EAST, new GetThothHex());
+        register("set_thoth_hex", "qqdqq", HexDir.SOUTH_EAST, new SetThothHex());
 
         register("thought_sieve", "qadaadadqaqdadqaq", HexDir.WEST, new HexResearchYoink());
         register("absorb_mind", "aawqqwqqqaede", HexDir.WEST, new MindLiquefaction());

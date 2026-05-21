@@ -1041,4 +1041,12 @@ public class Lapisworks implements ModInitializer {
 			? computer.apply(left.get())
 			: either.right().get();
 	}
+
+	public static double truncate(double value) {
+		return value - value % 1;
+	}
+
+	public static double ceil(double value) {
+		return truncate(value) + (value % 1 > 0.0 ? Math.signum(value) : 0.0);
+	}
 }
