@@ -2,17 +2,9 @@
     "name": "pages.lapisworks.lapisworks.misc.metaeval.title",
     "icon": "lapisworks:textures/entries/blueshulkerattempt.png",
     "advancement": "lapisworks:got_lapis",
-    "category": "hexcasting:lapisworks/misc",
-    "sortnum": 1,
+    "category": "hexcasting:lapisworks",
+    "sortnum": 6,
     "pages": [
-        {
-            "type": "hexcasting:pattern",
-            "op_id": "lapisworks:spherical_dstl",
-            "anchor": "lapisworks:spherical_dstl",
-            "input": "[pattern], vec, num",
-            "output": "[any]",
-            "text": "pages.lapisworks.lapisworks.misc.metaeval.spherical_dstl.summary"
-        },
         {
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:cubic_exalt",
@@ -23,9 +15,25 @@
         },
         {
             "type": "hexcasting:pattern",
+            "op_id": "lapisworks:spherical_dstl",
+            "anchor": "lapisworks:spherical_dstl",
+            "input": "[pattern], vec, num",
+            "output": "[any]",
+            "text": "pages.lapisworks.lapisworks.misc.metaeval.spherical_dstl.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:spherical_dstl_filled",
+            "anchor": "lapisworks:spherical_dstl_filled",
+            "input": "[pattern], vec, num",
+            "output": "[any]",
+            "text": "pages.lapisworks.lapisworks.misc.metaeval.spherical_dstl_filled.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
             "op_id": "lapisworks:for_n_in_range",
             "anchor": "lapisworks:for_n_in_range",
-            "input": "num, num, [pattern] | pattern",
+            "input": "num, num, [pattern]",
             "output": "[any]",
             "text": "pages.lapisworks.lapisworks.misc.metaeval.for_n_in_range.summary"
         },
@@ -33,7 +41,7 @@
             "type": "hexcasting:pattern",
             "op_id": "lapisworks:execute_many_times",
             "anchor": "lapisworks:execute_many_times",
-            "input": "num, [pattern] | pattern",
+            "input": "num, [pattern]",
             "output": "",
             "text": "pages.lapisworks.lapisworks.misc.metaeval.execute_many_times.summary"
         },

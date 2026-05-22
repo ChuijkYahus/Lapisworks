@@ -1,9 +1,9 @@
 {
     "name": "pages.lapisworks.lapisworks.misc.misc.title",
-    "icon": "lapisworks:textures/entries/question_mark.png",
+    "icon": "lapisworks:amel4",
     "advancement": "lapisworks:got_lapis",
-    "category": "hexcasting:lapisworks/misc",
-    "sortnum": 6,
+    "category": "hexcasting:lapisworks",
+    "sortnum": 11,
     "pages": [
         {
             "type": "hexcasting:pattern",

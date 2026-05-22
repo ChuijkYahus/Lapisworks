@@ -23,7 +23,7 @@ public class ModEvents {
             else ((LapisworksInterface)np).copyCrossDimensional(op);
         });
 
-        UseEntityCallback.EVENT.register((plr, world, hand, entity, hitRes) -> {
+        /*UseEntityCallback.EVENT.register((plr, world, hand, entity, hitRes) -> {
             ItemStack stack = plr.getStackInHand(hand);
             if (
                 plr.isSpectator() ||
@@ -48,7 +48,7 @@ public class ModEvents {
                 );
 
             return ActionResult.SUCCESS;
-        });
+        });*/
 
         // i'll use events for it.. eventually...
         /*

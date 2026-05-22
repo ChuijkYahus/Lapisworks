@@ -101,7 +101,8 @@ public class Patterns {
         register("disimbue_amel", "wwaqqddqqawwewwaqqddqqaww", HexDir.SOUTH_WEST, new DisenchantImbued());
         register("conjure_color", "qqaa", HexDir.NORTH_EAST, new ConjureColor());
         register("erase_color", "qqqaq", HexDir.NORTH_EAST, new EraseColor());
-        register("spherical_dstl", "wqwqwqwqwqwaeaqaaeaqaa", HexDir.NORTH_WEST, new SphereDst());
+        register("spherical_dstl", "wqwqwqwqwqwaeaqaaeaqaa", HexDir.NORTH_WEST, new SphereDst(false));
+        register("spherical_dstl_filled", "wqwqwqwqwqwaewawqwawaww", HexDir.NORTH_WEST, new SphereDst(true));
         register("cubic_exalt", "wqwawqwqqwqwq", HexDir.NORTH_WEST, new CubeExalt());
         register("empty_prfn", "qwawqwaqwweqqqq", HexDir.NORTH_WEST, new EmptyPrfn());
         register("empty_dstl", "dwewdwedwwwadwewdwedw", HexDir.NORTH_WEST, new EmptyDstl());
@@ -125,6 +126,7 @@ public class Patterns {
         register("set_datum", "qwq", HexDir.SOUTH_EAST, new SetDatum());
         register("get_thoth_hex", "eeaee", HexDir.NORTH_EAST, new GetThothHex());
         register("set_thoth_hex", "qqdqq", HexDir.SOUTH_EAST, new SetThothHex());
+        register("is_conjureable", "qqaaeqqqq", HexDir.NORTH_EAST, new IsConjureable());
 
         register("thought_sieve", "qadaadadqaqdadqaq", HexDir.WEST, new HexResearchYoink());
         register("absorb_mind", "aawqqwqqqaede", HexDir.WEST, new MindLiquefaction());

@@ -89,10 +89,6 @@
         {
             "type": "patchouli:text",
             "text": "pages.lapisworks.imbuement.trinkets.collar.additions.stealth_patterns"
-        },
-        {
-            "type": "patchouli:text",
-            "text": "pages.lapisworks.imbuement.trinkets.collar.additions.get_em_off"
         }
     ]
 }

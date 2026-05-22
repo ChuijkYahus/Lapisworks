@@ -3,7 +3,7 @@
     "icon": "lapisworks:amel3",
     "advancement": "lapisworks:enlightened",
     "category": "hexcasting:lapisworks",
-    "sortnum": 4,
+    "sortnum": 3,
     "pages": [
         {
             "type": "patchouli:text",

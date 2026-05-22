@@ -13,6 +13,7 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import com.luxof.lapisworks.mishaps.MishapInvalidContinuation;
 
 import static com.luxof.lapisworks.Lapisworks.CastingImgWithStack;
+import static com.luxof.lapisworks.Lapisworks.pullFrameOfType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +22,8 @@ public class GetThothHex implements Action {
 
     @Override
     public OperationResult operate(CastingEnvironment ctx, CastingImage img, SpellContinuation cont) {
-        if (
-            !(cont instanceof SpellContinuation.NotDone notDone) ||
-            !(notDone.getFrame() instanceof FrameForEach thothFrame)
-        )
+        FrameForEach thothFrame = pullFrameOfType(cont, FrameForEach.class);
+        if (thothFrame == null)
             throw new MishapInvalidContinuation("mishaps.lapisworks.descs.thothframe");
 
         List<Iota> stack = new ArrayList<>(img.getStack());

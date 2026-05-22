@@ -38,6 +38,11 @@
             "type": "patchouli:text",
             "title": "pages.lapisworks.lapisworks_mishaps.outsideofritual.title",
             "text": "pages.lapisworks.lapisworks_mishaps.outsideofritual.summary"
+        },
+        {
+            "type": "patchouli:text",
+            "title": "pages.lapisworks.lapisworks_mishaps.invalidcontinuation.title",
+            "text": "pages.lapisworks.lapisworks_mishaps.invalidcontinuation.summary"
         }
     ]
 }

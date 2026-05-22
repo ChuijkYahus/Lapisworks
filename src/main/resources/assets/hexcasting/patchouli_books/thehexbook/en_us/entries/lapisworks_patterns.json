@@ -3,7 +3,7 @@
     "icon": "lapisworks:amel2",
     "advancement": "lapisworks:got_lapis",
     "category": "hexcasting:lapisworks",
-    "sortnum": 3,
+    "sortnum": 2,
     "pages": [
         {
             "type": "hexcasting:pattern",

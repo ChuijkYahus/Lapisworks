@@ -362,29 +362,15 @@ Only the devs who can keep up with me...
   - add a gold ingot to add a bell
     - jingles when the wearer moves too
   - add a focus to add iota holding functionality
-    - these have special interactions when an animal wears them while they hold iotas
-    - put a vector in it = animal wanna go there
-    - put entity in it = animal attack
-    - item entity = fox or allay pick up
   - add a charged amethyst to:
     - erase the floating patterns around you
     - disable invis particles
     - make the collar invisible while you're invisible
-  - add a name tag to:
-    - allow writing MoreIotas String or Hexpose Text iotas to the collar via two new patterns
-    - make the name that appears above you not be your own name but the String or Text written to the name tag.
-- Dispel Conjureable
-- Enchanted Anvil? (Amvil?)
-  - Lets you enchant beyond the maximum.
-    - lets you combine beyond the usual maximum too.
-    - maximum decided by the same max for Imbue Amel's enchantment effect.
-  - Lets you enchant items with other items.
-  - has a scrollable menu on the right to select the enchantments you wanna move over.
-- Locator's Reflection
-- Necklaces and collars can be on dogs, cats, foxes, or allays (right click)
-  - Foci Necklaces make the NPC wearing them a target for Chronicler's Prfn and Gambit
-  - Totem Necklaces DO in fact save your pets from death
-- Patterns to exercise total control over a Thoth's frame
+  - i'd let animals wear them but i have a major rendering skill issue
+- Dispel Conjureable and Cleaner's Purification
+- Locator's Reflection (locate your enchanted sentinel)
+- Patterns to exert more control over a Thoth's Gambit from within it
+- Spherical Exaltation II
 - Totem Necklace
   - no regen, fire prot, or anything. just effect clearing.
   - still revives you
@@ -392,15 +378,16 @@ Only the devs who can keep up with me...
   - rechargeable
 ### Changes
 - Buk
+- Chalk drawing screen respects Hex Casting's config
+  - namely click to toggle drawing and the grid snap multiplier.
 - Mishap messages (removed examples like "(e.g. a staff)")
 - The meta-eval patterns can take patterns too now.
-- Made the default enchantment limit in the config customizeable. You can math now.
+- Made the default enchantment limit in the config customizeable. You can also do math there now.
   - the comment in the config updates on its own when you run the game to reflect this
 ### Fixes
 - A Charon in the meta-eval patterns won't exit the layer outside of them
-- Chalk drawing screen respects Hex Casting's click to toggle drawing option
+- Crash on opening the staff grid with Hexcessible
 - Crash on using Ancient Tomes in multiplayer
-- Crash with Hexcessible
 - Creative mode category no longer looks like it got hit by a tornado
 - Dealer's Prfn didn't work
 - Deposit Media bug??
@@ -410,28 +397,45 @@ Only the devs who can keep up with me...
   - basically, Carryon works with the Ritus
 - Potential Crash with Inner Media Prfn.
 - Pull was free if you triggered it for 0 ticks
-- Jumpslates and Rebound Slates are breakable and drop their item
-- Necklaces stick to your character better
+- Jumpslates and Rebound Slates weren't breakable and didn't drop their item
+- Necklaces appear closer to your character
 - "Oopsy woopsy" logspam BEGONE!
 - Sieve Thoughts not detecting certain great spell pattern shapes
 - Solid Color was not cheap to break via Break Block
-- Spatial meta-evals (Cubic Exaltation etc.) were tweaking about the (0, 0, 0) coordinate
+- Cubic Exaltation was tweaking about the (0, 0, 0) coordinate
 - Stopped Imbue Amel from taking a fuckton of Amel
+- Weird poky bits from the sphere in Spherical Exaltation were only for the north and west sides
 ### Interop
 - HexConnect (meaing Forge)
   It's easier to fix issues with Sinytra than it is to port the mod to both platforms
   - Apotheosis no longer prevents you from casting patterns when Lapisworks is in the pack
-  - Fixed chalk not connecting properly
   - Fixed un-flaying villagers not un-flaying them
 # 1.5.8.4
 ### Additions
 - added stuff to collars
-  - craft with an iron ingot to add spikes
   - the bell now supports full physics
     - which has full physics with itself and movement
     - even rings on the internal bell's collisions
   - phianglement and media-containing functionality, maybe?
-- shaders to make simple minds and amalgamations look better
+  - about the foci
+    - these have special interactions when an animal wears them while they hold iotas
+    - put a vector in it = animal wanna go there
+    - put entity in it = animal attack
+    - item entity = fox or allay pick up
+  - add a name tag to:
+    - allow writing MoreIotas String or Hexpose Text iotas to the collar via two new patterns
+    - make the name that appears above you not be your own name but the String or Text written to the name tag.
+- Enchanted Anvil? (Amvil?)
+  - Lets you enchant beyond the maximum.
+    - lets you combine beyond the usual maximum too.
+    - maximum decided by the same max for Imbue Amel's enchantment effect.
+  - Lets you enchant items with other items.
+  - has a scrollable menu on the right to select the enchantments you wanna move over.
+- Necklaces and collars can be on dogs, cats, foxes, or allays (right click)
+  - Foci Necklaces make the NPC wearing them a target for Chronicler's Prfn and Gambit
+  - Totem Necklaces DO in fact save your pets from death
+### Changes
+- Amalgamation Containers no longer look genuinely horrible
 ### Interop
 - hexic
   - craft a collar and a nametag to make a collartag
@@ -439,6 +443,8 @@ Only the devs who can keep up with me...
     - basically all entity iotas that point to your previous UUID 
   - craft a collar and a mediaweave to weave the cloth around it
     - nothing special, just acts as a mediaweave on top of being a collar
+- HexConnect (meaning Forge)
+  - Fixed chalk not connecting properly
 # 1.5.9
 ### Free me
 - [This](https://discord.com/channels/936370934292549712/950847275549229086/1479043488183095317)

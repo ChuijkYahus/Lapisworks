@@ -3,7 +3,7 @@
     "icon": "lapisworks:amel",
     "advancement": "lapisworks:got_lapis",
     "category": "hexcasting:lapisworks",
-    "sortnum": 2,
+    "sortnum": 1,
     "pages": [
         {
             "type": "patchouli:text",
@@ -16,6 +16,18 @@
         {
             "type": "patchouli:text",
             "text": "pages.lapisworks.lapisworks_lore.page3"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.lapisworks_lore.page4"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.lapisworks_lore.page5"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.lapisworks_lore.page6"
         }
     ]
 }

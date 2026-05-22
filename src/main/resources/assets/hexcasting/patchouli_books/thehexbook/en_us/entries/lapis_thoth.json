@@ -1,9 +1,9 @@
 {
     "name": "pages.lapisworks.lapisworks.misc.thoth.title",
-    "icon": "lapisworks:amel2",
+    "icon": "lapisworks:textures/entries/lmao.png",
     "advancement": "lapisworks:got_lapis",
-    "category": "hexcasting:lapisworks/misc",
-    "sortnum": 2,
+    "category": "hexcasting:lapisworks",
+    "sortnum": 7,
     "pages": [
         {
             "type": "patchouli:text",

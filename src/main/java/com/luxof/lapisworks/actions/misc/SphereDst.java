@@ -19,22 +19,28 @@ import java.util.List;
 
 import net.minecraft.util.math.Vec3d;
 
+/** the vultures pick another piece off of HexKinetics */
 public class SphereDst implements Action {
+    private final boolean filledSphere;
+    public SphereDst(boolean filledSphere) {
+        this.filledSphere = filledSphere;
+    }
+
     public int getArgc() {
         return 3;
     }
 
     @Override
     public OperationResult operate(CastingEnvironment ctx, CastingImage img, SpellContinuation cont) {
-        List<Iota> stack = new ArrayList<Iota>(img.getStack());
+        List<Iota> stack = new ArrayList<>(img.getStack());
         if (stack.size() < getArgc())
-            throw new MishapNotEnoughArgs(3, stack.size());
+            throw new MishapNotEnoughArgs(getArgc(), stack.size());
 
         int lastIdx = stack.size() - 1;
 
         SpellList instrs = OperatorUtils.evaluatable(
-            stack.get(stack.size() - 1),
-            stack.size() - 1
+            stack.get(lastIdx - 2),
+            lastIdx
         ).map(iota -> new SpellList.LList(List.of(iota)), list -> list);
 
         Vec3d pos = OperatorUtils.getVec3(stack, lastIdx - 1, getArgc());
@@ -51,7 +57,9 @@ public class SphereDst implements Action {
             img.getOpsConsumed(),
             img.getUserData()
         );
-        SpellList datum = generatePointsOnHollowSphere(pos, radius);
+        SpellList datum = filledSphere
+            ? generatePointsInFilledSphere(pos, radius)
+            : generatePointsOnHollowSphere(pos, radius);
         FrameForEach frame = new FrameForEach(datum, instrs, null, new ArrayList<Iota>());
 
         SpellContinuation newCont = cont instanceof SpellContinuation.NotDone notDone &&
@@ -62,20 +70,43 @@ public class SphereDst implements Action {
         return new OperationResult(img2, List.of(), newCont.pushFrame(frame), HexEvalSounds.THOTH);
     }
 
-    public static SpellList generatePointsOnHollowSphere(Vec3d offset, int radius) {
-        // technique: go through a cube and add all blocks which distance to center ~= radius
-        // (the vultures pick another piece off of HexKinetics)
-        List<Iota> sphere = new ArrayList<Iota>();
+    public static SpellList generatePointsOnHollowSphere(Vec3d center, int radius) {
+        List<Iota> sphere = new ArrayList<>();
         double innerRad = (radius - 1);
 
+        Vec3d offsetCenter = new Vec3d(radius, radius, radius);
+        Vec3d offset = center.subtract(offsetCenter);
+        double circumference = radius * 2;
         double checkRad = radius * radius;
         double checkInnerRad = innerRad * innerRad;
 
-        for (int x = -radius; x < radius; x++) {
-            for (int y = -radius; y < radius; y++) {
-                for (int z = -radius; z < radius; z++) {
-                    double sum = x*x + y*y + z*z;
-                    if (sum <= checkRad && sum >= checkInnerRad) {
+        for (int x = 0; x <= circumference; x++) {
+            for (int y = 0; y <= circumference; y++) {
+                for (int z = 0; z <= circumference; z++) {
+                    double distance = offsetCenter.squaredDistanceTo(x, y, z);
+                    if (distance <= checkRad && distance >= checkInnerRad) {
+                        sphere.add(new Vec3Iota(new Vec3d(x, y, z).add(offset)));
+                    }
+                }
+            }
+        }
+
+        return new SpellList.LList(sphere);
+    }
+
+    public static SpellList generatePointsInFilledSphere(Vec3d center, int radius) {
+        List<Iota> sphere = new ArrayList<>();
+
+        Vec3d offsetCenter = new Vec3d(radius, radius, radius);
+        Vec3d offset = center.subtract(offsetCenter);
+        double circumference = radius * 2;
+        double checkRad = radius * radius;
+
+        for (int x = 0; x <= circumference; x++) {
+            for (int y = 0; y <= circumference; y++) {
+                for (int z = 0; z <= circumference; z++) {
+                    double distance = offsetCenter.squaredDistanceTo(x, y, z);
+                    if (distance <= checkRad) {
                         sphere.add(new Vec3Iota(new Vec3d(x, y, z).add(offset)));
                     }
                 }

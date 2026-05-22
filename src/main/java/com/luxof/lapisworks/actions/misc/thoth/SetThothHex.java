@@ -15,6 +15,8 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import com.luxof.lapisworks.mishaps.MishapInvalidContinuation;
 
 import static com.luxof.lapisworks.Lapisworks.CastingImgWithStack;
+import static com.luxof.lapisworks.Lapisworks.pullFrameOfType;
+import static com.luxof.lapisworks.Lapisworks.setHighestFrameOfTypeTo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,26 +29,28 @@ public class SetThothHex implements Action {
         List<Iota> stack = new ArrayList<>(img.getStack());
         if (stack.size() < getArgc()) throw new MishapNotEnoughArgs(getArgc(), stack.size());
 
-        if (
-            !(cont instanceof SpellContinuation.NotDone notDone) ||
-            !(notDone.getFrame() instanceof FrameForEach thothFrame)
-        )
-            throw new MishapInvalidContinuation("mishaps.lapisworks.descs.thothframe");
-
         
         int lastIdx = stack.size() - 1;
         SpellList newCode = OperatorUtils.getList(stack, lastIdx, 1);
         stack.remove(lastIdx);
 
-        SpellContinuation newCont = notDone.getNext();
+        FrameForEach thothFrame = pullFrameOfType(cont, FrameForEach.class);
+        if (thothFrame == null)
+            throw new MishapInvalidContinuation("mishaps.lapisworks.descs.thothframe");
+
+        SpellContinuation newCont = setHighestFrameOfTypeTo(
+            cont,
+            FrameForEach.class,
+            thothFrame.copy(
+                thothFrame.getData(), newCode, thothFrame.getBaseStack(), thothFrame.getAcc()
+            )
+        );
 
 
         return new OperationResult(
             CastingImgWithStack(img.withUsedOp(), stack),
             List.of(),
-            newCont.pushFrame(thothFrame.copy(
-                thothFrame.getData(), newCode, thothFrame.getBaseStack(), thothFrame.getAcc()
-            )),
+            newCont,
             HexEvalSounds.NORMAL_EXECUTE
         );
     }

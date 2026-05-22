@@ -2,8 +2,8 @@
     "name": "pages.lapisworks.lapisworks.misc.spells.title",
     "icon": "lapisworks:textures/entries/fire.png",
     "advancement": "lapisworks:got_lapis",
-    "category": "hexcasting:lapisworks/misc",
-    "sortnum": 5,
+    "category": "hexcasting:lapisworks",
+    "sortnum": 10,
     "pages": [
         {
             "type": "hexcasting:pattern",

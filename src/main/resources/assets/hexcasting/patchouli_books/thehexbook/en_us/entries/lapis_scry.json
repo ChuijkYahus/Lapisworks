@@ -2,8 +2,8 @@
     "name": "pages.lapisworks.lapisworks.misc.scry.title",
     "icon": "lapisworks:textures/entries/scry.png",
     "advancement": "lapisworks:got_lapis",
-    "category": "hexcasting:lapisworks/misc",
-    "sortnum": 3,
+    "category": "hexcasting:lapisworks",
+    "sortnum": 8,
     "pages": [
         {
             "type": "hexcasting:pattern",
@@ -44,6 +44,14 @@
             "input": "vec, vec",
             "output": "bool",
             "text": "pages.lapisworks.lapisworks.misc.scry.equal_block.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:is_conjureable",
+            "anchor": "lapisworks:is_conjureable",
+            "input": "vec, vec",
+            "output": "bool",
+            "text": "pages.lapisworks.lapisworks.misc.scry.is_conjureable.summary"
         }
     ]
 }

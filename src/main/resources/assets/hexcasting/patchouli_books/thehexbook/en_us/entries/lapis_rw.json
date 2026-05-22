@@ -2,8 +2,8 @@
     "name": "pages.lapisworks.lapisworks.misc.rw.title",
     "icon": "lapisworks:textures/entries/quill.png",
     "advancement": "lapisworks:got_lapis",
-    "category": "hexcasting:lapisworks/misc",
-    "sortnum": 4,
+    "category": "hexcasting:lapisworks",
+    "sortnum": 9,
     "pages": [
         {
             "type": "patchouli:text",

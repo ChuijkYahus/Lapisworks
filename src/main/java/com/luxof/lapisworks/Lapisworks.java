@@ -5,6 +5,9 @@ import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame;
+import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
+import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation.NotDone;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.api.casting.math.HexDir;
@@ -1048,5 +1051,49 @@ public class Lapisworks implements ModInitializer {
 
 	public static double ceil(double value) {
 		return truncate(value) + (value % 1 > 0.0 ? Math.signum(value) : 0.0);
+	}
+
+	@Nullable
+	public static <DesiredFrame extends ContinuationFrame> DesiredFrame pullFrameOfType(
+		SpellContinuation continuation,
+		Class<DesiredFrame> type
+	) {
+		SpellContinuation cont = continuation;
+		while (cont instanceof NotDone notDone) {
+
+			if (!type.isInstance(notDone.getFrame())) {
+				cont = notDone.getNext();
+				continue;
+			}
+
+			return type.cast(notDone.getFrame());
+		}
+		return null;
+	}
+
+	@Nullable
+	public static <DesiredFrame extends ContinuationFrame> SpellContinuation setHighestFrameOfTypeTo(
+		SpellContinuation continuation,
+		Class<DesiredFrame> setThis,
+		ContinuationFrame to
+	) {
+		Stack<ContinuationFrame> buffer = new Stack<>();
+		SpellContinuation cont = continuation;
+		while (cont instanceof NotDone notDone) {
+			cont = notDone.getNext();
+
+			if (!setThis.isInstance(notDone.getFrame())) {
+				buffer.push(notDone.getFrame());
+				continue;
+			}
+
+			cont = cont.pushFrame(to);
+
+			while (!buffer.isEmpty()) {
+				cont = cont.pushFrame(buffer.pop());
+			}
+			return cont;
+		}
+		return null;
 	}
 }
