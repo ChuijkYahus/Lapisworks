@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.OperatorUtils;
 import at.petrak.hexcasting.api.casting.SpellList;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
+import at.petrak.hexcasting.api.casting.iota.EntityIota;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
@@ -156,10 +157,20 @@ public class HexIotaStack {
         } else if (
             iota instanceof Vec3Iota vec3Iota &&
             ctx.getWorld().getBlockEntity(BlockPos.ofFloored(vec3Iota.getVec3())) instanceof
-                MediaTransferInterface mti
-            && ctx.isVecInRange(vec3Iota.getVec3())
+                MediaTransferInterface mti &&
+            mti.isMTIAtThisTime(ctx)
         ) {
+            ctx.assertVecInRange(vec3Iota.getVec3());
             MTI = mti;
+
+        } else if (
+            iota instanceof EntityIota entityIota &&
+            entityIota.getEntity() instanceof MediaTransferInterface mti &&
+            mti.isMTIAtThisTime(ctx)
+        ) {
+            ctx.assertEntityInRange(entityIota.getEntity());
+            MTI = mti;
+
         }
 
         if (MTI == null || !MTI.isMTIAtThisTime(ctx)) {
@@ -195,7 +206,7 @@ public class HexIotaStack {
         if (
             !(iota instanceof DoubleIota dub) ||
             !closeEnough(dub.getDouble(), Math.round(dub.getDouble())) ||
-            dub.getDouble() < above
+            dub.getDouble() <= above
         )
             throw new MishapInvalidIota(
                 iota,

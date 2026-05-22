@@ -40,6 +40,7 @@ public class Chariot {
         block("chariotmind", CHARIOT_MIND);
         registerBeType("chariotmind", CHARIOT_MIND_ENTITY_TYPE);
         ModItems.registerItem("chariotmind", CHARIOT_MIND_ITEM);
+        ChariotPatterns.conjoinDasTwins();
     }
 
 

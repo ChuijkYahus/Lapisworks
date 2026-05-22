@@ -3,7 +3,7 @@
     "icon": "hexcasting:amethyst_dust",
     "advancement": "lapisworks:got_lapis",
     "category": "hexcasting:lapisworks",
-    "sortnum": 6,
+    "sortnum": 4,
     "pages": [
         {
             "type": "patchouli:text",

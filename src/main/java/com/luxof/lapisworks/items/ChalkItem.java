@@ -123,6 +123,7 @@ public class ChalkItem extends BlockItem {
             return super.place(context);
         } catch (EvilException evil) {
             // getPlaceSound is only called when place is about to succeed.
+            // basically i just want the checks and bells and whistles from super.place to have occured.
             PlayerEntity player = context.getPlayer();
             world.emitGameEvent(GameEvent.BLOCK_PLACE, pos, Emitter.of(player, evil.bs));
             if (player == null || !player.getAbilities().creativeMode) {
@@ -151,6 +152,7 @@ public class ChalkItem extends BlockItem {
     }
 
     public static final class EvilException extends RuntimeException {
+        // i find it funny that blockstate = bs = bullshit, so this is EvilException.bs
         public final BlockState bs;
         public EvilException(String s, BlockState state) {
             super(s);

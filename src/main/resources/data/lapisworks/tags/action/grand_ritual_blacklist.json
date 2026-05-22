@@ -2,6 +2,7 @@
     "replace": false,
     "values": [
         "lapisworks:deposit",
+		"lapisworks:imbue_lap",
         {
             "id": "hexal:wisp/summon/projectile",
             "required": false

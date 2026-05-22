@@ -75,28 +75,30 @@ public class FrameExecuteManyTimes implements ContinuationFrame {
         );
     }
 
-    @Override
-    public Type<?> getType() {
-        return new Type<ContinuationFrame>() {
-            @SuppressWarnings("null")
-            @Override
-            public ContinuationFrame deserializeFromNBT(NbtCompound nbt, ServerWorld world) {
-                List<Iota> newStack = new ArrayList<>();
+    public static final Type<FrameExecuteManyTimes> TYPE = new Type<>() {
+        @SuppressWarnings("null")
+        @Override
+        public FrameExecuteManyTimes deserializeFromNBT(NbtCompound nbt, ServerWorld world) {
+            List<Iota> newStack = new ArrayList<>();
+            HexIotaTypes.LIST.deserialize(
+                nbt.getList("instrs", NbtElement.COMPOUND_TYPE),
+                world
+            ).getList().forEach(newStack::add);
+
+            return new FrameExecuteManyTimes(
                 HexIotaTypes.LIST.deserialize(
                     nbt.getList("instrs", NbtElement.COMPOUND_TYPE),
                     world
-                ).getList().forEach(newStack::add);
+                ).getList(),
+                newStack,
+                nbt.getInt("howManyTimes")
+            );
+        }
+    };
 
-                return new FrameExecuteManyTimes(
-                    HexIotaTypes.LIST.deserialize(
-                        nbt.getList("instrs", NbtElement.COMPOUND_TYPE),
-                        world
-                    ).getList(),
-                    newStack,
-                    nbt.getInt("howManyTimes")
-                );
-            }
-        };
+    @Override
+    public Type<?> getType() {
+        return TYPE;
     }
 
     @Override

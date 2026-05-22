@@ -72,21 +72,11 @@ public abstract class BaseCastingWispMixin extends Entity implements MediaTransf
             ItemStack.EMPTY
         );
     }
-    @Inject(
-        at = @At("HEAD"),
-        method = "initDataTracker"
-    )
-    protected void initDataTracker(CallbackInfo ci) {
-        TRACKMYFUCKINGITEMSTACKYOUSLOBFUCKINGSHITGARGLINGSLABOFSHITIWILLFUCKINGMURDEREVERYFUCKINGLASTONEOFYOURFUCKINGFAMILYMEMBERSBECAUSEOFTHISFUCKINGASSFUCKINGSHITFUCKINGBITCHBUGBULLSHIT();
-    }
     @Override public ItemStack getStack() {
-        // for some reason, whenever i test outside the dev env, this errs.
-        // with an NPE.
-        // it errs because heldStack wasn't registered.
+        // mfw no initDataTracker for me to inject into
         try {
             return getDataTracker().get(heldStack);
         } catch (NullPointerException e) {
-            //err("uh oh! there was an oopsy woopsy!! Lapisworks' mixin did a fuhhcky wucky!!! a wittle fucko boingo!!!!");
             TRACKMYFUCKINGITEMSTACKYOUSLOBFUCKINGSHITGARGLINGSLABOFSHITIWILLFUCKINGMURDEREVERYFUCKINGLASTONEOFYOURFUCKINGFAMILYMEMBERSBECAUSEOFTHISFUCKINGASSFUCKINGSHITFUCKINGBITCHBUGBULLSHIT();
             return getDataTracker().get(heldStack);
         }

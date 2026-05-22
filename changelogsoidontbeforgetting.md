@@ -357,55 +357,54 @@ Only the devs who can keep up with me...
 - Some shit related to mixin mishap messages
 # 1.5.8.3
 ### Additions
-- Locate Own Enchanted Sentinel (pattern)
-- Enchanted Anvil? (Amvil?)
-  - Lets you enchant beyond the maximum.
-    - lets you combine beyond the usual maximum too.
-    - maximum decided by the same max for Imbue Amel's enchantment effect.
-  - Lets you enchant items with other items.
-  - has a scrollable menu on the right to select the enchantments you wanna move over.
-- necklaces and collars can be on dogs, cats, foxes, or allays (right click)
-  - Foci Necklaces make the NPC wearing them a target for Chronicler's Prfn and Gambit
-  - Totem Necklaces DO in fact save your pets from death
+- Collars
+  - dyeable
+  - add a gold ingot to add a bell
+    - jingles when the wearer moves too
+  - add a focus to add iota holding functionality
+  - add a charged amethyst to:
+    - erase the floating patterns around you
+    - disable invis particles
+    - make the collar invisible while you're invisible
+  - i'd let animals wear them but i have a major rendering skill issue
+- Dispel Conjureable and Cleaner's Purification
+- Locator's Reflection (locate your enchanted sentinel)
+- Patterns to exert more control over a Thoth's Gambit from within it
+- Spherical Exaltation II
 - Totem Necklace
   - no regen, fire prot, or anything. just effect clearing.
   - still revives you
   - 3 uses (starts with 1 when crafted)
   - rechargeable
-- Added collars
-  - dyeable
-  - add a gold ingot to add a bell
-    - jingles when the wearer moves too
-  - add a focus to add iota holding functionality
-    - these have special interactions when an animal wears them while they hold iotas
-    - put a vector in it = animal wanna go there
-    - put entity in it = animal attack
-    - item entity = fox or allay pick up
-  - add a charged amethyst to:
-    - erase the floating patterns around you
-    - disable invis particles
-    - make the collar invisible while you're invisible
 ### Changes
 - Buk
+- Chalk drawing screen respects Hex Casting's config
+  - namely click to toggle drawing and the grid snap multiplier.
 - Mishap messages (removed examples like "(e.g. a staff)")
 - The meta-eval patterns can take patterns too now.
-- Made the default enchantment limit in the config customizeable. You can math now.
+- Made the default enchantment limit in the config customizeable. You can also do math there now.
   - the comment in the config updates on its own when you run the game to reflect this
 ### Fixes
 - A Charon in the meta-eval patterns won't exit the layer outside of them
-- Crash on using Ancient Tomes
-- Crash with Hexcessible
+- Crash on opening the staff grid with Hexcessible
+- Crash on using Ancient Tomes in multiplayer
 - Creative mode category no longer looks like it got hit by a tornado
 - Dealer's Prfn didn't work
+- Deposit Media bug??
 - Enchanted Slipway spawn rate being 1x, not 2x a slipway's
+- Erebus' Gambit played the spell cast sound and not the normal pattern cast sound on execute
 - Placing a Ritus with the same data elsewhere in the world won't brick your world now
-  - basically Carryon works with the Ritus
+  - basically, Carryon works with the Ritus
 - Potential Crash with Inner Media Prfn.
-- Jumpslates and Rebound Slates are breakable and drop their item
-- Necklaces stick to your character better
+- Pull was free if you triggered it for 0 ticks
+- Jumpslates and Rebound Slates weren't breakable and didn't drop their item
+- Necklaces appear closer to your character
 - "Oopsy woopsy" logspam BEGONE!
 - Sieve Thoughts not detecting certain great spell pattern shapes
-- Stopped Imbue Amel from taking a fuckton of Amel no matter what
+- Solid Color was not cheap to break via Break Block
+- Cubic Exaltation was tweaking about the (0, 0, 0) coordinate
+- Stopped Imbue Amel from taking a fuckton of Amel
+- Weird poky bits from the sphere in Spherical Exaltation were only for the north and west sides
 ### Interop
 - HexConnect (meaing Forge)
   It's easier to fix issues with Sinytra than it is to port the mod to both platforms
@@ -414,12 +413,29 @@ Only the devs who can keep up with me...
 # 1.5.8.4
 ### Additions
 - added stuff to collars
-  - craft with an iron ingot to add spikes
   - the bell now supports full physics
     - which has full physics with itself and movement
     - even rings on the internal bell's collisions
   - phianglement and media-containing functionality, maybe?
-- shaders to make simple minds and amalgamations look better
+  - about the foci
+    - these have special interactions when an animal wears them while they hold iotas
+    - put a vector in it = animal wanna go there
+    - put entity in it = animal attack
+    - item entity = fox or allay pick up
+  - add a name tag to:
+    - allow writing MoreIotas String or Hexpose Text iotas to the collar via two new patterns
+    - make the name that appears above you not be your own name but the String or Text written to the name tag.
+- Enchanted Anvil? (Amvil?)
+  - Lets you enchant beyond the maximum.
+    - lets you combine beyond the usual maximum too.
+    - maximum decided by the same max for Imbue Amel's enchantment effect.
+  - Lets you enchant items with other items.
+  - has a scrollable menu on the right to select the enchantments you wanna move over.
+- Necklaces and collars can be on dogs, cats, foxes, or allays (right click)
+  - Foci Necklaces make the NPC wearing them a target for Chronicler's Prfn and Gambit
+  - Totem Necklaces DO in fact save your pets from death
+### Changes
+- Amalgamation Containers no longer look genuinely horrible
 ### Interop
 - hexic
   - craft a collar and a nametag to make a collartag
@@ -427,6 +443,8 @@ Only the devs who can keep up with me...
     - basically all entity iotas that point to your previous UUID 
   - craft a collar and a mediaweave to weave the cloth around it
     - nothing special, just acts as a mediaweave on top of being a collar
+- HexConnect (meaning Forge)
+  - Fixed chalk not connecting properly
 # 1.5.9
 ### Free me
 - [This](https://discord.com/channels/936370934292549712/950847275549229086/1479043488183095317)
@@ -498,6 +516,11 @@ iotic blocks interop
 possible interop:  
 - hexical
   - give conjured color the ability to take mage block effects
+  - Make AVM staff as a variant of sorts of Hexical's Lightning Rod Staff
+    - affix items to it
+    - enchant it to make the fixations permanent
+    - when enchanted, it uses the item as a power like in AVM  
+  - also add gloves with Hexical 2.0.0. they'll be two-handed charms that take half a second to clap.
 - hexcassettes? (`for i in range(n): enqueue(spell, tick_delay)`-like pattern?)
 - Hexpose interop
   - spell to remove a status effect from the entity that has it
@@ -566,10 +589,6 @@ Ra's Gambit
 Gene Editing (as an extension of the 4-arm-getting system) and Entity Creation
 - making yourself a vampire is possible  
 
-Make AVM staff as a variant of sorts of Hexical's Lightning Rod Staff
-- affix items to it
-- enchant it to make the fixations permanent
-- when enchanted, it uses the item as a power like in AVM  
 
 enchanted amethyst
 - not the first time i've thought about it, maybe see where it goes  
@@ -621,15 +640,17 @@ jumpslate across space and time
   - MASSIVE multi-block wizard towers! give you ambit + cost reduction + grid size
     (grid size toggleable)  
 
-trinket that casts upon dropped  
-right click to prime  
+trinket that casts upon dropped (so like death and shit)  
+shift right click to prime/unprime  
+right click to throw (when primed)
 
 trinket that stops GTP item spillage and makes it half as cheap  
 - "enderman's monocle"
 - rub some amethyst dust on an eye of ender, then put it in an amel-iron-diamond case  
 
-a trinket that shows a config screen for hexes it's primed to work for! it'll show
-pre-configured-for-hex iotas and let you select their values, with a default value already present  
+~~a trinket that shows a config screen for hexes it's primed to work for! it'll show~~
+~~pre-configured-for-hex iotas and let you select their values, with a default value already present  ~~
+Too late. HexIntent has that now.
 
 TODO:  
 - Hex familiar that lets you interact with the Media Condensing Network at a range.
@@ -689,10 +710,6 @@ make it rectangular like a beacon's
 make it play a cool ass sound effect  
 all that jazz  
 
-probably a library mod:  
-- Patchouli variables. You can embed them into text. They sync across client and server automatically.
-- Works with hexdoc.  
-
 put all this time shit in an addon  
 call it Hex To The Future  
 
@@ -725,5 +742,10 @@ Lightningbending rework
   - 4 = instant hit always
 - If you are hit with any lightning you redirect it where you're looking
 - Yes, sideways lightning.  
+  - past me, fuck yourself.
 
 [This?](https://discord.com/channels/936370934292549712/1011455473528098857/1493387681684652153)  
+with gloves, port the HexKinetics Swap Momentum spell and add a Swap Places and Swap Orientations spell.  
+Witch broom to sit on as you fly.  
+
+use "Apollo's Purification" somehow.  

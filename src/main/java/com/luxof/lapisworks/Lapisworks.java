@@ -5,6 +5,9 @@ import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment.HeldItemInfo;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame;
+import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
+import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation.NotDone;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.api.casting.math.HexDir;
@@ -41,6 +44,7 @@ import com.luxof.lapisworks.interop.hextended.Lapixtended;
 import com.luxof.lapisworks.interop.hierophantics.Chariot;
 import com.luxof.lapisworks.media.LinkableMediaBlock;
 import com.luxof.lapisworks.mixinsupport.GetStacks;
+import com.mojang.datafixers.util.Either;
 
 import static com.luxof.lapisworks.LapisworksIDs.CANNOT_MODIFY_COST_TAG;
 import static com.luxof.lapisworks.LapisworksIDs.GRAND_RITUAL_BLACKLIST_TAG;
@@ -60,9 +64,11 @@ import dev.emi.trinkets.api.TrinketInventory;
 import dev.emi.trinkets.api.TrinketsApi;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 import java.util.function.BiConsumer;
@@ -134,16 +140,21 @@ public class Lapisworks implements ModInitializer {
 	public static boolean VALKYRIEN_SKIES_INTEROP = false;
 	public static boolean HEXCESSIBLE_INTEROP = false;
 
+	public static String fmt(String string, Object... args) {
+		return String.format(string, args);
+	}
 	public static void log(String text, Object... args) {
-		LOGGER.info(String.format(text, args));
+		LOGGER.info(fmt(text, args));
 	}
 	public static void warn(String text, Object... args) {
-		LOGGER.warn(String.format(text, args));
+		LOGGER.warn(fmt(text, args));
 	}
 	public static void err(String text, Object... args) {
-		LOGGER.error(String.format(text, args));
+		LOGGER.error(fmt(text, args));
 	}
-	public static boolean isModLoaded(String modid) { return FabricLoader.getInstance().isModLoaded(modid); }
+	public static boolean isModLoaded(String modid) {
+		return FabricLoader.getInstance().isModLoaded(modid);
+	}
 	/** assumes the mod is actually loaded and that <code>targetVersion</code> doesn't cause an error.
 	 * Kurwa eksploduje if wrong? Nah, just gives <code>null</code>.
 	 * If true? returns <code>current version - target version</code> */
@@ -377,6 +388,18 @@ public class Lapisworks implements ModInitializer {
 	/** truncates to first two digits after the dot. */
 	public static double prettifyDouble(double value) {
 		return Math.floor(value * 100.0) / 100.0;
+	}
+	/** turns a list to "(element1, element2, element3)". */
+	public static String prettifyTuple(Collection<? extends Object> tuple) {
+		String ret = "";
+		for (Object ele : tuple) { ret += ", " + ele.toString(); }
+		return "(" + ret.substring(2) + ")";
+	}
+	/** turns an array to "(element1, element2, element3)". */
+	public static String prettifyTuple(Object[] tuple) {
+		String ret = "";
+		for (Object ele : tuple) { ret += ", " + ele.toString(); }
+		return "(" + ret.substring(2) + ")";
 	}
 	/** truncates all components to first 2 digits after the dot. */
 	public static Vec3d prettifyVec3d(Vec3d vec) {
@@ -1001,5 +1024,76 @@ public class Lapisworks implements ModInitializer {
 	}
 	public static <T extends Object> T last(List<T> list) {
 		return list.get(list.size() - 1);
+	}
+
+	public static <T1, T2 extends Object> T1 computeIfRight(
+		Either<T1, T2> either,
+		Function<T2, T1> computer
+	) {
+		Optional<T2> right = either.right();
+		return right.isPresent()
+			? computer.apply(right.get())
+			: either.left().get();
+	}
+	public static <T1, T2 extends Object> T2 computeIfLeft(
+		Either<T1, T2> either,
+		Function<T1, T2> computer
+	) {
+		Optional<T1> left = either.left();
+		return left.isPresent()
+			? computer.apply(left.get())
+			: either.right().get();
+	}
+
+	public static double truncate(double value) {
+		return value - value % 1;
+	}
+
+	public static double ceil(double value) {
+		return truncate(value) + (value % 1 > 0.0 ? Math.signum(value) : 0.0);
+	}
+
+	@Nullable
+	public static <DesiredFrame extends ContinuationFrame> DesiredFrame pullFrameOfType(
+		SpellContinuation continuation,
+		Class<DesiredFrame> type
+	) {
+		SpellContinuation cont = continuation;
+		while (cont instanceof NotDone notDone) {
+
+			if (!type.isInstance(notDone.getFrame())) {
+				cont = notDone.getNext();
+				continue;
+			}
+
+			return type.cast(notDone.getFrame());
+		}
+		return null;
+	}
+
+	@Nullable
+	public static <DesiredFrame extends ContinuationFrame> SpellContinuation setHighestFrameOfTypeTo(
+		SpellContinuation continuation,
+		Class<DesiredFrame> setThis,
+		ContinuationFrame to
+	) {
+		Stack<ContinuationFrame> buffer = new Stack<>();
+		SpellContinuation cont = continuation;
+		while (cont instanceof NotDone notDone) {
+			cont = notDone.getNext();
+
+			if (!setThis.isInstance(notDone.getFrame())) {
+				buffer.push(notDone.getFrame());
+				continue;
+			}
+
+			cont = cont.pushFrame(to);
+
+			while (!buffer.isEmpty()) {
+				cont = cont.pushFrame(buffer.pop());
+			}
+			return cont;
+		}
+		return null;
 	}
 }

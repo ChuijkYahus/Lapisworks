@@ -3,5 +3,5 @@
   "icon": "lapisworks:textures/entries/interop.png",
   "description": "categories.lapisworks.lapisworks.interop.desc",
   "parent": "hexcasting:lapisworks",
-  "sortnum": 2
+  "sortnum": 3
 }

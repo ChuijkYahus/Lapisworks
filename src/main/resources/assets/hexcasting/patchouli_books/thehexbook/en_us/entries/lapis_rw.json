@@ -1,0 +1,49 @@
+{
+    "name": "pages.lapisworks.lapisworks.misc.rw.title",
+    "icon": "lapisworks:textures/entries/quill.png",
+    "advancement": "lapisworks:got_lapis",
+    "category": "hexcasting:lapisworks",
+    "sortnum": 9,
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.lapisworks.misc.rwpattersheadsup"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "pages.lapisworks.lapisworks.misc.rw.text2"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:read_spechand",
+            "anchor": "lapisworks:read_spechand",
+            "input": "num",
+            "output": "any",
+            "text": "pages.lapisworks.lapisworks.misc.rw.read_spechand.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:readable_spechand",
+            "anchor": "lapisworks:readable_spechand",
+            "input": "num",
+            "output": "bool",
+            "text": "pages.lapisworks.lapisworks.misc.rw.readable_spechand.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:write_spechand",
+            "anchor": "lapisworks:write_spechand",
+            "input": "any, num",
+            "output": "",
+            "text": "pages.lapisworks.lapisworks.misc.rw.write_spechand.summary"
+        },
+        {
+            "type": "hexcasting:pattern",
+            "op_id": "lapisworks:writable_spechand",
+            "anchor": "lapisworks:writable_spechand",
+            "input": "num",
+            "output": "bool",
+            "text": "pages.lapisworks.lapisworks.misc.rw.writable_spechand.summary"
+        }
+    ]
+}

@@ -27,7 +27,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class ImbuementRec implements Recipe<HandsInv> {
     private final Identifier id;
-    private final boolean requiredModIsLoaded;
     private final Ingredient normal;
     private final Item partAmel;
     private final Item fullAmel;
@@ -47,14 +46,12 @@ public class ImbuementRec implements Recipe<HandsInv> {
 
     public ImbuementRec(
         Identifier id,
-        boolean requiredModIsLoaded,
         Ingredient norm,
         Item partAmel,
         Item fullAmel,
         int cost
     ) {
         this.id = id;
-        this.requiredModIsLoaded = requiredModIsLoaded;
         this.normal = norm;
         this.partAmel = partAmel;
         this.fullAmel = fullAmel;
@@ -63,7 +60,6 @@ public class ImbuementRec implements Recipe<HandsInv> {
 
     @Override
     public Identifier getId() { return this.id; }
-    public boolean getRequiredModIsLoaded() { return this.requiredModIsLoaded; }
     public Ingredient getNormal() { return this.normal; }
     public Item getPartAmel() { return this.partAmel; }
     public Item getFullAmel() { return this.fullAmel; }
@@ -145,9 +141,6 @@ public class ImbuementRec implements Recipe<HandsInv> {
 
     @Override
     public boolean matches(HandsInv inventory, World world) {
-        if (!this.requiredModIsLoaded) return false;
-
-
         if (inventory instanceof DisimbuementInv) {
             boolean ret = false;
             for (ItemStack stack : inventory.getHands()) {

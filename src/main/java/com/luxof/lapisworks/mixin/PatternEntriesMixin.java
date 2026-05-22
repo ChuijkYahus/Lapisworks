@@ -1,5 +1,7 @@
 package com.luxof.lapisworks.mixin;
 
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import com.luxof.lapisworks.init.ThemConfigFlags;
 import com.luxof.lapisworks.mixinsupport.AccessPWBookEntries;
 import com.luxof.lapisworks.mixinsupport.HexcessiblePWShapeSupport;
@@ -56,6 +58,7 @@ public class PatternEntriesMixin implements HexcessiblePWShapeSupport {
 
                 List<BookEntries.Entry> bookEntries = getEntriesForPWShapePattern(genericId);
 
+                /** "more like IHexplatAbstractions" -mauve. i saw that comment mauve */
                 pwShapePatterns.put(
                     specificId,
                     new PatternEntries.Entry(
@@ -63,7 +66,11 @@ public class PatternEntriesMixin implements HexcessiblePWShapeSupport {
                         entry.name(),
                         () -> false,
                         entry.dir(),
-                        entry.sig(),
+                        // entry.sig() calls entry.isPerWorld() which throws an error at this stage
+                        List.of(IXplatAbstractions.INSTANCE.getActionRegistry()
+                            .get(new Identifier(entry.id()))
+                            .prototype()
+                            .getAngles()),
                         bookEntries,
                         0
                     )

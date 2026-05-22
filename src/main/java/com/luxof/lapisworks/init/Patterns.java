@@ -14,17 +14,12 @@ import com.luxof.lapisworks.actions.*;
 import com.luxof.lapisworks.actions.great.GenericEnchant;
 import com.luxof.lapisworks.actions.interact.*;
 import com.luxof.lapisworks.actions.misc.*;
+import com.luxof.lapisworks.actions.misc.thoth.*;
 import com.luxof.lapisworks.actions.ritual.*;
 import com.luxof.lapisworks.actions.scry.*;
 import com.luxof.lapisworks.actions.wizard.*;
 import com.luxof.lapisworks.actions.wizard.enchsent.*;
-import com.luxof.lapisworks.interop.hexal.actions.*;
-// REF the JVM is doing lazy imports LOOK AT THIS CODE it feels like a
-// bomb blast begging to happen :sob::sob::sob:
-import com.luxof.lapisworks.interop.hierophantics.patterns.*;
 
-import static com.luxof.lapisworks.Lapisworks.HEXAL_INTEROP;
-import static com.luxof.lapisworks.Lapisworks.HIEROPHANTICS_INTEROP;
 import static com.luxof.lapisworks.Lapisworks.id;
 import static com.luxof.lapisworks.init.ThemConfigFlags.registerPWShapePattern;
 
@@ -105,7 +100,9 @@ public class Patterns {
         register("imbue_amel", "wqwwawwqwwaqwewaawewa", HexDir.NORTH_EAST, new ImbueAmel());
         register("disimbue_amel", "wwaqqddqqawwewwaqqddqqaww", HexDir.SOUTH_WEST, new DisenchantImbued());
         register("conjure_color", "qqaa", HexDir.NORTH_EAST, new ConjureColor());
-        register("spherical_dstl", "wqwqwqwqwqwaeaqaaeaqaa", HexDir.NORTH_WEST, new SphereDst());
+        register("erase_color", "qqqaq", HexDir.NORTH_EAST, new EraseColor());
+        register("spherical_dstl", "wqwqwqwqwqwaeaqaaeaqaa", HexDir.NORTH_WEST, new SphereDst(false));
+        register("spherical_dstl_filled", "wqwqwqwqwqwaewawqwawaww", HexDir.NORTH_WEST, new SphereDst(true));
         register("cubic_exalt", "wqwawqwqqwqwq", HexDir.NORTH_WEST, new CubeExalt());
         register("empty_prfn", "qwawqwaqwweqqqq", HexDir.NORTH_WEST, new EmptyPrfn());
         register("empty_dstl", "dwewdwedwwwadwewdwedw", HexDir.NORTH_WEST, new EmptyDstl());
@@ -125,6 +122,11 @@ public class Patterns {
         register("max", "wdeeweaaeweedw", HexDir.WEST, new MinMax(false));
         register("pull", "awwqqqwwaqww", HexDir.SOUTH_WEST, new Pull());
         register("robbie_exalt", "qaeaqaweaqa", HexDir.NORTH_WEST, new EstrogenExalt());
+        register("get_datum", "ewe", HexDir.NORTH_EAST, new GetDatum());
+        register("set_datum", "qwq", HexDir.SOUTH_EAST, new SetDatum());
+        register("get_thoth_hex", "eeaee", HexDir.NORTH_EAST, new GetThothHex());
+        register("set_thoth_hex", "qqdqq", HexDir.SOUTH_EAST, new SetThothHex());
+        register("is_conjureable", "qqaaeqqqq", HexDir.NORTH_EAST, new IsConjureable());
 
         register("thought_sieve", "qadaadadqaqdadqaq", HexDir.WEST, new HexResearchYoink());
         register("absorb_mind", "aawqqwqqqaede", HexDir.WEST, new MindLiquefaction());
@@ -195,30 +197,9 @@ public class Patterns {
         register("quenched_indigo4", "qawwqeaeqwwaqqqaqeqdaadqwedeeawdwa", HexDir.NORTH_WEST, new QuenchedIndigo());
         register("quenched_indigo5", "qawwqwwqwwaqaedewwwawweqaqdawdwa", HexDir.NORTH_WEST, new QuenchedIndigo());
         registerPWShapePattern("lapisworks:quenched_indigo");
-
-        // i register these here instead of their respective interop initializers
-        // because hexdoc needs to see them
-        if (HEXAL_INTEROP) {
-            register("gib_wisp_item", "aqawewewaqaweqqaqqedeae", HexDir.NORTH_WEST, new GibWispItem());
-            register("take_away_poor_baby_wisp_candy_like_evil_monster", "dedwqwqwdedwqeedeeqaqdq", HexDir.SOUTH_WEST, new RemoveWispItem());
-        }
-        if (HIEROPHANTICS_INTEROP) {
-            register("get_amalgamation", "qaqqaqqa", HexDir.NORTH_EAST, new GetAmalgamation());
-            register("get_amalgam_notiflevel", "waqaaqawqqwqqwq", HexDir.NORTH_WEST, new GetAmalgamAlert());
-            //                                      hehe weewee
-            register("set_amalgam_notiflevel", "wdeddedweeweewe", HexDir.NORTH_EAST, new SetAmalgamAlert());
-            register("get_amalgam_range", "qqqwqwqqqaqqqwqwqqqqaqqa", HexDir.NORTH_EAST, new GetAmalgamRange());
-            register("set_amalgam_range", "eeeweweeedeeeweweeeedeed", HexDir.NORTH_WEST, new SetAmalgamRange());
-            register("get_amalgam_greater", "qwewqaqwewqqaqqa", HexDir.NORTH_EAST, new GetAmalgamGreater());
-            register("get_self_amalgams_num", "qwedewqqaqqa", HexDir.NORTH_EAST, new GetSelfAmalgamsNum());
-            register("remove_self_amalgam", "edeedeed", HexDir.NORTH_WEST, new RemoveSelfAmalgam());
-            register("get_amalgam_err", "eqaqqaqqadqeqaqqaqqad", HexDir.NORTH_WEST, new GetAmalgamErr());
-            register("get_amalgam_hex", "qaqqaqqadaqdee", HexDir.NORTH_EAST, new GetAmalgamHex());
-            register("set_amalgam_hex", "edeedeedadeaqq", HexDir.NORTH_WEST, new SetAmalgamHex());
-        }
     }
 
-    private static ActionRegistryEntry register(
+    public static ActionRegistryEntry register(
         String name,
         String signature,
         HexDir startDir,

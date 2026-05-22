@@ -2,6 +2,7 @@ package com.luxof.lapisworks.client.screens;
 
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.mod.HexConfig;
 
 import static com.luxof.lapisworks.Lapisworks.closeEnough;
 import static com.luxof.lapisworks.Lapisworks.id;
@@ -48,10 +49,6 @@ public class ChalkWithPatternScreen extends HandledScreen<ChalkWithPatternScreen
         new Vector2i(10, 232), new Vector2i(44, 232), new Vector2i(79, 232), new Vector2i(114, 232), new Vector2i(148, 232), new Vector2i(183, 232), new Vector2i(218, 232)
     );
     private List<Vector2i> grid;
-    // how far does the mouse need to be for the line snap to the grid?
-    private final long distanceBeforeSnapToGridSqr = 50;
-    // how far can the mouse be from it's most recent dot before the line stops snapping to the grid?
-    private final long distanceFromRecentPointBeforeStopSnappingSqr = 2700;
     public final int patternLimit = 5;
     private int x;
     private int y;
@@ -67,6 +64,17 @@ public class ChalkWithPatternScreen extends HandledScreen<ChalkWithPatternScreen
         this.y = (this.height - this.backgroundHeight) / 2;
 
         this.grid = gridSetup.stream().map(vec -> new Vector2i(x + vec.x, y + vec.y)).toList();
+    }
+
+    // how far does the mouse need to be for the line snap to the grid?
+    private static final double defaultDistanceBeforeSnapToGrid = 50.0;
+    // how far can the mouse be from it's most recent dot before the line stops snapping to the grid?
+    private static final double distanceFromRecentPointBeforeStopSnappingSqr = 2700;
+    private static double getDistanceBeforeSnapToGridSqr() {
+        return Math.pow(
+            defaultDistanceBeforeSnapToGrid * HexConfig.client().gridSnapThreshold(),
+            2
+        );
     }
 
     private Pair<Long, Vector2i> findClosestPointTo(int x, int y) {
@@ -209,11 +217,27 @@ public class ChalkWithPatternScreen extends HandledScreen<ChalkWithPatternScreen
         RenderSystem.enableCull();
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
+
+        if (!HexConfig.client().clickingTogglesDrawing() || !drawingNewLine)
+            return;
+
+        mouseDragged(mouseX, mouseY, 0, 0, 0);
     }
+
+    private boolean drawingNewLine = false;
 
     @Override
     public boolean mouseClicked(double mX, double mY, int button) {
         if (button != 0 || patterns.size() >= patternLimit) return false;
+        if (HexConfig.client().clickingTogglesDrawing()) {
+            if (drawingNewLine) {
+                patterns.add(currentlyEngaged);
+                currentlyEngaged = new ArrayList<>();
+                drawingNewLine = false;
+                return true;
+            }
+            drawingNewLine = true;
+        }
 
         // O(1) trust (exception triggered rarely)
         // this "temporary solution" will last forever vro :broken_heart:
@@ -233,7 +257,7 @@ public class ChalkWithPatternScreen extends HandledScreen<ChalkWithPatternScreen
         Vector2i point = closest.getRight();
 
         if (
-            distance <= distanceBeforeSnapToGridSqr &&
+            distance <= getDistanceBeforeSnapToGridSqr() &&
             !pointIsOccupied(point)
         ) currentlyEngaged.add(point);
 
@@ -242,7 +266,11 @@ public class ChalkWithPatternScreen extends HandledScreen<ChalkWithPatternScreen
 
     @Override
     public boolean mouseDragged(double mX, double mY, int button, double dX, double dY) {
-        if (button != 0 || currentlyEngaged.size() == 0) return false;
+        if (
+            !(HexConfig.client().clickingTogglesDrawing() ? drawingNewLine : button == 0) ||
+            currentlyEngaged.size() == 0
+        )
+            return false;
 
         int mouseX = (int)Math.round(mX);
         int mouseY = (int)Math.round(mY);
@@ -253,7 +281,7 @@ public class ChalkWithPatternScreen extends HandledScreen<ChalkWithPatternScreen
 
         Vector2i lastEngaged = currentlyEngaged.get(currentlyEngaged.size() - 1);
         if (
-            distance <= distanceBeforeSnapToGridSqr &&
+            distance <= getDistanceBeforeSnapToGridSqr() &&
             lastEngaged.distanceSquared(mouseX, mouseY)
                 <= distanceFromRecentPointBeforeStopSnappingSqr
         ) {
@@ -276,14 +304,11 @@ public class ChalkWithPatternScreen extends HandledScreen<ChalkWithPatternScreen
 
     @Override
     public boolean mouseReleased(double mX, double mY, int button) {
-        if (button != 0 || currentlyEngaged.size() == 0) return false;
+        if (button != 0 || HexConfig.client().clickingTogglesDrawing())
+            return false;
 
-        // exception-based control flow :weedhexxy:
-        try {
-            currentlyEngaged.get(1);
+        if (currentlyEngaged.size() >= 2)
             patterns.add(currentlyEngaged);
-        } catch (IndexOutOfBoundsException e) {}
-
         currentlyEngaged = new ArrayList<>();
 
         return true;
